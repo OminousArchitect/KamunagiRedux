@@ -13,6 +13,8 @@ namespace KamunagiOfChains
         
         public static ItemDef CustomGhostItem;
         
+        public static Material woshisGhostOverlay;
+
         public static void RegisterContent()
         {
             WispSlot = DeployableAPI.RegisterDeployableSlot((master,count) => 4);
@@ -24,6 +26,7 @@ namespace KamunagiOfChains
             ItemAPI.Add(new CustomItem(CustomGhostItem, null as ItemDisplayRule[]));
             
             woshisGhostOverlay = new Material(Load<Material>("RoR2/Base/Common/VFX/matGhostEffect.mat"));
+            woshisGhostOverlay.SetTexture("_RemapTex", KamunagiOfChainsPlugin.Bundle!.LoadAsset<Texture2D>("texRampWoshis"));
         }
         
         internal static T Load<T>(string path)

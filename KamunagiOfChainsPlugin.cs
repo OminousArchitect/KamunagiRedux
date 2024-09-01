@@ -48,6 +48,7 @@ namespace KamunagiOfChains
             }
             
             Assets.RegisterContent();
+            Kamunagi.States.RegisterStates();
         }
     }
 }

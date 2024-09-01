@@ -11,6 +11,7 @@
         <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
         <PackageReference Include="RiskofThunder-R2API_Core" Version="5.1.1" />
         <PackageReference Include="RiskofThunder-R2API_Colors" Version="1.0.1" />
+        <PackageReference Include="RiskofThunder-R2API_Prefab" Version="1.0.4" />
         <PackageReference Include="RiskofThunder-R2API_ContentManagement" Version="1.0.5" />
         <PackageReference Include="RiskofThunder-R2API_DamageType" Version="1.1.1" />
         <PackageReference Include="RiskofThunder-R2API_Deployable" Version="1.0.1" />

@@ -22,7 +22,7 @@ namespace KamunagiOfChains.Data {
             
             foreach (var type in Assembly.GetCallingAssembly().GetTypes())
             {
-                if (!typeof(Asset).IsAssignableFrom(type)) continue;
+                if (!typeof(Asset).IsAssignableFrom(type) || type.IsAbstract) continue;
                 var instance = (Asset) Activator.CreateInstance(type);
                 Assets[type] = instance;
                 if (instance is IUnlockable unlockable)
@@ -40,17 +40,17 @@ namespace KamunagiOfChains.Data {
                 if (instance is IModel model)
                 {
                     var obj = model.BuildObject();
-                    Objects[type.Name + nameof(IModel)] = obj;
+                    Objects[type.Name + "_" + nameof(IModel)] = obj;
                 }
                 if (instance is IBodyDisplay display)
                 {
                     var obj = display.BuildObject();
-                    Objects[type.Name + nameof(IBodyDisplay)] = obj;
+                    Objects[type.Name + "_" + nameof(IBodyDisplay)] = obj;
                 }
                 if (instance is IBody body)
                 {
                     var obj = body.BuildObject();
-                    Objects[type.Name + nameof(IBody)] = obj;
+                    Objects[type.Name + "_" + nameof(IBody)] = obj;
                     bodies.Add(obj);
                 }
                 if (instance is ISurvivor survivor)

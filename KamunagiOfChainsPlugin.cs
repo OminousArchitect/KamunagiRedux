@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Security;
 using System.Security.Permissions;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using KamunagiOfChains.Data;
 using R2API;
 using R2API.Utils;
 using UnityEngine;
@@ -54,6 +56,9 @@ namespace KamunagiOfChains
             {
                 Log.LogDebug("Bundle Loaded");
                 Bundle = (operation as AssetBundleCreateRequest)?.assetBundle;
+                
+                Log.LogDebug("Loading ContentPack");
+                ContentPackProvider.Initialize(Info.Metadata.GUID, Asset.BuildContentPack());
             };
 
             Log.LogDebug("Finished Awake");
@@ -69,6 +74,42 @@ namespace KamunagiOfChains
             __instance.soundbankStrings = __instance.soundbankStrings
                 .AddItem(SoundBankName).ToArray();
             soundBankQueued = true;
+        }
+        
+        private class ContentPackProvider : RoR2.ContentManagement.IContentPackProvider
+        {
+            private static RoR2.ContentManagement.ContentPack _contentPack = null!;
+            private static string _identifier = null!;
+            public string identifier => _identifier;
+
+            public IEnumerator LoadStaticContentAsync(RoR2.ContentManagement.LoadStaticContentAsyncArgs args)
+            {
+                //ContentPack.identifier = identifier;
+                args.ReportProgress(1f);
+                yield break;
+            }
+
+            public IEnumerator GenerateContentPackAsync(RoR2.ContentManagement.GetContentPackAsyncArgs args)
+            {
+                RoR2.ContentManagement.ContentPack.Copy(_contentPack, args.output);
+                //Log.LogError(ContentPack.identifier);
+                args.ReportProgress(1f);
+                yield break;
+            }
+
+            public IEnumerator FinalizeAsync(RoR2.ContentManagement.FinalizeAsyncArgs args)
+            {
+                args.ReportProgress(1f);
+                Log.LogInfo("Contentpack finished");
+                yield break;
+            }
+
+            internal static void Initialize(string identifier, RoR2.ContentManagement.ContentPack pack)
+            {
+                _identifier = identifier;
+                _contentPack = pack;
+                RoR2.ContentManagement.ContentManager.collectContentPackProviders += provider => provider(new ContentPackProvider());
+            }
         }
     }
 }

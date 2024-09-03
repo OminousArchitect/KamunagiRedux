@@ -92,9 +92,7 @@ namespace KamunagiOfChains.Data.Bodies {
             if (TryGetGameObject<Kamunagi, IBodyDisplay>(out var display))
                 survivor.displayPrefab = display;
             
-            if (TryGetAsset<Kamunagi>(out var unlockable))
-                survivor.unlockableDef = unlockable;
-            throw new System.NotImplementedException();
+            return survivor;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace KamunagiOfChains.Data.Bodies {
                 };
             }
             var voidCrystalMat = LoadAsset<Material>("addressable:RoR2/DLC1/voidstage/matVoidCrystal.mat");
-            var infos = new List<CharacterModel.RendererInfo>()
+            characterModel.baseRendererInfos = new []
             {
                 new CharacterModel.RendererInfo
                 {
@@ -55,7 +55,15 @@ namespace KamunagiOfChains.Data.Bodies {
                 RenderInfoFromChild(childLocator.FindChild("S Shoe")),
                 RenderInfoFromChild(childLocator.FindChild("U Shoe")),
             };
-            characterModel.baseRendererInfos = infos.ToArray();
+
+            var modelHurtBoxGroup = model.GetComponent<HurtBoxGroup>();
+            if (!modelHurtBoxGroup) modelHurtBoxGroup = model.AddComponent<HurtBoxGroup>();
+            var mainHurtBox = childLocator.FindChild("MainHurtbox").gameObject;
+            mainHurtBox.layer = LayerIndex.entityPrecise.intVal;
+            var mainHurtBoxComponent = mainHurtBox.AddComponent<HurtBox>();
+            mainHurtBoxComponent.isBullseye = true;
+            modelHurtBoxGroup.hurtBoxes = new []{mainHurtBoxComponent};
+
             return model;
         }
         
@@ -71,7 +79,25 @@ namespace KamunagiOfChains.Data.Bodies {
         {
             if (!TryGetGameObject<Kamunagi, IModel>(out var model)) throw new Exception("Model not loaded.");
             var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody").InstantiateClone("NinesKamunagiBody");
-            bodyPrefab.GetComponent<ModelLocator>().modelTransform = model.transform;
+
+            var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
+
+            #region Setup Model
+            var bodyHurtBoxGroup = model.GetComponentInChildren<HurtBoxGroup>();
+            foreach (var hurtBox in bodyHurtBoxGroup.hurtBoxes)
+            {
+                hurtBox.healthComponent = bodyHealthComponent;
+            }
+
+            var bodyModelLocator = bodyPrefab.GetComponent<ModelLocator>();
+            UnityEngine.Object.Destroy(bodyModelLocator.modelTransform.gameObject);
+            model.transform.parent = bodyModelLocator.modelBaseTransform;
+            bodyModelLocator.modelTransform = model.transform;
+            #endregion
+
+            #region Setup StateMachines
+            
+            #endregion
             
             return bodyPrefab;
         }

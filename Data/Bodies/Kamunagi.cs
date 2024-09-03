@@ -1,62 +1,69 @@
+using System;
+using System.Collections.Generic;
 using R2API;
 using RoR2;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace KamunagiOfChains.Data.Bodies {
     public class Kamunagi : Asset, IBody, IBodyDisplay, ISurvivor, IModel {
         GameObject IModel.BuildObject()
         {
             var model = LoadAsset<GameObject>("bundle:mdlKamunagi");
-            var characterModel = model.GetComponent<CharacterModel>() || model.AddComponent<CharacterModel>();
+            var characterModel = model.GetComponent<CharacterModel>();
+            if (!characterModel) characterModel = model.AddComponent<CharacterModel>();
             var childLocator = model.GetComponent<ChildLocator>();
             
-            RendererInfo RenderInfoFromChild(GameObject child, dontHopoo = false)
+            CharacterModel.RendererInfo RenderInfoFromChild(Component child, bool dontHopoo = false)
             {
                 var renderer = child.GetComponent<Renderer>();
                 return new CharacterModel.RendererInfo()
                 {
                     renderer = renderer,
-                    material = !dontHopoo ? renderer.material.SetHopooMaterial() : renderer.material,
+                    defaultMaterial = !dontHopoo ? renderer.material.SetHopooMaterial() : renderer.material,
                     ignoreOverlays = false,
                     defaultShadowCastingMode = ShadowCastingMode.On,
-                }
+                };
             }
             var voidCrystalMat = LoadAsset<Material>("addressable:RoR2/DLC1/voidstage/matVoidCrystal.mat");
-            characterModel.baseRenderInfos = [
-                    new CharacterModel.RendererInfo()
-                    {
-                        renderer = childLocator.FindChild("S Cloth01").GetComponent<Renderer>(),
-                        material = voidCrystalMat,
-                        ignoreOverlays = false,
-                        defaultShadowCastingMode = ShadowCastingMode.On,
-                    },
-                    new CharacterModel.RendererInfo()
-                    {
-                        renderer = childLocator.FindChild("U Cloth01").GetComponent<Renderer>(),
-                        material = voidCrystalMat,
-                        ignoreOverlays = false,
-                        defaultShadowCastingMode = ShadowCastingMode.On,
-                    },
-                    RenderInfoFromChild(childLocator.FindChild("S Body")),
-                    RenderInfoFromChild(childLocator.FindChild("U Body")),
-                    RenderInfoFromChild(childLocator.FindChild("S Cloth02"), true),
-                    RenderInfoFromChild(childLocator.FindChild("U Cloth02"), true),
-                    RenderInfoFromChild(childLocator.FindChild("S Hair")),
-                    RenderInfoFromChild(childLocator.FindChild("U Hair")),
-                    RenderInfoFromChild(childLocator.FindChild("S Jewelry")),
-                    RenderInfoFromChild(childLocator.FindChild("U Jewelry")),
-                    RenderInfoFromChild(childLocator.FindChild("S HandItems")),
-                    RenderInfoFromChild(childLocator.FindChild("U HandItems")),
-                    RenderInfoFromChild(childLocator.FindChild("S Shoe")),
-                    RenderInfoFromChild(childLocator.FindChild("U Shoe")),
-                ]
+            var infos = new List<CharacterModel.RendererInfo>()
+            {
+                new CharacterModel.RendererInfo
+                {
+                    renderer = childLocator.FindChild("S Cloth01").GetComponent<Renderer>(),
+                    defaultMaterial = voidCrystalMat,
+                    ignoreOverlays = false,
+                    defaultShadowCastingMode = ShadowCastingMode.On,
+                },
+                new CharacterModel.RendererInfo()
+                {
+                    renderer = childLocator.FindChild("U Cloth01").GetComponent<Renderer>(),
+                    defaultMaterial = voidCrystalMat,
+                    ignoreOverlays = false,
+                    defaultShadowCastingMode = ShadowCastingMode.On,
+                },
+                RenderInfoFromChild(childLocator.FindChild("S Body")),
+                RenderInfoFromChild(childLocator.FindChild("U Body")),
+                RenderInfoFromChild(childLocator.FindChild("S Cloth02"), true),
+                RenderInfoFromChild(childLocator.FindChild("U Cloth02"), true),
+                RenderInfoFromChild(childLocator.FindChild("S Hair")),
+                RenderInfoFromChild(childLocator.FindChild("U Hair")),
+                RenderInfoFromChild(childLocator.FindChild("S Jewelry")),
+                RenderInfoFromChild(childLocator.FindChild("U Jewelry")),
+                RenderInfoFromChild(childLocator.FindChild("S HandItems")),
+                RenderInfoFromChild(childLocator.FindChild("U HandItems")),
+                RenderInfoFromChild(childLocator.FindChild("S Shoe")),
+                RenderInfoFromChild(childLocator.FindChild("U Shoe")),
+            };
+            characterModel.baseRendererInfos = infos.ToArray();
+            return model;
         }
         
         GameObject IBodyDisplay.BuildObject()
         {
             if (!TryGetGameObject<Kamunagi, IModel>(out var model)) throw new Exception("Model not loaded.");
-            var displayModel = PrefabAPI.InstantiateClone(model);
-            displayModel.GetComponent<Animator>().runtimeAnimatorController = LoadAsset<AnimationController>("animHenryMenu");
+            var displayModel = PrefabAPI.InstantiateClone(model, "KamunagiDisplay");
+            displayModel.GetComponent<Animator>().runtimeAnimatorController = LoadAsset<RuntimeAnimatorController>("animHenryMenu");
             return displayModel;
         }
         

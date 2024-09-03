@@ -4,6 +4,7 @@ using System.Reflection;
 using RoR2;
 using RoR2.ContentManagement;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace KamunagiOfChains.Data {
     public abstract class Asset {       
@@ -36,9 +37,14 @@ namespace KamunagiOfChains.Data {
                     Objects[type.Name + "_" + nameof(IItem)] = obj;
                     items.Add(obj);
                 }
-                if (instance is IBodyDisplay body)
+                if (instance is IModel model)
                 {
-                    var obj = body.BuildObject();
+                    var obj = model.BuildObject();
+                    Objects[type.Name + nameof(IModel)] = obj;
+                }
+                if (instance is IBodyDisplay display)
+                {
+                    var obj = display.BuildObject();
                     Objects[type.Name + nameof(IBodyDisplay)] = obj;
                 }
                 if (instance is IBody body)
@@ -51,7 +57,7 @@ namespace KamunagiOfChains.Data {
                 {
                     var name = type.Name;
                     var obj = survivor.BuildObject();
-                    obj.name = name + "SurvivorDef";
+                    obj.cachedName = name + nameof(SurvivorDef);
                     Objects[name + "_" + nameof(ISurvivor)] = obj;
                     survivors.Add(obj);
                 }
@@ -64,7 +70,7 @@ namespace KamunagiOfChains.Data {
             return result;
         }
         
-        public static T? LoadAsset<T>(string assetPath) where T : Object
+        public static T? LoadAsset<T>(string assetPath) where T : UnityEngine.Object
         {
             if (assetPath.StartsWith("addressable:"))
             {
@@ -134,6 +140,10 @@ namespace KamunagiOfChains.Data {
         public abstract GameObject BuildObject();
     }
     public interface IBodyDisplay : IGameObject
+    {
+        public abstract GameObject BuildObject();
+    }
+    public interface IModel : IGameObject
     {
         public abstract GameObject BuildObject();
     }

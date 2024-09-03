@@ -19,6 +19,7 @@ namespace KamunagiOfChains.Data {
             var bodies = new List<GameObject>();
             var survivors = new List<SurvivorDef>();
             var unlockables = new List<UnlockableDef>();
+            var networkedObjects = new List<GameObject>();
             
             foreach (var type in Assembly.GetCallingAssembly().GetTypes())
             {
@@ -36,6 +37,12 @@ namespace KamunagiOfChains.Data {
                     var obj = item.BuildObject();
                     Objects[type.Name + "_" + nameof(IItem)] = obj;
                     items.Add(obj);
+                }
+                if (instance is INetworkedObject networkedObject)
+                {
+                    var obj = networkedObject.BuildObject();
+                    Objects[type.Name + "_" + nameof(INetworkedObject)] = obj;
+                    networkedObjects.Add(obj);
                 }
                 if (instance is IModel model)
                 {
@@ -67,6 +74,7 @@ namespace KamunagiOfChains.Data {
             result.bodyPrefabs.Add(bodies.ToArray());
             result.survivorDefs.Add(survivors.ToArray());
             result.unlockableDefs.Add(unlockables.ToArray());
+            result.networkedObjectPrefabs.Add(networkedObjects.ToArray());
             return result;
         }
         
@@ -135,6 +143,10 @@ namespace KamunagiOfChains.Data {
     }
 
     public interface IGameObject {}
+    public interface INetworkedObject : IGameObject
+    {
+        public abstract GameObject BuildObject();
+    }
     public interface IBody : IGameObject
     {
         public abstract GameObject BuildObject();

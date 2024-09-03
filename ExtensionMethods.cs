@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace KamunagiOfChains
@@ -58,6 +59,24 @@ namespace KamunagiOfChains
 
             _cachedMaterials.Add(tempMat);
             return tempMat;
+        }
+
+        public static void Deconstruct<T>(this T[] array, out T first, out T second, out T[] rest)
+        {
+            first = array[0];
+            second = array[1];
+            rest = array[2..];
+        }
+        public static void Deconstruct<T>(this T[] array, out T first, out T second)
+        {
+            first = array[0];
+            second = array[1];
+        }
+
+        public static void Deconstruct<T>(this IList<T> list, out T first, out T second, out IList<T> rest) {
+            first = list.Count > 0 ? list[0] : default(T); // or throw
+            second = list.Count > 1 ? list[1] : default(T); // or throw
+            rest = list.Skip(2).ToList();
         }
     }
 }

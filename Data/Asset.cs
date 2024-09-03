@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using RoR2;
 using RoR2.ContentManagement;
@@ -14,12 +15,16 @@ namespace KamunagiOfChains.Data {
         public static ContentPack BuildContentPack()
         {
             var result = new ContentPack();
-        
-            var items = new List<ItemDef>();
-            var bodies = new List<GameObject>();
-            var survivors = new List<SurvivorDef>();
-            var unlockables = new List<UnlockableDef>();
-            var networkedObjects = new List<GameObject>();
+            
+            var iItems = new List<IItem>();
+            var iUnlockables = new List<IUnlockable>();
+            var iNetworkedObjects = new List<INetworkedObject>();
+            var iBodies = new List<IBody>();
+            var iBodyDisplays = new List<IBodyDisplay>();
+            var iModels = new List<IModel>();
+            var iSurvivors = new List<ISurvivor>();
+            
+
             
             foreach (var type in Assembly.GetCallingAssembly().GetTypes())
             {
@@ -28,53 +33,78 @@ namespace KamunagiOfChains.Data {
                 Assets[type] = instance;
                 if (instance is IUnlockable unlockable)
                 {
-                    var obj = unlockable.BuildObject();
-                    Objects[type.Name + "_" + nameof(IUnlockable)] = obj;
-                    unlockables.Add(obj);
+                    iUnlockables.Add(unlockable);
                 }
                 if (instance is IItem item)
                 {
-                    var obj = item.BuildObject();
-                    Objects[type.Name + "_" + nameof(IItem)] = obj;
-                    items.Add(obj);
+                   iItems.Add(item);
                 }
                 if (instance is INetworkedObject networkedObject)
                 {
-                    var obj = networkedObject.BuildObject();
-                    Objects[type.Name + "_" + nameof(INetworkedObject)] = obj;
-                    networkedObjects.Add(obj);
+                    iNetworkedObjects.Add(networkedObject);
                 }
                 if (instance is IModel model)
                 {
-                    var obj = model.BuildObject();
-                    Objects[type.Name + "_" + nameof(IModel)] = obj;
+                    iModels.Add(model);
                 }
                 if (instance is IBodyDisplay display)
                 {
-                    var obj = display.BuildObject();
-                    Objects[type.Name + "_" + nameof(IBodyDisplay)] = obj;
+                    iBodyDisplays.Add(display);
                 }
                 if (instance is IBody body)
                 {
-                    var obj = body.BuildObject();
-                    Objects[type.Name + "_" + nameof(IBody)] = obj;
-                    bodies.Add(obj);
+                    iBodies.Add(body);
                 }
                 if (instance is ISurvivor survivor)
                 {
-                    var name = type.Name;
-                    var obj = survivor.BuildObject();
-                    obj.cachedName = name + nameof(SurvivorDef);
-                    Objects[name + "_" + nameof(ISurvivor)] = obj;
-                    survivors.Add(obj);
+                    iSurvivors.Add(survivor);
                 }
             }
 
-            result.itemDefs.Add(items.ToArray());
-            result.bodyPrefabs.Add(bodies.ToArray());
-            result.survivorDefs.Add(survivors.ToArray());
-            result.unlockableDefs.Add(unlockables.ToArray());
-            result.networkedObjectPrefabs.Add(networkedObjects.ToArray());
+            // The order of this is important, so other objects can reference existing objects when being built.
+            foreach (var model in iModels)
+            {
+                var obj = model.BuildObject();
+                Objects[model.GetType().Name + "_" + nameof(IModel)] = obj;
+            }
+            foreach (var display in iBodyDisplays)
+            {
+                var obj = display.BuildObject();
+                Objects[display.GetType().Name + "_" + nameof(IBodyDisplay)] = obj;
+            }
+
+            result.unlockableDefs.Add(iUnlockables.Select(x =>
+            {
+                var obj = x.BuildObject();
+                Objects[x.GetType().Name + "_" + nameof(IUnlockable)] = obj;
+                return obj;
+            }).ToArray());
+            result.itemDefs.Add(iItems.Select(x =>
+            {
+                var obj = x.BuildObject();
+                Objects[x.GetType().Name + "_" + nameof(IItem)] = obj;
+                return obj;
+            }).ToArray());
+            result.networkedObjectPrefabs.Add(iNetworkedObjects.Select(x =>
+            {
+                var obj = x.BuildObject();
+                Objects[x.GetType().Name + "_" + nameof(INetworkedObject)] = obj;
+                return obj;
+            }).ToArray());
+            result.bodyPrefabs.Add(iBodies.Select(x =>
+            {
+                var obj = x.BuildObject();
+                Objects[x.GetType().Name + "_" + nameof(IBody)] = obj;
+                return obj;
+            }).ToArray());
+            result.survivorDefs.Add(iSurvivors.Select(x =>
+            {
+                var name = x.GetType().Name;
+                var obj = x.BuildObject();
+                obj.cachedName = name + nameof(SurvivorDef);
+                Objects[name + "_" + nameof(ISurvivor)] = obj;
+                return obj;
+            }).ToArray());
             return result;
         }
         

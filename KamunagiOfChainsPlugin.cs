@@ -47,8 +47,6 @@ namespace KamunagiOfChains
                 Logger.LogError(e);
             }
             
-            Assets.RegisterContent();
-            Kamunagi.States.RegisterStates();
         }
     }
 }

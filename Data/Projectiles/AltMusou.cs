@@ -163,6 +163,7 @@ namespace KamunagiOfChains.Data.Projectiles
                     .InstantiateClone("ChargedMusouEffect", false);
             effect.transform.localScale = Vector3.one * 0.5f;
 
+            effect.SetActive(false); // Required for pooled effects or you get a warning about effectData not being set
             var vfx = effect.GetOrAddComponent<VFXAttributes>();
             vfx.DoNotPool = false;
             vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;

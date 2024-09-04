@@ -122,13 +122,18 @@ namespace KamunagiOfChains.Data.Bodies
             bodyStateMachine.customName = "Body";
             bodyStateMachine.initialStateType = new SerializableEntityStateType(typeof(VoidPortalSpawnState));
             bodyStateMachine.mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
-            
+
             var weaponStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
             weaponStateMachine.customName = "Weapon";
             weaponStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
             weaponStateMachine.mainStateType = weaponStateMachine.initialStateType;
 
-            networkStateMachine.stateMachines = new[] { bodyStateMachine };
+            networkStateMachine.stateMachines = new[] { bodyStateMachine, weaponStateMachine };
+
+            var deathBehaviour = bodyPrefab.GetOrAddComponent<CharacterDeathBehavior>();
+            deathBehaviour.deathStateMachine = bodyStateMachine;
+            deathBehaviour.idleStateMachine = new[] { weaponStateMachine };
+            deathBehaviour.deathState = new SerializableEntityStateType(typeof(VoidDeathState));
 
             #endregion
 
@@ -183,6 +188,6 @@ namespace KamunagiOfChains.Data.Bodies
             }
         }
 
-        public Type[] GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal) };
+        public Type[] GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState) };
     }
 }

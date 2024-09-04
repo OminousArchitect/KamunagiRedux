@@ -28,7 +28,7 @@ namespace KamunagiOfChains.Data
 
             var instances = Assets.Values;
             var entityStates = instances.Where(x => x is IEntityStates).SelectMany(x =>
-                (Type[])(Objects[x.GetType().Name + "_EntityStates"] ??= ((IEntityStates)x).GetEntityStates()));
+                (Type[])(Objects.GetOrSet(x.GetType().Name + "_EntityStates", () => ((IEntityStates)x).GetEntityStates())));
             
             result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
             result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());

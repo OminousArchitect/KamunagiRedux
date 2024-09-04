@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -72,6 +73,14 @@ namespace KamunagiOfChains
             var result = gameObject.GetComponent<T>();
             if (!result) result = gameObject.AddComponent<T>();
             return result;
+        }
+
+        public static V GetOrSet<T, V>(this Dictionary<T, V> dict, T key, Func<V> valueGetter)
+        {
+            if (dict.TryGetValue(key, out var value)) return value;
+            value = valueGetter();
+            dict[key] = value;
+            return value;
         }
     }
 }

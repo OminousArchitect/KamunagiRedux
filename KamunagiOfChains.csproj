@@ -20,4 +20,14 @@
         <PackageReference Include="RiskofThunder-R2API_Items" Version="1.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Libs\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Unity.Postprocessing.Runtime">
+        <HintPath>Libs\Unity.Postprocessing.Runtime-nstrip.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

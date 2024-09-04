@@ -1,5 +1,6 @@
 using System;
 using EntityStates;
+using KamunagiOfChains.Data.States;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -9,7 +10,7 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.GameObjects
 {
-    public class SummonMothMoth : EntityState
+    public class SummonMothMoth : BaseTwinState
     {
         private float duration = 0.55f;
         public override void OnEnter()

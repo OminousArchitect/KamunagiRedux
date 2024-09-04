@@ -16,7 +16,7 @@ namespace KamunagiOfChains.Data.Bodies
     {
         GameObject IModel.BuildObject()
         {
-            var model = LoadAsset<GameObject>("bundle:mdlKamunagi");
+            var model = LoadAsset<GameObject>("bundle:mdlKamunagi")!;
             var characterModel = model.GetOrAddComponent<CharacterModel>();
             var childLocator = model.GetComponent<ChildLocator>();
 
@@ -85,7 +85,7 @@ namespace KamunagiOfChains.Data.Bodies
         GameObject IBody.BuildObject()
         {
             if (!TryGetGameObject<Kamunagi, IModel>(out var model)) throw new Exception("Model not loaded.");
-            var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody")
+            var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody")!
                 .InstantiateClone("NinesKamunagiBody");
 
             var bodyCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
@@ -150,7 +150,7 @@ namespace KamunagiOfChains.Data.Bodies
         SurvivorDef ISurvivor.BuildObject()
         {
             var survivor = ScriptableObject.CreateInstance<SurvivorDef>();
-            survivor.primaryColor = new Color(0.592156863f, 0f, 0.964705882f);
+            survivor.primaryColor = Colors.twinsLightColor;
             survivor.displayNameToken = "NINES_KAMUNAGI_BODY_NAME";
             survivor.descriptionToken = "NINES_KAMUNAGI_BODY_DESCRIPTION";
             survivor.outroFlavorToken = "NINES_KAMUNAGI_BODY_OUTRO_FLAVOR";

@@ -1,7 +1,7 @@
 ﻿using EntityStates;
 using RoR2;
 
-namespace KamunagiOfChains.Data.States
+namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {
     public class VoidDeathState : GenericCharacterDeath
     {

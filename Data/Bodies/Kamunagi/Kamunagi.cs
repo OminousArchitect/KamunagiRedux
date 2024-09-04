@@ -1,20 +1,17 @@
 using System;
 using EntityStates;
 using ExtraSkillSlots;
-using HarmonyLib;
-using KamunagiOfChains.Data.GameObjects;
-using KamunagiOfChains.Data.Projectiles;
-using KamunagiOfChains.Data.States;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
+using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
-using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 
-namespace KamunagiOfChains.Data.Bodies
+namespace KamunagiOfChains.Data.Bodies.Kamunagi
 {
-    public class Kamunagi : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin
+    public class KamunagiAsset : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin
     {
         Type[] IEntityStates.GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState) };
 
@@ -28,7 +25,7 @@ namespace KamunagiOfChains.Data.Bodies
                 skinDef.nameToken = "NINES_KAMUNAGI_BODY_DEFAULT_SKIN_NAME";
                 skinDef.icon = LoadAsset<Sprite>("bundle:TwinsSkin");
 
-                if (!TryGetGameObject<Kamunagi, IModel>(out var model)) return;
+                if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) return;
                 skinDef.rootObject = model;
                 var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
                 var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
@@ -99,7 +96,7 @@ namespace KamunagiOfChains.Data.Bodies
 
         GameObject IBodyDisplay.BuildObject()
         {
-            if (!TryGetGameObject<Kamunagi, IModel>(out var model)) throw new Exception("Model not loaded.");
+            if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) throw new Exception("Model not loaded.");
             var displayModel = model.InstantiateClone("KamunagiDisplay", false);
             displayModel.GetComponent<Animator>().runtimeAnimatorController =
                 LoadAsset<RuntimeAnimatorController>("bundle:animHenryMenu");
@@ -108,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies
 
         GameObject IBody.BuildObject()
         {
-            if (!TryGetGameObject<Kamunagi, IModel>(out var model)) throw new Exception("Model not loaded.");
+            if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) throw new Exception("Model not loaded.");
             var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody")!
                 .InstantiateClone("NinesKamunagiBody");
 
@@ -171,11 +168,11 @@ namespace KamunagiOfChains.Data.Bodies
 
             var skillLocator = bodyPrefab.GetComponent<SkillLocator>();
             var extraSkillLocator = bodyPrefab.AddComponent<ExtraSkillLocator>();
-            if (TryGetAsset<KamunagiSkillFamilyExtraFourth>(out var skillFamily))
+            if (TryGetAsset<KamunagiSkillFamilyExtra>(out var skillFamily))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
                 skill._skillFamily = skillFamily;
-                skillLocator.primary = skill;
+                extraSkillLocator.extraFourth = skill;
             }
 
             #endregion
@@ -193,24 +190,13 @@ namespace KamunagiOfChains.Data.Bodies
             survivor.mainEndingEscapeFailureFlavorToken = "NINES_KAMUNAGI_BODY_OUTRO_FAILURE";
             survivor.desiredSortPosition = 100f;
 
-            if (TryGetGameObject<Kamunagi, IBody>(out var body))
+            if (TryGetGameObject<KamunagiAsset, IBody>(out var body))
                 survivor.bodyPrefab = body;
 
-            if (TryGetGameObject<Kamunagi, IBodyDisplay>(out var display))
+            if (TryGetGameObject<KamunagiAsset, IBodyDisplay>(out var display))
                 survivor.displayPrefab = display;
 
             return survivor;
-        }
-
-        public class KamunagiSkillFamilyExtraFourth : Asset, ISkillFamily
-        {
-            public SkillFamily BuildObject()
-            {
-                var family = ScriptableObject.CreateInstance<SkillFamily>();
-                if (TryGetAsset<MothMoth>(out var mothmoth) && TryGetAsset<AltMusou>(out var altmousu))
-                    family.variants = new[] { (SkillFamily.Variant)mothmoth, (SkillFamily.Variant)altmousu };
-                return family;
-            }
         }
     }
 }

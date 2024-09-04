@@ -1,6 +1,6 @@
 ﻿using System;
 using EntityStates;
-using KamunagiOfChains.Data.States;
+using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -10,9 +10,9 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 using Object = UnityEngine.Object;
 
-namespace KamunagiOfChains.Data.Projectiles
+namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 {
-    class AltSoeiMusou : BaseTwinState
+    class AltSoeiMusouState : BaseTwinState
     {
         public static GameObject megaBlaster =
             Asset.LoadAsset<GameObject>(
@@ -111,7 +111,7 @@ namespace KamunagiOfChains.Data.Projectiles
         public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
     }
 
-    public class AltMusou : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
+    public class AltSoeiMusou : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
     {
         SkillDef ISkill.BuildObject()
         {
@@ -133,7 +133,7 @@ namespace KamunagiOfChains.Data.Projectiles
             return skill;
         }
 
-        Type[] ISkill.GetEntityStates() => new[] { typeof(AltSoeiMusou) };
+        Type[] ISkill.GetEntityStates() => new[] { typeof(AltSoeiMusouState) };
 
         GameObject IProjectile.BuildObject()
         {
@@ -274,7 +274,7 @@ namespace KamunagiOfChains.Data.Projectiles
 
         GameObject IProjectileGhost.BuildObject()
         {
-            if (!TryGetGameObject<AltMusou, IEffect>(out var effect)) throw new Exception("Effect not present");
+            if (!TryGetGameObject<AltSoeiMusou, IEffect>(out var effect)) throw new Exception("Effect not present");
             var ghost = effect.InstantiateClone("TwinsAltChargeBallGhost", false);
             Object.Destroy(ghost.GetComponent<ObjectScaleCurve>());
             Object.Destroy(ghost.GetComponent<EffectComponent>());

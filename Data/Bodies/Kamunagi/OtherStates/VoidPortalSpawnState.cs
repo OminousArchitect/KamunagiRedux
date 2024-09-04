@@ -3,7 +3,7 @@ using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace KamunagiOfChains.Data.States
+namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {
     public class VoidPortalSpawnState : BaseState
     {

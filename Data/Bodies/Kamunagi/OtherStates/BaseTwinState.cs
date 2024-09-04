@@ -1,6 +1,6 @@
 ﻿using EntityStates;
 
-namespace KamunagiOfChains.Data.States
+namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {
     public class BaseTwinState : BaseSkillState
     {

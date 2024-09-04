@@ -1,6 +1,6 @@
 using System;
 using EntityStates;
-using KamunagiOfChains.Data.States;
+using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Object = UnityEngine.Object;
 
-namespace KamunagiOfChains.Data.GameObjects
+namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
     public class SummonMothMoth : BaseTwinState
     {

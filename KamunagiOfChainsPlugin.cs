@@ -5,6 +5,7 @@ using System.Security;
 using System.Security.Permissions;
 using BepInEx;
 using BepInEx.Logging;
+using ExtraSkillSlots;
 using HarmonyLib;
 using KamunagiOfChains.Data;
 using R2API;
@@ -20,6 +21,7 @@ namespace KamunagiOfChains
 {
     //[BepInDependency(DotAPI.PluginGUID), BepInDependency(DamageAPI.PluginGUID), BepInDependency(ColorsAPI.PluginGUID), BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID)]
     [BepInDependency(PrefabAPI.PluginGUID)]
+    [BepInDependency(ExtraSkillSlotsPlugin.GUID)]
     [NetworkCompatibility]
     [BepInPlugin(Guid, Name, Version)]
     [HarmonyPatch]

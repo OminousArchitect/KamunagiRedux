@@ -20,7 +20,7 @@ namespace KamunagiOfChains.Data.Projectiles
 
         public float maxChargeTime = 3f;
         public Transform muzzleTransform = null!;
-        public GameObject? chargeEffectInstance;
+        public EffectManagerHelper chargeEffectInstance;
         public float projectileFireFrequency = 0.4f;
         public float ballDamageCoefficient = 6f;
         public float stopwatch;
@@ -32,10 +32,11 @@ namespace KamunagiOfChains.Data.Projectiles
             maxChargeTime *= attackSpeedStat;
             muzzleTransform = FindModelChild("MuzzleCenter");
             if (!muzzleTransform || !Asset.TryGetGameObject<AltMusou, IEffect>(out var muzzleEffect)) return;
-            chargeEffectInstance = Object.Instantiate(muzzleEffect, muzzleTransform);
-            var scale = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
+            chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
+            var scale = chargeEffectInstance.effectComponent.GetComponent<ObjectScaleCurve>();
             scale.baseScale = Vector3.one * 0.7f;
             scale.timeMax = projectileFireFrequency;
+            scale.Reset();
         }
 
         public void FireProjectiles()
@@ -83,9 +84,9 @@ namespace KamunagiOfChains.Data.Projectiles
 
             if (fixedAge >= maxChargeTime && chargeEffectInstance != null && chargeEffectInstance)
             {
-                var curve = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
-                curve.Reset();
+                var curve = chargeEffectInstance.effectComponent.gameObject.GetComponent<ObjectScaleCurve>();
                 curve.baseScale = Vector3.one;
+                curve.Reset();
             }
 
             stopwatch += Time.deltaTime;
@@ -99,7 +100,7 @@ namespace KamunagiOfChains.Data.Projectiles
         public override void OnExit()
         {
             StartAimMode();
-            if (chargeEffectInstance) Destroy(chargeEffectInstance);
+            if (chargeEffectInstance != null) chargeEffectInstance.ReturnToPool();
             if (fixedAge >= maxChargeTime) FireBall();
             base.OnExit();
         }
@@ -268,6 +269,7 @@ namespace KamunagiOfChains.Data.Projectiles
             if (!TryGetGameObject<AltMusou, IEffect>(out var effect)) throw new Exception("Effect not present");
             var ghost = effect.InstantiateClone("TwinsAltChargeBallGhost");
             Object.Destroy(ghost.GetComponent<ObjectScaleCurve>());
+            Object.Destroy(ghost.GetComponent<EffectComponent>());
             ghost.AddComponent<ProjectileGhostController>();
             return ghost;
         }

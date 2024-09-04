@@ -91,7 +91,18 @@ namespace KamunagiOfChains.Data.GameObjects
         SkillDef ISkillDef.BuildObject()
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
+            skill.skillName = "Extra Skill 4";
+            skill.skillNameToken = "NINES_KAMUNAGI_BODY_EXTRA4_NAME";
+            skill.skillDescriptionToken = "NINES_KAMUNAGI_BODY_EXTRA4_DESCRIPTION";
+            skill.icon = LoadAsset<Sprite>("bundle:lightpng");
             skill.activationStateMachineName = "Weapon";
+            skill.baseRechargeInterval = 2f;
+            skill.beginSkillCooldownOnSkillEnd = true;
+            skill.canceledFromSprinting = false;
+            skill.fullRestockOnAssign = false;
+            skill.interruptPriority = InterruptPriority.Any;
+            skill.mustKeyPress = true;
+            skill.cancelSprintingOnActivation = false;
             return skill;
         }
     }

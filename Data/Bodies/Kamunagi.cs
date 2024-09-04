@@ -29,6 +29,7 @@ namespace KamunagiOfChains.Data.Bodies
                 skinDef.icon = LoadAsset<Sprite>("bundle:TwinsSkin");
 
                 if (!TryGetGameObject<Kamunagi, IModel>(out var model)) return;
+                skinDef.rootObject = model;
                 var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
                 var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
                 modelRendererInfos.CopyTo(rendererInfos, 0);

@@ -111,9 +111,9 @@ namespace KamunagiOfChains.Data.Projectiles
         public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
     }
 
-    public class AltMusou : Asset, IProjectile, IProjectileGhost, IEffect, ISkillDef
+    public class AltMusou : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
     {
-        SkillDef ISkillDef.BuildObject()
+        SkillDef ISkill.BuildObject()
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
             skill.skillName = "Primary 2";
@@ -133,7 +133,7 @@ namespace KamunagiOfChains.Data.Projectiles
             return skill;
         }
 
-        Type[] ISkillDef.GetEntityStates() => new[] { typeof(AltSoeiMusou) };
+        Type[] ISkill.GetEntityStates() => new[] { typeof(AltSoeiMusou) };
 
         GameObject IProjectile.BuildObject()
         {

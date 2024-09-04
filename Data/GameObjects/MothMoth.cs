@@ -38,7 +38,7 @@ namespace KamunagiOfChains.Data.GameObjects
             return InterruptPriority.Skill;
         }
     }
-    public class MothMoth : Asset, INetworkedObject, ISkillDef
+    public class MothMoth : Asset, INetworkedObject, ISkill
     {
         private static readonly int Cull = Shader.PropertyToID("_Cull");
         private static readonly int Color = Shader.PropertyToID("_Color");
@@ -83,12 +83,12 @@ namespace KamunagiOfChains.Data.GameObjects
             return mothMoth;
         }
 
-        Type[] ISkillDef.GetEntityStates()
+        Type[] ISkill.GetEntityStates()
         {
             return new[] { typeof(SummonMothMoth) };
         }
 
-        SkillDef ISkillDef.BuildObject()
+        SkillDef ISkill.BuildObject()
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
             skill.skillName = "Extra Skill 4";

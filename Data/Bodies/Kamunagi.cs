@@ -1,6 +1,7 @@
 using System;
 using EntityStates;
 using ExtraSkillSlots;
+using HarmonyLib;
 using KamunagiOfChains.Data.GameObjects;
 using KamunagiOfChains.Data.Projectiles;
 using KamunagiOfChains.Data.States;
@@ -13,8 +14,29 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies
 {
-    public class Kamunagi : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates
+    public class Kamunagi : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin
     {
+        Type[] IEntityStates.GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState) };
+
+        SkinDef ISkin.BuildObject()
+        {
+            return (SkinDef) ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
+            {
+                var skinDef = (SkinDef)obj;
+                skinDef.baseSkins = Array.Empty<SkinDef>();
+                skinDef.name = "KamunagiDefaultSkinDef";
+                skinDef.nameToken = "NINES_KAMUNAGI_BODY_DEFAULT_SKIN_NAME";
+                skinDef.icon = LoadAsset<Sprite>("bundle:TwinsSkin");
+                
+                if (!TryGetGameObject<Kamunagi, IModel>(out var model)) return;
+                var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
+                var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
+                modelRendererInfos.CopyTo(rendererInfos, 0);
+                skinDef.rendererInfos = rendererInfos;
+            });
+        }
+
+        Asset[] IModel.GetSkins() => new Asset[] { this };
         GameObject IModel.BuildObject()
         {
             var model = LoadAsset<GameObject>("bundle:mdlKamunagi")!;
@@ -93,6 +115,8 @@ namespace KamunagiOfChains.Data.Bodies
             var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
 
             bodyCharacterBody.preferredPodPrefab = null;
+            bodyCharacterBody.baseNameToken = "NINES_KAMUNAGI_BODY_";
+            bodyCharacterBody.subtitleNameToken = "NINES_KAMUNAGI_BODY_";
 
             #region Setup Model
 
@@ -187,7 +211,5 @@ namespace KamunagiOfChains.Data.Bodies
                 return family;
             }
         }
-
-        public Type[] GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState) };
     }
 }

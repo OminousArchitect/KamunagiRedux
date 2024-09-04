@@ -24,6 +24,7 @@ namespace KamunagiOfChains.Data.Projectiles
         public float projectileFireFrequency = 0.4f;
         public float ballDamageCoefficient = 6f;
         public float stopwatch;
+        public bool charged;
         public override int meterGain => 0;
 
         public override void OnEnter()
@@ -82,11 +83,13 @@ namespace KamunagiOfChains.Data.Projectiles
                 return;
             }
 
-            if (fixedAge >= maxChargeTime && chargeEffectInstance != null && chargeEffectInstance)
+            if (fixedAge >= maxChargeTime && chargeEffectInstance != null && !charged)
             {
-                var curve = chargeEffectInstance.effectComponent.gameObject.GetComponent<ObjectScaleCurve>();
-                curve.baseScale = Vector3.one;
-                curve.Reset();
+                var scale = chargeEffectInstance.effectComponent.GetComponent<ObjectScaleCurve>();
+                scale.baseScale = Vector3.one;
+                scale.timeMax = projectileFireFrequency;
+                scale.Reset();
+                charged = true;
             }
 
             stopwatch += Time.deltaTime;

@@ -32,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
             base.OnEnter();
             maxChargeTime *= attackSpeedStat;
             muzzleTransform = FindModelChild("MuzzleCenter");
-            if (!muzzleTransform || !Asset.TryGetGameObject<AltMusou, IEffect>(out var muzzleEffect)) return;
+            if (!muzzleTransform || !Asset.TryGetGameObject<AltSoeiMusou, IEffect>(out var muzzleEffect)) return;
             chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
             var scale = chargeEffectInstance.effectComponent.GetComponent<ObjectScaleCurve>();
             scale.baseScale = Vector3.one * 0.7f;
@@ -42,7 +42,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
         public void FireProjectiles()
         {
-            if (!isAuthority || !Asset.TryGetGameObject<AltMusou, IProjectile>(out var projectile)) return;
+            if (!isAuthority || !Asset.TryGetGameObject<AltSoeiMusou, IProjectile>(out var projectile)) return;
             ProjectileManager.instance.FireProjectile(new FireProjectileInfo()
             {
                 crit = RollCrit(),
@@ -140,7 +140,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
             var projectile =
                 LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidRaidCrab/VoidRaidCrabMissileProjectile.prefab")!
                     .InstantiateClone("TwinsTrackingProjectile");
-            if (TryGetGameObject<AltMusou, IProjectileGhost>(out var ghost))
+            if (TryGetGameObject<AltSoeiMusou, IProjectileGhost>(out var ghost))
                 projectile.GetComponent<ProjectileController>().ghostPrefab = ghost;
             //projectile.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 15f;
             projectile.GetComponent<ProjectileDamage>().damage = 1f;

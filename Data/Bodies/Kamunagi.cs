@@ -23,6 +23,7 @@ namespace KamunagiOfChains.Data.Bodies
             return (SkinDef) ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
             {
                 var skinDef = (SkinDef)obj;
+                ISkin.AddDefaults(ref skinDef);
                 skinDef.name = "KamunagiDefaultSkinDef";
                 skinDef.nameToken = "NINES_KAMUNAGI_BODY_DEFAULT_SKIN_NAME";
                 skinDef.icon = LoadAsset<Sprite>("bundle:TwinsSkin");

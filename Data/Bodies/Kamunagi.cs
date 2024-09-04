@@ -1,7 +1,8 @@
 using System;
-using System.Collections.Generic;
+using EntityStates;
 using ExtraSkillSlots;
 using KamunagiOfChains.Data.GameObjects;
+using KamunagiOfChains.Data.States;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -87,7 +88,10 @@ namespace KamunagiOfChains.Data.Bodies
             var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody")
                 .InstantiateClone("NinesKamunagiBody");
 
+            var bodyCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
             var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
+
+            bodyCharacterBody.preferredPodPrefab = null;
 
             #region Setup Model
 
@@ -105,6 +109,20 @@ namespace KamunagiOfChains.Data.Bodies
             #endregion
 
             #region Setup StateMachines
+
+            foreach (var toDestroy in bodyPrefab.GetComponents<EntityStateMachine>())
+            {
+                Object.Destroy(toDestroy);
+            }
+
+            var networkStateMachine = bodyPrefab.GetOrAddComponent<NetworkStateMachine>();
+
+            var bodyStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
+            bodyStateMachine.customName = "Body";
+            bodyStateMachine.initialStateType = new SerializableEntityStateType(typeof(VoidPortalSpawnState));
+            bodyStateMachine.mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
+
+            networkStateMachine.stateMachines = new[] { bodyStateMachine };
 
             #endregion
 

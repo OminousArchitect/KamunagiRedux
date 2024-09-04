@@ -10,16 +10,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
     {
         public override int meterGain => 0;
 
-        public static GameObject muzzlePrefab =
+        public static GameObject MuzzlePrefab =
             Asset.LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab")!;
         public override void OnEnter()
         {
             base.OnEnter();
             if (characterMotor.isGrounded) StartAimMode();
-            AkSoundEngine.PostEvent("Play_voidman_m2_shoot", base.gameObject);
-            EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, twinMuzzle, false);
-            var aimRay = base.GetAimRay();
+            AkSoundEngine.PostEvent("Play_voidman_m2_shoot", gameObject);
+            EffectManager.SimpleMuzzleFlash(MuzzlePrefab, gameObject, twinMuzzle, false);
             if (!isAuthority || !Asset.TryGetGameObject<SoeiMusou, IProjectile>(out var projectile)) return;
+            var aimRay = GetAimRay();
             ProjectileManager.instance.FireProjectile(new FireProjectileInfo
             {
                 crit = RollCrit(),
@@ -35,6 +35,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
         }
         public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
     }
+
     class SoeiMusou : Asset, ISkill
     {
         

@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Numerics;
 using EntityStates;
 using KamunagiOfChains.Data.States;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
+using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 using Object = UnityEngine.Object;
-using Quaternion = UnityEngine.Quaternion;
-using Vector3 = UnityEngine.Vector3;
 
 namespace KamunagiOfChains.Data.Projectiles
 {
@@ -21,8 +19,8 @@ namespace KamunagiOfChains.Data.Projectiles
                 "addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallProjectile.prefab")!;
 
         public float maxChargeTime = 3f;
-        public Transform muzzleTransform;
-        public GameObject chargeEffectInstance;
+        public Transform muzzleTransform = null!;
+        public GameObject? chargeEffectInstance;
         public float projectileFireFrequency = 0.4f;
         public float ballDamageCoefficient = 6f;
         public float stopwatch;
@@ -83,7 +81,7 @@ namespace KamunagiOfChains.Data.Projectiles
                 return;
             }
 
-            if (fixedAge >= maxChargeTime && chargeEffectInstance)
+            if (fixedAge >= maxChargeTime && chargeEffectInstance != null && chargeEffectInstance)
             {
                 var curve = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
                 curve.Reset();
@@ -109,8 +107,15 @@ namespace KamunagiOfChains.Data.Projectiles
         public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
     }
 
-    public class AltMusou : Asset, IProjectile, IProjectileGhost, IEffect
+    public class AltMusou : Asset, IProjectile, IProjectileGhost, IEffect, ISkillDef
     {
+        SkillDef ISkillDef.BuildObject()
+        {
+            var skill = ScriptableObject.CreateInstance<SkillDef>();
+            return skill;
+        }
+
+        Type[] ISkillDef.GetEntityStates() => new[] { typeof(AltSoeiMusou) };
         GameObject IProjectile.BuildObject()
         {
             var projectile =
@@ -122,7 +127,6 @@ namespace KamunagiOfChains.Data.Projectiles
             projectile.GetComponent<ProjectileDamage>().damage = 1f;
             return projectile;
         }
-
         GameObject IProjectileGhost.BuildObject()
         {
             var ghost = LoadAsset<GameObject>(

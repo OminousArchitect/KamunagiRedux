@@ -60,9 +60,9 @@ namespace KamunagiOfChains.Data
 
             if (assetPath.StartsWith("bundle:"))
             {
-                return !KamunagiOfChainsPlugin.Bundle
+                return !KamunagiOfChainsPlugin.bundle
                     ? null
-                    : KamunagiOfChainsPlugin.Bundle!.LoadAsset<T>(assetPath["bundle:".Length..]);
+                    : KamunagiOfChainsPlugin.bundle!.LoadAsset<T>(assetPath["bundle:".Length..]);
             }
 
             if (assetPath.StartsWith("legacy:"))
@@ -92,7 +92,7 @@ namespace KamunagiOfChains.Data
                 asset = (GameObject)GetObjectOrThrow<T2>(Assets[typeof(T)]);
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 asset = default!;
                 return false;

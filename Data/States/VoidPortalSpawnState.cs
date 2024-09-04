@@ -30,7 +30,7 @@ namespace KamunagiOfChains.Data.States
     public class BufferPortal : BaseState
     {
         private static GameObject _spawnEffectPrefab =
-            Asset.LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierSpawnEffect.prefab");
+            Asset.LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierSpawnEffect.prefab")!;
 
         public static float duration = 2f;
 

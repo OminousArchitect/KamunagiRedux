@@ -29,11 +29,10 @@ namespace KamunagiOfChains
     {
         public const string AssetBundleName = "kamunagiassets";
         public const string SoundBankName = "KamunagiMusic.bnk";
-        public static AssetBundle? Bundle;
-        public static string PluginPath;
-        public static KamunagiOfChainsPlugin Instance;
-
-        public static ManualLogSource Log;
+        public static AssetBundle? bundle;
+        public static string? pluginPath;
+        public static KamunagiOfChainsPlugin instance = null!;
+        public static ManualLogSource log = null!;
         public static bool soundBankQueued;
 
         public const string Guid = "com.Nines.Kamunagi";
@@ -42,28 +41,28 @@ namespace KamunagiOfChains
 
         public void Awake()
         {
-            Instance = this;
-            Log = Logger;
-            Log.LogDebug("Harmony Patching");
+            instance = this;
+            log = Logger;
+            log.LogDebug("Harmony Patching");
             // Hook all the harmony attributes
             new Harmony(Info.Metadata.GUID).PatchAll();
 
-            Log.LogDebug("Getting Plugin Path");
+            log.LogDebug("Getting Plugin Path");
             // Get the path of the dll
-            PluginPath = System.IO.Path.GetDirectoryName(Info.Location) ?? throw new InvalidOperationException("Failed to find path of plugin.");
+            pluginPath = System.IO.Path.GetDirectoryName(Info.Location) ?? throw new InvalidOperationException("Failed to find path of plugin.");
 
-            Log.LogDebug("Loading Asset Bundle");
+            log.LogDebug("Loading Asset Bundle");
             // Load Assets
-            AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(PluginPath, AssetBundleName)).completed += operation =>
+            AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(pluginPath, AssetBundleName)).completed += operation =>
             {
-                Log.LogDebug("Bundle Loaded");
-                Bundle = (operation as AssetBundleCreateRequest)?.assetBundle;
+                log.LogDebug("Bundle Loaded");
+                bundle = (operation as AssetBundleCreateRequest)?.assetBundle;
                 
-                Log.LogDebug("Loading ContentPack");
+                log.LogDebug("Loading ContentPack");
                 ContentPackProvider.Initialize(Info.Metadata.GUID, Asset.BuildContentPack());
             };
 
-            Log.LogDebug("Finished Awake");
+            log.LogDebug("Finished Awake");
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(RoR2.WwiseUtils.SoundbankLoader), nameof(RoR2.WwiseUtils.SoundbankLoader.Start))]
@@ -71,8 +70,8 @@ namespace KamunagiOfChains
         {
             // Ensure the soundbank isn't added to each loader, but only one.
             if (soundBankQueued) return;
-            Log.LogDebug("Soundbank Added To Queue");
-            AkSoundEngine.AddBasePath(PluginPath);
+            log.LogDebug("Soundbank Added To Queue");
+            AkSoundEngine.AddBasePath(pluginPath);
             __instance.soundbankStrings = __instance.soundbankStrings
                 .AddItem(SoundBankName).ToArray();
             soundBankQueued = true;
@@ -102,7 +101,7 @@ namespace KamunagiOfChains
             public IEnumerator FinalizeAsync(RoR2.ContentManagement.FinalizeAsyncArgs args)
             {
                 args.ReportProgress(1f);
-                Log.LogInfo("Contentpack finished");
+                log.LogInfo("Contentpack finished");
                 yield break;
             }
 

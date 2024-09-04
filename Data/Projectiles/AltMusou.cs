@@ -160,6 +160,10 @@ namespace KamunagiOfChains.Data.Projectiles
                     .InstantiateClone("ChargedMusouEffect");
             effect.transform.localScale = Vector3.one * 0.5f;
 
+            var vfx = effect.GetOrAddComponent<VFXAttributes>();
+            vfx.DoNotPool = false;
+            vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
+
             var scale = effect.AddComponent<ObjectScaleCurve>();
             scale.useOverallCurveOnly = true;
             scale.timeMax = 0.5f;

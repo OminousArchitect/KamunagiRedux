@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies
 {
-    public class Kamunagi : Asset, IBody, IBodyDisplay, ISurvivor, IModel
+    public class Kamunagi : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates
     {
         GameObject IModel.BuildObject()
         {
@@ -176,5 +176,7 @@ namespace KamunagiOfChains.Data.Bodies
                 return family;
             }
         }
+
+        public Type[] GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal) };
     }
 }

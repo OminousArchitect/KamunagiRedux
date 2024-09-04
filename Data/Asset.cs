@@ -21,14 +21,15 @@ namespace KamunagiOfChains.Data
         public static ContentPack BuildContentPack()
         {
             var result = new ContentPack();
-
-            var assemblyTypes = Assembly.GetCallingAssembly().GetTypes();
-            var entityStates = assemblyTypes.Where(x => typeof(EntityState).IsAssignableFrom(x));
-            var assets = assemblyTypes
+            
+            var assets = Assembly.GetCallingAssembly().GetTypes()
                 .Where(x => typeof(Asset).IsAssignableFrom(x) && !x.IsAbstract);
             Assets = assets.ToDictionary(x => x, x => (Asset)Activator.CreateInstance(x));
 
             var instances = Assets.Values;
+            var entityStates = instances.Where(x => x is IEntityStates).SelectMany(x =>
+                (Type[])(Objects[x.GetType().Name + "_EntityStates"] ??= ((IEntityStates)x).GetEntityStates()));
+            
             result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
             result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
             result.skillDefs.Add(instances.Where(x => x is ISkillDef).Select(x => (SkillDef)x).ToArray());
@@ -44,7 +45,8 @@ namespace KamunagiOfChains.Data
             result.survivorDefs.Add(instances.Where(x => x is ISurvivor).Select(x => (SurvivorDef)x).ToArray());
             result.projectilePrefabs.Add(instances.Where(x => x is IProjectile)
                 .Select(x => (GameObject)GetObjectOrThrow<IProjectile>(x)).ToArray());
-            result.effectDefs.Add(instances.Where(x => x is IEffect).Select(x => new EffectDef((GameObject)GetObjectOrThrow<IEffect>(x))).ToArray());
+            result.effectDefs.Add(instances.Where(x => x is IEffect)
+                .Select(x => new EffectDef((GameObject)GetObjectOrThrow<IEffect>(x))).ToArray());
 
             return result;
         }
@@ -152,6 +154,19 @@ namespace KamunagiOfChains.Data
                     }
                     returnedObject = effect;
                     break;
+                case nameof(IVariant):
+                    var variant = (asset as IVariant)?.BuildObject();
+                    if (variant is null)
+                    {
+                        var skillDef = (SkillDef) asset;
+                        variant = new SkillFamily.Variant
+                        {
+                            skillDef = skillDef,
+                            viewableNode = new ViewablesCatalog.Node(skillDef.skillNameToken, false)
+                        };
+                    }
+                    returnedObject = variant;
+                    break;
                 default:
                     returnedObject = targetType.GetMethod("BuildObject")?.Invoke(asset, null) ?? throw notOfType;
                     break;
@@ -208,8 +223,7 @@ namespace KamunagiOfChains.Data
 
         public static implicit operator SkillFamily(Asset asset) => (SkillFamily)GetObjectOrThrow<ISkillFamily>(asset);
 
-        public static implicit operator SkillFamily.Variant(Asset asset) =>
-            (SkillFamily.Variant)GetObjectOrThrow<IVariant>(asset);
+        public static implicit operator SkillFamily.Variant(Asset asset) => (SkillFamily.Variant)GetObjectOrThrow<IVariant>(asset);
     }
 
     public class AssetTypeInvalidException : Exception
@@ -289,6 +303,11 @@ namespace KamunagiOfChains.Data
     {
         public abstract SkillDef BuildObject();
 
+        public abstract Type[] GetEntityStates();
+    }
+
+    public interface IEntityStates
+    {
         public abstract Type[] GetEntityStates();
     }
 

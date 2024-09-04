@@ -178,6 +178,15 @@ namespace KamunagiOfChains.Data
                     var skinController = ((GameObject)returnedObject).GetOrAddComponent<ModelSkinController>();
                     skinController.skins = modelAsset.GetSkins().Select(x => (SkinDef)x).ToArray();
                     return returnedObject;
+                case nameof(ISkin):
+                    var skinDef = (asset as ISkin)?.BuildObject() ?? throw notOfType;
+                    skinDef.baseSkins ??= Array.Empty<SkinDef>();
+                    skinDef.gameObjectActivations ??= Array.Empty<SkinDef.GameObjectActivation>();
+                    skinDef.meshReplacements ??= Array.Empty<SkinDef.MeshReplacement>();
+                    skinDef.minionSkinReplacements ??= Array.Empty<SkinDef.MinionSkinReplacement>();
+                    skinDef.projectileGhostReplacements ??= Array.Empty<SkinDef.ProjectileGhostReplacement>();
+                    returnedObject = skinDef;
+                    break;
                 default:
                     returnedObject = targetType.GetMethod("BuildObject")?.Invoke(asset, null) ?? throw notOfType;
                     break;

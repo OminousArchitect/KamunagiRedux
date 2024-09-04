@@ -23,11 +23,10 @@ namespace KamunagiOfChains.Data.Bodies
             return (SkinDef) ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
             {
                 var skinDef = (SkinDef)obj;
-                skinDef.baseSkins = Array.Empty<SkinDef>();
                 skinDef.name = "KamunagiDefaultSkinDef";
                 skinDef.nameToken = "NINES_KAMUNAGI_BODY_DEFAULT_SKIN_NAME";
                 skinDef.icon = LoadAsset<Sprite>("bundle:TwinsSkin");
-                
+
                 if (!TryGetGameObject<Kamunagi, IModel>(out var model)) return;
                 var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
                 var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];

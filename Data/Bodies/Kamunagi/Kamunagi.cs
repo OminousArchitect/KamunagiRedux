@@ -177,6 +177,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
                 skill._skillFamily = skillFamilyPrimary;
                 skillLocator.primary = skill;
+                var skill2 = bodyPrefab.AddComponent<GenericSkill>();
+                skill2._skillFamily = skillFamilyPrimary;
             }
             if (TryGetAsset<KamunagiSkillFamilySecondary>(out var skillFamilySecondary))
             {

@@ -2,6 +2,7 @@ using System;
 using EntityStates;
 using ExtraSkillSlots;
 using KamunagiOfChains.Data.GameObjects;
+using KamunagiOfChains.Data.Projectiles;
 using KamunagiOfChains.Data.States;
 using R2API;
 using RoR2;
@@ -171,8 +172,8 @@ namespace KamunagiOfChains.Data.Bodies
             public SkillFamily BuildObject()
             {
                 var family = ScriptableObject.CreateInstance<SkillFamily>();
-                if (TryGetAsset<MothMoth>(out var variant))
-                    family.variants = new[] { (SkillFamily.Variant)variant };
+                if (TryGetAsset<MothMoth>(out var mothmoth) && TryGetAsset<AltMusou>(out var altmousu))
+                    family.variants = new[] { (SkillFamily.Variant)mothmoth, (SkillFamily.Variant)altmousu };
                 return family;
             }
         }

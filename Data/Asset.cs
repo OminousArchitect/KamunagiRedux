@@ -32,12 +32,19 @@ namespace KamunagiOfChains.Data
             result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
             result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
             result.skillDefs.Add(instances.Where(x => x is ISkillDef).Select(x => (SkillDef)x).ToArray());
-            result.entityStateTypes.Add(instances.Where(x => x is ISkillDef).SelectMany(x => (Type[]) Objects[x.GetType().Name + "_" + nameof(ISkillDef) + "_EntityStates"]).Concat(entityStates).Distinct().ToArray());
+            result.entityStateTypes.Add(instances.Where(x => x is ISkillDef)
+                .SelectMany(x => (Type[])Objects[x.GetType().Name + "_" + nameof(ISkillDef) + "_EntityStates"])
+                .Concat(entityStates).Distinct().ToArray());
             result.skillFamilies.Add(instances.Where(x => x is ISkillFamily).Select(x => (SkillFamily)x).ToArray());
-            result.networkedObjectPrefabs.Add(instances.Where(x => x is INetworkedObject).Select(x => (GameObject)GetObjectOrThrow<INetworkedObject>(x))
+            result.networkedObjectPrefabs.Add(instances.Where(x => x is INetworkedObject)
+                .Select(x => (GameObject)GetObjectOrThrow<INetworkedObject>(x))
                 .ToArray());
-            result.bodyPrefabs.Add(instances.Where(x => x is IBody).Select(x => (GameObject)GetObjectOrThrow<IBody>(x)).ToArray());
+            result.bodyPrefabs.Add(instances.Where(x => x is IBody).Select(x => (GameObject)GetObjectOrThrow<IBody>(x))
+                .ToArray());
             result.survivorDefs.Add(instances.Where(x => x is ISurvivor).Select(x => (SurvivorDef)x).ToArray());
+            result.projectilePrefabs.Add(instances.Where(x => x is IProjectile)
+                .Select(x => (GameObject)GetObjectOrThrow<IProjectile>(x)).ToArray());
+            result.effectDefs.Add(instances.Where(x => x is IEffect).Select(x => new EffectDef((GameObject)GetObjectOrThrow<IEffect>(x))).ToArray());
 
             return result;
         }
@@ -93,7 +100,8 @@ namespace KamunagiOfChains.Data
         private static object GetObjectOrThrow<T>(Asset asset)
         {
             var name = asset.GetType().Name;
-            var targetTypeName = typeof(T).Name;
+            var targetType = typeof(T);
+            var targetTypeName = targetType.Name;
             var key = name + "_" + targetTypeName;
             var notOfType = new AssetTypeInvalidException($"{name} is not of type {targetTypeName}");
             if (Objects.TryGetValue(key, out var result))
@@ -122,6 +130,32 @@ namespace KamunagiOfChains.Data
                     skill.activationState = new SerializableEntityStateType(entityStates[0]);
                     returnedObject = skill;
                     break;
+                case nameof(ISurvivor):
+                    var survivor = (asset as ISurvivor)?.BuildObject() ?? throw notOfType;
+                    survivor.cachedName = name + nameof(SurvivorDef);
+                    returnedObject = survivor;
+                    break;
+                case nameof(IEffect):
+                    var effect = (asset as IEffect)?.BuildObject() ?? throw notOfType;
+                    if (!effect.GetComponent<VFXAttributes>())
+                    {
+                        var attributes = effect.AddComponent<VFXAttributes>();
+                        attributes.vfxPriority = VFXAttributes.VFXPriority.Always;
+                        attributes.DoNotPool = true;
+                    }
+                    if (!effect.GetComponent<EffectComponent>())
+                    {
+                        var comp = effect.AddComponent<EffectComponent>();
+                        comp.applyScale = false;
+                        comp.parentToReferencedTransform = true;
+                        comp.positionAtReferencedTransform = true;
+                    }
+                    returnedObject = effect;
+                    break;
+                default:
+                    returnedObject = targetType.GetMethod("BuildObject")?.Invoke(asset, null) ?? throw notOfType;
+                    break;
+                /*
                 case nameof(ISkillFamily):
                     var skillFamily = (asset as ISkillFamily)?.BuildObject() ?? throw notOfType;
                     returnedObject = skillFamily;
@@ -133,6 +167,14 @@ namespace KamunagiOfChains.Data
                 case nameof(INetworkedObject):
                     var networkedObject = (asset as INetworkedObject)?.BuildObject() ?? throw notOfType;
                     returnedObject = networkedObject;
+                    break;
+                case nameof(IProjectile):
+                    var projectile = (asset as IProjectile)?.BuildObject() ?? throw notOfType;
+                    returnedObject = projectile;
+                    break;
+                case nameof(IProjectileGhost):
+                    var ghost = (asset as IProjectileGhost)?.BuildObject() ?? throw notOfType;
+                    returnedObject = ghost;
                     break;
                 case nameof(IModel):
                     var model = (asset as IModel)?.BuildObject() ?? throw notOfType;
@@ -146,16 +188,12 @@ namespace KamunagiOfChains.Data
                     var body = (asset as IBody)?.BuildObject() ?? throw notOfType;
                     returnedObject = body;
                     break;
-                case nameof(ISurvivor):
-                    var survivor = (asset as ISurvivor)?.BuildObject() ?? throw notOfType;
-                    survivor.cachedName = name + nameof(SurvivorDef);
-                    returnedObject = survivor;
-                    break;
+                    */
             }
 
             Objects[key] = returnedObject ??
                            throw new InvalidOperationException(
-                               $"Tried to get object of unsupported type {targetTypeName}");
+                               $"How did you get here, maybe {targetTypeName} isn't a asset?");
             return returnedObject;
         }
 
@@ -165,11 +203,13 @@ namespace KamunagiOfChains.Data
             (UnlockableDef)GetObjectOrThrow<IUnlockable>(asset);
 
         public static implicit operator SurvivorDef(Asset asset) => (SurvivorDef)GetObjectOrThrow<ISurvivor>(asset);
-        
+
         public static implicit operator SkillDef(Asset asset) => (SkillDef)GetObjectOrThrow<ISkillDef>(asset);
-        
+
         public static implicit operator SkillFamily(Asset asset) => (SkillFamily)GetObjectOrThrow<ISkillFamily>(asset);
-        public static implicit operator SkillFamily.Variant(Asset asset) => (SkillFamily.Variant)GetObjectOrThrow<IVariant>(asset);
+
+        public static implicit operator SkillFamily.Variant(Asset asset) =>
+            (SkillFamily.Variant)GetObjectOrThrow<IVariant>(asset);
     }
 
     public class AssetTypeInvalidException : Exception
@@ -182,8 +222,23 @@ namespace KamunagiOfChains.Data
     public interface IGameObject
     {
     }
-    
+
     public interface INetworkedObject : IGameObject
+    {
+        public abstract GameObject BuildObject();
+    }
+
+    public interface IProjectile : IGameObject
+    {
+        public abstract GameObject BuildObject();
+    }
+
+    public interface IProjectileGhost : IGameObject
+    {
+        public abstract GameObject BuildObject();
+    }
+
+    public interface IEffect : IGameObject
     {
         public abstract GameObject BuildObject();
     }

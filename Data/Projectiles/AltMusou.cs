@@ -134,7 +134,7 @@ namespace KamunagiOfChains.Data.Projectiles
         GameObject IProjectile.BuildObject()
         {
             var projectile =
-                LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallGhost.prefab")!
+                LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidRaidCrab/VoidRaidCrabMissileProjectile.prefab")!
                     .InstantiateClone("TwinsTrackingProjectile");
             if (TryGetGameObject<AltMusou, IProjectileGhost>(out var ghost))
                 projectile.GetComponent<ProjectileController>().ghostPrefab = ghost;

@@ -77,7 +77,7 @@ namespace KamunagiOfChains.Data.Bodies
         GameObject IBodyDisplay.BuildObject()
         {
             if (!TryGetGameObject<Kamunagi, IModel>(out var model)) throw new Exception("Model not loaded.");
-            var displayModel = model.InstantiateClone("KamunagiDisplay");
+            var displayModel = model.InstantiateClone("KamunagiDisplay", false);
             displayModel.GetComponent<Animator>().runtimeAnimatorController =
                 LoadAsset<RuntimeAnimatorController>("bundle:animHenryMenu");
             return displayModel;

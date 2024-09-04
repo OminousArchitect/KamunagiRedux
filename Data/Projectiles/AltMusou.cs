@@ -148,7 +148,7 @@ namespace KamunagiOfChains.Data.Projectiles
         {
             var ghost = LoadAsset<GameObject>(
                     "addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallGhost.prefab")!
-                .InstantiateClone("TwinsTrackingGhost");
+                .InstantiateClone("TwinsTrackingGhost", false);
             ghost.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
             return ghost;
         }
@@ -157,7 +157,7 @@ namespace KamunagiOfChains.Data.Projectiles
         {
             var effect =
                 LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegacrabBlackSphere.prefab")!
-                    .InstantiateClone("ChargedMusouEffect");
+                    .InstantiateClone("ChargedMusouEffect", false);
             effect.transform.localScale = Vector3.one * 0.5f;
 
             var vfx = effect.GetOrAddComponent<VFXAttributes>();
@@ -183,13 +183,13 @@ namespace KamunagiOfChains.Data.Projectiles
             coolSphere.shadowCastingMode = ShadowCastingMode.On;
 
             var pointLight = LoadAsset<GameObject>("addressable:RoR2/Base/bazaar/Bazaar_Light.prefab")!.transform
-                .GetChild(1).gameObject.InstantiateClone("Point Light");
+                .GetChild(1).gameObject.InstantiateClone("Point Light", false);
             pointLight.transform.parent = effect.transform;
             pointLight.transform.localPosition = Vector3.zero;
             pointLight.transform.localScale = Vector3.one * 0.5f;
             pointLight.GetComponent<Light>().range = 0.5f;
             var altSparks = LoadAsset<GameObject>("addressable:RoR2/Base/Blackhole/GravSphere.prefab")!.transform
-                .GetChild(1).gameObject.InstantiateClone("Sparks, Blue");
+                .GetChild(1).gameObject.InstantiateClone("Sparks, Blue", false);
             var altP = altSparks.GetComponent<ParticleSystem>();
             var altPMain = altP.main;
             altPMain.simulationSpeed = 2f;
@@ -271,7 +271,7 @@ namespace KamunagiOfChains.Data.Projectiles
         GameObject IProjectileGhost.BuildObject()
         {
             if (!TryGetGameObject<AltMusou, IEffect>(out var effect)) throw new Exception("Effect not present");
-            var ghost = effect.InstantiateClone("TwinsAltChargeBallGhost");
+            var ghost = effect.InstantiateClone("TwinsAltChargeBallGhost", false);
             Object.Destroy(ghost.GetComponent<ObjectScaleCurve>());
             Object.Destroy(ghost.GetComponent<EffectComponent>());
             ghost.AddComponent<ProjectileGhostController>();

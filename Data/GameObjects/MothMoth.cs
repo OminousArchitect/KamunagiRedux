@@ -48,7 +48,7 @@ namespace KamunagiOfChains.Data.GameObjects
         private static readonly int RemapTex = Shader.PropertyToID("_RemapTex");
         private static readonly int TintColor = Shader.PropertyToID("_TintColor");
 
-        public GameObject BuildObject()
+        GameObject INetworkedObject.BuildObject()
         {
             var mothMoth = LoadAsset<GameObject>("addressable:RoR2/Base/Beetle/BeetleWard.prefab")!.InstantiateClone("MothMoth");
             

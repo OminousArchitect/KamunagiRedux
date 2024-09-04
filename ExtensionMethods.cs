@@ -66,5 +66,12 @@ namespace KamunagiOfChains
             first = array[0];
             rest = array[1..];
         }
+
+        public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
+        {
+            var result = gameObject.GetComponent<T>();
+            if (!result) result = gameObject.AddComponent<T>();
+            return result;
+        }
     }
 }

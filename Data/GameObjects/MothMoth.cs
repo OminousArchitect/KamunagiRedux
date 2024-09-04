@@ -1,10 +1,43 @@
+using System;
+using EntityStates;
 using R2API;
 using RoR2;
+using RoR2.Skills;
 using UnityEngine;
+using UnityEngine.Networking;
+using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.GameObjects
 {
-    public class MothMoth : Asset, INetworkedObject
+    public class SummonMothMoth : EntityState
+    {
+        private float duration = 0.55f;
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            Util.PlaySound(EntityStates.BeetleQueenMonster.SpawnWards.attackSoundString, gameObject);
+            if (NetworkServer.active && Asset.TryGetGameObject<MothMoth, INetworkedObject>(out var wardPrefab))
+            {
+                var ward = Object.Instantiate(wardPrefab, characterBody.corePosition, Quaternion.identity);
+                ward.GetComponent<TeamComponent>().teamIndex = teamComponent.teamIndex;
+                ward.GetComponent<TeamFilter>().teamIndex = teamComponent.teamIndex;
+                NetworkServer.Spawn(ward);
+            }
+        }
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            if (fixedAge >= duration && isAuthority)
+            {
+                outer.SetNextStateToMain();
+            }
+        }
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+    }
+    public class MothMoth : Asset, INetworkedObject, ISkillDef, IVariant
     {
         private static readonly int Cull = Shader.PropertyToID("_Cull");
         private static readonly int Color = Shader.PropertyToID("_Color");
@@ -47,6 +80,29 @@ namespace KamunagiOfChains.Data.GameObjects
 
             mothMoth.AddComponent<DestroyOnTimer>().duration = 10;            
             return mothMoth;
+        }
+
+        Type[] ISkillDef.GetEntityStates()
+        {
+            return new[] { typeof(SummonMothMoth) };
+        }
+
+        SkillDef ISkillDef.BuildObject()
+        {
+            var skill = ScriptableObject.CreateInstance<SkillDef>();
+            skill.activationStateMachineName = "Weapon";
+            return skill;
+        }
+
+        SkillFamily.Variant IVariant.BuildObject()
+        {
+            // TODO look into making this virtual or something somehow
+            var skill = (SkillDef)this;
+            return new SkillFamily.Variant
+            {
+                skillDef = skill,
+                viewableNode = new ViewablesCatalog.Node(skill.skillNameToken, false)
+            };
         }
     }
 }

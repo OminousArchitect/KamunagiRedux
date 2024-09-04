@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using EntityStates;
 using RoR2;
 using RoR2.ContentManagement;
+using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -24,12 +26,16 @@ namespace KamunagiOfChains.Data
                 .Where(x => typeof(Asset).IsAssignableFrom(x) && !x.IsAbstract);
             Assets = assets.ToDictionary(x => x, x => (Asset)Activator.CreateInstance(x));
 
-            result.unlockableDefs.Add(Assets.Values.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
-            result.itemDefs.Add(Assets.Values.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
-            result.networkedObjectPrefabs.Add(Assets.Values.Where(x => x is INetworkedObject).Select(x => (GameObject)GetObjectOrThrow<INetworkedObject>(x))
+            var instances = Assets.Values;
+            result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
+            result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
+            result.skillDefs.Add(instances.Where(x => x is ISkillDef).Select(x => (SkillDef)x).ToArray());
+            result.entityStateTypes.Add(instances.Where(x => x is ISkillDef).SelectMany(x => (Type[]) Objects[x.GetType().Name + "_" + nameof(ISkillDef) + "_EntityStates"]).ToArray());
+            result.skillFamilies.Add(instances.Where(x => x is ISkillFamily).Select(x => (SkillFamily)x).ToArray());
+            result.networkedObjectPrefabs.Add(instances.Where(x => x is INetworkedObject).Select(x => (GameObject)GetObjectOrThrow<INetworkedObject>(x))
                 .ToArray());
-            result.bodyPrefabs.Add(Assets.Values.Where(x => x is IBody).Select(x => (GameObject)GetObjectOrThrow<IBody>(x)).ToArray());
-            result.survivorDefs.Add(Assets.Values.Where(x => x is ISurvivor).Select(x => (SurvivorDef)x).ToArray());
+            result.bodyPrefabs.Add(instances.Where(x => x is IBody).Select(x => (GameObject)GetObjectOrThrow<IBody>(x)).ToArray());
+            result.survivorDefs.Add(instances.Where(x => x is ISurvivor).Select(x => (SurvivorDef)x).ToArray());
 
             return result;
         }
@@ -106,6 +112,22 @@ namespace KamunagiOfChains.Data
                     item.name = name + nameof(ItemDef);
                     returnedObject = item;
                     break;
+                case nameof(ISkillDef):
+                    var skill = (asset as ISkillDef)?.BuildObject() ?? throw notOfType;
+                    var entityStates = ((ISkillDef)asset).GetEntityStates();
+                    Objects[key + "_EntityStates"] = entityStates;
+                    skill.skillName = name + nameof(SkillDef);
+                    skill.activationState = new SerializableEntityStateType(entityStates[0]);
+                    returnedObject = skill;
+                    break;
+                case nameof(ISkillFamily):
+                    var skillFamily = (asset as ISkillFamily)?.BuildObject() ?? throw notOfType;
+                    returnedObject = skillFamily;
+                    break;
+                case nameof(IVariant):
+                    var variant = (asset as IVariant)?.BuildObject() ?? throw notOfType;
+                    returnedObject = variant;
+                    break;
                 case nameof(INetworkedObject):
                     var networkedObject = (asset as INetworkedObject)?.BuildObject() ?? throw notOfType;
                     returnedObject = networkedObject;
@@ -141,6 +163,11 @@ namespace KamunagiOfChains.Data
             (UnlockableDef)GetObjectOrThrow<IUnlockable>(asset);
 
         public static implicit operator SurvivorDef(Asset asset) => (SurvivorDef)GetObjectOrThrow<ISurvivor>(asset);
+        
+        public static implicit operator SkillDef(Asset asset) => (SkillDef)GetObjectOrThrow<ISkillDef>(asset);
+        
+        public static implicit operator SkillFamily(Asset asset) => (SkillFamily)GetObjectOrThrow<ISkillFamily>(asset);
+        public static implicit operator SkillFamily.Variant(Asset asset) => (SkillFamily.Variant)GetObjectOrThrow<IVariant>(asset);
     }
 
     public class AssetTypeInvalidException : Exception
@@ -194,5 +221,22 @@ namespace KamunagiOfChains.Data
     public interface IUnlockable
     {
         public abstract UnlockableDef BuildObject();
+    }
+
+    public interface ISkillFamily
+    {
+        public abstract SkillFamily BuildObject();
+    }
+
+    public interface ISkillDef
+    {
+        public abstract SkillDef BuildObject();
+
+        public abstract Type[] GetEntityStates();
+    }
+
+    public interface IVariant
+    {
+        public abstract SkillFamily.Variant BuildObject();
     }
 }

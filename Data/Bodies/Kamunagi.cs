@@ -1,19 +1,24 @@
 using System;
 using System.Collections.Generic;
+using ExtraSkillSlots;
+using KamunagiOfChains.Data.GameObjects;
 using R2API;
 using RoR2;
+using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Object = UnityEngine.Object;
 
-namespace KamunagiOfChains.Data.Bodies {
-    public class Kamunagi : Asset, IBody, IBodyDisplay, ISurvivor, IModel {
+namespace KamunagiOfChains.Data.Bodies
+{
+    public class Kamunagi : Asset, IBody, IBodyDisplay, ISurvivor, IModel
+    {
         GameObject IModel.BuildObject()
         {
             var model = LoadAsset<GameObject>("bundle:mdlKamunagi");
-            var characterModel = model.GetComponent<CharacterModel>();
-            if (!characterModel) characterModel = model.AddComponent<CharacterModel>();
+            var characterModel = model.GetOrAddComponent<CharacterModel>();
             var childLocator = model.GetComponent<ChildLocator>();
-            
+
             CharacterModel.RendererInfo RenderInfoFromChild(Component child, bool dontHopoo = false)
             {
                 var renderer = child.GetComponent<Renderer>();
@@ -25,8 +30,9 @@ namespace KamunagiOfChains.Data.Bodies {
                     defaultShadowCastingMode = ShadowCastingMode.On,
                 };
             }
+
             var voidCrystalMat = LoadAsset<Material>("addressable:RoR2/DLC1/voidstage/matVoidCrystal.mat");
-            characterModel.baseRendererInfos = new []
+            characterModel.baseRendererInfos = new[]
             {
                 new CharacterModel.RendererInfo
                 {
@@ -56,33 +62,35 @@ namespace KamunagiOfChains.Data.Bodies {
                 RenderInfoFromChild(childLocator.FindChild("U Shoe")),
             };
 
-            var modelHurtBoxGroup = model.GetComponent<HurtBoxGroup>();
-            if (!modelHurtBoxGroup) modelHurtBoxGroup = model.AddComponent<HurtBoxGroup>();
+            var modelHurtBoxGroup = model.GetOrAddComponent<HurtBoxGroup>();
             var mainHurtBox = childLocator.FindChild("MainHurtbox").gameObject;
             mainHurtBox.layer = LayerIndex.entityPrecise.intVal;
-            var mainHurtBoxComponent = mainHurtBox.AddComponent<HurtBox>();
+            var mainHurtBoxComponent = mainHurtBox.GetOrAddComponent<HurtBox>();
             mainHurtBoxComponent.isBullseye = true;
-            modelHurtBoxGroup.hurtBoxes = new []{mainHurtBoxComponent};
+            modelHurtBoxGroup.hurtBoxes = new[] { mainHurtBoxComponent };
 
             return model;
         }
-        
+
         GameObject IBodyDisplay.BuildObject()
         {
             if (!TryGetGameObject<Kamunagi, IModel>(out var model)) throw new Exception("Model not loaded.");
-            var displayModel = PrefabAPI.InstantiateClone(model, "KamunagiDisplay");
-            displayModel.GetComponent<Animator>().runtimeAnimatorController = LoadAsset<RuntimeAnimatorController>("bundle:animHenryMenu");
+            var displayModel = model.InstantiateClone("KamunagiDisplay");
+            displayModel.GetComponent<Animator>().runtimeAnimatorController =
+                LoadAsset<RuntimeAnimatorController>("bundle:animHenryMenu");
             return displayModel;
         }
-        
+
         GameObject IBody.BuildObject()
         {
             if (!TryGetGameObject<Kamunagi, IModel>(out var model)) throw new Exception("Model not loaded.");
-            var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody").InstantiateClone("NinesKamunagiBody");
+            var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody")
+                .InstantiateClone("NinesKamunagiBody");
 
             var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
 
             #region Setup Model
+
             var bodyHurtBoxGroup = model.GetComponentInChildren<HurtBoxGroup>();
             foreach (var hurtBox in bodyHurtBoxGroup.hurtBoxes)
             {
@@ -90,15 +98,34 @@ namespace KamunagiOfChains.Data.Bodies {
             }
 
             var bodyModelLocator = bodyPrefab.GetComponent<ModelLocator>();
-            UnityEngine.Object.Destroy(bodyModelLocator.modelTransform.gameObject);
+            Object.Destroy(bodyModelLocator.modelTransform.gameObject);
             model.transform.parent = bodyModelLocator.modelBaseTransform;
             bodyModelLocator.modelTransform = model.transform;
+
             #endregion
 
             #region Setup StateMachines
-            
+
             #endregion
-            
+
+            #region Setup Skills
+
+            foreach (var toDestroy in bodyPrefab.GetComponents<GenericSkill>())
+            {
+                Object.Destroy(toDestroy);
+            }
+
+            var skillLocator = bodyPrefab.GetComponent<SkillLocator>();
+            var extraSkillLocator = bodyPrefab.AddComponent<ExtraSkillLocator>();
+            if (TryGetAsset<KamunagiSkillFamilyExtraFourth>(out var skillFamily))
+            {
+                var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill._skillFamily = skillFamily;
+                skillLocator.primary = skill;
+            }
+
+            #endregion
+
             return bodyPrefab;
         }
 
@@ -111,14 +138,25 @@ namespace KamunagiOfChains.Data.Bodies {
             survivor.outroFlavorToken = "NINES_KAMUNAGI_BODY_OUTRO_FLAVOR";
             survivor.mainEndingEscapeFailureFlavorToken = "NINES_KAMUNAGI_BODY_OUTRO_FAILURE";
             survivor.desiredSortPosition = 100f;
-            
+
             if (TryGetGameObject<Kamunagi, IBody>(out var body))
                 survivor.bodyPrefab = body;
-            
+
             if (TryGetGameObject<Kamunagi, IBodyDisplay>(out var display))
                 survivor.displayPrefab = display;
-            
+
             return survivor;
+        }
+
+        public class KamunagiSkillFamilyExtraFourth : Asset, ISkillFamily
+        {
+            public SkillFamily BuildObject()
+            {
+                var family = ScriptableObject.CreateInstance<SkillFamily>();
+                if (TryGetAsset<MothMoth>(out var variant))
+                    family.variants = new[] { (SkillFamily.Variant)variant };
+                return family;
+            }
         }
     }
 }

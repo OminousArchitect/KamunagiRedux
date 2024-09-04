@@ -122,6 +122,11 @@ namespace KamunagiOfChains.Data.Bodies
             bodyStateMachine.customName = "Body";
             bodyStateMachine.initialStateType = new SerializableEntityStateType(typeof(VoidPortalSpawnState));
             bodyStateMachine.mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
+            
+            var weaponStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
+            weaponStateMachine.customName = "Weapon";
+            weaponStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
+            weaponStateMachine.mainStateType = weaponStateMachine.initialStateType;
 
             networkStateMachine.stateMachines = new[] { bodyStateMachine };
 

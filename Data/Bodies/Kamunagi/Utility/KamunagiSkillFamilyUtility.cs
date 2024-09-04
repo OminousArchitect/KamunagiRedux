@@ -1,9 +1,9 @@
 using RoR2.Skills;
 using UnityEngine;
 
-namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
+namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-    public class KamunagiSkillFamilyPrimary : Asset, ISkillFamily
+    public class KamunagiSkillFamilyUtility : Asset, ISkillFamily
     {
         public SkillFamily BuildObject()
         {

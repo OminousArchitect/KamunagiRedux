@@ -1,6 +1,10 @@
 using System;
 using EntityStates;
 using ExtraSkillSlots;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Secondary;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
@@ -168,10 +172,34 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
             var skillLocator = bodyPrefab.GetComponent<SkillLocator>();
             var extraSkillLocator = bodyPrefab.AddComponent<ExtraSkillLocator>();
-            if (TryGetAsset<KamunagiSkillFamilyExtra>(out var skillFamily))
+            if (TryGetAsset<KamunagiSkillFamilyPrimary>(out var skillFamilyPrimary))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
-                skill._skillFamily = skillFamily;
+                skill._skillFamily = skillFamilyPrimary;
+                skillLocator.primary = skill;
+            }
+            if (TryGetAsset<KamunagiSkillFamilySecondary>(out var skillFamilySecondary))
+            {
+                var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill._skillFamily = skillFamilySecondary;
+                skillLocator.secondary = skill;
+            }
+            if (TryGetAsset<KamunagiSkillFamilyUtility>(out var skillFamilyUtility))
+            {
+                var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill._skillFamily = skillFamilyUtility;
+                skillLocator.utility = skill;
+            }
+            if (TryGetAsset<KamunagiSkillFamilySpecial>(out var skillFamilySpecial))
+            {
+                var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill._skillFamily = skillFamilySpecial;
+                skillLocator.special = skill;
+            }
+            if (TryGetAsset<KamunagiSkillFamilyExtra>(out var skillFamilyExtra))
+            {
+                var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill._skillFamily = skillFamilyExtra;
                 extraSkillLocator.extraFourth = skill;
             }
 

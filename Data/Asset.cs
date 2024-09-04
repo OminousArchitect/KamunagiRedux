@@ -85,6 +85,10 @@ namespace KamunagiOfChains.Data
             asset = default!;
             return false;
         }
+        public static T GetAsset<T>() where T : Asset
+        {
+            return (T) Assets[typeof(T)];
+        }
 
         public static bool TryGetGameObject<T, T2>(out GameObject asset) where T2 : IGameObject
         {
@@ -98,6 +102,10 @@ namespace KamunagiOfChains.Data
                 asset = default!;
                 return false;
             }
+        }
+        public static GameObject GetGameObject<T, T2>() where T2 : IGameObject
+        {
+            return (GameObject) GetObjectOrThrow<T2>(Assets[typeof(T)]);
         }
 
         private static object GetObjectOrThrow<T>(Asset asset)

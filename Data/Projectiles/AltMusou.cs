@@ -112,10 +112,25 @@ namespace KamunagiOfChains.Data.Projectiles
         SkillDef ISkillDef.BuildObject()
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
+            skill.skillName = "Primary 2";
+            skill.skillNameToken = "NINES_KAMUNAGI_BODY_PRIMARY1_NAME";
+            skill.skillDescriptionToken = "NINES_KAMUNAGI_BODY_PRIMARY1_DESCRIPTION";
+            skill.icon = LoadAsset<Sprite>("bundle:darkpng");
+            skill.activationStateMachineName = "Weapon";
+            skill.baseMaxStock = 0;
+            skill.baseRechargeInterval = 2f;
+            skill.beginSkillCooldownOnSkillEnd = true;
+            skill.interruptPriority = InterruptPriority.Any;
+            skill.cancelSprintingOnActivation = false;
+            skill.rechargeStock = 0;
+            skill.requiredStock = 0;
+            skill.stockToConsume = 0;
+            skill.keywordTokens = new[] { "KEYWORD_AGILE" };
             return skill;
         }
 
         Type[] ISkillDef.GetEntityStates() => new[] { typeof(AltSoeiMusou) };
+
         GameObject IProjectile.BuildObject()
         {
             var projectile =
@@ -127,6 +142,7 @@ namespace KamunagiOfChains.Data.Projectiles
             projectile.GetComponent<ProjectileDamage>().damage = 1f;
             return projectile;
         }
+
         GameObject IProjectileGhost.BuildObject()
         {
             var ghost = LoadAsset<GameObject>(
@@ -239,8 +255,9 @@ namespace KamunagiOfChains.Data.Projectiles
     {
         GameObject IProjectile.BuildObject()
         {
-            var projectile = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigProjectile.prefab")!
-                .InstantiateClone("TwinsAltChargeBallProjectile");
+            var projectile =
+                LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigProjectile.prefab")!
+                    .InstantiateClone("TwinsAltChargeBallProjectile");
             if (TryGetGameObject<AltMusouChargeBall, IProjectileGhost>(out var ghost))
                 projectile.GetComponent<ProjectileController>().ghostPrefab = ghost;
             return projectile;

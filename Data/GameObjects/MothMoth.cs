@@ -38,7 +38,7 @@ namespace KamunagiOfChains.Data.GameObjects
             return InterruptPriority.Skill;
         }
     }
-    public class MothMoth : Asset, INetworkedObject, ISkillDef, IVariant
+    public class MothMoth : Asset, INetworkedObject, ISkillDef
     {
         private static readonly int Cull = Shader.PropertyToID("_Cull");
         private static readonly int Color = Shader.PropertyToID("_Color");
@@ -93,17 +93,6 @@ namespace KamunagiOfChains.Data.GameObjects
             var skill = ScriptableObject.CreateInstance<SkillDef>();
             skill.activationStateMachineName = "Weapon";
             return skill;
-        }
-
-        SkillFamily.Variant IVariant.BuildObject()
-        {
-            // TODO look into making this virtual or something somehow
-            var skill = (SkillDef)this;
-            return new SkillFamily.Variant
-            {
-                skillDef = skill,
-                viewableNode = new ViewablesCatalog.Node(skill.skillNameToken, false)
-            };
         }
     }
 }

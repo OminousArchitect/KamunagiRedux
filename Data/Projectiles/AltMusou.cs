@@ -20,7 +20,7 @@ namespace KamunagiOfChains.Data.Projectiles
 
         public float maxChargeTime = 3f;
         public Transform muzzleTransform = null!;
-        public EffectManagerHelper chargeEffectInstance;
+        public EffectManagerHelper? chargeEffectInstance;
         public float projectileFireFrequency = 0.4f;
         public float ballDamageCoefficient = 6f;
         public float stopwatch;

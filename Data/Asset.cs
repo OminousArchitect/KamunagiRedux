@@ -22,7 +22,9 @@ namespace KamunagiOfChains.Data
         {
             var result = new ContentPack();
 
-            var assets = Assembly.GetCallingAssembly().GetTypes()
+            var assemblyTypes = Assembly.GetCallingAssembly().GetTypes();
+            var entityStates = assemblyTypes.Where(x => typeof(EntityState).IsAssignableFrom(x));
+            var assets = assemblyTypes
                 .Where(x => typeof(Asset).IsAssignableFrom(x) && !x.IsAbstract);
             Assets = assets.ToDictionary(x => x, x => (Asset)Activator.CreateInstance(x));
 
@@ -30,7 +32,7 @@ namespace KamunagiOfChains.Data
             result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
             result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
             result.skillDefs.Add(instances.Where(x => x is ISkillDef).Select(x => (SkillDef)x).ToArray());
-            result.entityStateTypes.Add(instances.Where(x => x is ISkillDef).SelectMany(x => (Type[]) Objects[x.GetType().Name + "_" + nameof(ISkillDef) + "_EntityStates"]).ToArray());
+            result.entityStateTypes.Add(instances.Where(x => x is ISkillDef).SelectMany(x => (Type[]) Objects[x.GetType().Name + "_" + nameof(ISkillDef) + "_EntityStates"]).Concat(entityStates).Distinct().ToArray());
             result.skillFamilies.Add(instances.Where(x => x is ISkillFamily).Select(x => (SkillFamily)x).ToArray());
             result.networkedObjectPrefabs.Add(instances.Where(x => x is INetworkedObject).Select(x => (GameObject)GetObjectOrThrow<INetworkedObject>(x))
                 .ToArray());
@@ -180,7 +182,7 @@ namespace KamunagiOfChains.Data
     public interface IGameObject
     {
     }
-
+    
     public interface INetworkedObject : IGameObject
     {
         public abstract GameObject BuildObject();

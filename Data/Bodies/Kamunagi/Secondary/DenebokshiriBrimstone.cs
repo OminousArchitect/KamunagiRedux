@@ -168,7 +168,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             scale.useOverallCurveOnly = true;
             scale.timeMax = 2f;
             scale.overallCurve = AnimationCurve.Linear(0, 0, 1, 1);
-            var minisunMesh = ghost.GetComponentInChildren<MeshRenderer>();
+            var minisunMesh = ghost.GetComponentInChildren<MeshRenderer>(true);
+            minisunMesh.gameObject.SetActive(true);
             minisunMesh.material.SetTexture("_RemapTex",
                 LoadAsset<Texture2D>("RoR2/Base/FireballsOnHit/texFireballsOnHitIcon.png"));
             minisunMesh.material.SetFloat("_AlphaBoost", 6.351971f);

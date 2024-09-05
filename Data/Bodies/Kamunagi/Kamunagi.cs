@@ -119,8 +119,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
             var twinBehaviour = bodyPrefab.AddComponent<TwinBehaviour>();
 
             bodyCharacterBody.preferredPodPrefab = null;
-            bodyCharacterBody.baseNameToken = tokenPrefix + "";
-            bodyCharacterBody.subtitleNameToken = tokenPrefix + "";
+            bodyCharacterBody.baseNameToken = tokenPrefix + "NAME";
+            bodyCharacterBody.subtitleNameToken = tokenPrefix + "SUBTITLE";
             bodyCharacterBody.bodyColor = Colors.twinsLightColor;
 
             #region Setup Model

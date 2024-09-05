@@ -114,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
             skill.interruptPriority = InterruptPriority.Any;
             skill.isCombatSkill = false;
             skill.cancelSprintingOnActivation = false;
-            skill.keywordTokens = new[] { "TWINSSHOCK_KEYWORD" };
+            skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSSHOCK_KEYWORD" };
             return skill;
         }
     }

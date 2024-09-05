@@ -112,8 +112,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
             skill.skillName = "Special 1";
-            skill.skillNameToken = "SPECIAL1_NAME";
-            skill.skillDescriptionToken = "SPECIAL1_DESCRIPTION";
+            skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL1_NAME";
+            skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL1_DESCRIPTION";
             skill.icon = LoadAsset<Sprite>("bundle:Special1");
             skill.activationStateMachineName = "Body";
             skill.baseMaxStock = 2;

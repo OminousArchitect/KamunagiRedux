@@ -197,9 +197,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
         GameObject IProjectileGhost.BuildObject()
         {
-            var ghost = LoadAsset<GameObject>("addressables:RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab")!
+            var ghost = LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab")!
                 .InstantiateClone("MikazuchiLightningOrbGhost", false);
-            var warbannerRamp = LoadAsset<Texture2D>("addressables:RoR2/Base/Common/ColorRamps/texRampWarbanner2.png");
+            var warbannerRamp = LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampWarbanner2.png");
             foreach (var r in ghost.GetComponentsInChildren<ParticleSystemRenderer>(true))
             {
                 var name = r.name;

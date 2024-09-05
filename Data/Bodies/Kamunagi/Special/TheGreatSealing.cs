@@ -1,4 +1,5 @@
 ﻿using System;
+using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -105,7 +106,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
         SkillDef ISkill.BuildObject()
         {
-            throw new NotImplementedException();
+            var skill = ScriptableObject.CreateInstance<SkillDef>();
+            skill.skillName = "Special 1";
+            skill.skillNameToken = "SPECIAL1_NAME";
+            skill.skillDescriptionToken = "SPECIAL1_DESCRIPTION";
+            skill.icon = LoadAsset<Sprite>("bundle:Special1");
+            skill.activationStateMachineName = "Body";
+            skill.baseMaxStock = 2;
+            skill.baseRechargeInterval = 3f;
+            skill.beginSkillCooldownOnSkillEnd = true;
+            skill.canceledFromSprinting = false;
+            skill.fullRestockOnAssign = true;
+            skill.interruptPriority = InterruptPriority.Any;
+            skill.isCombatSkill = true;
+            skill.mustKeyPress = true;
+            skill.cancelSprintingOnActivation = true;
+            return skill;
         }
     }
 

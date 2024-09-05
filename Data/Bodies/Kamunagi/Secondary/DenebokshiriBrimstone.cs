@@ -100,11 +100,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         }
     }
 
-    public class DenebokshiriBrimstone  :    Asset, IProjectile, IProjectileGhost, IEffect, ISkill
+    public class DenebokshiriBrimstone : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
     {
-        Type[] ISkill.GetEntityStates() => new[] {typeof(WindBoomerangState) };
-        
-        SkillDef ISkill.BuildOject()
+        SkillDef ISkill.BuildObject()
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
             skill.skillName = "Secondary 0";
@@ -123,11 +121,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             skill.cancelSprintingOnActivation = false;
             return skill;
         }
+
+        Type[] ISkill.GetEntityStates() => new[] {typeof(DenebokshiriBrimstoneState) };
         
         GameObject IProjectile.BuildObject()
         {
             var hitEffect = GetGameObject<FireHitEffect, IEffect>();
-            
+
             var proj = GetGameObject<WindBoomerang, IProjectile>()!.InstantiateClone("TwinsMiniSun", true);
             UnityEngine.Object.Destroy(proj.GetComponent<WindBoomerangProjectileBehaviour>());
             UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>()); //bro what is this spaghetti
@@ -162,22 +162,28 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
         GameObject IProjectileGhost.BuildObject()
         {
-            var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!.InstantiateClone("TwinsChargeMiniSun", false);
+            var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!
+                .InstantiateClone("TwinsChargeMiniSun", false);
             ObjectScaleCurve scale = ghost.AddComponent<ObjectScaleCurve>();
             scale.useOverallCurveOnly = true;
             scale.timeMax = 2f;
             scale.overallCurve = AnimationCurve.Linear(0, 0, 1, 1);
             var minisunMesh = ghost.GetComponentInChildren<MeshRenderer>();
-            minisunMesh.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/FireballsOnHit/texFireballsOnHitIcon.png"));
+            minisunMesh.material.SetTexture("_RemapTex",
+                LoadAsset<Texture2D>("RoR2/Base/FireballsOnHit/texFireballsOnHitIcon.png"));
             minisunMesh.material.SetFloat("_AlphaBoost", 6.351971f);
             ghost.AddComponent<ProjectileGhostController>();
             ghost.AddComponent<MeshFilter>().mesh = LoadAsset<Mesh>("RoR2/Base/Common/VFX/mdlVFXIcosphere.fbx");
-            var miniSunIndicator = PrefabAPI.InstantiateClone(LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphere.prefab").transform.GetChild(0).gameObject, "MiniSunIndicator", false);
+            var miniSunIndicator = PrefabAPI.InstantiateClone(
+                LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphere.prefab").transform.GetChild(0)
+                    .gameObject, "MiniSunIndicator", false);
             miniSunIndicator.transform.parent = ghost.transform; //this was the first time I figured this out
             miniSunIndicator.transform.localPosition = Vector3.zero;
             miniSunIndicator.transform.localScale = Vector3.one * 25f;
-            
-            var gravSphere = PrefabAPI.InstantiateClone(LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereGhost.prefab").transform.GetChild(0).gameObject, "Indicator", false);
+
+            var gravSphere = PrefabAPI.InstantiateClone(
+                LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereGhost.prefab").transform.GetChild(0)
+                    .gameObject, "Indicator", false);
             var gooDrops = PrefabAPI.InstantiateClone(gravSphere.transform.GetChild(3).gameObject, "MiniSunGoo", false);
             gooDrops.transform.parent = ghost.transform; // adding the indicator sphere to DenebokshiriBrimstone
             gooDrops.transform.localPosition = Vector3.zero;
@@ -186,7 +192,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
         GameObject IEffect.BuildObject()
         {
-            var effect = LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!.InstantiateClone("TwinsChargeMiniSun", false);
+            var effect =
+                LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!.InstantiateClone(
+                    "TwinsChargeMiniSun", false);
             var scale = effect.AddComponent<ObjectScaleCurve>();
             scale.useOverallCurveOnly = true;
             scale.timeMax = 2f;
@@ -194,26 +202,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             effect.transform.GetChild(1).gameObject.SetActive(true);
             return effect;
         }
+    }
 
-        public class FireHitEffect : Asset, IEffect
+    public class FireHitEffect : Asset, IEffect
+    {
+        GameObject IEffect.BuildObject()
         {
-            GameObject IEffect.BuildObject()
+            var effect = LoadAsset<GameObject>("addressable:RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone("TwinsFireHitEffect", false);
+            UnityEngine.Object.Destroy(effect.GetComponent<OmniEffect>());
+            foreach (ParticleSystemRenderer r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
             {
-                var effect = PrefabAPI.InstantiateClone(LoadAsset<GameObject>("RoR2/Base/Merc/MercExposeConsumeEffect.prefab"), "TwinsFireHitEffect", false);
-                UnityEngine.Object.Destroy(effect.GetComponent<OmniEffect>());
-                foreach (ParticleSystemRenderer r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
+                r.gameObject.SetActive(true);
+                r.material.SetColor("_TintColor", new Color(0.7264151f, 0.1280128f, 0f));
+                if (r.name == "PulseEffect, Ring (1)")
                 {
-                    r.gameObject.SetActive(true);
-                    r.material.SetColor("_TintColor", new Color(0.7264151f, 0.1280128f, 0f));
-                    if (r.name == "PulseEffect, Ring (1)")
-                    {
-                        var mat = r.material;
-                        mat.mainTexture = LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
-                    }
+                    var mat = r.material;
+                    mat.mainTexture = Asset.LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
                 }
-                effect.EffectWithSound("Play_item_use_molotov_throw");
-                return effect;
             }
+            effect.EffectWithSound("Play_item_use_molotov_throw");
+            return effect;
         }
     }
 }

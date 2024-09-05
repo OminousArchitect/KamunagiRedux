@@ -9,8 +9,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         public SkillFamily BuildObject()
         {
             var family = ScriptableObject.CreateInstance<SkillFamily>();
-            if (TryGetAsset<WindBoomerang>(out var wind))
-                family.variants = new[] { (SkillFamily.Variant)wind };
+            if (TryGetAsset<WindBoomerang>(out var wind) && TryGetAsset<DenebokshiriBrimstone>(out var fiery))
+                family.variants = new[] { (SkillFamily.Variant)wind, (SkillFamily.Variant)fiery };
+            
             return family;
         }
     }

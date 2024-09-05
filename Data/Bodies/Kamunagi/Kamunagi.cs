@@ -188,24 +188,37 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
             if (TryGetAsset<KamunagiSkillFamilySecondary>(out var skillFamilySecondary))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill.skillName = "SaraanaSecondary";
                 skill._skillFamily = skillFamilySecondary;
                 skillLocator.secondary = skill;
+                var skill2 = bodyPrefab.AddComponent<GenericSkill>();
+                skill2.skillName = "UruruuSecondary";
+                skill2._skillFamily = skillFamilySecondary;
             }
             if (TryGetAsset<KamunagiSkillFamilyUtility>(out var skillFamilyUtility))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill.skillName = "SaraanaUtility";
                 skill._skillFamily = skillFamilyUtility;
                 skillLocator.utility = skill;
+                var skill2 = bodyPrefab.AddComponent<GenericSkill>();
+                skill2.skillName = "UruruuUtility";
+                skill2._skillFamily = skillFamilyUtility;
             }
             if (TryGetAsset<KamunagiSkillFamilySpecial>(out var skillFamilySpecial))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill.skillName = "SaraanaSpecial";
                 skill._skillFamily = skillFamilySpecial;
                 skillLocator.special = skill;
+                var skill2 = bodyPrefab.AddComponent<GenericSkill>();
+                skill2.skillName = "UruruuSpecial";
+                skill2._skillFamily = skillFamilySpecial;
             }
             if (TryGetAsset<KamunagiSkillFamilyExtra>(out var skillFamilyExtra))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill.skillName = "SaraanaExtra";
                 skill._skillFamily = skillFamilyExtra;
                 extraSkillLocator.extraFourth = skill;
             }

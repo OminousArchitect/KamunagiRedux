@@ -1,4 +1,4 @@
-using System;
+using RoR2;
 using RoR2.Skills;
 using UnityEngine;
 
@@ -13,5 +13,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
                 family.variants = new []{(SkillFamily.Variant)sealing};
             return family;
         }
+        public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaSpecial"  ? "NINES_SARAANA_SPECIAL" : "NINES_URURUU_SPECIAL";
     }
 }

@@ -1,4 +1,4 @@
-using System;
+using RoR2;
 using RoR2.Skills;
 using UnityEngine;
 
@@ -14,5 +14,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             
             return family;
         }
+        public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaSecondary"  ? "NINES_SARAANA_SECONDARY" : "NINES_URURUU_SECONDARY";
     }
 }

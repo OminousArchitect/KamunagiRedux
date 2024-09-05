@@ -1,6 +1,14 @@
 {
   "strings": {
     "NINES_SARAANA_PRIMARY": "Saraana Primary",
-    "NINES_URURUU_PRIMARY": "<color=#D0A1F8>Ururuu Primary</color>"
+    "NINES_URURUU_PRIMARY": "<color=#D0A1F8>Ururuu Primary</color>",
+    "NINES_SARAANA_SECONDARY": "Saraana Secondary",
+    "NINES_URURUU_SECONDARY": "<color=#D0A1F8>Ururuu Secondary</color>",
+    "NINES_SARAANA_UTILITY": "Saraana Utility",
+    "NINES_URURUU_UTILITY": "<color=#D0A1F8>Ururuu Utility</color>",
+    "NINES_SARAANA_SPECIAL": "Saraana Final Strike",
+    "NINES_URURUU_SPECIAL": "<color=#D0A1F8>Ururuu Final Strike</color>",
+    "NINES_SARAANA_EXTRA": "Saraana Extra",
+    "NINES_URURUU_EXTRA": "<color=#D0A1F8>Ururuu Extra</color>"
   }
 }

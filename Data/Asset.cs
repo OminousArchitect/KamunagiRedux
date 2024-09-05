@@ -90,7 +90,7 @@ namespace KamunagiOfChains.Data
             return (T) Assets[typeof(T)];
         }
 
-        public static bool TryGetGameObject<T, T2>(out GameObject asset) where T2 : IGameObject
+        public static bool TryGetGameObject<T, T2>(out GameObject asset) where T2 : IGameObject where T : T2
         {
             try
             {
@@ -103,7 +103,7 @@ namespace KamunagiOfChains.Data
                 return false;
             }
         }
-        public static GameObject GetGameObject<T, T2>() where T2 : IGameObject
+        public static GameObject GetGameObject<T, T2>() where T2 : IGameObject where T : T2
         {
             return (GameObject) GetObjectOrThrow<T2>(Assets[typeof(T)]);
         }

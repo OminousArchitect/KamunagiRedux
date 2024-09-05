@@ -15,14 +15,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
         public static GameObject MuzzlePrefab =
             Asset.LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab")!;
+
+        public float duration;
+
         public override void OnEnter()
         {
             base.OnEnter();
-            if (characterMotor.isGrounded) StartAimMode();
             AkSoundEngine.PostEvent("Play_voidman_m2_shoot", gameObject);
             EffectManager.SimpleMuzzleFlash(MuzzlePrefab, gameObject, twinMuzzle, false);
             if (isAuthority && Asset.TryGetGameObject<SoeiMusou, IProjectile>(out var projectile))
             {
+                duration = 0.45f / attackSpeedStat;
                 var aimRay = GetAimRay();
                 ProjectileManager.instance.FireProjectile(new FireProjectileInfo
                 {
@@ -37,6 +40,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
                     speedOverride = 105f,
                 });
             }
+        }
+        
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            if (!isAuthority || fixedAge < duration) return;
+            outer.SetNextStateToMain();
         }
         public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
     }

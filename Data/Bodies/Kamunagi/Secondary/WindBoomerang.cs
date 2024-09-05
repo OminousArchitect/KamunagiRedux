@@ -17,14 +17,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
     {
         public override int meterGain => 5;
         private float damageCoefficient = 2.8f;
-        private float distanceMult;
         private float maxChargeTime = 1.5f;
         private float minDistance = 0.05f;
         private float maxDistance = 0.6f;
-        private Transform muzzleTransform;
-        private string effectMuzzleString = "MuzzleCenter";
         public EffectManagerHelper? chargeEffectInstance;
-        
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -32,7 +29,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             {
                 base.StartAimMode();
             }
-            muzzleTransform = base.FindModelChild("MuzzleCenter");
+
+            var muzzleTransform = base.FindModelChild("MuzzleCenter");
             if (muzzleTransform && Asset.TryGetGameObject<WindBoomerang, IEffect>(out var muzzleEffect))
             {
                 chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
@@ -44,53 +42,30 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 }
             }
         }
-        
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
+            if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
+            var aimRay = GetAimRay();
+            var prefab = Asset.GetGameObject<WindBoomerang, IProjectile>();
+            prefab.GetComponent<WindBoomerangProjectile>().distanceMultiplier = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
+            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+            {
+                crit = RollCrit(),
+                damage = characterBody.damage * damageCoefficient,
+                force = 500,
+                owner = gameObject,
+                position = aimRay.origin,
+                projectilePrefab = prefab,
+                rotation = Quaternion.LookRotation(aimRay.direction),
+                useFuseOverride = false,
+                useSpeedOverride = true,
+                speedOverride = 50,
+            });
+            outer.SetNextStateToMain();
+        }
 
-            if (base.isAuthority && fixedAge >= maxChargeTime)
-            {
-                Fire();
-                outer.SetNextStateToMain();
-            }
-            
-            if (base.isAuthority && !inputBank.skill2.down)
-            {
-                Fire();
-                outer.SetNextStateToMain();
-            }
-        }
-        
-        void Fire()
-        {
-            Ray aimRay = base.GetAimRay();
-            Asset.GetGameObject<WindBoomerang, IProjectile>().GetComponent<WindBoomerangProjectile>().distanceMultiplier = distanceMult;
-            
-            if (base.isAuthority)
-            {
-                FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
-                {
-                    crit = base.RollCrit(),
-                    damage = this.characterBody.damage * damageCoefficient,
-                    damageTypeOverride = DamageType.Generic,
-                    damageColorIndex = DamageColorIndex.Default,
-                    force = 500,
-                    owner = base.gameObject,
-                    position = aimRay.origin,
-                    procChainMask = default(RoR2.ProcChainMask),
-                    projectilePrefab = Asset.GetGameObject<WindBoomerang, IProjectile>(),
-                    rotation = Quaternion.LookRotation(aimRay.direction),
-                    useFuseOverride = false,
-                    useSpeedOverride = true,
-                    speedOverride = 50,
-                    target = null
-                };
-                ProjectileManager.instance.FireProjectile(fireProjectileInfo);
-            }
-        }
-        
         public override void OnExit()
         {
             base.OnExit();
@@ -99,7 +74,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 Destroy(chargeEffectInstance);
             }
         }
-        
+
         public override InterruptPriority GetMinimumInterruptPriority()
         {
             return InterruptPriority.Skill;

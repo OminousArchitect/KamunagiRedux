@@ -32,29 +32,31 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
             base.OnEnter();
             maxChargeTime *= attackSpeedStat;
             muzzleTransform = FindModelChild("MuzzleCenter");
-            if (!muzzleTransform || !Asset.TryGetGameObject<AltSoeiMusou, IEffect>(out var muzzleEffect)) return;
-            chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
-            var scale = chargeEffectInstance.effectComponent.GetComponent<ObjectScaleCurve>();
-            scale.baseScale = Vector3.one * 0.7f;
-            scale.timeMax = projectileFireFrequency;
-            scale.Reset();
+            if (muzzleTransform && Asset.TryGetGameObject<AltSoeiMusou, IEffect>(out var muzzleEffect))
+            {
+                chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
+                var scale = chargeEffectInstance.effectComponent.GetComponent<ObjectScaleCurve>();
+                scale.baseScale = Vector3.one * 0.7f;
+                scale.timeMax = projectileFireFrequency;
+                scale.Reset();
+            }
         }
 
         public void FireProjectiles()
         {
-            if (!isAuthority || !Asset.TryGetGameObject<AltSoeiMusou, IProjectile>(out var projectile)) return;
-            ProjectileManager.instance.FireProjectile(new FireProjectileInfo()
-            {
-                crit = RollCrit(),
-                damage = characterBody.damage * 1.2f,
-                damageTypeOverride = DamageTypeCombo.Generic,
-                damageColorIndex = DamageColorIndex.Default,
-                force = 120,
-                owner = gameObject,
-                position = muzzleTransform.position,
-                projectilePrefab = projectile,
-                rotation = Quaternion.LookRotation(GetAimRay().direction),
-            });
+            if (isAuthority && Asset.TryGetGameObject<AltSoeiMusou, IProjectile>(out var projectile))
+                ProjectileManager.instance.FireProjectile(new FireProjectileInfo()
+                {
+                    crit = RollCrit(),
+                    damage = characterBody.damage * 1.2f,
+                    damageTypeOverride = DamageTypeCombo.Generic,
+                    damageColorIndex = DamageColorIndex.Default,
+                    force = 120,
+                    owner = gameObject,
+                    position = muzzleTransform.position,
+                    projectilePrefab = projectile,
+                    rotation = Quaternion.LookRotation(GetAimRay().direction),
+                });
         }
 
         public void FireBall()
@@ -116,7 +118,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
         SkillDef ISkill.BuildObject()
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
-            skill.skillName = "Primary 2";
+            skill.skillName = "Primary 1";
             skill.skillNameToken = "NINES_KAMUNAGI_BODY_PRIMARY1_NAME";
             skill.skillDescriptionToken = "NINES_KAMUNAGI_BODY_PRIMARY1_DESCRIPTION";
             skill.icon = LoadAsset<Sprite>("bundle:darkpng");

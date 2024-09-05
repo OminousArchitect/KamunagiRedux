@@ -85,9 +85,17 @@ namespace KamunagiOfChains.Data
             asset = default!;
             return false;
         }
+        public static bool TryGetAsset<T, T2>(out T asset) where T : Asset, T2
+        {
+            return TryGetAsset<T>(out asset);
+        }
         public static T GetAsset<T>() where T : Asset
         {
             return (T) Assets[typeof(T)];
+        }
+        public static T GetAsset<T, T2>() where T : Asset, T2
+        {
+            return GetAsset<T>();
         }
 
         public static bool TryGetGameObject<T, T2>(out GameObject asset) where T2 : IGameObject where T : T2

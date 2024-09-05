@@ -17,6 +17,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 {
     public class KamunagiAsset : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin
     {
+        public const string tokenPrefix = "NINES_KAMUNAGI_BODY_";
         Type[] IEntityStates.GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState) };
 
         SkinDef ISkin.BuildObject()
@@ -26,7 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
                 var skinDef = (SkinDef)obj;
                 ISkin.AddDefaults(ref skinDef);
                 skinDef.name = "KamunagiDefaultSkinDef";
-                skinDef.nameToken = "NINES_KAMUNAGI_BODY_DEFAULT_SKIN_NAME";
+                skinDef.nameToken = tokenPrefix + "DEFAULT_SKIN_NAME";
                 skinDef.icon = LoadAsset<Sprite>("bundle:TwinsSkin");
 
                 if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) return;
@@ -118,8 +119,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
             var twinBehaviour = bodyPrefab.AddComponent<TwinBehaviour>();
 
             bodyCharacterBody.preferredPodPrefab = null;
-            bodyCharacterBody.baseNameToken = "NINES_KAMUNAGI_BODY_";
-            bodyCharacterBody.subtitleNameToken = "NINES_KAMUNAGI_BODY_";
+            bodyCharacterBody.baseNameToken = tokenPrefix + "";
+            bodyCharacterBody.subtitleNameToken = tokenPrefix + "";
             bodyCharacterBody.bodyColor = Colors.twinsLightColor;
 
             #region Setup Model
@@ -218,10 +219,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
         {
             var survivor = ScriptableObject.CreateInstance<SurvivorDef>();
             survivor.primaryColor = Colors.twinsLightColor;
-            survivor.displayNameToken = "NINES_KAMUNAGI_BODY_NAME";
-            survivor.descriptionToken = "NINES_KAMUNAGI_BODY_DESCRIPTION";
-            survivor.outroFlavorToken = "NINES_KAMUNAGI_BODY_OUTRO_FLAVOR";
-            survivor.mainEndingEscapeFailureFlavorToken = "NINES_KAMUNAGI_BODY_OUTRO_FAILURE";
+            survivor.displayNameToken = tokenPrefix + "NAME";
+            survivor.descriptionToken = tokenPrefix + "DESCRIPTION";
+            survivor.outroFlavorToken = tokenPrefix + "OUTRO_FLAVOR";
+            survivor.mainEndingEscapeFailureFlavorToken = tokenPrefix + "OUTRO_FAILURE";
             survivor.desiredSortPosition = 100f;
 
             if (TryGetGameObject<KamunagiAsset, IBody>(out var body))

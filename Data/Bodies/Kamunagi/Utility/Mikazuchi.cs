@@ -104,8 +104,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
             skill.skillName = "Utility 0";
-            skill.skillNameToken = "NINES_KAMUNAGI_BODY_UTILITY0_NAME";
-            skill.skillDescriptionToken = "NINES_KAMUNAGI_BODY_UTILITY0_DESCRIPTION";
+            skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY0_NAME";
+            skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY0_DESCRIPTION";
             skill.icon = LoadAsset<Sprite>("bundle:Mikazuchi");
             skill.activationStateMachineName = "Weapon";
             skill.baseRechargeInterval = 2f;

@@ -106,8 +106,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
             skill.skillName = "Secondary 0";
-            skill.skillNameToken = "NINES_KAMUNAGI_BODY_SECONDARY0_NAME";
-            skill.skillDescriptionToken = "NINES_KAMUNAGI_BODY_SECONDARY0_DESCRIPTION";
+            skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY0_NAME";
+            skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY0_DESCRIPTION";
             skill.icon = LoadAsset<Sprite>("bundle:firepng");
             skill.activationStateMachineName = "Weapon";
             skill.baseMaxStock = 1;

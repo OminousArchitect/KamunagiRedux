@@ -2,10 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BepInEx;
 using EntityStates;
+using HarmonyLib;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using RoR2;
 using RoR2.ContentManagement;
 using RoR2.Skills;
+using RoR2.UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -13,11 +18,13 @@ using UnityEngine.AddressableAssets;
 
 namespace KamunagiOfChains.Data
 {
+    [HarmonyPatch]
     public abstract class Asset
     {
         // TODO store objects and assets based on T.Assembly
         public static Dictionary<string, object> Objects = new Dictionary<string, object>();
         public static Dictionary<Type, Asset> Assets = new Dictionary<Type, Asset>();
+        public static Dictionary<object, Asset> ObjectToAssetMap = new Dictionary<object, Asset>();
 
         public static ContentPack BuildContentPack()
         {
@@ -71,7 +78,7 @@ namespace KamunagiOfChains.Data
             {
                 return LegacyResourcesAPI.Load<T>(assetPath["legacy:".Length..]);
             }
-            
+
             return Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..]).WaitForCompletion();
         }
 
@@ -86,14 +93,24 @@ namespace KamunagiOfChains.Data
             asset = default!;
             return false;
         }
+        
+        public static bool TryGetAssetFromObject<T>(object obj, out T asset)
+        {
+            var found = ObjectToAssetMap.TryGetValue(obj, out var assetObj);
+            asset = assetObj is T ? (T)(object)assetObj : default!;
+            return found;
+        }
+
         public static bool TryGetAsset<T, T2>(out T asset) where T : Asset, T2
         {
             return TryGetAsset<T>(out asset);
         }
+
         public static T GetAsset<T>() where T : Asset
         {
-            return (T) Assets[typeof(T)];
+            return (T)Assets[typeof(T)];
         }
+
         public static T GetAsset<T, T2>() where T : Asset, T2
         {
             return GetAsset<T>();
@@ -112,9 +129,10 @@ namespace KamunagiOfChains.Data
                 return false;
             }
         }
+
         public static GameObject GetGameObject<T, T2>() where T2 : IGameObject where T : T2
         {
-            return (GameObject) GetObjectOrThrow<T2>(Assets[typeof(T)]);
+            return (GameObject)GetObjectOrThrow<T2>(Assets[typeof(T)]);
         }
 
         private static object GetObjectOrThrow<T>(Asset asset)
@@ -146,6 +164,7 @@ namespace KamunagiOfChains.Data
                     var skill = (asset as ISkill)?.BuildObject() ?? throw notOfType;
                     var entityStates = ((ISkill)asset).GetEntityStates();
                     Objects[key + "_EntityStates"] = entityStates;
+                    // ObjectToAssetMap ??
                     skill.skillName = name + nameof(SkillDef);
                     skill.activationState = new SerializableEntityStateType(entityStates[0]);
                     returnedObject = skill;
@@ -192,6 +211,7 @@ namespace KamunagiOfChains.Data
                     var modelAsset = asset as IModel ?? throw notOfType;
                     returnedObject = modelAsset.BuildObject();
                     Objects[key] = returnedObject;
+                    ObjectToAssetMap[returnedObject] = asset;
                     var skinController = ((GameObject)returnedObject).GetOrAddComponent<ModelSkinController>();
                     skinController.skins = modelAsset.GetSkins().Select(x => (SkinDef)x).ToArray();
                     return returnedObject;
@@ -233,11 +253,29 @@ namespace KamunagiOfChains.Data
                     break;
                     */
             }
-
+            
             Objects[key] = returnedObject ??
                            throw new InvalidOperationException(
                                $"How did you get here, maybe {targetTypeName} isn't a asset?");
+            ObjectToAssetMap[returnedObject] = asset;
             return returnedObject;
+        }
+        
+        [HarmonyILManipulator, HarmonyPatch(typeof(LoadoutPanelController.Row), nameof(LoadoutPanelController.Row.FromSkillSlot))]
+        public static void FromSkillSlot(ILContext il)
+        {
+            var c = new ILCursor(il);
+            c.GotoNext(
+                x => x.MatchNewobj<LoadoutPanelController.Row>()
+            );
+            c.Emit(OpCodes.Ldarg_3);
+            c.EmitDelegate<Func<string, GenericSkill, string>>((s, skill) =>
+            {
+                if (!TryGetAssetFromObject(skill.skillFamily, out ISkillFamily asset))
+                    return s;
+                var nameToken = asset.GetNameToken(skill);
+                return nameToken.IsNullOrWhiteSpace() ? s : nameToken;
+            });
         }
 
         public static implicit operator ItemDef(Asset asset) => (ItemDef)GetObjectOrThrow<IItem>(asset);
@@ -342,6 +380,7 @@ namespace KamunagiOfChains.Data
     public interface ISkillFamily
     {
         public abstract SkillFamily BuildObject();
+        public virtual string GetNameToken(GenericSkill skill) => "";
     }
 
     public interface ISkill

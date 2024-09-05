@@ -356,11 +356,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
             var blastIndicator = effect.transform.GetChild(10).gameObject;
             blastIndicator.transform.localScale = Vector3.one * 1.4f; //blast indicator
             blastIndicator.transform.position = new Vector3(blastIndicator.transform.position.x, 0.5f, blastIndicator.transform.position.z);
-            
-            var comp = effect.AddComponent<EffectComponent>();
-            comp.parentToReferencedTransform = true;
-            comp.positionAtReferencedTransform = true;
-            comp.soundName = "Play_item_void_bleedOnHit_explo";
+
+            effect.EffectWithSound("Play_item_void_bleedOnHit_explo");
 
             return effect;
         }

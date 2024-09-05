@@ -9,8 +9,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
         public SkillFamily BuildObject()
         {
             var family = ScriptableObject.CreateInstance<SkillFamily>();
-            //if (TryGetAsset<SoeiMusou>(out var soei) && TryGetAsset<ReaverMusou>(out var reaver) && TryGetAsset<AltSoeiMusou>(out var alt))
-            family.variants = Array.Empty<SkillFamily.Variant>();
+            if (TryGetAsset<TheGreatSealing>(out var sealing))
+                family.variants = new []{(SkillFamily.Variant)sealing};
             return family;
         }
     }

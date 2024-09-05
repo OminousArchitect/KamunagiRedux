@@ -115,6 +115,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
             var bodyCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
             var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
+            var twinBehaviour = bodyPrefab.AddComponent<TwinBehaviour>();
 
             bodyCharacterBody.preferredPodPrefab = null;
             bodyCharacterBody.baseNameToken = "NINES_KAMUNAGI_BODY_";

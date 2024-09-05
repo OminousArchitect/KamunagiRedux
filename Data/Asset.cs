@@ -71,8 +71,8 @@ namespace KamunagiOfChains.Data
             {
                 return LegacyResourcesAPI.Load<T>(assetPath["legacy:".Length..]);
             }
-
-            return null;
+            
+            return Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..]).WaitForCompletion();
         }
 
         public static bool TryGetAsset<T>(out T asset) where T : Asset

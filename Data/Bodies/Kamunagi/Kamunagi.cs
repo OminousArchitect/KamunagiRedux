@@ -120,6 +120,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
             bodyCharacterBody.preferredPodPrefab = null;
             bodyCharacterBody.baseNameToken = "NINES_KAMUNAGI_BODY_";
             bodyCharacterBody.subtitleNameToken = "NINES_KAMUNAGI_BODY_";
+            bodyCharacterBody.bodyColor = Colors.twinsLightColor;
 
             #region Setup Model
 
@@ -176,9 +177,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
             if (TryGetAsset<KamunagiSkillFamilyPrimary>(out var skillFamilyPrimary))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
+                skill.skillName = "SaraanaPrimary";
                 skill._skillFamily = skillFamilyPrimary;
                 skillLocator.primary = skill;
                 var skill2 = bodyPrefab.AddComponent<GenericSkill>();
+                skill2.skillName = "UruruuPrimary";
                 skill2._skillFamily = skillFamilyPrimary;
             }
             if (TryGetAsset<KamunagiSkillFamilySecondary>(out var skillFamilySecondary))

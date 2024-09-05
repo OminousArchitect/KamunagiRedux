@@ -43,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
         {
             base.Update();
             if (!isAuthority) return;
-            characterMotor.velocityAuthority = Vector3.zero;
+            ((IPhysMotor) characterMotor).velocityAuthority = Vector3.zero;
         }
 
         public override void OnExit()

@@ -1,8 +1,11 @@
-﻿using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+﻿using System;
+using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
+using RoR2.Skills;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 {
@@ -53,6 +56,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
     public class TheGreatSealing : Asset, ISkill, IEffect
     {
+        public static Material[] onKamiMats;
+
+        static TheGreatSealing()
+        {
+            var onkami1 = new Material(LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalCenter.mat"));
+            onkami1.SetFloat("_AlphaBoost", 1.3f);
+            onkami1.SetColor("_TintColor", new Color(0f, 0.1843f, 1f)); ;
+            var onkami2 = new Material(LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalEdge.mat"));
+            onkami2.SetColor("_TintColor", new Color(0f, 0.1843f, 1f));
+            onkami2.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
+            onkami2.SetFloat("_BrightnessBoost", 4.67f);
+            onkami2.SetFloat("_AlphaBoost", 1.2f);
+            onKamiMats = new[] { onkami1, onkami2 };
+        }
+        
         GameObject IEffect.BuildObject()
         {
             var effect =
@@ -82,7 +100,253 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
             Object.Destroy(scaler.transform.GetChild(3).gameObject);
             return effect;
         }
+
+        Type[] ISkill.GetEntityStates() => new[] { typeof(TheGreatSealingState) };
+
+        SkillDef ISkill.BuildObject()
+        {
+            throw new NotImplementedException();
+        }
     }
 
-   
+    // first
+    public class PrimedObelisk : Asset, IProjectile, IProjectileGhost
+    {
+        GameObject IProjectile.BuildObject()
+        {
+            var projectile = LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab")!.InstantiateClone("OnkamiSealPhase1", true);
+            projectile.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<PrimedObelisk, IProjectileGhost>();
+            UnityEngine.Object.Destroy(projectile.transform.GetChild(0).gameObject);
+            //not needed? projectile.transform.position = new Vector3(sealingMeshObject.transform.position.x, -8f, sealingMeshObject.transform.position.z); //todo first (1) position
+            projectile.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+            var onkamiImpact = projectile.GetComponent<ProjectileImpactExplosion>();
+            onkamiImpact.blastRadius = 1f;
+            onkamiImpact.fireChildren = true;
+            onkamiImpact.blastDamageCoefficient = 0f;
+            onkamiImpact.childrenProjectilePrefab = GetGameObject<TickingFuseObelisk, IProjectile>();
+            onkamiImpact.impactEffect = null;
+            onkamiImpact.lifetimeExpiredSound = null;
+            return projectile;
+        }
+
+        GameObject IProjectileGhost.BuildObject()
+        {
+            var ghost = GetGameObject<ExplodingObelisk, IEffect>().InstantiateClone("OnkamiSealPhase1Ghost", false);
+            Object.Destroy(ghost.GetComponent<EffectComponent>());
+            Object.Destroy(ghost.GetComponent<VFXAttributes>());
+            ghost.transform.GetChild(0).gameObject.SetActive(false);
+            ghost.transform.GetChild(2).gameObject.SetActive(false);
+            ghost.transform.GetChild(4).gameObject.SetActive(false);
+            ghost.transform.GetChild(8).gameObject.SetActive(false);
+            ghost.transform.GetChild(9).gameObject.SetActive(false);
+            ghost.transform.GetChild(10).gameObject.SetActive(false);
+            ghost.transform.GetChild(11).gameObject.SetActive(false);
+            ghost.transform.localScale = Vector3.one * 13.6f;
+            var onkamiMesh = ghost.transform.GetChild(7).gameObject;
+            Object.Destroy(onkamiMesh.GetComponent<ObjectScaleCurve>());
+            onkamiMesh.GetComponent<MeshRenderer>().materials = TheGreatSealing.onKamiMats;
+            ghost.AddComponent<ProjectileGhostController>();
+            return ghost;
+        }
+    }
+
+    // second
+    public class TickingFuseObelisk : Asset, IProjectile, IProjectileGhost
+    {
+        GameObject IProjectile.BuildObject()
+        {
+            var projectile = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombProjectile.prefab")!.InstantiateClone("OnkamiSealPhase2", true);
+            projectile.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<TickingFuseObelisk, IProjectileGhost>();
+            var sealingImpact = projectile.GetComponent<ProjectileImpactExplosion>();
+            sealingImpact.lifetime = 1.5f;
+            sealingImpact.blastRadius = 15f;
+            sealingImpact.fireChildren = false;
+            sealingImpact.impactEffect = GetGameObject<ExplodingObelisk, IEffect>();
+            sealingImpact.blastDamageCoefficient = 6f; //todo you dont set it here
+            projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
+            //tickingFuseObelisk.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Uitsalnemetia);
+            return projectile;
+        }
+
+        GameObject IProjectileGhost.BuildObject()
+        {
+            var sealingProjectileMat = new Material(LoadAsset<Material>("addressable:RoR2/Base/Common/matVoidDeathBombAreaIndicatorFront.mat"));
+            sealingProjectileMat.SetTexture("_Cloud1Tex", LoadAsset<Texture2D>("addressable:RoR2/DLC1/MajorAndMinorConstruct/texMajorConstructShield.png"));
+            sealingProjectileMat.SetTexture("_Cloud2Tex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/VFX/texArcaneCircleWispMask.png"));
+            sealingProjectileMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonPreBoss.png"));
+            sealingProjectileMat.SetTexture("_MainTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texLunarWispTracer 1.png"));
+            sealingProjectileMat.SetFloat("_SrcBlendFloat", 5f);
+            sealingProjectileMat.SetFloat("_DstBlendFloat", 1f);
+            sealingProjectileMat.SetFloat("_IntersectionStrength", 0.4f);
+            sealingProjectileMat.SetFloat("_AlphaBoost", 9.041705f);
+            sealingProjectileMat.SetFloat("_RimStrength", 9.041705f);
+            sealingProjectileMat.SetFloat("_RimPower", 0.1f);
+            sealingProjectileMat.SetColor("_TintColor", Colors.sealingColor);
+            
+            var ghost = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombGhost.prefab")!.InstantiateClone("OnkamiSealPhase2Ghost", false);
+            ghost.transform.localScale = Vector3.one * 2f;
+            var sealingScale = ghost.transform.GetChild(0).gameObject;
+            sealingScale.transform.localScale = Vector3.one * 5.625f;
+            foreach (ParticleSystemRenderer r in ghost.GetComponentsInChildren<ParticleSystemRenderer>())
+            {
+                var name = r.name;
+
+                if (name == "AreaIndicator, Front")
+                {
+                    r.material = sealingProjectileMat;
+                }
+
+                if (name == "AreaIndicator, Back")
+                {
+                    r.material.SetColor("_TintColor", new Color(0f, 0.01960784f, 1f));
+                }
+
+                if (name == "Vacuum Stars")
+                {
+                    r.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
+                }
+            }
+            foreach (ParticleSystem p in ghost.GetComponentsInChildren<ParticleSystem>())
+            {
+                var name = p.name;
+                var main = p.main;
+                var sizeLife = p.sizeOverLifetime;
+
+                if (name == "AreaIndicator, Front")
+                {
+                    sizeLife.enabled = false;
+                }
+
+                if (name == "Vacuum Radial")
+                {
+                    sizeLife.sizeMultiplier = 1.6f;
+                }
+
+                if (name == "AreaIndicator, Back")
+                {
+                    sizeLife.enabled = false;
+                }
+
+                if (name == "Vacuum Stars, Trails")
+                {
+                    main.startColor = Colors.sealingColor;
+                }
+            } 
+            var scaleChild = ghost.transform.GetChild(0);
+            scaleChild.transform.position = new Vector3(0f, 4f, 0f);
+            var frontIndicator = scaleChild.GetChild(8).gameObject;
+            var backIndicator = scaleChild.GetChild(9).gameObject;
+            frontIndicator.transform.localScale = Vector3.one * 1.3f; // sealing frontIndicator
+            backIndicator.transform.localScale = Vector3.one * 1.3f; // sealing backIndicator
+            
+            var sealingMeshObject = GetGameObject<ExplodingObelisk, IEffect>().transform.GetChild(7).gameObject;
+            var onkamiObelisk = PrefabAPI.InstantiateClone(sealingMeshObject, "OnkamiObelisk", false);
+            Object.Destroy(onkamiObelisk.GetComponent<ObjectScaleCurve>());
+            onkamiObelisk.transform.localScale = Vector3.one;
+            onkamiObelisk.transform.SetParent(scaleChild);
+            onkamiObelisk.transform.localScale = Vector3.one * 0.6f;
+            onkamiObelisk.transform.localPosition = ghost.transform.position;
+            onkamiObelisk.transform.position = new Vector3(0f, -10f, 0f);     //todo obelisk second (2) position
+            
+            var onkamiMeshR = onkamiObelisk.GetComponent<MeshRenderer>();
+            onkamiMeshR.materials = TheGreatSealing.onKamiMats; //this is how you make a completely new array
+            
+            return ghost;
+        }
+    }
+    
+    
+    // third
+    public class ExplodingObelisk : Asset, IEffect
+    {
+        GameObject IEffect.BuildObject()
+        {
+            var effect = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathExplosion.prefab")!.InstantiateClone("OnkamiSealPhase3BlastEffect", false);
+            foreach (var r in effect.GetComponentsInChildren<ParticleSystemRenderer>())
+            {
+                var name = r.name;
+
+                if (name == "AreaIndicator")
+                {
+                    r.material.SetTexture("_Cloud1Tex",
+                        LoadAsset<Texture2D>("addressable:RoR2/DLC1/MajorAndMinorConstruct/texMajorConstructShield.png"));
+                    r.material.SetTexture("_Cloud2Tex",
+                        LoadAsset<Texture2D>("addressable:RoR2/DLC1/ancientloft/texAncientLoft_TempleDecal.tga"));
+                    r.material.SetTexture("_RemapTex",
+                        LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
+                    r.material.SetColor("_TintColor", Colors.sealingColor); //new Color(0f, 0.9137255f, 1f));
+
+                    r.material.SetFloat("_IntersectionStrength", 0.08f);
+                    r.material.SetFloat("_AlphaBoost", 20f);
+                    r.material.SetFloat("_RimStrength", 1.050622f);
+                    r.material.SetFloat("_RimPower", 1.415718f);
+                }
+
+                if (name == "Vacuum Radial")
+                {
+                    r.material.SetTexture("_MainTex",
+                        LoadAsset<Texture2D>("addressable:RoR2/DLC1/ancientloft/texAncientLoft_TempleDecal.tga"));
+                    r.material.SetTexture("_RemapTex",
+                        LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampBrotherPillar.png"));
+                    r.material.SetFloat("_AlphaBoost", 6.483454f);
+                    r.material.SetColor("_TintColor", new Color(0f, 0.1843f, 1f));
+                }
+
+                if (name == "Vacuum Stars, Trails")
+                {
+                    r.enabled = false;
+                }
+
+                if (name == "Goo, Medium")
+                {
+                    r.enabled = false;
+                }
+
+                if (name == "AreaIndicator (1)")
+                {
+                    r.enabled = false;
+                }
+
+                if (name == "Vacuum Stars")
+                {
+                    r.enabled = false;
+                }
+            }
+
+            effect.transform.localScale = Vector3.one * 11.25f;
+            effect.GetComponentInChildren<Light>().color = Colors.sealingColor;
+            //explodingObelisk.transform.position = new Vector3(explodingObelisk.transform.position.x, 4f, explodingObelisk.transform.position.z);
+            var sealMeshR = effect.GetComponentInChildren<MeshRenderer>();
+            sealMeshR.materials = TheGreatSealing.onKamiMats;
+
+            
+             //obtaining the perfect obelisk mesh
+            var loftPrefab = LoadAsset<GameObject>("addressable:RoR2/DLC1/ancientloft/AL_LightStatue_On.prefab");
+            var obelisk = loftPrefab.transform.GetChild(4).gameObject;
+            // TODO??
+            var theObelisk = PrefabAPI.InstantiateClone(obelisk, "TwinsObelisk", false);
+            theObelisk.transform.position = Vector3.zero;
+            var obeliskChildRotation = theObelisk.transform.rotation;
+            var sealingObelisk = theObelisk.GetComponent<MeshFilter>().mesh;
+            //
+            var sealingMeshObject = effect.transform.GetChild(7).gameObject;
+            sealingMeshObject.GetComponent<MeshFilter>().mesh = sealingObelisk;
+            sealingMeshObject.transform.rotation = obeliskChildRotation; //I should get an award for this
+            sealingMeshObject.transform.position = new Vector3(sealingMeshObject.transform.position.x, -8f, sealingMeshObject.transform.position.z); //todo obelisk third (3) position
+            //the detonation and priming obelisk use the same Vector3
+            sealingMeshObject.GetComponent<MeshRenderer>().materials = TheGreatSealing.onKamiMats;
+            sealingMeshObject.GetComponent<ObjectScaleCurve>().baseScale = Vector3.one * 0.7f;
+
+            var blastIndicator = effect.transform.GetChild(10).gameObject;
+            blastIndicator.transform.localScale = Vector3.one * 1.4f; //blast indicator
+            blastIndicator.transform.position = new Vector3(blastIndicator.transform.position.x, 0.5f, blastIndicator.transform.position.z);
+            
+            var comp = effect.AddComponent<EffectComponent>();
+            comp.parentToReferencedTransform = true;
+            comp.positionAtReferencedTransform = true;
+            comp.soundName = "Play_item_void_bleedOnHit_explo";
+
+            return effect;
+        }
+    }
 }

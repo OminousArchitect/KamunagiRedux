@@ -10,6 +10,7 @@ using HarmonyLib;
 using KamunagiOfChains.Data;
 using R2API;
 using R2API.Utils;
+using RoR2;
 using UnityEngine;
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -61,6 +62,8 @@ namespace KamunagiOfChains
                 log.LogDebug("Loading ContentPack");
                 ContentPackProvider.Initialize(Info.Metadata.GUID, Asset.BuildContentPack());
             };
+
+            Language.collectLanguageRootFolders += folders => folders.Add(System.IO.Path.Combine(pluginPath, "Language"));
 
             log.LogDebug("Finished Awake");
         }

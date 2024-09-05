@@ -133,7 +133,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
             comp.soundName = "Play_item_use_lighningArm";
 
             var pp = effect.GetComponentInChildren<PostProcessVolume>();
-            pp.profile = LoadAsset<PostProcessProfile>("addressable:RoR2/Base/title/ppLocalGrandparent.asset");
+            pp.profile = LoadAsset<PostProcessProfile>("addressable:RoR2/Base/title/PostProcessing/ppLocalGrandparent.asset");
             pp.sharedProfile = pp.profile;
 
             var rampTeleport =

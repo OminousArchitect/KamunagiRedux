@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using RoR2.Skills;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
@@ -108,8 +109,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	    GameObject IProjectile.BuildObject()
         {
-            var proj = LoadAsset<GameObject>("addressable:RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone( "TwinsWindBoomerang", true);
-            UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>());
+            var proj =
+                LoadAsset<GameObject>("addressable:RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone(
+                    "TwinsWindBoomerang", true);
+            foreach (var boom in proj.GetComponents<BoomerangProjectile>())
+            {
+                Object.Destroy(boom);
+            }
             UnityEngine.Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
             var windDamage = proj.GetComponent<ProjectileDotZone>();
             windDamage.damageCoefficient = 0.5f;

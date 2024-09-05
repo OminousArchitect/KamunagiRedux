@@ -6,6 +6,10 @@ using RoR2;
 using RoR2.Audio;
 using RoR2.Projectile;
 using UnityEngine;
+using UnityEngine.Networking;
+using System.Runtime.InteropServices;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
@@ -173,7 +177,235 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                     mat.mainTexture = LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
                 }
             }
+            effect.EffectWithSound("Play_huntress_R_snipe_shoot");
             return effect;
         }
     }
+    
+
+    [RequireComponent(typeof(ProjectileController))]
+	class WindBoomerangProjectile : NetworkBehaviour, IProjectileImpactBehavior
+	{
+		public float travelSpeed = 60f;
+
+		public float transitionDuration = 0.75f;
+		
+		private float attackScale = 4f;
+		
+		public float distanceMultiplier = 0.05f;
+		
+		private float maxFlyStopwatch;
+
+		public GameObject impactSpark;
+		
+		public GameObject crosshairPrefab;
+		
+		public bool canHitCharacters;
+		
+		public bool canHitWorld;
+		
+		private ProjectileController projectileController;
+		[SyncVar]
+		private WindBoomerangState windboomerangState;
+		
+		private Transform ownerTransform;
+		
+		private ProjectileDamage projectileDamage;
+
+		private Rigidbody rigidbody;
+
+		private float stopwatch;
+
+		private float fireAge;
+
+		private float fireFrequency;
+
+		[FormerlySerializedAs("onFlyBack")] public UnityEvent onWindFlyBack;
+
+		
+		private bool setScale;
+
+		protected enum WindBoomerangState
+		{
+			FlyOut,
+			Transition,
+			FlyBack
+		}
+		
+		private void Awake()
+		{
+			this.rigidbody = base.GetComponent<Rigidbody>();
+			this.projectileController = base.GetComponent<ProjectileController>();
+			this.projectileDamage = base.GetComponent<ProjectileDamage>();
+			if (this.projectileController && this.projectileController.owner)
+			{
+				this.ownerTransform = this.projectileController.owner.transform;
+			}
+			this.maxFlyStopwatch = distanceMultiplier;
+		}
+		
+		private void Start()
+		{
+			base.transform.localScale = Vector3.one * attackScale;
+		}
+
+		public void OnProjectileImpact(ProjectileImpactInfo impactInfo)
+		{
+			if (!this.canHitWorld)
+			{
+				return;
+			}
+			this.NetworkboomerangState = WindBoomerangState.FlyBack;
+			UnityEvent unityEvent = this.onWindFlyBack;
+			if (unityEvent != null)
+			{
+				unityEvent.Invoke();
+			}
+			EffectManager.SimpleImpactEffect(this.impactSpark, impactInfo.estimatedPointOfImpact, -base.transform.forward, true);
+		}
+
+		private bool Reel()
+		{
+			Vector3 vector = this.projectileController.owner.transform.position - base.transform.position;
+			Vector3 normalized = vector.normalized;
+			return vector.magnitude <= 2f;
+		}
+
+		public void FixedUpdate()
+		{
+			if (NetworkServer.active)
+			{
+				if (!this.setScale)
+				{
+					this.setScale = true;
+				}
+				if (!this.projectileController.owner)
+				{
+					UnityEngine.Object.Destroy(base.gameObject);
+					return;
+				}
+				switch (this.windboomerangState)
+				{
+				case WindBoomerangState.FlyOut:
+					if (NetworkServer.active)
+					{
+						this.rigidbody.velocity = this.travelSpeed * base.transform.forward;
+						this.stopwatch += Time.deltaTime;
+						if (this.stopwatch >= this.maxFlyStopwatch)
+						{
+							this.stopwatch = 0f;
+							this.NetworkboomerangState = WindBoomerangState.Transition;
+							return;
+						}
+					}
+					break;
+				case WindBoomerangState.Transition:
+				{
+					this.stopwatch += Time.deltaTime;
+					float num = this.stopwatch / this.transitionDuration;
+					Vector3 thisVector = NetworkedVector();
+					this.rigidbody.velocity = Vector3.Lerp(this.travelSpeed * base.transform.forward, this.travelSpeed * thisVector, num);
+					if (num >= 1f)
+					{
+						this.NetworkboomerangState = WindBoomerangState.FlyBack;
+						UnityEvent unityEvent = this.onWindFlyBack;
+						if (unityEvent == null)
+						{
+							return;
+						}
+						unityEvent.Invoke();
+						return;
+					}
+					break;
+				}
+				case WindBoomerangState.FlyBack:
+				{
+					bool flag = this.Reel();
+					if (NetworkServer.active)
+					{
+						this.canHitWorld = false;
+						Vector3 thisVector = NetworkedVector();
+						this.rigidbody.velocity = this.travelSpeed * thisVector;
+						if (flag)
+						{
+							UnityEngine.Object.Destroy(base.gameObject);
+						}
+					}
+					break;
+				}
+				default:
+					return;
+				}
+			}
+		}
+		
+		private Vector3 NetworkedVector()
+		{
+			if (this.projectileController.owner)
+			{
+				return (this.projectileController.owner.transform.position - base.transform.position).normalized;
+			}
+			return base.transform.forward;
+		}
+		
+		protected WindBoomerangState NetworkboomerangState
+		{
+			get
+			{
+				return this.windboomerangState;
+			}
+			[param: In]
+			set
+			{
+				ulong newValueAsUlong = (ulong)((long)value);
+				ulong fieldValueAsUlong = (ulong)((long)this.windboomerangState);
+				base.SetSyncVarEnum<WindBoomerangState>(value, newValueAsUlong, ref this.windboomerangState, fieldValueAsUlong, 1U);
+			}
+		}
+
+		// Token: 0x06004361 RID: 17249 RVA: 0x0011785C File Offset: 0x00115A5C
+		public override bool OnSerialize(NetworkWriter writer, bool forceAll)
+		{
+			if (forceAll)
+			{
+				writer.Write((int)this.windboomerangState);
+				return true;
+			}
+			bool flag = false;
+			if ((base.syncVarDirtyBits & 1U) != 0U)
+			{
+				if (!flag)
+				{
+					writer.WritePackedUInt32(base.syncVarDirtyBits);
+					flag = true;
+				}
+				writer.Write((int)this.windboomerangState);
+			}
+			if (!flag)
+			{
+				writer.WritePackedUInt32(base.syncVarDirtyBits);
+			}
+			return flag;
+		}
+
+		// Token: 0x06004362 RID: 17250 RVA: 0x001178C8 File Offset: 0x00115AC8
+		public override void OnDeserialize(NetworkReader reader, bool initialState)
+		{
+			if (initialState)
+			{
+				this.windboomerangState = (WindBoomerangState)reader.ReadInt32();
+				return;
+			}
+			int num = (int)reader.ReadPackedUInt32();
+			if ((num & 1) != 0)
+			{
+				this.windboomerangState = (WindBoomerangState)reader.ReadInt32();
+			}
+		}
+
+		// Token: 0x06004363 RID: 17251 RVA: 0x00002225 File Offset: 0x00000425
+		public override void PreStartClient()
+		{
+		}
+	}
 }

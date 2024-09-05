@@ -34,7 +34,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
                     {
                         position = hitInfo.point,
                         crit = RollCrit(),
-                        
+                        projectilePrefab = 
                     });
                     return true;
                 }
@@ -49,8 +49,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
         SkillDef ISkill.BuildObject()
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
-            skill.skillName = "KamunagiReaverMusou";
-            skill.skillNameToken = "PRIMARY2_NAME";
+            skill.skillName = "Primary 2";
+            skill.skillNameToken = "NINES_KAMUNAGI_BODY_PRIMARY2_NAME";
+            skill.skillDescriptionToken = "NINES_KAMUNAGI_BODY_PRIMARY2_DESCRIPTION";
             skill.skillDescriptionToken = "PRIMARY2_DESCRIPTION";
             skill.icon = LoadAsset<Sprite>("bundle:darkpng");
             skill.activationStateMachineName = "Weapon";

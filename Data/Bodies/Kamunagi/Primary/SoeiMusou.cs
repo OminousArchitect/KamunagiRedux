@@ -21,20 +21,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
             if (characterMotor.isGrounded) StartAimMode();
             AkSoundEngine.PostEvent("Play_voidman_m2_shoot", gameObject);
             EffectManager.SimpleMuzzleFlash(MuzzlePrefab, gameObject, twinMuzzle, false);
-            if (!isAuthority || !Asset.TryGetGameObject<SoeiMusou, IProjectile>(out var projectile)) return;
-            var aimRay = GetAimRay();
-            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+            if (isAuthority && Asset.TryGetGameObject<SoeiMusou, IProjectile>(out var projectile))
             {
-                crit = RollCrit(),
-                damage = characterBody.damage * 2.9f,
-                force = 500,
-                owner = gameObject,
-                position = aimRay.origin,
-                rotation = Quaternion.LookRotation(aimRay.direction),
-                projectilePrefab = projectile,
-                useSpeedOverride = true,
-                speedOverride = 105f,
-            });
+                var aimRay = GetAimRay();
+                ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+                {
+                    crit = RollCrit(),
+                    damage = characterBody.damage * 2.9f,
+                    force = 500,
+                    owner = gameObject,
+                    position = aimRay.origin,
+                    rotation = Quaternion.LookRotation(aimRay.direction),
+                    projectilePrefab = projectile,
+                    useSpeedOverride = true,
+                    speedOverride = 105f,
+                });
+            }
         }
         public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
     }
@@ -44,7 +46,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
         SkillDef ISkill.BuildObject()
         {
             var skill = ScriptableObject.CreateInstance<SkillDef>();
-            skill.skillName = "KamunagiSoeiMusou";
+            skill.skillName = "Primary 0";
             skill.skillNameToken = "NINES_KAMUNAGI_BODY_PRIMARY0_NAME";
             skill.skillDescriptionToken = "NINES_KAMUNAGI_BODY_PRIMARY0_DESCRIPTION";
             skill.icon = LoadAsset<Sprite>("bundle:darkpng");

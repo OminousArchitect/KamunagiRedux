@@ -129,7 +129,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         {
             var windyGreen = new Color(0.175f, 0.63f, 0.086f);
             
-            var ghost = LoadAsset<GameObject>("addresable:RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab")!.InstantiateClone( "TwinsWindBoomerangGhost", false);
+            var ghost = LoadAsset<GameObject>("addressable:RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab")!.InstantiateClone( "TwinsWindBoomerangGhost", false);
             var windPsr = ghost.GetComponentsInChildren<ParticleSystemRenderer>();
             windPsr[0].material.SetColor("_TintColor", windyGreen);
             windPsr[2].enabled = false;

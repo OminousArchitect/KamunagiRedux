@@ -65,7 +65,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
             return skill;
         }
 
-        Type[] ISkill.GetEntityStates() => new[] {typeof(ReaverMusou) }; //todo lambda
+        Type[] ISkill.GetEntityStates() => new[] {typeof(ReaverMusouState) };
 
         GameObject IEffect.BuildObject()
         {

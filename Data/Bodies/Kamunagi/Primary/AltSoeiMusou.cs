@@ -181,7 +181,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
             scale.overallCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
             var altPP = effect.AddComponent<PostProcessVolume>();
-            altPP.profile = LoadAsset<PostProcessProfile>("addressable:RoR2/Base/title/ppLocalBrotherImpact.asset");
+            altPP.profile = LoadAsset<PostProcessProfile>("addressable:RoR2/Base/title/PostProcessing/ppLocalBrotherImpact.asset");
             altPP.sharedProfile = altPP.profile;
 
             var musouInstance =

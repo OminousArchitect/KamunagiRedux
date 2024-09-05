@@ -15,6 +15,7 @@ namespace KamunagiOfChains.Data
 {
     public abstract class Asset
     {
+        // TODO store objects and assets based on T.Assembly
         public static Dictionary<string, object> Objects = new Dictionary<string, object>();
         public static Dictionary<Type, Asset> Assets = new Dictionary<Type, Asset>();
 

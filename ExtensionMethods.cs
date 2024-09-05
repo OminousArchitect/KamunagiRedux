@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using RoR2;
 using UnityEngine;
 
 namespace KamunagiOfChains
@@ -81,6 +81,19 @@ namespace KamunagiOfChains
             value = valueGetter();
             dict[key] = value;
             return value;
+        }
+
+        public static EffectComponent EffectWithSound(this GameObject gameObject, string soundName)
+        {
+            var comp = gameObject.GetComponent<EffectComponent>();
+            if (!comp)
+            {
+                comp = gameObject.AddComponent<EffectComponent>();
+                comp.parentToReferencedTransform = true;
+                comp.positionAtReferencedTransform = true;
+            }
+            comp.soundName = soundName;
+            return comp;
         }
     }
 }

@@ -7,13 +7,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {
     public class VoidPortalSpawnState : BaseState
     {
-        public static float minimumIdleDuration = 1.5f;
+        public static float minimumIdleDuration = 1f;
         public override void OnEnter()
         {
             base.OnEnter();
             if (NetworkServer.active)
             {
                 characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, minimumIdleDuration);
+            }
+            var characterModel = base.GetModelTransform().GetComponent<CharacterModel>();
+            if (characterModel)
+            {
+                characterModel.invisibilityCount++;
             }
         }
 
@@ -47,6 +52,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
             if (NetworkServer.active)
                 characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, duration * 1.2f);
+            
+            var characterModel = base.GetModelTransform().GetComponent<CharacterModel>();
+            if (characterModel)
+            {
+                characterModel.invisibilityCount--;
+            }
         }
 
         public override void FixedUpdate()

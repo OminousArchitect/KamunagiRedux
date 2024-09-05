@@ -16,10 +16,11 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
-    public class WindBoomerangState : BaseTwinState
+	class WindBoomerangState : BaseTwinState
     {
         public override int meterGain => 5;
         private float damageCoefficient = 2.8f;
+        private float distanceMult;
         private float maxChargeTime = 1.5f;
         private float minDistance = 0.05f;
         private float maxDistance = 0.6f;
@@ -28,53 +29,68 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         public override void OnEnter()
         {
             base.OnEnter();
-            if (characterMotor.isGrounded)
-            {
-                base.StartAimMode();
-            }
-
             var muzzleTransform = base.FindModelChild("MuzzleCenter");
-            if (muzzleTransform && Asset.TryGetGameObject<WindBoomerang, IEffect>(out var muzzleEffect))
+            if (muzzleTransform)
             {
-                chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
-                ObjectScaleCurve scale = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
-                if (scale)
-                {
-                    scale.baseScale = Vector3.one;
-                    scale.timeMax = maxChargeTime;
-                }
+	            chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<WindBoomerang, IEffect>(), muzzleTransform, true, new EffectData()
+	            {
+		            rootObject = muzzleTransform.gameObject,
+	            });
             }
         }
-
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
-            var aimRay = GetAimRay();
-            var prefab = Asset.GetGameObject<WindBoomerang, IProjectile>();
-            prefab.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
-            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+            distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
+
+            if (base.isAuthority && fixedAge >= maxChargeTime)
             {
-                crit = RollCrit(),
-                damage = characterBody.damage * damageCoefficient,
-                force = 500,
-                owner = gameObject,
-                position = aimRay.origin,
-                projectilePrefab = prefab,
-                rotation = Quaternion.LookRotation(aimRay.direction),
-                useFuseOverride = false,
-                useSpeedOverride = true,
-                speedOverride = 50,
-            });
-            outer.SetNextStateToMain();
+                Fire();
+                outer.SetNextStateToMain();
+            }
+            
+            if (base.isAuthority && !inputBank.skill2.down)
+            {
+                Fire();
+                outer.SetNextStateToMain();
+            }
+        }
+
+        void Fire()
+        {
+	        var boomerang = Asset.GetGameObject<WindBoomerang, IProjectile>();
+	        Ray aimRay = base.GetAimRay();
+            boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
+            
+            if (base.isAuthority)
+            {
+                FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
+                {
+                    crit = base.RollCrit(),
+                    damage = this.characterBody.damage * damageCoefficient,
+                    damageTypeOverride = DamageType.Generic,
+                    damageColorIndex = DamageColorIndex.Default,
+                    force = 500,
+                    owner = base.gameObject,
+                    position = aimRay.origin,
+                    procChainMask = default(RoR2.ProcChainMask),
+                    projectilePrefab = boomerang,
+                    rotation = Quaternion.LookRotation(aimRay.direction),
+                    useFuseOverride = false,
+                    useSpeedOverride = true,
+                    speedOverride = 50,
+                    target = null
+                };
+                ProjectileManager.instance.FireProjectile(fireProjectileInfo);
+            }
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            if (chargeEffectInstance)
+            if (chargeEffectInstance != null)
             {
-                Destroy(chargeEffectInstance);
+                chargeEffectInstance.ReturnToPool();
             }
         }
 
@@ -83,9 +99,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             return InterruptPriority.Skill;
         }
     }
-
+	
     public class WindBoomerang : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
     {
+	    Type[] ISkill.GetEntityStates() => new[] {typeof(WindBoomerangState) };
+	    
 	    SkillDef ISkill.BuildObject()
 	    {
 		    var skill = ScriptableObject.CreateInstance<SkillDef>();
@@ -105,12 +123,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		    return skill;
 	    }
 
-	    Type[] ISkill.GetEntityStates() => new[] {typeof(WindBoomerangState) };
-
 	    GameObject IProjectile.BuildObject()
         {
             var proj =
-                LoadAsset<GameObject>("addressable:RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone(
+                LoadAsset<GameObject>("RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone(
                     "TwinsWindBoomerang", true);
             foreach (var boom in proj.GetComponents<BoomerangProjectile>())
             {
@@ -123,10 +139,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             windDamage.fireFrequency = 25f;
             windDamage.resetFrequency = 10f;
             windDamage.impactEffect = GetGameObject<WindHitEffect, IEffect>();
-            var itjustworks = proj.AddComponent<WindBoomerangProjectileBehaviour>(); //ugh we gotta add this later
+            var itjustworks = proj.AddComponent<WindBoomerangProjectileBehaviour>();
+            //haha hopefully
             var windSounds = proj.GetComponent<ProjectileController>();
             windSounds.startSound = "Play_merc_m2_uppercut";
-            windSounds.flightSoundLoop = LoadAsset<LoopSoundDef>("addressable:RoR2/Base/LunarSkillReplacements/lsdLunarSecondaryProjectileFlight.asset");
+            windSounds.flightSoundLoop = LoadAsset<LoopSoundDef>("RoR2/Base/LunarSkillReplacements/lsdLunarSecondaryProjectileFlight.asset");
             proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<WindBoomerang, IProjectileGhost>();
             return proj;
         }
@@ -135,7 +152,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         {
             var windyGreen = new Color(0.175f, 0.63f, 0.086f);
             
-            var ghost = LoadAsset<GameObject>("addressable:RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab")!.InstantiateClone( "TwinsWindBoomerangGhost", false);
+            var ghost = LoadAsset<GameObject>("RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab")!.InstantiateClone( "TwinsWindBoomerangGhost", false);
             var windPsr = ghost.GetComponentsInChildren<ParticleSystemRenderer>();
             windPsr[0].material.SetColor("_TintColor", windyGreen);
             windPsr[2].enabled = false;
@@ -161,6 +178,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         {
             var effect = GetGameObject<WindBoomerang, IProjectile>()!.InstantiateClone("WindChargeEffect", false);
             UnityEngine.Object.Destroy(effect.GetComponent<ProjectileGhostController>());
+            
+            var attributes = effect.AddComponent<VFXAttributes>();
+            attributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
+            attributes.DoNotPool = false;
             return effect;
         }
     }
@@ -169,7 +190,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
     {
         GameObject IEffect.BuildObject()
         {
-            var effect = LoadAsset<GameObject>("addressable:RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone( "TwinsWindHitEffect", false);
+            var effect = LoadAsset<GameObject>("RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone( "TwinsWindHitEffect", false);
             UnityEngine.Object.Destroy(effect.GetComponent<OmniEffect>());
             foreach (ParticleSystemRenderer r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
             {

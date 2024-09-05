@@ -26,6 +26,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
                 force = 0,
                 radius = 0.3f,
                 procCoefficient = 0,
+                smartCollision = true, 
                 muzzleName = "MuzzleRight",
                 tracerEffectPrefab = tracer,
                 hitCallback = (BulletAttack bulletAttack, ref BulletAttack.BulletHit hitInfo) =>
@@ -43,6 +44,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
                 }
             };
             testForTarget.Fire();
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            
+            if (base.fixedAge >= 0.45f && base.isAuthority)
+            {
+                this.outer.SetNextStateToMain();
+            }
+
+            if (!inputBank.skill1.down)
+            {
+                outer.SetNextStateToMain();
+            }
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
         }
     }
     
@@ -69,7 +90,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
         GameObject IEffect.BuildObject()
         {
-            var effect = LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierExplosion.prefab")!.InstantiateClone("ReaverMusouMuzzleFlash", false);
+            var effect = LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierExplosion.prefab")!.InstantiateClone("ReaverMusouMuzzleFlash", false);
             UnityEngine.Object.Destroy(effect.GetComponent<ShakeEmitter>());
             //UnityEngine.Object.Destroy(effect.GetComponent<Rigidbody>());
             effect.transform.GetChild(1).gameObject.SetActive(false);
@@ -84,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
         GameObject IProjectile.BuildObject()
         {
-            var proj = LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab")!.InstantiateClone("proj", true);
+            var proj = LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab")!.InstantiateClone("proj", true);
             var impact = proj.GetComponent<ProjectileImpactExplosion>();
             impact.lifetime = 0.5f;
             impact.impactEffect = GetGameObject<ReaverMusou, IEffect>();
@@ -96,11 +117,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
         GameObject IProjectileGhost.BuildObject()
         {
-            var ghost = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombletsGhost.prefab")!.InstantiateClone("ReaverMusouGhost", false);
+            var ghost = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombletsGhost.prefab")!.InstantiateClone("ReaverMusouGhost", false);
             ghost.transform.localScale = Vector3.one;
 
             var reaveMesh = ghost.GetComponentInChildren<MeshRenderer>();
-            reaveMesh.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampBanditSplatter.png"));
+            reaveMesh.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampBanditSplatter.png"));
             reaveMesh.material.SetColor("_TintColor",  new Color(0.5411765f, 0.1176471f, 1f));
             var flickerPurple = ghost.transform.GetChild(1).gameObject;
             var lightC = flickerPurple.GetComponent<Light>();

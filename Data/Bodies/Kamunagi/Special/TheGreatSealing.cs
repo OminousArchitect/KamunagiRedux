@@ -37,11 +37,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
             if (isAuthority) characterMotor.useGravity = false;
             var muzzleTransform = FindModelChild("MuzzleCenter");
             if (!muzzleTransform || !Asset.TryGetGameObject<TheGreatSealing, IEffect>(out var muzzleEffect)) return;
-            chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true, new EffectData()
-            {
-                rootObject = muzzleTransform.gameObject,
-                scale = 0.0625f,
-            });
+            chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform,
+                true, new EffectData()
+                {
+                    rootObject = muzzleTransform.gameObject,
+                    scale = 0.0625f,
+                });
         }
 
         public override void Update()

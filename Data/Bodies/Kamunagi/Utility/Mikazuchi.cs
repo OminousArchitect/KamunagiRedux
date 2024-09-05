@@ -2,7 +2,6 @@
 using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
-using Rewired.UI.ControlMapper;
 using RoR2;
 using RoR2.Projectile;
 using RoR2.Skills;
@@ -85,7 +84,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
                 var centerPoint = indicatorPosition + Vector3.up * 2.5f;
                 for (var i = 0; i < projectileCount; i++)
                 {
-                    ProjectileManager.instance.FireProjectile(Asset.GetGameObject<Mikazuchi, IProjectile>(),
+                    ProjectileManager.instance.FireProjectile(Asset.GetGameObject<MikazuchiLightningOrb, IProjectile>(),
                         centerPoint,
                         Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) *
                                                         forward),

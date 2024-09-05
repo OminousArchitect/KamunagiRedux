@@ -37,7 +37,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
             if (isAuthority) characterMotor.useGravity = false;
             var muzzleTransform = FindModelChild("MuzzleCenter");
             if (!muzzleTransform || !Asset.TryGetGameObject<TheGreatSealing, IEffect>(out var muzzleEffect)) return;
-            chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
+            chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true, new EffectData()
+            {
+                rootObject = muzzleTransform.gameObject,
+                scale = 0.0625f,
+            });
         }
 
         public override void Update()
@@ -79,7 +83,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
                     .InstantiateClone("AntimatterMuzzleEffect", false);
 
             var comp = effect.GetOrAddComponent<EffectComponent>();
-            comp.applyScale = false;
+            comp.applyScale = true;
             comp.parentToReferencedTransform = true;
             comp.positionAtReferencedTransform = true;
             comp.effectData = new EffectData() { };
@@ -89,7 +93,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
             vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
 
             Object.Destroy(effect.GetComponent<ProjectileGhostController>());
-            effect.transform.localScale = Vector3.one * 0.04f;
             var scaler = effect.transform.GetChild(0).gameObject;
             var blackSphere = scaler.transform.GetChild(1).gameObject;
             var (emissionMat, (rampMat, _)) = blackSphere.GetComponent<MeshRenderer>().materials;

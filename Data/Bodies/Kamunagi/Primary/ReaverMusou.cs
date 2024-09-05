@@ -34,7 +34,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
                     {
                         position = hitInfo.point,
                         crit = RollCrit(),
-                        projectilePrefab = 
+                        projectilePrefab = Asset.GetGameObject<ReaverMusou, IProjectile>(),
+                        owner = gameObject,
+                        damage = this.characterBody.damage * 3.1f,
+                        force = 200
                     });
                     return true;
                 }
@@ -62,7 +65,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
             return skill;
         }
 
-        Type[] ISkill.GetEntityStates() => new[] {typeof(ReaverMusou) };
+        Type[] ISkill.GetEntityStates() => new[] {typeof(ReaverMusou) }; //todo lambda
 
         GameObject IEffect.BuildObject()
         {

@@ -1,4 +1,5 @@
-﻿using EntityStates;
+﻿using System;
+using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using Rewired.UI.ControlMapper;
@@ -8,6 +9,7 @@ using RoR2.Projectile;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Runtime.InteropServices;
+using RoR2.Skills;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
@@ -49,7 +51,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
             var aimRay = GetAimRay();
             var prefab = Asset.GetGameObject<WindBoomerang, IProjectile>();
-            prefab.GetComponent<WindBoomerangProjectile>().distanceMultiplier = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
+            prefab.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
             ProjectileManager.instance.FireProjectile(new FireProjectileInfo
             {
                 crit = RollCrit(),
@@ -83,7 +85,28 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
     public class WindBoomerang : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
     {
-        GameObject IProjectile.BuildObject()
+	    SkillDef ISkill.BuildObject()
+	    {
+		    var skill = ScriptableObject.CreateInstance<SkillDef>();
+		    skill.skillName = "Secondary 0";
+		    skill.skillNameToken = "SECONDARY0_NAME";
+		    skill.skillDescriptionToken = "SECONDARY0_DESCRIPTION";
+		    skill.icon = LoadAsset<Sprite>("bundle:firepng");
+		    skill.activationStateMachineName = "Weapon";
+		    skill.baseMaxStock = 1;
+		    skill.baseRechargeInterval = 2f;
+		    skill.beginSkillCooldownOnSkillEnd = false;
+		    skill.canceledFromSprinting = false;
+		    skill.interruptPriority = InterruptPriority.Any;
+		    skill.isCombatSkill = true;
+		    skill.mustKeyPress = true; 
+		    skill.cancelSprintingOnActivation = false;
+		    return skill;
+	    }
+
+	    Type[] ISkill.GetEntityStates() => new[] {typeof(WindBoomerangState) };
+
+	    GameObject IProjectile.BuildObject()
         {
             var proj = LoadAsset<GameObject>("addressable:RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone( "TwinsWindBoomerang", true);
             UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>());
@@ -94,7 +117,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             windDamage.fireFrequency = 25f;
             windDamage.resetFrequency = 10f;
             windDamage.impactEffect = GetGameObject<WindHitEffect, IEffect>();
-            var itjustworks = proj.AddComponent<WindBoomerangProjectile>(); //ugh we gotta add this later
+            var itjustworks = proj.AddComponent<WindBoomerangProjectileBehaviour>(); //ugh we gotta add this later
             var windSounds = proj.GetComponent<ProjectileController>();
             windSounds.startSound = "Play_merc_m2_uppercut";
             windSounds.flightSoundLoop = LoadAsset<LoopSoundDef>("addressable:RoR2/Base/LunarSkillReplacements/lsdLunarSecondaryProjectileFlight.asset");
@@ -159,7 +182,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
     
 
     [RequireComponent(typeof(ProjectileController))]
-	class WindBoomerangProjectile : NetworkBehaviour, IProjectileImpactBehavior
+	class WindBoomerangProjectileBehaviour : NetworkBehaviour, IProjectileImpactBehavior
 	{
 		public float travelSpeed = 60f;
 

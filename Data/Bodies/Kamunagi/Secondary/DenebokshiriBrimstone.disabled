@@ -59,7 +59,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         GameObject IProjectile.BuildObject()
         {
             var proj = GetGameObject<WindBoomerang, IProjectile>()!.InstantiateClone("TwinsMiniSun", true);
-            UnityEngine.Object.Destroy(proj.GetComponent<WindBoomerangProjectile>());
+            UnityEngine.Object.Destroy(proj.GetComponent<WindBoomerangProjectileBehaviour>());
             UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>()); //bro what is this spaghetti
             UnityEngine.Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
             UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDotZone>());

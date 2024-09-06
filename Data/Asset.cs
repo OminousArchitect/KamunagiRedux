@@ -105,7 +105,7 @@ namespace KamunagiOfChains.Data
 
         public static bool TryGetAsset<T, T2>(out T asset) where T : Asset, T2
         {
-            return TryGetAsset<T>(out asset);
+            return TryGetAsset(out asset);
         }
 
         public static T GetAsset<T>() where T : Asset
@@ -118,7 +118,7 @@ namespace KamunagiOfChains.Data
             return GetAsset<T>();
         }
 
-        public static bool TryGetGameObject<T, T2>(out GameObject asset) where T2 : IGameObject where T : T2
+        public static bool TryGetGameObject<T, T2>(out GameObject asset) where T2 : IGameObject where T : Asset, T2
         {
             try
             {
@@ -132,15 +132,23 @@ namespace KamunagiOfChains.Data
             }
         }
 
-        public static GameObject GetGameObject<T, T2>() where T2 : IGameObject where T : T2
+        public static GameObject GetGameObject<T, T2>() where T2 : IGameObject where T : Asset, T2
         {
             return (GameObject)GetObjectOrThrow<T2>(Assets[typeof(T)]);
         }
 
+        internal static GameObject GetGameObject(Type callingType, Type targetType)
+        {
+            return (GameObject)GetObjectOrThrow(Assets[callingType], targetType);
+        }
+
         private static object GetObjectOrThrow<T>(Asset asset)
         {
+            return GetObjectOrThrow(asset, typeof(T));
+        }
+        private static object GetObjectOrThrow(Asset asset, Type targetType)
+        {
             var name = asset.GetType().Name;
-            var targetType = typeof(T);
             var targetTypeName = targetType.Name;
             var key = name + "_" + targetTypeName;
             var notOfType = new AssetTypeInvalidException($"{name} is not of type {targetTypeName}");
@@ -300,6 +308,41 @@ namespace KamunagiOfChains.Data
     {
         public AssetTypeInvalidException(string message) : base(message)
         {
+        }
+    }
+    
+    public static class AssetExtensionMethods {
+        public static GameObject GetNetworkedObject<T>(this T obj) where T : Asset, INetworkedObject
+        {
+            return Asset.GetGameObject(obj.GetType(), typeof(INetworkedObject));
+        }
+        public static GameObject GetProjectile<T>(this T obj) where T : Asset, IProjectile
+        {
+            return Asset.GetGameObject(obj.GetType(), typeof(IProjectile));
+        }
+        public static GameObject GetGhost<T>(this T obj) where T : Asset, IProjectileGhost
+        {
+            return Asset.GetGameObject(obj.GetType(), typeof(IProjectileGhost));
+        }
+        public static GameObject GetEffect<T>(this T obj) where T : Asset, IEffect
+        {
+            return Asset.GetGameObject(obj.GetType(), typeof(IEffect));
+        }
+        public static GameObject GetMaster<T>(this T obj) where T : Asset, IMaster
+        {
+            return Asset.GetGameObject(obj.GetType(), typeof(IMaster));
+        }
+        public static GameObject GetBody<T>(this T obj) where T : Asset, IBody
+        {
+            return Asset.GetGameObject(obj.GetType(), typeof(IBody));
+        }
+        public static GameObject GetBodyDisplay<T>(this T obj) where T : Asset, IBodyDisplay
+        {
+            return Asset.GetGameObject(obj.GetType(), typeof(IBodyDisplay));
+        }
+        public static GameObject GetModel<T>(this T obj) where T : Asset, IModel
+        {
+            return Asset.GetGameObject(obj.GetType(), typeof(IModel));
         }
     }
 

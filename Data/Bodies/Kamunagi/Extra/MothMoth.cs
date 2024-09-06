@@ -51,6 +51,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
         GameObject INetworkedObject.BuildObject()
         {
             var mothMoth = LoadAsset<GameObject>("addressable:RoR2/Base/Beetle/BeetleWard.prefab")!.InstantiateClone("MothMoth");
+            mothMoth.GetComponent<BuffWard>().buffDef = LoadAsset<BuffDef>("RoR2/Base/LifestealOnHit/bdLifeSteal.asset");
             
             var impMat = new Material(LoadAsset<Material>("addressable:RoR2/Base/Imp/matImpBoss.mat"));
             impMat.SetFloat(Cull, 0);

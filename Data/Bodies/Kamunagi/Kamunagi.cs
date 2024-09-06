@@ -43,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
         GameObject IMaster.BuildObject()
         {
-            var master = LoadAsset<GameObject>("Prefabs/CharacterMasters/MercMonsterMaster")!.InstantiateClone(
+            var master = LoadAsset<GameObject>("RoR2/Base/Merc/MercMonsterMaster.prefab")!.InstantiateClone(
                 "NinesKamunagiBodyMonsterMaster", true);
             master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<KamunagiAsset, IBody>();
             return master;

@@ -21,7 +21,6 @@ namespace KamunagiOfChains.Data
     [HarmonyPatch]
     public abstract class Asset
     {
-        // TODO store objects and assets based on T.Assembly
         public static Dictionary<string, object> Objects = new Dictionary<string, object>();
         public static Dictionary<Type, Asset> Assets = new Dictionary<Type, Asset>();
         public static Dictionary<object, Asset> ObjectToAssetMap = new Dictionary<object, Asset>();
@@ -36,14 +35,14 @@ namespace KamunagiOfChains.Data
 
             var instances = Assets.Values;
             var entityStates = instances.Where(x => x is IEntityStates).SelectMany(x =>
-                (Type[])(Objects.GetOrSet(x.GetType().Name + "_EntityStates",
+                (Type[])(Objects.GetOrSet(x.GetType().Assembly.FullName + "_" + x.GetType().Name + "_EntityStates",
                     () => ((IEntityStates)x).GetEntityStates())));
 
             result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
             result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
             result.skillDefs.Add(instances.Where(x => x is ISkill).Select(x => (SkillDef)x).ToArray());
             result.entityStateTypes.Add(instances.Where(x => x is ISkill)
-                .SelectMany(x => (Type[])Objects[x.GetType().Name + "_" + nameof(ISkill) + "_EntityStates"])
+                .SelectMany(x => (Type[])Objects[x.GetType().Assembly.FullName + "_" + x.GetType().Name + "_" + nameof(ISkill) + "_EntityStates"])
                 .Concat(entityStates).Distinct().ToArray());
             result.skillFamilies.Add(instances.Where(x => x is ISkillFamily).Select(x => (SkillFamily)x).ToArray());
             result.networkedObjectPrefabs.Add(instances.Where(x => x is INetworkedObject)
@@ -148,9 +147,10 @@ namespace KamunagiOfChains.Data
         }
         private static object GetObjectOrThrow(Asset asset, Type targetType)
         {
-            var name = asset.GetType().Name;
+            var assetType = asset.GetType();
+            var name = assetType.Name;
             var targetTypeName = targetType.Name;
-            var key = name + "_" + targetTypeName;
+            var key = assetType.Assembly.FullName + "_" + name + "_" + targetTypeName;
             var notOfType = new AssetTypeInvalidException($"{name} is not of type {targetTypeName}");
             if (Objects.TryGetValue(key, out var result))
             {

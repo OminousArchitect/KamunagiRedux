@@ -341,7 +341,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
             
              //obtaining the perfect obelisk mesh
-            var loftPrefab = LoadAsset<GameObject>("addressable:RoR2/DLC1/ancientloft/AL_LightStatue_On.prefab");
+            var loftPrefab = LoadAsset<GameObject>("addressable:RoR2/DLC1/ancientloft/AL_LightStatue_On.prefab")!;
             var obelisk = loftPrefab.transform.GetChild(4).gameObject;
             // TODO??
             var theObelisk = PrefabAPI.InstantiateClone(obelisk, "TwinsObelisk", false);

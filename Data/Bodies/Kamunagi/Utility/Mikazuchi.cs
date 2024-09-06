@@ -138,7 +138,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
             var rampTeleport =
                 LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png");
-            var sphereMat = LoadAsset<Material>("addressable:RoR2/Base/Loader/matLightningLongYellow.mat");
+            var sphereMat = LoadAsset<Material>("addressable:RoR2/Base/Loader/matLightningLongYellow.mat")!;
             foreach (var particleSystemRenderer in effect.GetComponentsInChildren<ParticleSystemRenderer>())
             {
                 switch (particleSystemRenderer.name)

@@ -37,8 +37,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 ObjectScaleCurve scale = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
                 if (scale)
                 {
-                    scale.baseScale = Vector3.one * 0.35f;
-                    scale.timeMax = maxChargeTime;
+                    //scale.baseScale = Vector3.one * 0.35f;
+                    //scale.timeMax = maxChargeTime;
                 }
             }
             soundID = AkSoundEngine.PostEvent("Play_fireballsOnHit_pool_aliveLoop", base.gameObject);
@@ -73,17 +73,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             base.FixedUpdate();
             damageCoefficient = Util.Remap(base.fixedAge, 0, maxChargeTime, remapMin, remapMax);
 
-            if (base.isAuthority && base.fixedAge > maxChargeTime && inputBank.skill2.down)
-            {
-                FireProjectile();
-                this.outer.SetNextStateToMain();
-            }
-
-            if (base.isAuthority && base.fixedAge < maxChargeTime && !inputBank.skill2.down)
-            {
-                FireProjectile();
-                outer.SetNextStateToMain();
-            }
+            if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
+            FireProjectile();
+            outer.SetNextStateToMain();
         }
         public override void OnExit()
         {
@@ -119,6 +111,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             skill.beginSkillCooldownOnSkillEnd = false;
             skill.interruptPriority = InterruptPriority.Any;
             skill.cancelSprintingOnActivation = false;
+            skill.mustKeyPress = true;
             return skill;
         }
 

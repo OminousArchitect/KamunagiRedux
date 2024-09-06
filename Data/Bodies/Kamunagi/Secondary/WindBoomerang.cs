@@ -29,13 +29,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         public override void OnEnter()
         {
             base.OnEnter();
-            var muzzleTransform = base.FindModelChild("MuzzleCenter");
+            var muzzleTransform = FindModelChild("MuzzleCenter");
+            var effect = Asset.GetGameObject<WindBoomerang, IEffect>();
             if (muzzleTransform)
             {
-	            chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<WindBoomerang, IEffect>(), muzzleTransform, true, new EffectData()
+	            chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
+		            new EffectData()
+		            {
+			            rootObject = muzzleTransform.gameObject,
+		            });
+                
+	            ObjectScaleCurve scale = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
+	            if (scale)
 	            {
-		            rootObject = muzzleTransform.gameObject,
-	            });
+		            //scale.baseScale = Vector3.one * 0.35f;
+		            //scale.timeMax = maxChargeTime;
+	            }
             }
         }
         public override void FixedUpdate()
@@ -43,17 +52,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             base.FixedUpdate();
             distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
 
-            if (base.isAuthority && fixedAge >= maxChargeTime)
-            {
-                Fire();
-                outer.SetNextStateToMain();
-            }
-            
-            if (base.isAuthority && !inputBank.skill2.down)
-            {
-                Fire();
-                outer.SetNextStateToMain();
-            }
+            if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
+            Fire();
+            outer.SetNextStateToMain();
         }
 
         void Fire()
@@ -107,10 +108,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	    SkillDef ISkill.BuildObject()
 	    {
 		    var skill = ScriptableObject.CreateInstance<SkillDef>();
-		    skill.skillName = "Secondary 0";
-		    skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY0_NAME";
-		    skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY0_DESCRIPTION";
-		    skill.icon = LoadAsset<Sprite>("bundle:firepng");
+		    skill.skillName = "Secondary 2";
+		    skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY2_NAME";
+		    skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY2_DESCRIPTION";
+		    skill.icon = LoadAsset<Sprite>("bundle:windpng");
 		    skill.activationStateMachineName = "Weapon";
 		    skill.baseMaxStock = 1;
 		    skill.baseRechargeInterval = 2f;
@@ -125,13 +126,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	    GameObject IProjectile.BuildObject()
         {
-            var proj =
-                LoadAsset<GameObject>("RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone(
-                    "TwinsWindBoomerang", true);
-            foreach (var boom in proj.GetComponents<BoomerangProjectile>())
-            {
-                Object.Destroy(boom);
-            }
+            var proj = LoadAsset<GameObject>("RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone("TwinsWindBoomerang", true);
+            UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>());
             UnityEngine.Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
             var windDamage = proj.GetComponent<ProjectileDotZone>();
             windDamage.damageCoefficient = 0.5f;
@@ -176,9 +172,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
         GameObject IEffect.BuildObject()
         {
-            var effect = GetGameObject<WindBoomerang, IProjectile>()!.InstantiateClone("WindChargeEffect", false);
+            var effect = GetGameObject<WindBoomerang, IProjectileGhost>()!.InstantiateClone("TwinsWindChargeEffect", false);
             UnityEngine.Object.Destroy(effect.GetComponent<ProjectileGhostController>());
-            
             var attributes = effect.AddComponent<VFXAttributes>();
             attributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             attributes.DoNotPool = false;

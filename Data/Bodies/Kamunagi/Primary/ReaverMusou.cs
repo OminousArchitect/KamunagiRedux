@@ -40,10 +40,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
                         damage = this.characterBody.damage * 3.1f,
                         force = 200
                     });
-                    return true;
+                    return false;
                 }
             };
             testForTarget.Fire();
+            EffectManager.SimpleMuzzleFlash(Asset.GetGameObject<ReaverMusou, IEffect>(), gameObject,  twinMuzzle, false);
         }
 
         public override void FixedUpdate()
@@ -104,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
         GameObject IProjectile.BuildObject()
         {
-            var proj = LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab")!.InstantiateClone("proj", true);
+            var proj = LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab")!.InstantiateClone("ReaverMusouProjectile", true);
             var impact = proj.GetComponent<ProjectileImpactExplosion>();
             impact.lifetime = 0.5f;
             impact.impactEffect = GetGameObject<ReaverMusou, IEffect>();

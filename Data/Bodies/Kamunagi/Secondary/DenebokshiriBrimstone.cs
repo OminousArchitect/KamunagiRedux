@@ -6,6 +6,8 @@ using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 using HarmonyLib;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using RoR2.Orbs;
 using RoR2.Skills;
 
@@ -17,7 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         private float remapMax = 2f;
         private float maxChargeTime = 2f;
         private float damageCoefficient;
-        
+
         private EffectManagerHelper? chargeEffectInstance;
         private uint soundID;
 
@@ -33,7 +35,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                     {
                         rootObject = muzzleTransform.gameObject
                     });
-                
+
                 ObjectScaleCurve scale = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
                 if (scale)
                 {
@@ -41,6 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                     //scale.timeMax = maxChargeTime;
                 }
             }
+
             soundID = AkSoundEngine.PostEvent("Play_fireballsOnHit_pool_aliveLoop", base.gameObject);
         }
 
@@ -59,7 +62,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                     damageColorIndex = DamageColorIndex.Default,
                     force = damageCoefficient * 100,
                     owner = base.gameObject,
-                    position = aimRay.origin,  //aimRay.origin + aimRay.direction * 2,
+                    position = aimRay.origin, //aimRay.origin + aimRay.direction * 2,
                     procChainMask = default(RoR2.ProcChainMask),
                     projectilePrefab = prefab,
                     rotation = Quaternion.LookRotation(aimRay.direction),
@@ -67,7 +70,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 ProjectileManager.instance.FireProjectile(fireProjectileInfo);
             }
         }
-        
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
@@ -77,15 +80,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             FireProjectile();
             outer.SetNextStateToMain();
         }
+
         public override void OnExit()
         {
             if (chargeEffectInstance != null)
             {
                 chargeEffectInstance.ReturnToPool();
             }
+
             AkSoundEngine.StopPlayingID(soundID);
             base.OnExit();
         }
+
         public override InterruptPriority GetMinimumInterruptPriority()
         {
             return InterruptPriority.Skill;
@@ -115,8 +121,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             return skill;
         }
 
-        Type[] ISkill.GetEntityStates() => new[] {typeof(DenebokshiriBrimstoneState) };
-        
+        Type[] ISkill.GetEntityStates() => new[] { typeof(DenebokshiriBrimstoneState) };
+
         GameObject IProjectile.BuildObject()
         {
             var hitEffect = GetGameObject<FireHitEffect, IEffect>();
@@ -148,7 +154,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             proxBeam.procCoefficient = 0.3f;
             proxBeam.damageCoefficient = 0.1f;
             proxBeam.bounces = 0;
-            proxBeam.lightningType = LightningOrb.LightningType.Loader;
+            proxBeam.lightningType = (LightningOrb.LightningType)204957; // some random constant bullshit
             proxBeam.inheritDamageType = true;
             return proj;
         }
@@ -202,7 +208,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
     {
         GameObject IEffect.BuildObject()
         {
-            var effect = LoadAsset<GameObject>("addressable:RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone("TwinsFireHitEffect", false);
+            var effect =
+                LoadAsset<GameObject>("addressable:RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone(
+                    "TwinsFireHitEffect", false);
             UnityEngine.Object.Destroy(effect.GetComponent<OmniEffect>());
             foreach (ParticleSystemRenderer r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
             {
@@ -214,7 +222,46 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                     mat.mainTexture = Asset.LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
                 }
             }
+
             effect.EffectWithSound("Play_item_use_molotov_throw");
+            return effect;
+        }
+    }
+
+    [HarmonyPatch]
+    public class LightningEffect : Asset, IEffect
+    {
+        [HarmonyILManipulator, HarmonyPatch(typeof(LightningOrb), nameof(LightningOrb.Begin))]
+        public static void ReplaceEffect(ILContext il)
+        {
+            var c = new ILCursor(il);
+            if (!c.TryGotoNext(x =>
+                    x.MatchCallOrCallvirt(typeof(OrbStorageUtility), nameof(OrbStorageUtility.Get)))) return;
+            c.Emit(OpCodes.Ldarg_0);
+            c.Remove();
+            c.EmitDelegate<Func<string, LightningOrb, GameObject>>((path, orb) => orb.lightningType == (LightningOrb.LightningType)204957
+                ? GetGameObject<LightningEffect, IEffect>()
+                : OrbStorageUtility.Get(path));
+        }
+
+        public GameObject BuildObject()
+        {
+            var effect =
+                LoadAsset<GameObject>("legacy:Prefabs/Effects/OrbEffects/MageLightningOrbEffect")!.InstantiateClone(
+                    "BrimstoneLightning", false);
+            effect.GetComponent<OrbEffect>().endEffect = GetGameObject<LightningEndEffect, IEffect>();
+            effect.GetComponentInChildren<LineRenderer>().material = LoadAsset<Material>("RoR2/Base/Common/VFX/mageMageFireStarburst.mat");
+            return effect;
+        }
+    }
+
+    public class LightningEndEffect : Asset, IEffect
+    {
+        public GameObject BuildObject()
+        {
+            var effect =
+                LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniExplosionVFXQuick.prefab")!.InstantiateClone(
+                    "LightningImpactEffect", false);
             return effect;
         }
     }

@@ -29,8 +29,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
         {
             base.FixedUpdate();
             if (!isAuthority) return;
-            if (fixedAge >= 5f) outer.SetNextStateToMain();
-            if (projectilesFired > Mathf.FloorToInt(fixedAge * totalProjectileCount) || projectilesFired >= totalProjectileCount) return;
+            if (fixedAge >= 5f || projectilesFired >= totalProjectileCount) outer.SetNextStateToMain();
+            if (projectilesFired > Mathf.FloorToInt(fixedAge * totalProjectileCount)) return;
             var aimRay = GetAimRay();
             ProjectileManager.instance.FireProjectile(
                 projectilePrefab = Util.CheckRoll(critStat + 17f, characterBody.master) ? luckyProjectilePrefab : projectilePrefab, 

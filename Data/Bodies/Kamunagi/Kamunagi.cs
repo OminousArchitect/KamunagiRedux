@@ -15,14 +15,16 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi
 {
-    public class KamunagiAsset : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin
+    public class KamunagiAsset : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin, IMaster
     {
         public const string tokenPrefix = "NINES_KAMUNAGI_BODY_";
-        Type[] IEntityStates.GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState) };
+
+        Type[] IEntityStates.GetEntityStates() => new[]
+            { typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState) };
 
         SkinDef ISkin.BuildObject()
         {
-            return (SkinDef) ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
+            return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
             {
                 var skinDef = (SkinDef)obj;
                 ISkin.AddDefaults(ref skinDef);
@@ -39,7 +41,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
             });
         }
 
+        GameObject IMaster.BuildObject()
+        {
+            var master = LoadAsset<GameObject>("Prefabs/CharacterMasters/MercMonsterMaster")!.InstantiateClone(
+                "NinesKamunagiBodyMonsterMaster", true);
+            master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<KamunagiAsset, IBody>();
+            return master;
+        }
+
         Asset[] IModel.GetSkins() => new Asset[] { this };
+
         GameObject IModel.BuildObject()
         {
             var model = LoadAsset<GameObject>("bundle:mdlKamunagi")!;
@@ -114,14 +125,45 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
             var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody")!
                 .InstantiateClone("NinesKamunagiBody");
 
-            var bodyCharacterBody = bodyPrefab.GetComponent<CharacterBody>();
+            var bodyComponent = bodyPrefab.GetComponent<CharacterBody>();
             var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
             var twinBehaviour = bodyPrefab.AddComponent<TwinBehaviour>();
 
-            bodyCharacterBody.preferredPodPrefab = null;
-            bodyCharacterBody.baseNameToken = tokenPrefix + "NAME";
-            bodyCharacterBody.subtitleNameToken = tokenPrefix + "SUBTITLE";
-            bodyCharacterBody.bodyColor = Colors.twinsLightColor;
+            bodyComponent.preferredPodPrefab = null;
+            bodyComponent.baseNameToken = tokenPrefix + "NAME";
+            bodyComponent.subtitleNameToken = tokenPrefix + "SUBTITLE";
+            bodyComponent.bodyColor = Colors.twinsLightColor;
+            bodyComponent.portraitIcon = LoadAsset<Texture>("bundle:Twins");
+            bodyComponent._defaultCrosshairPrefab = LoadAsset<GameObject>("RoR2/Base/Croco/CrocoCrosshair.prefab");
+
+            bodyComponent.baseMaxHealth = 150f;
+            bodyComponent.baseRegen = 1.5f;
+            bodyComponent.baseArmor = 0f;
+            bodyComponent.baseDamage = 12f;
+            bodyComponent.baseCrit = 1f;
+            bodyComponent.baseAttackSpeed = 1f;
+            bodyComponent.baseMoveSpeed = 7f;
+            bodyComponent.baseAcceleration = 80f;
+            bodyComponent.baseJumpPower = 15f;
+
+            //bodyCharacterBody.levelDamage = 2.6f; overwrote by below values in henry
+            bodyComponent.levelMaxHealth = Mathf.Round(bodyComponent.baseMaxHealth * 0.3f);
+            bodyComponent.levelMaxShield = Mathf.Round(bodyComponent.baseMaxShield * 0.3f);
+            bodyComponent.levelRegen = bodyComponent.baseRegen * 0.2f;
+
+            bodyComponent.levelMoveSpeed = 0f;
+            bodyComponent.levelJumpPower = 0f;
+
+            bodyComponent.levelDamage = bodyComponent.baseDamage * 0.2f;
+            bodyComponent.levelAttackSpeed = 0f;
+            bodyComponent.levelCrit = 0f;
+
+            bodyComponent.levelArmor = 0f;
+            bodyComponent.sprintingSpeedMultiplier = 1.45f;
+
+            // I assume these were meant to be on?
+            bodyComponent.bodyFlags |= CharacterBody.BodyFlags.ImmuneToExecutes;
+            bodyComponent.bodyFlags |= CharacterBody.BodyFlags.SprintAnyDirection;
 
             #region Setup Model
 
@@ -185,6 +227,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
                 skill2.skillName = "UruruuPrimary";
                 skill2._skillFamily = skillFamilyPrimary;
             }
+
             if (TryGetAsset<KamunagiSkillFamilySecondary>(out var skillFamilySecondary))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
@@ -195,6 +238,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
                 skill2.skillName = "UruruuSecondary";
                 skill2._skillFamily = skillFamilySecondary;
             }
+
             if (TryGetAsset<KamunagiSkillFamilyUtility>(out var skillFamilyUtility))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
@@ -205,6 +249,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
                 skill2.skillName = "UruruuUtility";
                 skill2._skillFamily = skillFamilyUtility;
             }
+
             if (TryGetAsset<KamunagiSkillFamilySpecial>(out var skillFamilySpecial))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();
@@ -215,6 +260,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
                 skill2.skillName = "UruruuSpecial";
                 skill2._skillFamily = skillFamilySpecial;
             }
+
             if (TryGetAsset<KamunagiSkillFamilyExtra>(out var skillFamilyExtra))
             {
                 var skill = bodyPrefab.AddComponent<GenericSkill>();

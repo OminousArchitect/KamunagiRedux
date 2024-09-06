@@ -56,6 +56,8 @@ namespace KamunagiOfChains.Data
                 .Select(x => (GameObject)GetObjectOrThrow<IProjectile>(x)).ToArray());
             result.effectDefs.Add(instances.Where(x => x is IEffect)
                 .Select(x => new EffectDef((GameObject)GetObjectOrThrow<IEffect>(x))).ToArray());
+            result.masterPrefabs.Add(instances.Where(x => x is IMaster).Select(x => (GameObject)GetObjectOrThrow<IMaster>(x))
+                .ToArray());
 
             return result;
         }
@@ -324,7 +326,10 @@ namespace KamunagiOfChains.Data
     {
         public abstract GameObject BuildObject();
     }
-
+    public interface IMaster : IGameObject
+    {
+        public abstract GameObject BuildObject();
+    }
     public interface IBody : IGameObject
     {
         public abstract GameObject BuildObject();

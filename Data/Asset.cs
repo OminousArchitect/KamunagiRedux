@@ -203,7 +203,7 @@ namespace KamunagiOfChains.Data
                         variant = new SkillFamily.Variant
                         {
                             skillDef = skillDef,
-                            viewableNode = new ViewablesCatalog.Node(skillDef.skillNameToken, false)
+                            viewableNode = new ViewablesCatalog.Node(skillDef.skillName, false)
                         };
                     }
 

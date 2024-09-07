@@ -230,7 +230,7 @@ namespace KamunagiOfChains.Data
                     {
                         family = ScriptableObject.CreateInstance<SkillFamily>();
                         family.variants = familyAsset.GetSkillAssets()
-                            .Select(x => (SkillFamily.Variant)GetObjectOrThrow<ISkill>(Assets[x])).ToArray();
+                            .Select(x => (SkillFamily.Variant)Assets[x]).ToArray();
                     }
 
                     returnedObject = family;

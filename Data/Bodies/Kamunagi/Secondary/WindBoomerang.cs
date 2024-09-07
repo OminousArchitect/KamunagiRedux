@@ -16,213 +16,217 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
-	class WindBoomerangState : BaseTwinState
-    {
-        public override int meterGain => 5;
-        private float damageCoefficient = 2.8f;
-        private float distanceMult;
-        private float maxChargeTime = 1.5f;
-        private float minDistance = 0.05f;
-        private float maxDistance = 0.6f;
-        public EffectManagerHelper? chargeEffectInstance;
+	internal class WindBoomerangState : BaseTwinState
+	{
+		public override int meterGain => 5;
+		private float damageCoefficient = 2.8f;
+		private float distanceMult;
+		private float maxChargeTime = 1.5f;
+		private float minDistance = 0.05f;
+		private float maxDistance = 0.6f;
+		public EffectManagerHelper? chargeEffectInstance;
 
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            var muzzleTransform = FindModelChild("MuzzleCenter");
-            var effect = Asset.GetGameObject<WindBoomerang, IEffect>();
-            if (muzzleTransform)
-            {
-	            chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
-		            new EffectData()
-		            {
-			            rootObject = muzzleTransform.gameObject,
-		            });
-            }
-        }
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
-            distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			var muzzleTransform = FindModelChild("MuzzleCenter");
+			var effect = Asset.GetGameObject<WindBoomerang, IEffect>();
+			if (muzzleTransform)
+			{
+				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
+					new EffectData() { rootObject = muzzleTransform.gameObject });
+			}
+		}
 
-            if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
-            Fire();
-            outer.SetNextStateToMain();
-        }
+		public override void FixedUpdate()
+		{
+			base.FixedUpdate();
+			distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
 
-        void Fire()
-        {
-	        var boomerang = Asset.GetGameObject<WindBoomerang, IProjectile>();
-	        Ray aimRay = base.GetAimRay();
-            boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
-            
-            if (base.isAuthority)
-            {
-                FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
-                {
-                    crit = base.RollCrit(),
-                    damage = this.characterBody.damage * damageCoefficient,
-                    damageTypeOverride = DamageType.Generic,
-                    damageColorIndex = DamageColorIndex.Default,
-                    force = 500,
-                    owner = base.gameObject,
-                    position = aimRay.origin,
-                    procChainMask = default(RoR2.ProcChainMask),
-                    projectilePrefab = boomerang,
-                    rotation = Quaternion.LookRotation(aimRay.direction),
-                    useFuseOverride = false,
-                    useSpeedOverride = true,
-                    speedOverride = 50,
-                    target = null
-                };
-                ProjectileManager.instance.FireProjectile(fireProjectileInfo);
-            }
-        }
+			if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
+			Fire();
+			outer.SetNextStateToMain();
+		}
 
-        public override void OnExit()
-        {
-            base.OnExit();
-            if (chargeEffectInstance != null)
-            {
-                chargeEffectInstance.ReturnToPool();
-            }
-        }
+		private void Fire()
+		{
+			var boomerang = Asset.GetGameObject<WindBoomerang, IProjectile>();
+			var aimRay = GetAimRay();
+			boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
 
-        public override InterruptPriority GetMinimumInterruptPriority()
-        {
-            return InterruptPriority.Skill;
-        }
-    }
-	
-    public class WindBoomerang : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
-    {
-	    Type[] ISkill.GetEntityStates() => new[] {typeof(WindBoomerangState) };
-	    
-	    SkillDef ISkill.BuildObject()
-	    {
-		    var skill = ScriptableObject.CreateInstance<SkillDef>();
-		    skill.skillName = "Secondary 2";
-		    skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY2_NAME";
-		    skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY2_DESCRIPTION";
-		    skill.icon = LoadAsset<Sprite>("bundle:windpng");
-		    skill.activationStateMachineName = "Weapon";
-		    skill.baseMaxStock = 1;
-		    skill.baseRechargeInterval = 2f;
-		    skill.beginSkillCooldownOnSkillEnd = false;
-		    skill.canceledFromSprinting = false;
-		    skill.interruptPriority = InterruptPriority.Any;
-		    skill.isCombatSkill = true;
-		    skill.mustKeyPress = true; 
-		    skill.cancelSprintingOnActivation = false;
-		    return skill;
-	    }
+			if (isAuthority)
+			{
+				var fireProjectileInfo = new FireProjectileInfo
+				{
+					crit = RollCrit(),
+					damage = characterBody.damage * damageCoefficient,
+					damageTypeOverride = DamageType.Generic,
+					damageColorIndex = DamageColorIndex.Default,
+					force = 500,
+					owner = gameObject,
+					position = aimRay.origin,
+					procChainMask = default,
+					projectilePrefab = boomerang,
+					rotation = Quaternion.LookRotation(aimRay.direction),
+					useFuseOverride = false,
+					useSpeedOverride = true,
+					speedOverride = 50,
+					target = null
+				};
+				ProjectileManager.instance.FireProjectile(fireProjectileInfo);
+			}
+		}
 
-	    GameObject IProjectile.BuildObject()
-        {
-            var proj = LoadAsset<GameObject>("RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone("TwinsWindBoomerang", true);
-            UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>());
-            UnityEngine.Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
-            var windDamage = proj.GetComponent<ProjectileDotZone>();
-            windDamage.damageCoefficient = 0.5f;
-            windDamage.overlapProcCoefficient = 0.2f;
-            windDamage.fireFrequency = 25f;
-            windDamage.resetFrequency = 10f;
-            windDamage.impactEffect = GetGameObject<WindHitEffect, IEffect>();
-            var itjustworks = proj.AddComponent<WindBoomerangProjectileBehaviour>();
-            //haha hopefully
-            var windSounds = proj.GetComponent<ProjectileController>();
-            windSounds.startSound = "Play_merc_m2_uppercut";
-            windSounds.flightSoundLoop = LoadAsset<LoopSoundDef>("RoR2/Base/LunarSkillReplacements/lsdLunarSecondaryProjectileFlight.asset");
-            proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<WindBoomerang, IProjectileGhost>();
-            return proj;
-        }
+		public override void OnExit()
+		{
+			base.OnExit();
+			if (chargeEffectInstance != null)
+			{
+				chargeEffectInstance.ReturnToPool();
+			}
+		}
 
-        GameObject IProjectileGhost.BuildObject()
-        {
-            var windyGreen = new Color(0.175f, 0.63f, 0.086f);
-            
-            var ghost = LoadAsset<GameObject>("RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab")!.InstantiateClone( "TwinsWindBoomerangGhost", false);
-            var windPsr = ghost.GetComponentsInChildren<ParticleSystemRenderer>();
-            windPsr[0].material.SetColor("_TintColor", windyGreen);
-            windPsr[2].enabled = false;
-            windPsr[3].enabled = false;
-            windPsr[3].material.SetColor("_TintColor", windyGreen);
-            windPsr[3].material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
-            windPsr[4].enabled = false;
-            windPsr[5].enabled = false;
-            var boomerangTrail = ghost.GetComponentInChildren<TrailRenderer>();
-            boomerangTrail.material = new Material(boomerangTrail.material);
-            boomerangTrail.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
-            boomerangTrail.material.SetColor("_TintColor", windyGreen);
-            var windLight = ghost.GetComponentInChildren<Light>();
-            windLight.color = windyGreen;
-            windLight.intensity = 20f;
-            var windMR = ghost.GetComponentsInChildren<MeshRenderer>();
-            windMR[0].material.SetColor("_TintColor", windyGreen);
-            windMR[1].material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
-            return ghost;
-        }
+		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
+	}
 
-        GameObject IEffect.BuildObject()
-        {
-            var effect = GetGameObject<WindBoomerang, IProjectileGhost>()!.InstantiateClone("TwinsWindChargeEffect", false);
-            UnityEngine.Object.Destroy(effect.GetComponent<ProjectileGhostController>());
-            var attributes = effect.AddComponent<VFXAttributes>();
-            attributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
-            attributes.DoNotPool = false;
-            return effect;
-        }
-    }
+	public class WindBoomerang : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
+	{
+		Type[] ISkill.GetEntityStates() => new[] { typeof(WindBoomerangState) };
 
-    public class WindHitEffect : Asset, IEffect
-    {
-        GameObject IEffect.BuildObject()
-        {
-            var effect = LoadAsset<GameObject>("RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone( "TwinsWindHitEffect", false);
-            UnityEngine.Object.Destroy(effect.GetComponent<OmniEffect>());
-            foreach (ParticleSystemRenderer r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
-            {
-                r.gameObject.SetActive(true);
-                r.material.SetColor("_TintColor", Color.green);
-                if (r.name == "PulseEffect, Ring (1)")
-                {
-                    var mat = r.material;
-                    mat.mainTexture = LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
-                }
-            }
-            effect.EffectWithSound("Play_huntress_R_snipe_shoot");
-            return effect;
-        }
-    }
-    
+		SkillDef ISkill.BuildObject()
+		{
+			var skill = ScriptableObject.CreateInstance<SkillDef>();
+			skill.skillName = "Secondary 2";
+			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY2_NAME";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY2_DESCRIPTION";
+			skill.icon = LoadAsset<Sprite>("bundle:windpng");
+			skill.activationStateMachineName = "Weapon";
+			skill.baseMaxStock = 1;
+			skill.baseRechargeInterval = 2f;
+			skill.beginSkillCooldownOnSkillEnd = false;
+			skill.canceledFromSprinting = false;
+			skill.interruptPriority = InterruptPriority.Any;
+			skill.isCombatSkill = true;
+			skill.mustKeyPress = true;
+			skill.cancelSprintingOnActivation = false;
+			return skill;
+		}
 
-    [RequireComponent(typeof(ProjectileController))]
-	class WindBoomerangProjectileBehaviour : NetworkBehaviour, IProjectileImpactBehavior
+		GameObject IProjectile.BuildObject()
+		{
+			var proj = LoadAsset<GameObject>("RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone("TwinsWindBoomerang",
+				true);
+			Object.Destroy(proj.GetComponent<BoomerangProjectile>());
+			Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
+			var windDamage = proj.GetComponent<ProjectileDotZone>();
+			windDamage.damageCoefficient = 0.5f;
+			windDamage.overlapProcCoefficient = 0.2f;
+			windDamage.fireFrequency = 25f;
+			windDamage.resetFrequency = 10f;
+			windDamage.impactEffect = GetGameObject<WindHitEffect, IEffect>();
+			var itjustworks = proj.AddComponent<WindBoomerangProjectileBehaviour>();
+			//haha hopefully
+			var windSounds = proj.GetComponent<ProjectileController>();
+			windSounds.startSound = "Play_merc_m2_uppercut";
+			windSounds.flightSoundLoop =
+				LoadAsset<LoopSoundDef>("RoR2/Base/LunarSkillReplacements/lsdLunarSecondaryProjectileFlight.asset");
+			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<WindBoomerang, IProjectileGhost>();
+			return proj;
+		}
+
+		GameObject IProjectileGhost.BuildObject()
+		{
+			var windyGreen = new Color(0.175f, 0.63f, 0.086f);
+
+			var ghost = LoadAsset<GameObject>("RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab")!
+				.InstantiateClone("TwinsWindBoomerangGhost", false);
+			var windPsr = ghost.GetComponentsInChildren<ParticleSystemRenderer>();
+			windPsr[0].material.SetColor("_TintColor", windyGreen);
+			windPsr[2].enabled = false;
+			windPsr[3].enabled = false;
+			windPsr[3].material.SetColor("_TintColor", windyGreen);
+			windPsr[3].material.SetTexture("_RemapTex",
+				LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
+			windPsr[4].enabled = false;
+			windPsr[5].enabled = false;
+			var boomerangTrail = ghost.GetComponentInChildren<TrailRenderer>();
+			boomerangTrail.material = new Material(boomerangTrail.material);
+			boomerangTrail.material.SetTexture("_RemapTex",
+				LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
+			boomerangTrail.material.SetColor("_TintColor", windyGreen);
+			var windLight = ghost.GetComponentInChildren<Light>();
+			windLight.color = windyGreen;
+			windLight.intensity = 20f;
+			var windMR = ghost.GetComponentsInChildren<MeshRenderer>();
+			windMR[0].material.SetColor("_TintColor", windyGreen);
+			windMR[1].material.SetTexture("_RemapTex",
+				LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
+			return ghost;
+		}
+
+		GameObject IEffect.BuildObject()
+		{
+			var effect =
+				GetGameObject<WindBoomerang, IProjectileGhost>()!.InstantiateClone("TwinsWindChargeEffect", false);
+			Object.Destroy(effect.GetComponent<ProjectileGhostController>());
+			var attributes = effect.AddComponent<VFXAttributes>();
+			attributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
+			attributes.DoNotPool = false;
+			return effect;
+		}
+	}
+
+	public class WindHitEffect : Asset, IEffect
+	{
+		GameObject IEffect.BuildObject()
+		{
+			var effect =
+				LoadAsset<GameObject>("RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone(
+					"TwinsWindHitEffect", false);
+			Object.Destroy(effect.GetComponent<OmniEffect>());
+			foreach (var r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
+			{
+				r.gameObject.SetActive(true);
+				r.material.SetColor("_TintColor", Color.green);
+				if (r.name == "PulseEffect, Ring (1)")
+				{
+					var mat = r.material;
+					mat.mainTexture = LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
+				}
+			}
+
+			effect.EffectWithSound("Play_huntress_R_snipe_shoot");
+			return effect;
+		}
+	}
+
+
+	[RequireComponent(typeof(ProjectileController))]
+	internal class WindBoomerangProjectileBehaviour : NetworkBehaviour, IProjectileImpactBehavior
 	{
 		public float travelSpeed = 60f;
 
 		public float transitionDuration = 0.75f;
-		
+
 		private float attackScale = 4f;
-		
+
 		public float distanceMultiplier = 0.05f;
-		
+
 		private float maxFlyStopwatch;
 
 		public GameObject impactSpark;
-		
+
 		public GameObject crosshairPrefab;
-		
+
 		public bool canHitCharacters;
-		
+
 		public bool canHitWorld;
-		
+
 		private ProjectileController projectileController;
-		[SyncVar]
-		private WindBoomerangState windboomerangState;
-		
+		[SyncVar] private WindBoomerangState windboomerangState;
+
 		private Transform ownerTransform;
-		
+
 		private ProjectileDamage projectileDamage;
 
 		private Rigidbody rigidbody;
@@ -235,7 +239,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		[FormerlySerializedAs("onFlyBack")] public UnityEvent onWindFlyBack;
 
-		
+
 		private bool setScale;
 
 		protected enum WindBoomerangState
@@ -244,43 +248,43 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			Transition,
 			FlyBack
 		}
-		
+
 		private void Awake()
 		{
-			this.rigidbody = base.GetComponent<Rigidbody>();
-			this.projectileController = base.GetComponent<ProjectileController>();
-			this.projectileDamage = base.GetComponent<ProjectileDamage>();
-			if (this.projectileController && this.projectileController.owner)
+			rigidbody = GetComponent<Rigidbody>();
+			projectileController = GetComponent<ProjectileController>();
+			projectileDamage = GetComponent<ProjectileDamage>();
+			if (projectileController && projectileController.owner)
 			{
-				this.ownerTransform = this.projectileController.owner.transform;
+				ownerTransform = projectileController.owner.transform;
 			}
-			this.maxFlyStopwatch = distanceMultiplier;
+
+			maxFlyStopwatch = distanceMultiplier;
 		}
-		
-		private void Start()
-		{
-			base.transform.localScale = Vector3.one * attackScale;
-		}
+
+		private void Start() => transform.localScale = Vector3.one * attackScale;
 
 		public void OnProjectileImpact(ProjectileImpactInfo impactInfo)
 		{
-			if (!this.canHitWorld)
+			if (!canHitWorld)
 			{
 				return;
 			}
-			this.NetworkboomerangState = WindBoomerangState.FlyBack;
-			UnityEvent unityEvent = this.onWindFlyBack;
+
+			NetworkboomerangState = WindBoomerangState.FlyBack;
+			var unityEvent = onWindFlyBack;
 			if (unityEvent != null)
 			{
 				unityEvent.Invoke();
 			}
-			EffectManager.SimpleImpactEffect(this.impactSpark, impactInfo.estimatedPointOfImpact, -base.transform.forward, true);
+
+			EffectManager.SimpleImpactEffect(impactSpark, impactInfo.estimatedPointOfImpact, -transform.forward, true);
 		}
 
 		private bool Reel()
 		{
-			Vector3 vector = this.projectileController.owner.transform.position - base.transform.position;
-			Vector3 normalized = vector.normalized;
+			var vector = projectileController.owner.transform.position - transform.position;
+			var normalized = vector.normalized;
 			return vector.magnitude <= 2f;
 		}
 
@@ -288,91 +292,97 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			if (NetworkServer.active)
 			{
-				if (!this.setScale)
+				if (!setScale)
 				{
-					this.setScale = true;
+					setScale = true;
 				}
-				if (!this.projectileController.owner)
+
+				if (!projectileController.owner)
 				{
-					UnityEngine.Object.Destroy(base.gameObject);
+					Destroy(gameObject);
 					return;
 				}
-				switch (this.windboomerangState)
+
+				switch (windboomerangState)
 				{
-				case WindBoomerangState.FlyOut:
-					if (NetworkServer.active)
-					{
-						this.rigidbody.velocity = this.travelSpeed * base.transform.forward;
-						this.stopwatch += Time.deltaTime;
-						if (this.stopwatch >= this.maxFlyStopwatch)
+					case WindBoomerangState.FlyOut:
+						if (NetworkServer.active)
 						{
-							this.stopwatch = 0f;
-							this.NetworkboomerangState = WindBoomerangState.Transition;
-							return;
+							rigidbody.velocity = travelSpeed * transform.forward;
+							stopwatch += Time.deltaTime;
+							if (stopwatch >= maxFlyStopwatch)
+							{
+								stopwatch = 0f;
+								NetworkboomerangState = WindBoomerangState.Transition;
+								return;
+							}
 						}
-					}
-					break;
-				case WindBoomerangState.Transition:
-				{
-					this.stopwatch += Time.deltaTime;
-					float num = this.stopwatch / this.transitionDuration;
-					Vector3 thisVector = NetworkedVector();
-					this.rigidbody.velocity = Vector3.Lerp(this.travelSpeed * base.transform.forward, this.travelSpeed * thisVector, num);
-					if (num >= 1f)
-					{
-						this.NetworkboomerangState = WindBoomerangState.FlyBack;
-						UnityEvent unityEvent = this.onWindFlyBack;
-						if (unityEvent == null)
+
+						break;
+					case WindBoomerangState.Transition:
 						{
-							return;
+							stopwatch += Time.deltaTime;
+							var num = stopwatch / transitionDuration;
+							var thisVector = NetworkedVector();
+							rigidbody.velocity = Vector3.Lerp(travelSpeed * transform.forward, travelSpeed * thisVector,
+								num);
+							if (num >= 1f)
+							{
+								NetworkboomerangState = WindBoomerangState.FlyBack;
+								var unityEvent = onWindFlyBack;
+								if (unityEvent == null)
+								{
+									return;
+								}
+
+								unityEvent.Invoke();
+								return;
+							}
+
+							break;
 						}
-						unityEvent.Invoke();
+					case WindBoomerangState.FlyBack:
+						{
+							var flag = Reel();
+							if (NetworkServer.active)
+							{
+								canHitWorld = false;
+								var thisVector = NetworkedVector();
+								rigidbody.velocity = travelSpeed * thisVector;
+								if (flag)
+								{
+									Destroy(gameObject);
+								}
+							}
+
+							break;
+						}
+					default:
 						return;
-					}
-					break;
-				}
-				case WindBoomerangState.FlyBack:
-				{
-					bool flag = this.Reel();
-					if (NetworkServer.active)
-					{
-						this.canHitWorld = false;
-						Vector3 thisVector = NetworkedVector();
-						this.rigidbody.velocity = this.travelSpeed * thisVector;
-						if (flag)
-						{
-							UnityEngine.Object.Destroy(base.gameObject);
-						}
-					}
-					break;
-				}
-				default:
-					return;
 				}
 			}
 		}
-		
+
 		private Vector3 NetworkedVector()
 		{
-			if (this.projectileController.owner)
+			if (projectileController.owner)
 			{
-				return (this.projectileController.owner.transform.position - base.transform.position).normalized;
+				return (projectileController.owner.transform.position - transform.position).normalized;
 			}
-			return base.transform.forward;
+
+			return transform.forward;
 		}
-		
+
 		protected WindBoomerangState NetworkboomerangState
 		{
-			get
-			{
-				return this.windboomerangState;
-			}
+			get => windboomerangState;
 			[param: In]
 			set
 			{
-				ulong newValueAsUlong = (ulong)((long)value);
-				ulong fieldValueAsUlong = (ulong)((long)this.windboomerangState);
-				base.SetSyncVarEnum<WindBoomerangState>(value, newValueAsUlong, ref this.windboomerangState, fieldValueAsUlong, 1U);
+				var newValueAsUlong = (ulong)(long)value;
+				var fieldValueAsUlong = (ulong)(long)windboomerangState;
+				SetSyncVarEnum<WindBoomerangState>(value, newValueAsUlong, ref windboomerangState, fieldValueAsUlong,
+					1U);
 			}
 		}
 
@@ -381,23 +391,27 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			if (forceAll)
 			{
-				writer.Write((int)this.windboomerangState);
+				writer.Write((int)windboomerangState);
 				return true;
 			}
-			bool flag = false;
-			if ((base.syncVarDirtyBits & 1U) != 0U)
+
+			var flag = false;
+			if ((syncVarDirtyBits & 1U) != 0U)
 			{
 				if (!flag)
 				{
-					writer.WritePackedUInt32(base.syncVarDirtyBits);
+					writer.WritePackedUInt32(syncVarDirtyBits);
 					flag = true;
 				}
-				writer.Write((int)this.windboomerangState);
+
+				writer.Write((int)windboomerangState);
 			}
+
 			if (!flag)
 			{
-				writer.WritePackedUInt32(base.syncVarDirtyBits);
+				writer.WritePackedUInt32(syncVarDirtyBits);
 			}
+
 			return flag;
 		}
 
@@ -406,13 +420,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			if (initialState)
 			{
-				this.windboomerangState = (WindBoomerangState)reader.ReadInt32();
+				windboomerangState = (WindBoomerangState)reader.ReadInt32();
 				return;
 			}
-			int num = (int)reader.ReadPackedUInt32();
+
+			var num = (int)reader.ReadPackedUInt32();
 			if ((num & 1) != 0)
 			{
-				this.windboomerangState = (WindBoomerangState)reader.ReadInt32();
+				windboomerangState = (WindBoomerangState)reader.ReadInt32();
 			}
 		}
 

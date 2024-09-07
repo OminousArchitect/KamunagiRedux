@@ -113,12 +113,18 @@ namespace KamunagiOfChains.Data
 
         public static T GetAsset<T>() where T : Asset
         {
-            return (T)Assets[typeof(T)];
+            return (T)GetAsset(typeof(T));
         }
 
         public static T GetAsset<T, T2>() where T : Asset, T2
         {
             return GetAsset<T>();
+        }
+
+        public static object GetAsset(Type assetType)
+        {
+            // TODO do some warning about the type not being in assets instead of blowing up without saying why
+            return Assets[assetType];
         }
 
         public static bool TryGetGameObject<T, T2>(out GameObject asset) where T2 : IGameObject where T : Asset, T2
@@ -137,7 +143,7 @@ namespace KamunagiOfChains.Data
 
         public static GameObject GetGameObject<T, T2>() where T2 : IGameObject where T : Asset, T2
         {
-            return (GameObject)GetObjectOrThrow<T2>(Assets[typeof(T)]);
+            return GetGameObject(typeof(T), typeof(T2));
         }
 
         internal static GameObject GetGameObject(Type callingType, Type targetType)

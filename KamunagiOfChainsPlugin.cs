@@ -1,4 +1,5 @@
-﻿using System;
+﻿global using static KamunagiOfChains.KamunagiOfChainsPlugin;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Security;
@@ -12,6 +13,7 @@ using R2API;
 using R2API.Utils;
 using RoR2;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -66,6 +68,27 @@ namespace KamunagiOfChains
             Language.collectLanguageRootFolders += folders => folders.Add(System.IO.Path.Combine(pluginPath, "Language"));
 
             log.LogDebug("Finished Awake");
+        }
+        public static T? LoadAsset<T>(string assetPath) where T : UnityEngine.Object
+        {
+            if (assetPath.StartsWith("addressable:"))
+            {
+                return Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..]).WaitForCompletion();
+            }
+
+            if (assetPath.StartsWith("bundle:"))
+            {
+                return !bundle
+                    ? null
+                    : bundle!.LoadAsset<T>(assetPath["bundle:".Length..]);
+            }
+
+            if (assetPath.StartsWith("legacy:"))
+            {
+                return LegacyResourcesAPI.Load<T>(assetPath["legacy:".Length..]);
+            }
+
+            return Addressables.LoadAssetAsync<T>(assetPath).WaitForCompletion();
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(RoR2.WwiseUtils.SoundbankLoader), nameof(RoR2.WwiseUtils.SoundbankLoader.Start))]

@@ -13,8 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
     {
         public override int meterGain => 0;
 
-        public static GameObject MuzzlePrefab =
-            Asset.LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab")!;
+        public static GameObject MuzzlePrefab = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab")!;
 
         public float duration;
 

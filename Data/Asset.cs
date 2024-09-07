@@ -66,28 +66,6 @@ namespace KamunagiOfChains.Data
             return result;
         }
 
-        public static T? LoadAsset<T>(string assetPath) where T : UnityEngine.Object
-        {
-            if (assetPath.StartsWith("addressable:"))
-            {
-                return Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..]).WaitForCompletion();
-            }
-
-            if (assetPath.StartsWith("bundle:"))
-            {
-                return !KamunagiOfChainsPlugin.bundle
-                    ? null
-                    : KamunagiOfChainsPlugin.bundle!.LoadAsset<T>(assetPath["bundle:".Length..]);
-            }
-
-            if (assetPath.StartsWith("legacy:"))
-            {
-                return LegacyResourcesAPI.Load<T>(assetPath["legacy:".Length..]);
-            }
-
-            return Addressables.LoadAssetAsync<T>(assetPath).WaitForCompletion();
-        }
-
         public static bool TryGetAsset<T>(out T asset) where T : Asset
         {
             if (Assets.TryGetValue(typeof(T), out var foundAsset))

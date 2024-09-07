@@ -213,7 +213,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 if (r.name == "PulseEffect, Ring (1)")
                 {
                     var mat = r.material;
-                    mat.mainTexture = Asset.LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
+                    mat.mainTexture = LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
                 }
             }
 

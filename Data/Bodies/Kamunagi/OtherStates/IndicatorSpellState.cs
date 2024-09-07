@@ -17,7 +17,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
             {
                 if (indicator == null || !indicator)
                 {
-                    indicator = Object.Instantiate(EntityStates.Huntress.ArrowRain.areaIndicatorPrefab);
+                    indicator = UnityEngine.Object.Instantiate(EntityStates.Huntress.ArrowRain.areaIndicatorPrefab);
                     indicator.transform.localScale = Vector3.one * indicatorScale;
                 }
 

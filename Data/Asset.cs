@@ -40,6 +40,7 @@ namespace KamunagiOfChains.Data
 
             result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
             result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
+            result.buffDefs.Add(instances.Where(x => x is IBuff).Select(x => (BuffDef)x).ToArray());
             result.skillDefs.Add(instances.Where(x => x is ISkill).Select(x => (SkillDef)x).ToArray());
             result.entityStateTypes.Add(instances.Where(x => x is ISkill)
                 .SelectMany(x =>

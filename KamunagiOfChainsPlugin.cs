@@ -1,7 +1,5 @@
 ﻿global using static KamunagiOfChains.KamunagiOfChainsPlugin;
-using System;
 using System.Collections;
-using System.Linq;
 using System.Security;
 using System.Security.Permissions;
 using BepInEx;

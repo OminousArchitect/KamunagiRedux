@@ -1,5 +1,4 @@
-﻿using System;
-using EntityStates;
+﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using RoR2;
 using RoR2.Skills;

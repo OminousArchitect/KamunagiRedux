@@ -1,4 +1,3 @@
-using System;
 using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;

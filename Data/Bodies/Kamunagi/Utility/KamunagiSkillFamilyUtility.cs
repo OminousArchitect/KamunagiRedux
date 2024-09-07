@@ -1,4 +1,3 @@
-using System;
 using RoR2;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility

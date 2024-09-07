@@ -1,8 +1,6 @@
-﻿using System;
-using EntityStates;
+﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
-using Rewired.UI.ControlMapper;
 using RoR2;
 using RoR2.Audio;
 using RoR2.Projectile;

@@ -1,5 +1,4 @@
-﻿using System;
-using EntityStates;
+﻿using EntityStates;
 using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;

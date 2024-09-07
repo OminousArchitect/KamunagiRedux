@@ -1,12 +1,9 @@
-﻿using System;
-using EntityStates;
+﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
-using Rewired.UI.ControlMapper;
 using RoR2;
 using RoR2.Skills;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Rendering.PostProcessing;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special

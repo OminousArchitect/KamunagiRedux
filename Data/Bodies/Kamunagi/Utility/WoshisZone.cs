@@ -111,7 +111,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
         [HarmonyPrefix, HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.UpdateRendererMaterials))]
         private static void CharacterModelUpdateRenderers(CharacterModel __instance)
         {
-            if (!__instance.body.inventory) return;
+            if (!__instance.body || !__instance.body.inventory) return;
             // ReSharper disable once InconsistentNaming
             var _this = GetAsset<WoshisZone>();
             if (__instance.body.inventory.GetItemCount(_this) <= 0) return;

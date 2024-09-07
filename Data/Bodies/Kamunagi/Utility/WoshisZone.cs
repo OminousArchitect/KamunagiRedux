@@ -174,6 +174,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
                 master.inventory.GiveItem(RoR2Content.Items.BoostDamage, 10);
             };
             var master = summon.Perform();
+            if (!master) return;
             var summonBody = master.GetBody();
             if (!summonBody) return;
             foreach (var esm in summonBody.GetComponents<EntityStateMachine>())

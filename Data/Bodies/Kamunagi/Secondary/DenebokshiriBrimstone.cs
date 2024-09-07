@@ -229,7 +229,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 
 		[HarmonyPrefix]
-		[HarmonyPatch(typeof(LightningOrb), nameof(LightningOrb.Begin))]
+		[HarmonyPatch(typeof(OrbStorageUtility), nameof(OrbStorageUtility.Get))]
 		public static bool ReplaceEffect(string path, ref GameObject __result)
 		{
 			if (path == "NINES_LIGHTNING_ORB")

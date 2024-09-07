@@ -34,7 +34,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
         public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
     }
 
-    public class WoshisZone : Asset, ISkill, INetworkedObject
+    public class WoshisZone : Asset, ISkill, INetworkedObject, IBuff
     {
         SkillDef ISkill.BuildObject()
         {
@@ -70,9 +70,76 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
             Object.Destroy(woshisWard.GetComponent<NetworkedBodyAttachment>());
             woshisWard.GetComponentInChildren<MeshRenderer>().material = woshisEnergy;
-            woshisWard.GetComponent<BuffWard>().radius = 10f;
+            var ward = woshisWard.GetComponent<BuffWard>();
+            ward.radius = 10f;
+            ward.buffDef = this;
             woshisWard.AddComponent<DestroyOnTimer>().duration = 8f;
+
             return woshisWard;
+        }
+
+        BuffDef IBuff.BuildObject()
+        {
+            var buffDef = ScriptableObject.CreateInstance<BuffDef>();
+            buffDef.name = "WoshisCurseDebuff";
+            buffDef.buffColor = Color.red;
+            buffDef.canStack = false;
+            buffDef.isDebuff = true;
+            buffDef.iconSprite = LoadAsset<Sprite>("bundle:CurseScroll");
+            buffDef.isHidden = true;
+
+            return buffDef;
+        }
+
+        public WoshisZone()
+        {
+            GlobalEventManager.onCharacterDeathGlobal += CharacterDeath;
+        }
+
+        ~WoshisZone()
+        {
+            GlobalEventManager.onCharacterDeathGlobal -= CharacterDeath;
+        }
+
+        public void CharacterDeath(DamageReport report)
+        {
+            if (!NetworkServer.active || !report.victimBody || !report.victimBody.HasBuff(this) ||
+                report.victimBody.inventory.GetItemCount(this) > 0) return;
+
+            var prefab = BodyCatalog.FindBodyPrefab(report.victimBody);
+            if (prefab == null || !prefab) return;
+
+            var masterIndex = MasterCatalog.FindAiMasterIndexForBody(prefab.GetComponent<CharacterBody>().bodyIndex);
+            if (masterIndex == MasterCatalog.MasterIndex.none) return;
+            var masterPrefab = MasterCatalog.GetMasterPrefab(masterIndex);
+
+            var victimTransform = report.victimBody.transform;
+
+            var summon = new MasterSummon()
+            {
+                masterPrefab = masterPrefab,
+                ignoreTeamMemberLimit = false,
+                position = victimTransform.position
+            };
+
+            var direction = report.victimBody.GetComponent<CharacterDirection>();
+            summon.rotation = direction ? Quaternion.Euler(0f, direction.yaw, 0f) : victimTransform.rotation;
+            summon.summonerBodyObject = report.attacker ? report.attacker : null;
+            summon.inventoryToCopy = report.victimBody.inventory;
+            summon.useAmbientLevel = true;
+            summon.preSpawnSetupCallback += master =>
+            {
+                master.inventory.GiveItem(this);
+                master.inventory.GiveItem(RoR2Content.Items.HealthDecay, 15);
+                master.inventory.GiveItem(RoR2Content.Items.BoostDamage, 10);
+            };
+            var master = summon.Perform();
+            var summonBody = master.GetBody();
+            if (!summonBody) return;
+            foreach (var esm in summonBody.GetComponents<EntityStateMachine>())
+            {
+                esm.initialStateType = esm.mainStateType;
+            }
         }
     }
 }

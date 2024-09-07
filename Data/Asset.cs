@@ -318,6 +318,7 @@ namespace KamunagiOfChains.Data
         public static implicit operator UnlockableDef(Asset asset) =>
             (UnlockableDef)GetObjectOrThrow<IUnlockable>(asset);
 
+        public static implicit operator BuffDef(Asset asset) => (BuffDef)GetObjectOrThrow<IBuff>(asset);
         public static implicit operator SurvivorDef(Asset asset) => (SurvivorDef)GetObjectOrThrow<ISurvivor>(asset);
         public static implicit operator SkinDef(Asset asset) => (SkinDef)GetObjectOrThrow<ISkin>(asset);
 
@@ -458,6 +459,11 @@ namespace KamunagiOfChains.Data
     public interface IUnlockable
     {
         public abstract UnlockableDef BuildObject();
+    }
+    
+    public interface IBuff
+    {
+        public abstract BuffDef BuildObject();
     }
 
     public interface ISkillFamily

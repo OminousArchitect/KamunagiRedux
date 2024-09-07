@@ -1,19 +1,15 @@
+using System;
 using RoR2;
-using RoR2.Skills;
-using UnityEngine;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
     public class KamunagiSkillFamilySecondary : Asset, ISkillFamily
     {
-        public SkillFamily BuildObject()
-        {
-            var family = ScriptableObject.CreateInstance<SkillFamily>();
-            if (TryGetAsset<WindBoomerang>(out var wind) && TryGetAsset<DenebokshiriBrimstone>(out var fiery) && TryGetAsset<EnnakamuyEarth>(out var enna))
-                family.variants = new[] { (SkillFamily.Variant)wind, (SkillFamily.Variant)fiery, (SkillFamily.Variant) enna };
-            
-            return family;
-        }
-        public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaSecondary"  ? "NINES_SARAANA_SECONDARY" : "NINES_URURUU_SECONDARY";
+        public Type[] GetSkillAssets() => new[]
+            { typeof(WindBoomerang), typeof(DenebokshiriBrimstone), typeof(EnnakamuyEarth) };
+
+        public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaSecondary"
+            ? "NINES_SARAANA_SECONDARY"
+            : "NINES_URURUU_SECONDARY";
     }
 }

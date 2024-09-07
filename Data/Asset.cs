@@ -40,9 +40,13 @@ namespace KamunagiOfChains.Data
 
             result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
             result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
+            result.buffDefs.Add(instances.Where(x => x is IBuff).Select(x => (BuffDef)x).ToArray());
             result.skillDefs.Add(instances.Where(x => x is ISkill).Select(x => (SkillDef)x).ToArray());
             result.entityStateTypes.Add(instances.Where(x => x is ISkill)
-                .SelectMany(x => (Type[])Objects[x.GetType().Assembly.FullName + "_" + x.GetType().Name + "_" + nameof(ISkill) + "_EntityStates"])
+                .SelectMany(x =>
+                    (Type[])Objects[
+                        x.GetType().Assembly.FullName + "_" + x.GetType().Name + "_" + nameof(ISkill) +
+                        "_EntityStates"])
                 .Concat(entityStates).Distinct().ToArray());
             result.skillFamilies.Add(instances.Where(x => x is ISkillFamily).Select(x => (SkillFamily)x).ToArray());
             result.networkedObjectPrefabs.Add(instances.Where(x => x is INetworkedObject)
@@ -55,7 +59,8 @@ namespace KamunagiOfChains.Data
                 .Select(x => (GameObject)GetObjectOrThrow<IProjectile>(x)).ToArray());
             result.effectDefs.Add(instances.Where(x => x is IEffect)
                 .Select(x => new EffectDef((GameObject)GetObjectOrThrow<IEffect>(x))).ToArray());
-            result.masterPrefabs.Add(instances.Where(x => x is IMaster).Select(x => (GameObject)GetObjectOrThrow<IMaster>(x))
+            result.masterPrefabs.Add(instances.Where(x => x is IMaster)
+                .Select(x => (GameObject)GetObjectOrThrow<IMaster>(x))
                 .ToArray());
 
             return result;
@@ -94,7 +99,7 @@ namespace KamunagiOfChains.Data
             asset = default!;
             return false;
         }
-        
+
         public static bool TryGetAssetFromObject<T>(object obj, out T asset)
         {
             var found = ObjectToAssetMap.TryGetValue(obj, out var assetObj);
@@ -109,12 +114,18 @@ namespace KamunagiOfChains.Data
 
         public static T GetAsset<T>() where T : Asset
         {
-            return (T)Assets[typeof(T)];
+            return (T)GetAsset(typeof(T));
         }
 
         public static T GetAsset<T, T2>() where T : Asset, T2
         {
             return GetAsset<T>();
+        }
+
+        public static object GetAsset(Type assetType)
+        {
+            // TODO do some warning about the type not being in assets instead of blowing up without saying why
+            return Assets[assetType];
         }
 
         public static bool TryGetGameObject<T, T2>(out GameObject asset) where T2 : IGameObject where T : Asset, T2
@@ -133,7 +144,7 @@ namespace KamunagiOfChains.Data
 
         public static GameObject GetGameObject<T, T2>() where T2 : IGameObject where T : Asset, T2
         {
-            return (GameObject)GetObjectOrThrow<T2>(Assets[typeof(T)]);
+            return GetGameObject(typeof(T), typeof(T2));
         }
 
         internal static GameObject GetGameObject(Type callingType, Type targetType)
@@ -145,6 +156,7 @@ namespace KamunagiOfChains.Data
         {
             return GetObjectOrThrow(asset, typeof(T));
         }
+
         private static object GetObjectOrThrow(Asset asset, Type targetType)
         {
             var assetType = asset.GetType();
@@ -217,6 +229,19 @@ namespace KamunagiOfChains.Data
 
                     returnedObject = variant;
                     break;
+                case nameof(ISkillFamily):
+                    var familyAsset = asset as ISkillFamily ?? throw notOfType;
+                    var family = familyAsset.BuildObject();
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                    if (family is null)
+                    {
+                        family = ScriptableObject.CreateInstance<SkillFamily>();
+                        family.variants = familyAsset.GetSkillAssets()
+                            .Select(x => (SkillFamily.Variant)Assets[x]).ToArray();
+                    }
+
+                    returnedObject = family;
+                    break;
                 case nameof(IModel):
                     var modelAsset = asset as IModel ?? throw notOfType;
                     returnedObject = modelAsset.BuildObject();
@@ -263,15 +288,16 @@ namespace KamunagiOfChains.Data
                     break;
                     */
             }
-            
+
             Objects[key] = returnedObject ??
                            throw new InvalidOperationException(
                                $"How did you get here, maybe {targetTypeName} isn't a asset?");
             ObjectToAssetMap[returnedObject] = asset;
             return returnedObject;
         }
-        
-        [HarmonyILManipulator, HarmonyPatch(typeof(LoadoutPanelController.Row), nameof(LoadoutPanelController.Row.FromSkillSlot))]
+
+        [HarmonyILManipulator,
+         HarmonyPatch(typeof(LoadoutPanelController.Row), nameof(LoadoutPanelController.Row.FromSkillSlot))]
         public static void FromSkillSlot(ILContext il)
         {
             var c = new ILCursor(il);
@@ -293,6 +319,7 @@ namespace KamunagiOfChains.Data
         public static implicit operator UnlockableDef(Asset asset) =>
             (UnlockableDef)GetObjectOrThrow<IUnlockable>(asset);
 
+        public static implicit operator BuffDef(Asset asset) => (BuffDef)GetObjectOrThrow<IBuff>(asset);
         public static implicit operator SurvivorDef(Asset asset) => (SurvivorDef)GetObjectOrThrow<ISurvivor>(asset);
         public static implicit operator SkinDef(Asset asset) => (SkinDef)GetObjectOrThrow<ISkin>(asset);
 
@@ -310,36 +337,44 @@ namespace KamunagiOfChains.Data
         {
         }
     }
-    
-    public static class AssetExtensionMethods {
+
+    public static class AssetExtensionMethods
+    {
         public static GameObject GetNetworkedObject<T>(this T obj) where T : Asset, INetworkedObject
         {
             return Asset.GetGameObject(obj.GetType(), typeof(INetworkedObject));
         }
+
         public static GameObject GetProjectile<T>(this T obj) where T : Asset, IProjectile
         {
             return Asset.GetGameObject(obj.GetType(), typeof(IProjectile));
         }
+
         public static GameObject GetGhost<T>(this T obj) where T : Asset, IProjectileGhost
         {
             return Asset.GetGameObject(obj.GetType(), typeof(IProjectileGhost));
         }
+
         public static GameObject GetEffect<T>(this T obj) where T : Asset, IEffect
         {
             return Asset.GetGameObject(obj.GetType(), typeof(IEffect));
         }
+
         public static GameObject GetMaster<T>(this T obj) where T : Asset, IMaster
         {
             return Asset.GetGameObject(obj.GetType(), typeof(IMaster));
         }
+
         public static GameObject GetBody<T>(this T obj) where T : Asset, IBody
         {
             return Asset.GetGameObject(obj.GetType(), typeof(IBody));
         }
+
         public static GameObject GetBodyDisplay<T>(this T obj) where T : Asset, IBodyDisplay
         {
             return Asset.GetGameObject(obj.GetType(), typeof(IBodyDisplay));
         }
+
         public static GameObject GetModel<T>(this T obj) where T : Asset, IModel
         {
             return Asset.GetGameObject(obj.GetType(), typeof(IModel));
@@ -369,10 +404,12 @@ namespace KamunagiOfChains.Data
     {
         public abstract GameObject BuildObject();
     }
+
     public interface IMaster : IGameObject
     {
         public abstract GameObject BuildObject();
     }
+
     public interface IBody : IGameObject
     {
         public abstract GameObject BuildObject();
@@ -424,10 +461,20 @@ namespace KamunagiOfChains.Data
     {
         public abstract UnlockableDef BuildObject();
     }
+    
+    public interface IBuff
+    {
+        public abstract BuffDef BuildObject();
+    }
 
     public interface ISkillFamily
     {
-        public abstract SkillFamily BuildObject();
+        public virtual SkillFamily BuildObject()
+        {
+            return null!;
+        }
+
+        public abstract Type[] GetSkillAssets();
         public virtual string GetNameToken(GenericSkill skill) => "";
     }
 

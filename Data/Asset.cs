@@ -35,7 +35,7 @@ namespace KamunagiOfChains.Data
 
             var instances = Assets.Values;
             var entityStates = instances.Where(x => x is IEntityStates).SelectMany(x =>
-                (Type[])(Objects.GetOrSet(x.GetType().Assembly.FullName + "_" + x.GetType().Name + "_EntityStates",
+                (Type[])(Objects.GetOrSet(x.GetType().Assembly.FullName + "_" + x.GetType().FullName + "_EntityStates",
                     () => ((IEntityStates)x).GetEntityStates())));
 
             result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
@@ -45,7 +45,7 @@ namespace KamunagiOfChains.Data
             result.entityStateTypes.Add(instances.Where(x => x is ISkill)
                 .SelectMany(x =>
                     (Type[])Objects[
-                        x.GetType().Assembly.FullName + "_" + x.GetType().Name + "_" + nameof(ISkill) +
+                        x.GetType().Assembly.FullName + "_" + x.GetType().FullName + "_" + nameof(ISkill) +
                         "_EntityStates"])
                 .Concat(entityStates).Distinct().ToArray());
             result.skillFamilies.Add(instances.Where(x => x is ISkillFamily).Select(x => (SkillFamily)x).ToArray());
@@ -138,7 +138,7 @@ namespace KamunagiOfChains.Data
         private static object GetObjectOrThrow(Asset asset, Type targetType)
         {
             var assetType = asset.GetType();
-            var name = assetType.Name;
+            var name = assetType.FullName;
             var targetTypeName = targetType.Name;
             var key = assetType.Assembly.FullName + "_" + name + "_" + targetTypeName;
             var notOfType = new AssetTypeInvalidException($"{name} is not of type {targetTypeName}");

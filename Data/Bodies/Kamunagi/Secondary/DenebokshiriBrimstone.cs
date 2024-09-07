@@ -156,11 +156,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         {
             var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!
                 .InstantiateClone("TwinsChargeMiniSun", false);
-            /*ObjectScaleCurve scale = ghost.AddComponent<ObjectScaleCurve>();
-            scale.useOverallCurveOnly = true;
-            scale.timeMax = 2f;
-            scale.overallCurve = AnimationCurve.Linear(0, 0, 1, 1);
-            scale.baseScale = */
             var minisunMesh = ghost.GetComponentInChildren<MeshRenderer>(true);
             minisunMesh.gameObject.SetActive(true);
             minisunMesh.material.SetTexture("_RemapTex",
@@ -192,6 +187,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             var scale = effect.AddComponent<ObjectScaleCurve>();
             effect.transform.localScale = Vector3.one * 0.35f;
             scale.timeMax = 1f;
+            scale.useOverallCurveOnly = true;
             scale.overallCurve = AnimationCurve.Linear(0, 0, 1, 1);
             effect.transform.GetChild(1).gameObject.SetActive(true);
             return effect;

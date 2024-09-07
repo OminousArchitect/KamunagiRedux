@@ -90,17 +90,28 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         {
             var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab")!.InstantiateClone("BoulderProjectileGhost", false);
             ghost.transform.localScale = Vector3.one * 0.3f;
+            
             return ghost;
         }
     }
 
-    public class EnnakamuyEarthChild : Asset, IProjectile
+    public class EnnakamuyEarthChild : Asset, IProjectile, IProjectileGhost
     {
         GameObject IProjectile.BuildObject()
         {
             var projectile = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab")!.InstantiateClone("BoulderChild", true);
             projectile.GetComponent<ProjectileImpactExplosion>().falloffModel = BlastAttack.FalloffModel.None;
+            projectile.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<EnnakamuyEarthChild, IProjectileGhost>();
             return projectile;
+        }
+
+        GameObject IProjectileGhost.BuildObject()
+        {
+            var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab")!.InstantiateClone("BoulderChildGhost", false);
+            var childMesh = ghost.GetComponentInChildren<MeshFilter>();
+            var theRock = LoadAsset<Mesh>("RoR2/Base/skymeadow/SMRockAngular.fbx");
+            childMesh.mesh = theRock;
+            return ghost;
         }
     }
 }

@@ -154,19 +154,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
             var masterPrefab = MasterCatalog.GetMasterPrefab(masterIndex);
 
             var victimTransform = report.victimBody.transform;
-
-            var summon = new MasterSummon()
+            var direction = report.victimBody.GetComponent<CharacterDirection>();
+            
+            var summon = new MasterSummon
             {
                 masterPrefab = masterPrefab,
                 ignoreTeamMemberLimit = false,
-                position = victimTransform.position
+                useAmbientLevel = true,
+                inventoryToCopy = report.victimBody.inventory,
+                position = victimTransform.position,
+                rotation = direction ? Quaternion.Euler(0f, direction.yaw, 0f) : victimTransform.rotation,
+                summonerBodyObject = report.attacker ? report.attacker : null,
+                teamIndexOverride = report.attackerBody ? report.attackerBody.teamComponent.teamIndex : TeamIndex.Player
             };
-
-            var direction = report.victimBody.GetComponent<CharacterDirection>();
-            summon.rotation = direction ? Quaternion.Euler(0f, direction.yaw, 0f) : victimTransform.rotation;
-            summon.summonerBodyObject = report.attacker ? report.attacker : null;
-            summon.inventoryToCopy = report.victimBody.inventory;
-            summon.useAmbientLevel = true;
+            
             summon.preSpawnSetupCallback += master =>
             {
                 master.inventory.GiveItem(this);

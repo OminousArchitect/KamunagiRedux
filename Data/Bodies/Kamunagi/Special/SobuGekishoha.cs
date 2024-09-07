@@ -93,7 +93,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public override void Update()
 		{
 			base.Update();
-			characterMotor.velocity = Vector3.zero;
+			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 			if (tracerInstance && sphereTransform)
 			{
 				var aimRay = GetAimRay();

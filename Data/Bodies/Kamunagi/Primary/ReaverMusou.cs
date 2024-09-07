@@ -95,11 +95,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
             //UnityEngine.Object.Destroy(effect.GetComponent<Rigidbody>());
             effect.transform.GetChild(1).gameObject.SetActive(false);
             effect.transform.GetChild(4).gameObject.SetActive(false);
+            //effect.transform.GetChild(5).gameObject.SetActive(false);
             effect.transform.GetChild(6).gameObject.SetActive(false);
             effect.transform.localScale = Vector3.one * 0.4f;
             var dist = effect.transform.GetChild(3).gameObject;
             var distP = dist.GetComponentInChildren<ParticleSystem>().shape;
             distP.scale = Vector3.one * 0.5f;
+            var comp = effect.GetComponent<EffectComponent>();
+            comp.parentToReferencedTransform = true;
+            comp.positionAtReferencedTransform = true;
             return effect;
         }
 

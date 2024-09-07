@@ -33,15 +33,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
                     new EffectData()
                     {
-                        rootObject = muzzleTransform.gameObject
+                        rootObject = muzzleTransform.gameObject,
                     });
-
-                ObjectScaleCurve scale = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
-                if (scale)
-                {
-                    //scale.baseScale = Vector3.one * 0.35f;
-                    //scale.timeMax = maxChargeTime;
-                }
             }
 
             soundID = AkSoundEngine.PostEvent("Play_fireballsOnHit_pool_aliveLoop", base.gameObject);
@@ -163,10 +156,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         {
             var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!
                 .InstantiateClone("TwinsChargeMiniSun", false);
-            ObjectScaleCurve scale = ghost.AddComponent<ObjectScaleCurve>();
+            /*ObjectScaleCurve scale = ghost.AddComponent<ObjectScaleCurve>();
             scale.useOverallCurveOnly = true;
             scale.timeMax = 2f;
             scale.overallCurve = AnimationCurve.Linear(0, 0, 1, 1);
+            scale.baseScale = */
             var minisunMesh = ghost.GetComponentInChildren<MeshRenderer>(true);
             minisunMesh.gameObject.SetActive(true);
             minisunMesh.material.SetTexture("_RemapTex",
@@ -192,12 +186,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
         GameObject IEffect.BuildObject()
         {
-            var effect =
-                LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!.InstantiateClone(
-                    "TwinsChargeMiniSun", false);
+            var effect = LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!.InstantiateClone("TwinsChargeMiniSun", false);
             var scale = effect.AddComponent<ObjectScaleCurve>();
-            scale.useOverallCurveOnly = true;
-            scale.timeMax = 2f;
+            effect.transform.localScale = Vector3.one * 0.35f;
+            scale.timeMax = 1f;
             scale.overallCurve = AnimationCurve.Linear(0, 0, 1, 1);
             effect.transform.GetChild(1).gameObject.SetActive(true);
             return effect;

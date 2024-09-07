@@ -38,13 +38,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		            {
 			            rootObject = muzzleTransform.gameObject,
 		            });
-                
-	            ObjectScaleCurve scale = chargeEffectInstance.GetComponent<ObjectScaleCurve>();
-	            if (scale)
-	            {
-		            //scale.baseScale = Vector3.one * 0.35f;
-		            //scale.timeMax = maxChargeTime;
-	            }
             }
         }
         public override void FixedUpdate()

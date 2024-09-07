@@ -1,5 +1,6 @@
 ﻿using System;
 using EntityStates;
+using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -34,7 +35,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
         public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
     }
 
-    public class WoshisZone : Asset, ISkill, INetworkedObject, IBuff
+    public class WoshisZone : Asset, ISkill, INetworkedObject, IBuff, IItem, IMaterial
     {
         SkillDef ISkill.BuildObject()
         {
@@ -90,6 +91,45 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
             return buffDef;
         }
+        
+        ItemDef IItem.BuildObject()
+        {
+            var customGhostItem = ScriptableObject.CreateInstance<ItemDef>();
+            customGhostItem.name = "NINES_WOSHISGHOST_NAME";
+            customGhostItem.nameToken = "NINES_WOSHISGHOST_NAME";
+            customGhostItem.pickupToken = "NINES_WOSHISGHOST_PICKUP";
+            customGhostItem.descriptionToken = "NINES_WOSHISGHOST_DESC";
+            customGhostItem.loreToken = "NINES_WOSHISGHOST_LORE";
+            customGhostItem.tier = ItemTier.NoTier;
+            customGhostItem.pickupIconSprite = LoadAsset<Sprite>("RoR2/Base/Beetle/texBuffBeetleJuiceIcon.tif");
+            customGhostItem.pickupModelPrefab = LoadAsset<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab");
+            customGhostItem.canRemove = false;
+            customGhostItem.hidden = true;
+            return customGhostItem;
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.UpdateRendererMaterials))]
+        private static void CharacterModelUpdateRenderers(CharacterModel __instance)
+        {
+            if (!__instance.body.inventory) return;
+            // ReSharper disable once InconsistentNaming
+            var _this = GetAsset<WoshisZone>();
+            if (__instance.body.inventory.GetItemCount(_this) <= 0) return;
+            for (var i = 0; i < __instance.baseRendererInfos.Length; i++)
+            {
+                var renderInfo = __instance.baseRendererInfos[i];
+                if (!renderInfo.renderer.GetComponent<ParticleSystemRenderer>())
+                {
+                    renderInfo.defaultMaterial = _this; //jesus fucking christ, this was the solution
+                }
+                else
+                {
+                    renderInfo.defaultMaterial = GetAsset<WoshisZoneWispGhost>();
+                }
+                __instance.baseRendererInfos[i] = renderInfo;
+            }
+        }
+
 
         public WoshisZone()
         {
@@ -140,6 +180,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
             {
                 esm.initialStateType = esm.mainStateType;
             }
+        }
+        
+        Material IMaterial.BuildObject()
+        {
+            var woshisGhostOverlay = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matGhostEffect.mat"));
+            woshisGhostOverlay.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:texRampWoshis"));
+            return woshisGhostOverlay;
+        }
+    }
+
+    public class WoshisZoneWispGhost : Asset, IMaterial
+    {
+        Material IMaterial.BuildObject()
+        {
+            var redWispMat = new Material(LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
+            redWispMat.SetFloat("_BrightnessBoost", 2.63f);
+            redWispMat.SetFloat("_AlphaBoost", 1.2f);
+            redWispMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
+            redWispMat.SetColor("_TintColor", Color.red);
+            return redWispMat;
         }
     }
 }

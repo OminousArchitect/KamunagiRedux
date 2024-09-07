@@ -186,7 +186,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
         GameObject IEffect.BuildObject()
         {
-            var effect = LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!.InstantiateClone("TwinsChargeMiniSun", false);
+            var effect =
+                LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!.InstantiateClone(
+                    "TwinsChargeMiniSun", false);
             var scale = effect.AddComponent<ObjectScaleCurve>();
             effect.transform.localScale = Vector3.one * 0.35f;
             scale.timeMax = 1f;
@@ -230,10 +232,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             if (!c.TryGotoNext(x =>
                     x.MatchCallOrCallvirt(typeof(OrbStorageUtility), nameof(OrbStorageUtility.Get)))) return;
             c.Emit(OpCodes.Ldarg_0);
-            c.Remove();
-            c.EmitDelegate<Func<string, LightningOrb, GameObject>>((path, orb) => orb.lightningType == (LightningOrb.LightningType)204957
-                ? GetGameObject<LightningEffect, IEffect>()
-                : OrbStorageUtility.Get(path));
+            c.EmitDelegate<Func<string, LightningOrb, string>>((path, orb) =>
+                orb.lightningType == (LightningOrb.LightningType)204957
+                    ? "NINES_LIGHTNING_ORB"
+                    : path);
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(LightningOrb), nameof(LightningOrb.Begin))]
+        public static bool ReplaceEffect(string path, ref GameObject __result)
+        {
+            if (path == "NINES_LIGHTNING_ORB")
+            {
+                __result = GetGameObject<LightningEffect, IEffect>();
+                return false;
+            }
+
+            return true;
         }
 
         public GameObject BuildObject()
@@ -242,7 +256,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 LoadAsset<GameObject>("legacy:Prefabs/Effects/OrbEffects/MageLightningOrbEffect")!.InstantiateClone(
                     "BrimstoneLightning", false);
             effect.GetComponent<OrbEffect>().endEffect = GetGameObject<LightningEndEffect, IEffect>();
-            effect.GetComponentInChildren<LineRenderer>().material = LoadAsset<Material>("RoR2/Base/Common/VFX/mageMageFireStarburst.mat");
+            effect.GetComponentInChildren<LineRenderer>().material =
+                LoadAsset<Material>("RoR2/Base/Common/VFX/mageMageFireStarburst.mat");
             return effect;
         }
     }

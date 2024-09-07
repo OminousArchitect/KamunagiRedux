@@ -320,6 +320,7 @@ namespace KamunagiOfChains.Data
             (UnlockableDef)GetObjectOrThrow<IUnlockable>(asset);
 
         public static implicit operator BuffDef(Asset asset) => (BuffDef)GetObjectOrThrow<IBuff>(asset);
+        public static implicit operator Material(Asset asset) => (Material)GetObjectOrThrow<IMaterial>(asset);
         public static implicit operator SurvivorDef(Asset asset) => (SurvivorDef)GetObjectOrThrow<ISurvivor>(asset);
         public static implicit operator SkinDef(Asset asset) => (SkinDef)GetObjectOrThrow<ISkin>(asset);
 
@@ -447,14 +448,12 @@ namespace KamunagiOfChains.Data
 
     public interface IItem
     {
-        public abstract string nameToken { get; }
+        public abstract ItemDef BuildObject();
+    }
 
-        public virtual ItemDef BuildObject()
-        {
-            var item = ScriptableObject.CreateInstance<ItemDef>();
-            item.nameToken = nameToken;
-            return item;
-        }
+    public interface IMaterial
+    {
+        public abstract Material BuildObject();
     }
 
     public interface IUnlockable

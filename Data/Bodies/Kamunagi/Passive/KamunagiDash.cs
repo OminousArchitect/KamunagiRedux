@@ -56,7 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
             if (base.isAuthority)
             {
                 this.characterMotor.Motor.SetPosition(this.origin);
-                this.characterMotor.velocity = Vector3.zero;
+                (characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 
                 if (base.fixedAge >= this.duration || !inputBank.jump.down)
                 { 
@@ -141,7 +141,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
             flyVector = inputBank.interact.wasDown ? -flyRay.direction * speedMult : flyRay.direction * speedMult;
             base.characterMotor.rootMotion += flyVector * (moveSpeedStat * flyCurve.Evaluate(fixedAge / duration) * Time.deltaTime);
-            base.characterMotor.velocity.y = 0f;
+
+            var motor = characterMotor as IPhysMotor;
+            var motorVelocityAuthority = motor.velocityAuthority;
+            motorVelocityAuthority.y = 0f;
+            motor.velocityAuthority = motorVelocityAuthority;
         }
 
         public override InterruptPriority GetMinimumInterruptPriority() 
@@ -177,7 +181,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		GameObject IProjectileGhost.BuildObject()
 		{
-			var sparks = PrefabAPI.InstantiateClone(LoadAsset<GameObject>("RoR2/Base/Blackhole/GravSphere.prefab").transform.GetChild(1).gameObject, "Sparks, Blue", false);
+			var sparks = PrefabAPI.InstantiateClone(LoadAsset<GameObject>("RoR2/Base/Blackhole/GravSphere.prefab")!.transform.GetChild(1).gameObject, "Sparks, Blue", false);
 			var altP = sparks.GetComponent<ParticleSystem>();
 			var altPMain = altP.main;
 			altPMain.simulationSpeed = 2f;

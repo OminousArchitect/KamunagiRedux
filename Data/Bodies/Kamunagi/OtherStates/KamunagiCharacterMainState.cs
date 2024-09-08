@@ -11,7 +11,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		public GenericSkill passiveSkill;
 		public EntityStateMachine hoverStateMachine;
-		public bool spacePressed;
 		public static GameObject chainsEffect = Asset.GetGameObject<KamunagiAsset, IEffect>();
 		public Transform UBone;
 		public Transform SBone;
@@ -51,12 +50,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		{
 			base.ProcessJump();
 			
-			if (!hasInputBank || characterMotor.isGrounded || !((characterMotor as IPhysMotor).velocity.y < 0)) return;
-			spacePressed |= inputBank.jump.justPressed;
-			if (spacePressed &&
+			if (!hasInputBank || characterMotor.isGrounded || (characterMotor as IPhysMotor).velocity.y > 0) return;
+			if (inputBank.jump.justPressed &&
 			    passiveSkill.ExecuteIfReady())
 			{
-				spacePressed = false;
 				return;
 			}
 

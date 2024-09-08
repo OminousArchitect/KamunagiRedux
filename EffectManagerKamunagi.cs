@@ -27,5 +27,10 @@ namespace KamunagiOfChains
 
 			return pooledEffect;
 		}
+
+		public static EffectManagerHelper GetAndActivatePooledEffect(GameObject prefab, EffectData data)
+		{
+			return GetAndActivatePooledEffect(prefab, data.rootObject.transform, false, data);
+		}
 	}
 }

@@ -116,7 +116,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		GameObject IProjectileGhost.BuildObject()
 		{
 			var ghost =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab")!.InstantiateClone(
+				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab")!.InstantiateClone(
 					"BoulderChildGhost", false);
 			var childMesh = ghost.GetComponentInChildren<MeshFilter>();
 			var theRock = LoadAsset<Mesh>("RoR2/Base/skymeadow/SMRockAngular.fbx");

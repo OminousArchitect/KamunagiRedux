@@ -239,7 +239,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				var effect =
 					LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamChargeUp.prefab")!
 						.InstantiateClone("VoidTracerSphere", false);
-				effect.GetComponent<Light>().range = 30f;
+				effect.GetOrAddComponent<Light>().range = 30f;
 				return effect;
 			}
 		}

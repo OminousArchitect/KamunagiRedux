@@ -92,8 +92,8 @@ namespace KamunagiOfChains
 			return Addressables.LoadAssetAsync<T>(assetPath).WaitForCompletion();
 		}
 
-		[HarmonyPrefix,
-		 HarmonyPatch(typeof(RoR2.WwiseUtils.SoundbankLoader), nameof(RoR2.WwiseUtils.SoundbankLoader.Start))]
+		[HarmonyPrefix]
+		[HarmonyPatch(typeof(RoR2.WwiseUtils.SoundbankLoader), nameof(RoR2.WwiseUtils.SoundbankLoader.Start))]
 		public static void AddSoundbankToLoader(RoR2.WwiseUtils.SoundbankLoader __instance)
 		{
 			// Ensure the soundbank isn't added to each loader, but only one.

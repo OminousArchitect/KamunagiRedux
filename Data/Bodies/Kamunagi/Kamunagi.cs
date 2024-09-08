@@ -6,20 +6,26 @@ using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Passive;
 using R2API;
 using RoR2;
+using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi
 {
-	public class KamunagiAsset : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin, IMaster
+	public class KamunagiAsset : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin, IMaster, IEffect
 	{
 		public const string tokenPrefix = "NINES_KAMUNAGI_BODY_";
 
 		Type[] IEntityStates.GetEntityStates() =>
-			new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState) };
+			new[]
+			{
+				typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState),
+				typeof(KamunagiCharacterMainState)
+			};
 
 		SkinDef ISkin.BuildObject() =>
 			(SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
@@ -189,18 +195,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var bodyStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
 			bodyStateMachine.customName = "Body";
 			bodyStateMachine.initialStateType = new SerializableEntityStateType(typeof(VoidPortalSpawnState));
-			bodyStateMachine.mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
+			bodyStateMachine.mainStateType = new SerializableEntityStateType(typeof(KamunagiCharacterMainState));
+
+			var hoverStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
+			hoverStateMachine.customName = "Hover";
+			hoverStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
+			hoverStateMachine.mainStateType = hoverStateMachine.initialStateType;
 
 			var weaponStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
 			weaponStateMachine.customName = "Weapon";
 			weaponStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
 			weaponStateMachine.mainStateType = weaponStateMachine.initialStateType;
 
-			networkStateMachine.stateMachines = new[] { bodyStateMachine, weaponStateMachine };
+			networkStateMachine.stateMachines = new[] { bodyStateMachine, weaponStateMachine, hoverStateMachine };
 
 			var deathBehaviour = bodyPrefab.GetOrAddComponent<CharacterDeathBehavior>();
 			deathBehaviour.deathStateMachine = bodyStateMachine;
-			deathBehaviour.idleStateMachine = new[] { weaponStateMachine };
+			deathBehaviour.idleStateMachine = new[] { weaponStateMachine, hoverStateMachine };
 			deathBehaviour.deathState = new SerializableEntityStateType(typeof(VoidDeathState));
 
 			#endregion
@@ -266,6 +277,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				extraSkillLocator.extraFourth = skill;
 			}
 
+			if (TryGetAsset<KamunagiSkillFamilyPassive>(out var skillFamilyPassive))
+			{
+				var skill = bodyPrefab.AddComponent<GenericSkill>();
+				var family = (SkillFamily)skillFamilyPassive;
+				var onePassive = family.variants.Length == 1;
+				skill.hideInCharacterSelect =
+					onePassive; // We can disable this to have swappable passives later triggered the same(space when in air)
+				skill.skillName = "SaraanaPassive";
+				skill._skillFamily = family;
+
+				if (onePassive)
+					skillLocator.passiveSkill = new SkillLocator.PassiveSkill
+					{
+						enabled = true,
+						icon = LoadAsset<Sprite>("bundle:TwinsPassive"),
+						skillDescriptionToken = tokenPrefix + "PASSIVE_DESCRIPTION",
+						skillNameToken = tokenPrefix + "PASSIVE_NAME"
+					};
+			}
+
 			#endregion
 
 			return bodyPrefab;
@@ -288,6 +319,24 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				survivor.displayPrefab = display;
 
 			return survivor;
+		}
+
+		GameObject IEffect.BuildObject()
+		{
+			var kamunagiChains = LoadAsset<GameObject>("bundle:KamunagiChains")!;
+			kamunagiChains.AddComponent<ModelAttachedEffect>();
+			kamunagiChains.transform.position = Vector3.zero;
+			kamunagiChains.transform.rotation = Quaternion.identity;
+			kamunagiChains.transform.localScale = new Vector3(0.2f, 0.4f, 0.2f);
+			kamunagiChains.GetOrAddComponent<ParticleUVScroll>();
+
+			var comp = kamunagiChains.GetOrAddComponent<EffectComponent>();
+			comp.parentToReferencedTransform = true;
+			comp.positionAtReferencedTransform = true;
+			var vfx = kamunagiChains.GetOrAddComponent<VFXAttributes>();
+			vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
+			vfx.DoNotPool = false;
+			return kamunagiChains;
 		}
 	}
 }

@@ -324,7 +324,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			kamunagiChains.AddComponent<ModelAttachedEffect>();
 			kamunagiChains.transform.position = Vector3.zero;
 			kamunagiChains.transform.rotation = Quaternion.identity;
-			kamunagiChains.transform.localScale = new Vector3(0.4f, 0.8f, 0.4f);
+			kamunagiChains.transform.localScale = new Vector3(0.17f, 0.25f, 0.17f);
 			kamunagiChains.GetOrAddComponent<ParticleUVScroll>();
 
 			var comp = kamunagiChains.GetOrAddComponent<EffectComponent>();

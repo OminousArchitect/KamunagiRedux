@@ -74,14 +74,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
                     }*/
                     //else
                     //{
-                        outer.SetNextState(new KamunagiDashState()
-                        { 
+	                outer.SetNextState(new KamunagiDashState()
+                    { 
                             speedMult = ascendSpeedMult,
                             effectPosition = thePosition 
-                        });
-                    //}
+                    });
+                    
+	                //}
                 }
             }
+        }
+
+        public override void OnExit()
+        {
+	        log.LogDebug("exiting channeldash");
+	        base.OnExit();
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
@@ -110,7 +117,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
             CreateBlinkEffect(effectPosition);
             EffectManager.SimpleMuzzleFlash(Asset.GetGameObject<FlyEffect, IEffect>(), base.gameObject, "MuzzleRight", false);
             EffectManager.SimpleMuzzleFlash(Asset.GetGameObject<FlyEffect, IEffect>(), base.gameObject, "MuzzleLeft", false);
+            if (!isAuthority) return;
             base.characterMotor.Motor.ForceUnground();
+            log.LogDebug("dash is entering");
         }
 
         private void CreateBlinkEffect(Vector3 origin)
@@ -125,10 +134,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
         public override void FixedUpdate()
         { 
             base.FixedUpdate();
-            if (base.isAuthority && fixedAge >= duration) 
-            {
-                this.outer.SetNextStateToMain(); 
-            } 
+            if (!base.isAuthority) return;
+            if (fixedAge >= duration) this.outer.SetNextStateToMain();
             HandleMovements();
         }
         
@@ -196,6 +203,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			sparks.transform.SetParent(ghost.transform);
 			var innerSphere = ghost.transform.GetChild(0).gameObject;
 			innerSphere.GetComponent<MeshRenderer>().material = LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierGemPortal.mat");
+			ghost.AddComponent<ProjectileGhostController>();
 			return ghost;
 		}
 	}

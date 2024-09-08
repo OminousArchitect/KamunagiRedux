@@ -20,6 +20,7 @@ namespace KamunagiOfChains.Data
 		public static Dictionary<string, object> Objects = new Dictionary<string, object>();
 		public static Dictionary<Type, Asset> Assets = new Dictionary<Type, Asset>();
 		public static Dictionary<object, Asset> ObjectToAssetMap = new Dictionary<object, Asset>();
+		public static List<IOverlay> Overlays = new List<IOverlay>();
 
 		public static ContentPack BuildContentPack()
 		{
@@ -30,6 +31,7 @@ namespace KamunagiOfChains.Data
 			Assets = assets.ToDictionary(x => x, x => (Asset)Activator.CreateInstance(x));
 
 			var instances = Assets.Values;
+			Overlays.AddRange(instances.Where(x => x is IOverlay).Cast<IOverlay>());
 			var entityStates = instances.Where(x => x is IEntityStates).SelectMany(x =>
 				(Type[])Objects.GetOrSet(x.GetType().Assembly.FullName + "_" + x.GetType().FullName + "_EntityStates",
 					() => ((IEntityStates)x).GetEntityStates()));
@@ -268,6 +270,15 @@ namespace KamunagiOfChains.Data
 				return nameToken.IsNullOrWhiteSpace() ? s : nameToken;
 			});
 		}
+		
+		[HarmonyPostfix, HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.UpdateOverlays))]
+		private static void CharacterModelUpdateOverlays(CharacterModel __instance)
+		{
+			foreach (var overlay in Overlays.Where(overlay => overlay.CheckEnabled(__instance) && __instance.activeOverlayCount < CharacterModel.maxOverlays))
+			{
+				__instance.currentOverlays[__instance.activeOverlayCount++] = (Material)GetObjectOrThrow<IOverlay>((Asset)overlay);
+			}
+		}
 
 		public static explicit operator ItemDef(Asset asset) => (ItemDef)GetObjectOrThrow<IItem>(asset);
 		public static implicit operator ItemIndex(Asset asset) => ((ItemDef)GetObjectOrThrow<IItem>(asset)).itemIndex;
@@ -401,6 +412,12 @@ namespace KamunagiOfChains.Data
 		public abstract Material BuildObject();
 	}
 
+	public interface IOverlay
+	{
+		public abstract Material BuildObject();
+		public abstract bool CheckEnabled(CharacterModel model);
+	}
+	
 	public interface IUnlockable
 	{
 		public abstract UnlockableDef BuildObject();

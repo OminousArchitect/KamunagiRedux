@@ -72,7 +72,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			woshisWard.GetComponentInChildren<MeshRenderer>().material = woshisEnergy;
 			var ward = woshisWard.GetComponent<BuffWard>();
 			ward.radius = 10f;
-			ward.buffDef = this;
+			ward.buffDef = (BuffDef)this;
 			woshisWard.AddComponent<DestroyOnTimer>().duration = 8f;
 
 			return woshisWard;

@@ -35,8 +35,8 @@ namespace KamunagiOfChains.Data
 					() => ((IEntityStates)x).GetEntityStates()));
 
 			result.unlockableDefs.Add(instances.Where(x => x is IUnlockable).Select(x => (UnlockableDef)x).ToArray());
-			result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)GetObjectOrThrow<IItem>(x)).ToArray());
-			result.buffDefs.Add(instances.Where(x => x is IBuff).Select(x => (BuffDef)GetObjectOrThrow<IBuff>(x)).ToArray());
+			result.itemDefs.Add(instances.Where(x => x is IItem).Select(x => (ItemDef)x).ToArray());
+			result.buffDefs.Add(instances.Where(x => x is IBuff).Select(x => (BuffDef)x).ToArray());
 			result.skillDefs.Add(instances.Where(x => x is ISkill).Select(x => (SkillDef)x).ToArray());
 			result.entityStateTypes.Add(instances.Where(x => x is ISkill)
 				.SelectMany(x =>
@@ -269,13 +269,13 @@ namespace KamunagiOfChains.Data
 			});
 		}
 
-		//public static implicit operator ItemDef(Asset asset) => (ItemDef)GetObjectOrThrow<IItem>(asset);
+		public static explicit operator ItemDef(Asset asset) => (ItemDef)GetObjectOrThrow<IItem>(asset);
 		public static implicit operator ItemIndex(Asset asset) => ((ItemDef)GetObjectOrThrow<IItem>(asset)).itemIndex;
 
 		public static implicit operator UnlockableDef(Asset asset) =>
 			(UnlockableDef)GetObjectOrThrow<IUnlockable>(asset);
 
-		//public static implicit operator BuffDef(Asset asset) => (BuffDef)GetObjectOrThrow<IBuff>(asset);
+		public static explicit operator BuffDef(Asset asset) => (BuffDef)GetObjectOrThrow<IBuff>(asset);
 		public static implicit operator BuffIndex(Asset asset) => ((BuffDef)GetObjectOrThrow<IBuff>(asset)).buffIndex;
 		public static implicit operator BodyIndex(Asset asset) => ((GameObject)GetObjectOrThrow<IBody>(asset)).GetComponent<CharacterBody>().bodyIndex;
 

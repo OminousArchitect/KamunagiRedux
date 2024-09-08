@@ -50,9 +50,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void ProcessJump()
 		{
 			base.ProcessJump();
-
-			spacePressed |= inputBank.jump.justPressed;
+			
 			if (!hasInputBank || characterMotor.isGrounded || !((characterMotor as IPhysMotor).velocity.y < 0)) return;
+			spacePressed |= inputBank.jump.justPressed;
 			if (spacePressed &&
 			    passiveSkill.ExecuteIfReady())
 			{

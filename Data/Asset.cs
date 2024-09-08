@@ -21,6 +21,7 @@ namespace KamunagiOfChains.Data
 		public static Dictionary<Type, Asset> Assets = new Dictionary<Type, Asset>();
 		public static Dictionary<object, Asset> ObjectToAssetMap = new Dictionary<object, Asset>();
 		public static List<IOverlay> Overlays = new List<IOverlay>();
+		public static List<IMaterialSwap> MaterialSwaps = new List<IMaterialSwap>();
 
 		public static ContentPack BuildContentPack()
 		{
@@ -32,6 +33,7 @@ namespace KamunagiOfChains.Data
 
 			var instances = Assets.Values;
 			Overlays.AddRange(instances.Where(x => x is IOverlay).Cast<IOverlay>());
+			MaterialSwaps.AddRange(instances.Where(x => x is IMaterialSwap).Cast<IMaterialSwap>());
 			var entityStates = instances.Where(x => x is IEntityStates).SelectMany(x =>
 				(Type[])Objects.GetOrSet(x.GetType().Assembly.FullName + "_" + x.GetType().FullName + "_EntityStates",
 					() => ((IEntityStates)x).GetEntityStates()));
@@ -270,14 +272,40 @@ namespace KamunagiOfChains.Data
 				return nameToken.IsNullOrWhiteSpace() ? s : nameToken;
 			});
 		}
-		
+
 		[HarmonyPostfix, HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.UpdateOverlays))]
 		private static void CharacterModelUpdateOverlays(CharacterModel __instance)
 		{
-			foreach (var overlay in Overlays.Where(overlay => overlay.CheckEnabled(__instance) && __instance.activeOverlayCount < CharacterModel.maxOverlays))
+			foreach (var overlay in Overlays.Where(overlay =>
+				         overlay.CheckEnabled(__instance) &&
+				         __instance.activeOverlayCount < CharacterModel.maxOverlays))
 			{
-				__instance.currentOverlays[__instance.activeOverlayCount++] = (Material)GetObjectOrThrow<IOverlay>((Asset)overlay);
+				__instance.currentOverlays[__instance.activeOverlayCount++] =
+					(Material)GetObjectOrThrow<IOverlay>((Asset)overlay);
 			}
+		}
+
+		[HarmonyILManipulator, HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.UpdateMaterials))]
+		public static void InjectMaterial(ILContext il)
+		{
+			var c = new ILCursor(il);
+			if (!c.TryGotoNext(MoveType.After,
+				    x => x.MatchCallOrCallvirt<CharacterModel>(nameof(CharacterModel.UpdateRendererMaterials)))) return;
+			var injectionIndex = c.Index;
+			var iIndex = -1;
+			if (!c.TryGotoPrev(x => x.MatchLdloc(out iIndex))) return;
+			c.Index = injectionIndex;
+			c.Emit(OpCodes.Ldarg_0);
+			c.Emit(OpCodes.Ldloc, iIndex);
+			c.EmitDelegate<Action<CharacterModel, int>>((__instance, i) =>
+			{
+				var baseRenderer = __instance.baseRendererInfos[i];
+				var swappedMaterial = MaterialSwaps.Where(overlay => overlay.CheckEnabled(__instance, baseRenderer))
+					.OrderBy(x => x.Priority).FirstOrDefault();
+				if (swappedMaterial != null)
+					__instance.baseRendererInfos[i].renderer.material =
+						(Material)GetObjectOrThrow<IMaterialSwap>((Asset)swappedMaterial);
+			});
 		}
 
 		public static explicit operator ItemDef(Asset asset) => (ItemDef)GetObjectOrThrow<IItem>(asset);
@@ -288,7 +316,9 @@ namespace KamunagiOfChains.Data
 
 		public static explicit operator BuffDef(Asset asset) => (BuffDef)GetObjectOrThrow<IBuff>(asset);
 		public static implicit operator BuffIndex(Asset asset) => ((BuffDef)GetObjectOrThrow<IBuff>(asset)).buffIndex;
-		public static implicit operator BodyIndex(Asset asset) => ((GameObject)GetObjectOrThrow<IBody>(asset)).GetComponent<CharacterBody>().bodyIndex;
+
+		public static implicit operator BodyIndex(Asset asset) =>
+			((GameObject)GetObjectOrThrow<IBody>(asset)).GetComponent<CharacterBody>().bodyIndex;
 
 		public static implicit operator Material(Asset asset) => (Material)GetObjectOrThrow<IMaterial>(asset);
 
@@ -340,46 +370,47 @@ namespace KamunagiOfChains.Data
 
 	public interface IGameObject
 	{
+		public virtual GameObject BuildObject() => null!;
 	}
 
 	public interface INetworkedObject : IGameObject
 	{
-		public abstract GameObject BuildObject();
+		public new abstract GameObject BuildObject();
 	}
 
 	public interface IProjectile : IGameObject
 	{
-		public abstract GameObject BuildObject();
+		public new abstract GameObject BuildObject();
 	}
 
 	public interface IProjectileGhost : IGameObject
 	{
-		public abstract GameObject BuildObject();
+		public new abstract GameObject BuildObject();
 	}
 
 	public interface IEffect : IGameObject
 	{
-		public abstract GameObject BuildObject();
+		public new abstract GameObject BuildObject();
 	}
 
 	public interface IMaster : IGameObject
 	{
-		public abstract GameObject BuildObject();
+		public new abstract GameObject BuildObject();
 	}
 
 	public interface IBody : IGameObject
 	{
-		public abstract GameObject BuildObject();
+		public new abstract GameObject BuildObject();
 	}
 
 	public interface IBodyDisplay : IGameObject
 	{
-		public abstract GameObject BuildObject();
+		public new abstract GameObject BuildObject();
 	}
 
 	public interface IModel : IGameObject
 	{
-		public abstract GameObject BuildObject();
+		public new abstract GameObject BuildObject();
 		public abstract Asset[] GetSkins();
 	}
 
@@ -417,7 +448,14 @@ namespace KamunagiOfChains.Data
 		public abstract Material BuildObject();
 		public abstract bool CheckEnabled(CharacterModel model);
 	}
-	
+
+	public interface IMaterialSwap
+	{
+		public abstract Material BuildObject();
+		public abstract bool CheckEnabled(CharacterModel model, CharacterModel.RendererInfo targetRendererInfo);
+		public abstract int Priority { get; }
+	}
+
 	public interface IUnlockable
 	{
 		public abstract UnlockableDef BuildObject();

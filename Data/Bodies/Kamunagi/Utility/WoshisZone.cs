@@ -1,5 +1,4 @@
 ﻿using EntityStates;
-using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -34,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class WoshisZone : Asset, ISkill, INetworkedObject, IBuff, IItem, IMaterial
+	public class WoshisZone : Asset, ISkill, INetworkedObject, IBuff, IItem, IMaterialSwap
 	{
 		SkillDef ISkill.BuildObject()
 		{
@@ -107,8 +106,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			return customGhostItem;
 		}
 
-		[HarmonyPrefix]
-		[HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.UpdateRendererMaterials))]
+
+		//[HarmonyPrefix, HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.UpdateRendererMaterials))]
 		private static void CharacterModelUpdateRenderers(CharacterModel __instance)
 		{
 			if (!__instance.body || !__instance.body.inventory) return;
@@ -181,17 +180,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			}
 		}
 
-		Material IMaterial.BuildObject()
+		Material IMaterialSwap.BuildObject()
 		{
 			var woshisGhostOverlay = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matGhostEffect.mat"));
 			woshisGhostOverlay.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:texRampWoshis"));
 			return woshisGhostOverlay;
 		}
+		
+		public bool CheckEnabled(CharacterModel model, CharacterModel.RendererInfo targetRendererInfo) => !targetRendererInfo.ignoreOverlays && model.body && model.body.inventory && model.body.inventory.GetItemCount(this) > 0;
+
+		public int Priority => 1;
 	}
 
-	public class WoshisZoneWispGhost : Asset, IMaterial
+	public class WoshisZoneWispGhost : Asset, IMaterialSwap
 	{
-		Material IMaterial.BuildObject()
+		Material IMaterialSwap.BuildObject()
 		{
 			var redWispMat = new Material(LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
 			redWispMat.SetFloat("_BrightnessBoost", 2.63f);
@@ -200,5 +203,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			redWispMat.SetColor("_TintColor", Color.red);
 			return redWispMat;
 		}
+
+		public bool CheckEnabled(CharacterModel model, CharacterModel.RendererInfo targetRendererInfo) => targetRendererInfo.ignoreOverlays && model.body && model.body.inventory &&
+		                                                                            model.body.inventory.GetItemCount(GetAsset<WoshisZone>()) > 0;
+
+		public int Priority => 1;
 	}
 }

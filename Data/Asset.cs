@@ -270,11 +270,14 @@ namespace KamunagiOfChains.Data
 		}
 
 		public static implicit operator ItemDef(Asset asset) => (ItemDef)GetObjectOrThrow<IItem>(asset);
+		public static implicit operator ItemIndex(Asset asset) => ((ItemDef)GetObjectOrThrow<IItem>(asset)).itemIndex;
 
 		public static implicit operator UnlockableDef(Asset asset) =>
 			(UnlockableDef)GetObjectOrThrow<IUnlockable>(asset);
 
 		public static implicit operator BuffDef(Asset asset) => (BuffDef)GetObjectOrThrow<IBuff>(asset);
+		public static implicit operator BuffIndex(Asset asset) => ((BuffDef)GetObjectOrThrow<IBuff>(asset)).buffIndex;
+		public static implicit operator BodyIndex(Asset asset) => ((GameObject)GetObjectOrThrow<IBody>(asset)).GetComponent<CharacterBody>().bodyIndex;
 
 		public static implicit operator Material(Asset asset) => (Material)GetObjectOrThrow<IMaterial>(asset);
 

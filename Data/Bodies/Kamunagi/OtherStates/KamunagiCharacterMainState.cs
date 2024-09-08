@@ -34,7 +34,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			if (passiveSkill.IsReady() && chainsLeftInstance == null && chainsRightInstance == null)
 			{
 				chainsLeftInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, UBone,
-					data: new EffectData() { rootObject = UBone.gameObject });
+					data: new EffectData() { rootObject = UBone.gameObject, });
 				chainsRightInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, SBone,
 					data: new EffectData() { rootObject = SBone.gameObject });
 			}
@@ -67,10 +67,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 	public class KamunagiHoverState : BaseState, IZealState
 	{
-		public float
-			hoverVelocity =
-				-0.04f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
-
+		public float hoverVelocity = -0.04f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
 		public float hoverAcceleration = 80;
 		public static GameObject muzzleEffect = Asset.GetGameObject<KamunagiHover, IEffect>();
 		private EffectManagerHelper muzzleInstanceLeft;
@@ -131,9 +128,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		GameObject IEffect.BuildObject()
 		{
 			var mashiroEffect = GetGameObject<MashiroBlessing, IEffect>()!.InstantiateClone("mashiroEffect", false);
-			var electricOrbPink =
-				LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab")!.InstantiateClone(
-					"TwinsPinkHandEnergy", false);
+			var electricOrbPink = LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab")!.InstantiateClone("TwinsPinkHandEnergy", false);
 			mashiroEffect.transform.SetParent(electricOrbPink.transform);
 			electricOrbPink.AddComponent<ModelAttachedEffect>();
 			UnityEngine.Object.Destroy(electricOrbPink.GetComponent<ProjectileGhostController>());
@@ -158,6 +153,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			pinkTrails[0].material.SetColor("_TintColor", pink);
 			pinkTrails[1].material.SetColor("_TintColor", pink);
 			electricOrbPink.GetComponentInChildren<Light>().color = Colors.twinsDarkColor;
+			
 			return electricOrbPink;
 		}
 	}

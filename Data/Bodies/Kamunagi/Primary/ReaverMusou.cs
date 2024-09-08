@@ -101,8 +101,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var distP = dist.GetComponentInChildren<ParticleSystem>().shape;
 			distP.scale = Vector3.one * 0.5f;
 			var comp = effect.GetComponent<EffectComponent>();
-			comp.parentToReferencedTransform = true;
-			comp.positionAtReferencedTransform = true;
+			//comp.parentToReferencedTransform = true;
+			//comp.positionAtReferencedTransform = true;
 			return effect;
 		}
 

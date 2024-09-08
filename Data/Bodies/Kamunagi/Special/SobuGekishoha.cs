@@ -10,22 +10,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 {
 	public class SobuGekishohaState : BaseTwinState
 	{
-		public override int meterGain => 0;
 		private float duration = 5;
 		private float fireFrequency = 0.15f;
 		private float stopwatch;
 		private float maxRange = 180;
 		private float damageCoefficient = 3;
-		private GameObject tracerInstance;
 		private Transform sphereTransform;
 		private Transform sigilTransform;
-		private GameObject voidSphereMuzzle;
-		private GameObject darkSigilEffect;
-		private CameraTargetParams.AimRequest request;
 		private Vector3 spherePosition;
 		private Vector3 sigilPosition;
-		private float bulletCount = 0;
 
+		private GameObject voidSphereMuzzle;
+		private GameObject darkSigilEffect;
+		private GameObject tracerInstance;
+		private CameraTargetParams.AimRequest request;
+		
 		public EffectManagerHelper? voidSphere;
 		public EffectManagerHelper? voidTracer;
 		public EffectManagerHelper? darkSigil;
@@ -40,23 +39,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sigilTransform = FindModelChild("MuzzleCenter");
 			spherePosition = sphereTransform.position;
 			sigilPosition = sigilTransform.position;
-			tracerInstance = UnityEngine.Object.Instantiate(Asset.GetGameObject<SobuGekishoha, IEffect>(),
-				spherePosition, Quaternion.identity, null);
+			
+			tracerInstance = UnityEngine.Object.Instantiate(Asset.GetGameObject<SobuGekishoha, IEffect>(), spherePosition, Quaternion.identity, null);
 			tracerInstance.transform.localScale = new Vector3(1, 1, 0.03f * maxRange);
-			//voidSphereMuzzle = UnityEngine.Object.Instantiate(Asset.GetGameObject<SobuGekishoha.VoidSphere, IEffect>(), spherePosition, Quaternion.identity, sphereTransform);
-			//voidSphereMuzzle.transform.localRotation = Quaternion.identity;
-			//voidSphereMuzzle.transform.localScale = Vector3.one;
+			
+			voidSphereMuzzle = UnityEngine.Object.Instantiate(Asset.GetGameObject<SobuGekishoha.VoidSphere, IEffect>(), spherePosition, Quaternion.identity, sphereTransform);
+			voidSphereMuzzle.transform.localRotation = Quaternion.identity;
+			voidSphereMuzzle.transform.localScale = Vector3.one;
 			//transform.position + Vector3.back * 2f; example
-			//var additive = characterDirection.forward * 0.5f;
-			//darkSigilEffect = UnityEngine.Object.Instantiate(Asset.GetGameObject<SobuGekishoha.DarkSigil, IEffect>(), (sigilPosition + additive), Util.QuaternionSafeLookRotation(characterDirection.forward, Vector3.up), sigilTransform);
-
-
-			var sphere = Asset.GetGameObject<SobuGekishoha.VoidSphere, IEffect>();
-			sphere.transform.localScale = Vector3.one;
-			var sigil = Asset.GetGameObject<SobuGekishoha.DarkSigil, IEffect>();
-			var tracer = Asset.GetGameObject<SobuGekishoha, IEffect>();
-			//tracer isn't done yet
-			if (sphereTransform)
+			var additive = characterDirection.forward * 0.5f;
+			darkSigilEffect = UnityEngine.Object.Instantiate(Asset.GetGameObject<SobuGekishoha.DarkSigil, IEffect>(), (sigilPosition + additive), Util.QuaternionSafeLookRotation(characterDirection.forward, Vector3.up), sigilTransform);
+			
+			/*if (sphereTransform)
 			{
 				voidSphere = EffectManagerKamunagi.GetAndActivatePooledEffect(sphere, sphereTransform, true,
 					new EffectData() { rootObject = sphereTransform.gameObject });
@@ -64,7 +58,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					new EffectData() { rootObject = sigilTransform.gameObject });
 				darkSigil = EffectManagerKamunagi.GetAndActivatePooledEffect(sigil, sphereTransform, true,
 					new EffectData() { rootObject = sphereTransform.gameObject });
-			}
+			}*/
 
 			var component = voidSphereMuzzle.GetComponent<ScaleParticleSystemDuration>();
 			if (component)
@@ -147,7 +141,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					smartCollision = true,
 					damageType = DamageType.Generic
 				}.Fire();
-				bulletCount++;
 			}
 		}
 

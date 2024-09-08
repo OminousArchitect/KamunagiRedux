@@ -104,22 +104,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	{
 		GameObject IProjectile.BuildObject()
 		{
-			var projectile =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab")!.InstantiateClone(
-					"BoulderChild", true);
+			var projectile = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab")!.InstantiateClone("BoulderChild", true);
 			projectile.GetComponent<ProjectileImpactExplosion>().falloffModel = BlastAttack.FalloffModel.None;
-			projectile.GetComponent<ProjectileController>().ghostPrefab =
-				GetGameObject<EnnakamuyEarthChild, IProjectileGhost>();
+			projectile.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<EnnakamuyEarthChild, IProjectileGhost>();
 			return projectile;
 		}
 
 		GameObject IProjectileGhost.BuildObject()
 		{
 			var ghost =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab")!.InstantiateClone(
-					"BoulderChildGhost", false);
+				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab")!.InstantiateClone("BoulderChildGhost", false);
 			var childMesh = ghost.GetComponentInChildren<MeshFilter>();
-			var theRock = LoadAsset<Mesh>("RoR2/Base/skymeadow/SMRockAngular.fbx");
+			var theRock = LoadAsset<Mesh>("RoR2/Base/blackbeach/mdlBBBoulderMediumRound1.fbx");
 			childMesh.mesh = theRock;
 			return ghost;
 		}

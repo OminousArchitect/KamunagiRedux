@@ -129,6 +129,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 				return;
 			}
 
+			characterBody.isSprinting = true; //magic
 			flyVector = inputBank.interact.wasDown ? -flyRay.direction * speedMult : flyRay.direction * speedMult;
 
 			log.LogDebug("flyVector: " + flyVector);
@@ -136,8 +137,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 				flyVector * (moveSpeedStat * flyCurve.Evaluate(fixedAge / duration) * Time.deltaTime);
 
 			log.LogDebug("rootMotion: " + characterMotor.rootMotion);
-
-
+			
 			var motor = characterMotor as IPhysMotor;
 			var motorVelocityAuthority = motor.velocityAuthority;
 			motorVelocityAuthority.y = 0f;

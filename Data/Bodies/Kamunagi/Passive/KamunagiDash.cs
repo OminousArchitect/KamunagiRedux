@@ -111,7 +111,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
         public override void OnEnter() 
         {
             base.OnEnter();
-            //Debug.Log($"{speedMult} remapped");
+            Debug.Log($"{speedMult} remapped");
             PlayAnimation("Saraana", "FlyUp");
             PlayAnimation("Ururuu", "FlyUp");
             CreateBlinkEffect(effectPosition);
@@ -230,9 +230,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 				if (name == "Matrix, Billboard")
 				{
 					r.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
-					//r.materials[1].SetTexture("_RemapTex", Load<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealingMedkit.png"));
 				}
-				//todo remove the connected lines stuff
+				
 				if (name == "Matrix, Mesh")
 				{
 					r.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));

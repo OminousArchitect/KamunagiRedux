@@ -281,21 +281,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			{
 				var skill = bodyPrefab.AddComponent<GenericSkill>();
 				var family = (SkillFamily)skillFamilyPassive;
-				var onePassive = family.variants.Length == 1;
-				skill.hideInCharacterSelect =
-					onePassive; // We can disable this to have swappable passives later triggered the same(space when in air)
+				skill.hideInCharacterSelect = family.variants.Length == 1;
 				skill.skillName = "SaraanaPassive";
 				skill._skillFamily = family;
-
-				if (onePassive)
-					skillLocator.passiveSkill = new SkillLocator.PassiveSkill
-					{
-						enabled = true,
-						icon = LoadAsset<Sprite>("bundle:TwinsPassive"),
-						skillDescriptionToken = tokenPrefix + "PASSIVE_DESCRIPTION",
-						skillNameToken = tokenPrefix + "PASSIVE_NAME"
-					};
 			}
+
+			skillLocator.passiveSkill = new SkillLocator.PassiveSkill
+			{
+				enabled = true,
+				icon = LoadAsset<Sprite>("bundle:TwinsPassive"),
+				skillDescriptionToken = tokenPrefix + "PASSIVE_DESCRIPTION",
+				skillNameToken = tokenPrefix + "PASSIVE_NAME"
+			};
 
 			#endregion
 

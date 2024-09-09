@@ -83,8 +83,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		GameObject IEffect.BuildObject()
 		{
-			var impBoss = LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab");
-			var dustCenter = impBoss.transform.Find("DustCenter");
+			var impBoss = LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab")!;
+			var dustCenter = impBoss.transform.Find("ModelBase/mdlImpBoss/DustCenter");
 
 			var effect = dustCenter.gameObject.InstantiateClone("VeilVisualEffect", false);
 			var distortion = effect.AddComponent<ParticleSystem>();

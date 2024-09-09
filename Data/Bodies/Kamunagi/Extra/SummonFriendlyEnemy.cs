@@ -9,6 +9,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	public class SummonFriendlyEnemyState : IndicatorSpellState
 	{
+		public override int meterGain => 0;
+		public override int meterGainOnExit => possibleElites.Length != 0 || deadElites.Length != 0 ? 10 : 0;
 		public override float indicatorScale => 1f;
 		public string[] possibleElites;
 		public CharacterMaster[] deadElites;

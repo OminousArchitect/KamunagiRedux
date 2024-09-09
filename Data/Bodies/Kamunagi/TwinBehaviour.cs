@@ -79,6 +79,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 		public void ModifyNextState(EntityStateMachine entitystatemachine, ref EntityState nextState)
 		{
+			if (entitystatemachine.state is IZealState currentZealState)
+			{
+				zealMeter += currentZealState.meterGainOnExit;
+			}
 			if (nextState is IZealState zealState)
 			{
 				zealMeter += zealState.meterGain;

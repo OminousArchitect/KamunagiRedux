@@ -62,6 +62,7 @@ namespace KamunagiOfChains.Data
 			result.masterPrefabs.Add(instances.Where(x => x is IMaster)
 				.Select(x => (GameObject)GetObjectOrThrow<IMaster>(x))
 				.ToArray());
+			result.musicTrackDefs.Add(instances.Where(x => x is IMusicTrack).Select(x => (MusicTrackDef)x).ToArray());
 
 			return result;
 		}
@@ -327,6 +328,8 @@ namespace KamunagiOfChains.Data
 		public static implicit operator SkinDef(Asset asset) => (SkinDef)GetObjectOrThrow<ISkin>(asset);
 
 		public static implicit operator SkillDef(Asset asset) => (SkillDef)GetObjectOrThrow<ISkill>(asset);
+		public static implicit operator MusicTrackDef(Asset asset) => (MusicTrackDef)GetObjectOrThrow<IMusicTrack>(asset);
+
 
 		public static implicit operator SkillFamily(Asset asset) => (SkillFamily)GetObjectOrThrow<ISkillFamily>(asset);
 
@@ -459,6 +462,11 @@ namespace KamunagiOfChains.Data
 	public interface IUnlockable
 	{
 		public abstract UnlockableDef BuildObject();
+	}
+
+	public interface IMusicTrack
+	{
+		public abstract MusicTrackDef BuildObject();
 	}
 
 	public interface IBuff

@@ -27,6 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 					UnsetOverrides();
 				else
 					SetOverrides();
+				alternateSkills = !alternateSkills;
 				_zealMeter = 0;
 			}
 		}

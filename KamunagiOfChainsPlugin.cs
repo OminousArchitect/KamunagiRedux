@@ -24,6 +24,7 @@ namespace KamunagiOfChains
 	[BepInDependency(PrefabAPI.PluginGUID)]
 	[BepInDependency(ColorsAPI.PluginGUID)]
 	[BepInDependency(DeployableAPI.PluginGUID)]
+	[BepInDependency(DotAPI.PluginGUID)]
 	[BepInDependency(ExtraSkillSlotsPlugin.GUID)]
 	[NetworkCompatibility]
 	[BepInPlugin(Guid, Name, Version)]

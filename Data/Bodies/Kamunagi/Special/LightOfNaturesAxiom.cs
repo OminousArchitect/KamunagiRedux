@@ -31,7 +31,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				new EffectData() { scale = 0.3f });
 			rightMuzzleInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(
 				Asset.GetGameObject<LightOfNaturesAxiom, IEffect>(), childLocator.FindChild("MuzzleRight"), true,
-				new EffectData() {  scale = 0.3f });
+				new EffectData() { scale = 0.3f });
 			channelSound = Util.PlaySound(ChannelSunStart.beginSoundName, gameObject);
 			if (!isAuthority) return;
 			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
@@ -243,9 +243,88 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return buffDef;
 		}
 
-		public NaturesAxiom()
+		public static DotController.DotIndex CurseIndex;
+
+		public override void Initialize()
 		{
+			CurseIndex = DotAPI.RegisterDotDef(new DotController.DotDef
+			{
+				interval = 0.2f,
+				damageCoefficient = 0.1f,
+				damageColorIndex = DamageColorIndex.Void,
+				associatedBuff = (BuffDef)GetAsset<AxiomBurn, IBuff>()
+			}, (self, stack) =>
+			{
+				if (stack.dotIndex != CurseIndex) return;
+				var pos = self.victimBody.corePosition;
+				Debug.Log("A stack was added");
+			}, self =>
+			{
+				if (!self || !self.victimObject) return;
+				var modelLocator = self.victimObject.GetComponent<ModelLocator>();
+				if (!modelLocator || !modelLocator.modelTransform) return;
+				if (self.GetComponent<KamunagiBurnEffectController>()) return;
+				var kamunagiEffectController = self.gameObject.AddComponent<KamunagiBurnEffectController>();
+				kamunagiEffectController.effectParams = new KamunagiBurnEffectController.KamunagiEffectParams
+				{
+					startSound = "Play_item_proc_igniteOnKill_Loop",
+					stopSound = "Stop_item_proc_igniteOnKill_Loop",
+					overlayMaterial = GetAsset<AxiomBurn, IMaterial>()
+				};;
+				kamunagiEffectController.target = modelLocator.modelTransform.gameObject;
+				Debug.LogWarning("added Kamunagi Controller");
+			});
 		}
+		
+		 public class KamunagiBurnEffectController : MonoBehaviour
+    {
+        public class KamunagiEffectParams
+        {
+            public string startSound;
+
+            public string stopSound;
+
+            public Material overlayMaterial;
+        }
+        
+        private Transform theTransform;
+        public GameObject curseParticles;
+        public CharacterBody victimBody;
+        public DotController dotController;
+        public ModelLocator modelLocator;
+        public GameObject target;
+        public GameObject mdlObject;
+        public TemporaryOverlayInstance burnEffectInstance;
+        public CharacterModel charModel;
+        public KamunagiEffectParams effectParams;
+
+        private void Awake()
+        {
+	        dotController = GetComponent<DotController>();
+            victimBody = dotController.victimBody;
+            modelLocator = dotController.victimObject.GetComponent<ModelLocator>();
+            charModel = modelLocator.modelTransform.GetComponent<CharacterModel>();
+            mdlObject = modelLocator.modelTransform.gameObject;
+        }
+
+        private void Start()
+        {
+            //Util.PlaySound(effectType.startSound, dotController.gameObject);
+            if (!target)
+            {
+                return;
+            }
+
+            burnEffectInstance = TemporaryOverlayManager.AddOverlay(mdlObject);
+            // TODO do a pooled effect and remove it on destroy
+        }
+
+        private void OnDestroy()
+        {
+            //Util.PlaySound(effectType.stopSound, base.gameObject);
+            burnEffectInstance.RemoveFromCharacterModel();
+        }
+    }
 
 		[RequireComponent(typeof(TeamFilter))]
 		[RequireComponent(typeof(GenericOwnership))]
@@ -385,8 +464,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 								if (theNumber > 0)
 								{
 									var inflictDotInfo = new InflictDotInfo();
-									inflictDotInfo.dotIndex =
-										DotController.DotIndex.Blight; //Modules.Dots.KamunagiCurse;
+									inflictDotInfo.dotIndex = NaturesAxiom.CurseIndex;
 									inflictDotInfo.attackerObject = ownership.ownerObject;
 									inflictDotInfo.victimObject = body.gameObject;
 									inflictDotInfo.damageMultiplier = 1f;
@@ -445,7 +523,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 	}
 
-	public class AxiomBurn : Asset, IEffect
+	public class AxiomBurn : Asset, IEffect, IBuff, IMaterial
 	{
 		public GameObject BuildObject()
 		{
@@ -484,6 +562,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			UnityEngine.Object.Destroy(curseBurnFx.GetComponent<ShakeEmitter>());
 			curseBurnFx.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
 			return curseBurnFx;
+		}
+
+		BuffDef IBuff.BuildObject()
+		{
+			var buff = ScriptableObject.CreateInstance<BuffDef>();
+			buff.name = "KamunagiCurseDebuff";
+			buff.iconSprite = LoadAsset<Sprite>("bundle:CurseScroll");
+			buff.buffColor = Color.white;
+			buff.canStack = true;
+			buff.isDebuff = true;
+			buff.isHidden = false;
+			return buff;
+		}
+
+		Material IMaterial.BuildObject() {
+			// TODO this probably should use IOverlay instead?
+			var purpleFireOverlay = new Material(LoadAsset<Material>("RoR2/Base/BurnNearby/matOnHelfire.mat"));
+			purpleFireOverlay.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+			purpleFireOverlay.SetFloat("_FresnelPower", -15.8f);
+			return purpleFireOverlay;
 		}
 	}
 }

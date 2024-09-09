@@ -30,6 +30,7 @@ namespace KamunagiOfChains.Data
 			var assets = Assembly.GetCallingAssembly().GetTypes()
 				.Where(x => typeof(Asset).IsAssignableFrom(x) && !x.IsAbstract);
 			Assets = assets.ToDictionary(x => x, x => (Asset)Activator.CreateInstance(x));
+			foreach (var asset in Assets.Values) asset.Initialize();
 
 			var instances = Assets.Values;
 			Overlays.AddRange(instances.Where(x => x is IOverlay).Cast<IOverlay>());
@@ -335,6 +336,8 @@ namespace KamunagiOfChains.Data
 
 		public static implicit operator SkillFamily.Variant(Asset asset) =>
 			(SkillFamily.Variant)GetObjectOrThrow<IVariant>(asset);
+
+		public virtual void Initialize() {}
 	}
 
 	public class AssetTypeInvalidException : Exception

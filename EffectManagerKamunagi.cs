@@ -21,6 +21,7 @@ namespace KamunagiOfChains
 			if (data != null && effectComponent)
 			{
 				effectComponent.effectData = data.Clone();
+				effectComponent.effectData.rootObject = parentTransform.gameObject;
 				pooledEffect.Reset(true);
 				pooledEffect.gameObject.SetActive(true);
 			}

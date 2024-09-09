@@ -124,6 +124,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.baseMaxStock = 0;
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;
+			skill.fullRestockOnAssign = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;
 			skill.rechargeStock = 0;

@@ -1,4 +1,6 @@
-﻿using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
+﻿using EntityStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
+using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using RoR2;
 using UnityEngine;
 
@@ -10,6 +12,48 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public GameObject activeBuffWard;
 		public bool componentAddedToMaster;
 		public CharacterBody body;
+		private int _zealMeter;
+		public int maxZeal = 80;
+		private bool alternateSkills;
+
+		public int zealMeter
+		{
+			get => _zealMeter;
+			set
+			{
+				_zealMeter = Math.Min(value, maxZeal);
+				if (_zealMeter != maxZeal) return;
+				if (alternateSkills)
+					UnsetOverrides();
+				else
+					SetOverrides();
+				_zealMeter = 0;
+			}
+		}
+
+		private void SetOverrides()
+		{
+			for (var index = 0; index < body.skillLocator.allSkills.Length; index += 2)
+			{
+				var skill = body.skillLocator.allSkills[index];
+				var slot = body.skillLocator.FindSkillSlot(skill);
+				if (slot != SkillSlot.None && slot <= SkillSlot.Special)
+					skill.SetSkillOverride(this, body.skillLocator.allSkills[index + 1].skillDef,
+						GenericSkill.SkillOverridePriority.Contextual);
+			}
+		}
+
+		private void UnsetOverrides()
+		{
+			for (var index = 0; index < body.skillLocator.allSkills.Length; index += 2)
+			{
+				var skill = body.skillLocator.allSkills[index];
+				var slot = body.skillLocator.FindSkillSlot(skill);
+				if (slot != SkillSlot.None && slot <= SkillSlot.Special)
+					skill.UnsetSkillOverride(this, body.skillLocator.allSkills[index + 1].skillDef,
+						GenericSkill.SkillOverridePriority.Contextual);
+			}
+		}
 
 		public string twinMuzzle
 		{
@@ -20,9 +64,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			}
 		}
 
+		public float zealMeterNormalized => (float) zealMeter / (float) maxZeal;
+
 		public void Awake()
 		{
 			body = GetComponent<CharacterBody>();
+			foreach (var esm in body.GetComponents<EntityStateMachine>())
+			{
+				esm.nextStateModifier += ModifyNextState;
+			}
+		}
+
+		public void ModifyNextState(EntityStateMachine entitystatemachine, ref EntityState nextState)
+		{
+			if (nextState is IZealState zealState)
+			{
+				zealMeter += zealState.meterGain;
+			}
 		}
 
 		public void FixedUpdate()
@@ -77,10 +135,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 			if (!rezEffect) return;
 			EffectManager.SpawnEffect(rezEffect,
-				new EffectData
-				{
-					origin = positionAtDeath, rotation = master.bodyInstanceObject.transform.rotation
-				}, transmit: true);
+				new EffectData { origin = positionAtDeath, rotation = master.bodyInstanceObject.transform.rotation },
+				transmit: true);
 		}
 	}
 }

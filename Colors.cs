@@ -9,5 +9,6 @@ namespace KamunagiOfChains
 		public static Color twinsTintColor = new Color(0.525f, 0f, 1f);
 		public static Color sealingColor = new Color(0.05098039f, 1f, 0.9058824f);
 		public static Color oceanColor = new Color(0.13f, 0.79f, 0.85f);
+		public static Color zealColor = new Color(0.9294118f, 0.654902f, 0.09019608f);
 	}
 }

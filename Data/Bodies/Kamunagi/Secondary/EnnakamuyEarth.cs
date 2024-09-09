@@ -112,11 +112,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		GameObject IProjectileGhost.BuildObject()
 		{
-			var ghost =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab")!.InstantiateClone("BoulderChildGhost", false);
+			var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab")!.InstantiateClone("BoulderChildGhost", false);
 			var childMesh = ghost.GetComponentInChildren<MeshFilter>();
-			var theRock = LoadAsset<Mesh>("RoR2/Base/blackbeach/mdlBBBoulderMediumRound1.fbx");
+			var theRock = LoadAsset<Mesh>("RoR2/Base/skymeadow/SMRockAngular.fbx");
 			childMesh.mesh = theRock;
+			ghost.transform.localScale = Vector3.one * 0.1f;
 			return ghost;
 		}
 	}

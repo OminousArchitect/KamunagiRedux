@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using R2API;
 using RoR2;
 using RoR2.Skills;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
+		public EffectManagerHelper? veilEffect;
 		public override int meterGain => 0;
 
 		public override void OnEnter()
@@ -29,21 +31,27 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			}
 
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
+			var effect = Asset.GetGameObject<HonokasVeil, IEffect>();
 			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
-			//TODO effects and chains bullshit
+
+			veilEffect = EffectManager.GetAndActivatePooledEffect(effect, characterBody.coreTransform, true);
 		}
 
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			if (!isAuthority) return;
-			if (!IsKeyDownAuthority()) outer.SetNextStateToMain();
+			if (!inputBank.skill3.down || fixedAge > 25f)
+			{
+				outer.SetNextStateToMain();
+			}
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
+			if (veilEffect != null) veilEffect.ReturnToPool();
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)
 			{
@@ -53,7 +61,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class HonokasVeil : Asset, ISkill
+	public class HonokasVeil : Asset, ISkill, IEffect
 	{
 		SkillDef ISkill.BuildObject()
 		{
@@ -72,5 +80,42 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 
 		Type[] ISkill.GetEntityStates() => new[] { typeof(HonokasVeilState) };
+
+		GameObject IEffect.BuildObject()
+		{
+			var impBoss = LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab");
+			var dustCenter = impBoss.transform.Find("DustCenter");
+
+			var effect = dustCenter.gameObject.InstantiateClone("VeilVisualEffect", false);
+			var distortion = effect.AddComponent<ParticleSystem>();
+			var coreR = effect.GetComponent<ParticleSystemRenderer>();
+			Material decalMaterial = new Material(LoadAsset<Material>("RoR2/Base/Brother/matLunarShardImpactEffect.mat"));
+			decalMaterial.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+			coreR.material = decalMaterial;
+			coreR.renderMode = ParticleSystemRenderMode.Billboard;
+			var coreM = distortion.main;
+			coreM.duration = 1f;
+			coreM.simulationSpeed = 1.1f;
+			coreM.loop = true;
+			coreM.startLifetime = 0.13f;
+			coreM.startSpeed = 5f;
+			coreM.startSize3D = false;
+			coreM.startSizeY = 0.6f;
+			coreM.startRotation3D = false;
+			coreM.startRotationZ = 0.1745f;
+			coreM.startSpeed = 0f;
+			coreM.maxParticles = 30;
+			var coreS = distortion.shape;
+			coreS.enabled = false;
+			coreS.shapeType = ParticleSystemShapeType.Circle;
+			coreS.radius = 0.67f;
+			coreS.arcMode = ParticleSystemShapeMultiModeValue.Random;
+			var sparkleSize = distortion.sizeOverLifetime;
+			sparkleSize.enabled = true;
+			sparkleSize.separateAxes = true;
+			//sparkleSize.sizeMultiplier = 0.75f;
+			sparkleSize.xMultiplier = 1.3f;
+			return effect;
+		}
 	}
 }

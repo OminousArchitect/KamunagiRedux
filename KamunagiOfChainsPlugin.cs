@@ -23,6 +23,7 @@ namespace KamunagiOfChains
 	//[BepInDependency(DotAPI.PluginGUID), BepInDependency(DamageAPI.PluginGUID), BepInDependency(ColorsAPI.PluginGUID), BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID)]
 	[BepInDependency(PrefabAPI.PluginGUID)]
 	[BepInDependency(ColorsAPI.PluginGUID)]
+	[BepInDependency(DeployableAPI.PluginGUID)]
 	[BepInDependency(ExtraSkillSlotsPlugin.GUID)]
 	[NetworkCompatibility]
 	[BepInPlugin(Guid, Name, Version)]

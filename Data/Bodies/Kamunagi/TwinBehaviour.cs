@@ -14,7 +14,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public CharacterBody body;
 		private int _zealMeter;
 		public int maxZeal = 80;
-		private bool alternateSkills;
+		public bool alternateSkills;
+		public MasterTwinBehaviour masterBehaviour;
 
 		public int zealMeter
 		{
@@ -88,7 +89,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		{
 			if (!componentAddedToMaster && body.masterObject)
 			{
-				body.masterObject.GetOrAddComponent<MasterTwinBehaviour>();
+				masterBehaviour = body.masterObject.GetOrAddComponent<MasterTwinBehaviour>();
 				componentAddedToMaster = true;
 			}
 		}
@@ -97,6 +98,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 	public class MasterTwinBehaviour : MonoBehaviour
 	{
 		public CharacterMaster master;
+		public Dictionary<string, CharacterMaster?> wispies = new Dictionary<string, CharacterMaster?>()
+		{
+			{"EliteFireEquipment", null},
+			{"EliteLightningEquipment", null},
+			{"EliteEarthEquipment", null},
+			{"EliteLunarEquipment", null}
+		};
 
 		public void Awake()
 		{

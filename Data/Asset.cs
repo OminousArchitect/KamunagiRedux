@@ -268,7 +268,7 @@ namespace KamunagiOfChains.Data
 			c.Emit(OpCodes.Ldarg_3);
 			c.EmitDelegate<Func<string, GenericSkill, string>>((s, skill) =>
 			{
-				if (!TryGetAssetFromObject(skill.skillFamily, out ISkillFamily asset))
+				if (!TryGetAssetFromObject(skill.skillFamily, out ISkillFamily asset)) 
 					return s;
 				var nameToken = asset.GetNameToken(skill);
 				return nameToken.IsNullOrWhiteSpace() ? s : nameToken;

@@ -98,9 +98,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		SkillDef ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
-			skill.skillName = "Extra Skill 3";
-			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA3_NAME";
-			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix +  "EXTRA3_DESCRIPTION";
+			skill.skillName = "Extra Skill 6";
+			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA6_NAME";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix +  "EXTRA6_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle:Uitsalnemetia");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 3f;

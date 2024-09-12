@@ -2,6 +2,7 @@
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
+using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
 
@@ -10,20 +11,24 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	public class KujyuriFrostState : RaycastedSpellState
 	{
 		public EffectManagerHelper muzzleEffectInstance;
+
+		public EffectManagerHelper iceMagicInstance;
 		public override float failedCastCooldown => 2f;
 		public override float duration => 0.8f;
 		public override bool requireFullCharge => true;
 
 		public override void OnEnter() {
 			base.OnEnter();
-			muzzleEffectInstance =
-				EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<KujyuriFrost, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true);
+			muzzleEffectInstance = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<KujyuriFrost, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true);
+			var toggling = twinMuzzle;
+			iceMagicInstance = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<IceMagicEffect, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true); 
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
 			if (muzzleEffectInstance != null) muzzleEffectInstance.ReturnToPool();
+			if (iceMagicInstance != null) iceMagicInstance.ReturnToPool();
 		}
 
 		public override void FixedUpdate()
@@ -32,6 +37,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			if (!isAuthority) return;
 			if (fixedAge >= duration || IsKeyDownAuthority()) return;
 			var aimRay = GetAimRay();
+			
 			new BulletAttack
 			{
 				maxDistance = 1000,
@@ -134,6 +140,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var effect = LoadAsset<GameObject>("RoR2/Base/EliteIce/AffixWhiteExplosion.prefab")!.InstantiateClone("TwinsFrostNovaEffect", false);
 			effect.transform.localScale = Vector3.one * 10f;
 			effect.EffectWithSound("Play_item_proc_iceRingSpear");
+			return effect;
+		}
+	}
+
+	public class IceMagicEffect : Asset, IEffect
+	{
+		GameObject IEffect.BuildObject()
+		{
+			var effect = LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab")!.InstantiateClone("TwinsIceHandEnergy", false);
+			UnityEngine.Object.Destroy(effect.GetComponent<ProjectileGhostController>());
+			var iceChild = effect.transform.GetChild(0);
+			iceChild.transform.localScale = Vector3.one * 0.1f;
+			var iceTransform = iceChild.transform.GetChild(0);
+			iceTransform.transform.localScale = Vector3.one * 0.25f;
+			var iceAdditive = new Color(0.298039216f, 0.443137255f, 0.767741935f);
+			var spitCore = effect.GetComponentInChildren<ParticleSystemRenderer>();
+			spitCore.material.SetColor("_TintColor", iceAdditive);
+			var iceTrails = effect.GetComponentsInChildren<TrailRenderer>();
+			iceTrails[0].enabled = false;
+			iceTrails[1].enabled = false;
 			return effect;
 		}
 	}

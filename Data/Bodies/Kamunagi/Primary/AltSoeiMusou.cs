@@ -121,15 +121,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY1_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle:darkpng");
 			skill.activationStateMachineName = "Weapon";
-			skill.baseMaxStock = 0;
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;
-			skill.fullRestockOnAssign = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;
-			skill.rechargeStock = 0;
-			skill.requiredStock = 0;
-			skill.stockToConsume = 0;
 			skill.keywordTokens = new[] { "KEYWORD_AGILE" };
 			return skill;
 		}

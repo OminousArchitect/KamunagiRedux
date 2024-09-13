@@ -8,6 +8,7 @@ using RoR2;
 using RoR2.ContentManagement;
 using RoR2.Skills;
 using RoR2.UI;
+using System.Diagnostics;
 using UnityEngine;
 
 // ReSharper disable SuspiciousTypeConversion.Global
@@ -210,7 +211,7 @@ namespace KamunagiOfChains.Data
 					ObjectToAssetMap[returnedObject] = asset;
 					var skinController = ((GameObject)returnedObject).GetOrAddComponent<ModelSkinController>();
 					skinController.skins = modelAsset.GetSkins().Select(x => (SkinDef)x).ToArray();
-					return returnedObject;
+					break;
 				default:
 					returnedObject = targetType.GetMethod("BuildObject")?.Invoke(asset, null) ?? throw notOfType;
 					break;
@@ -248,6 +249,17 @@ namespace KamunagiOfChains.Data
 				    returnedObject = body;
 				    break;
 				    */
+			}
+
+			var returnedType = returnedObject.GetType();
+			var scriptableObject = typeof(ScriptableObject);
+			var cachedName = returnedType.GetProperty("cachedName");
+			var nameProperty = scriptableObject.GetProperty("name")!.GetSetMethod();
+			var objectName = (assetType.Name  + "_" + targetTypeName).Replace(".", "_");
+			cachedName?.GetSetMethod().Invoke(returnedObject, new object[] { objectName });
+			if (cachedName is null && scriptableObject.IsAssignableFrom(returnedType))
+			{
+				nameProperty.Invoke(returnedObject, new object[] { objectName });
 			}
 
 			Objects[key] = returnedObject ??
@@ -315,16 +327,19 @@ namespace KamunagiOfChains.Data
 		{
 			var c = new ILCursor(il);
 			ILLabel? jumpTarget = null;
-			if (!c.TryGotoNext(MoveType.After, x => x.MatchBr(out jumpTarget), x => x.MatchLdloc(out _), x=>x.MatchLdloc(out _), x => x.MatchCallOrCallvirt(out _), x => x.MatchStloc(out _)))
+			if (!c.TryGotoNext(MoveType.After, x => x.MatchBr(out jumpTarget), x => x.MatchLdloc(out _),
+				    x => x.MatchLdloc(out _), x => x.MatchCallOrCallvirt(out _), x => x.MatchStloc(out _)))
 			{
 				log.LogError("Failed to match il in loadout panel hidden skills fix.");
 				return;
 			}
+
 			c.Index--;
 			c.Emit(OpCodes.Dup);
 			c.Index++;
 			c.Emit(OpCodes.Ldfld, typeof(GenericSkill).GetField(nameof(GenericSkill.hideInCharacterSelect)));
-			c.Emit(OpCodes.Brtrue, jumpTarget!.Target.Previous.Previous.Previous.Previous); // jump to where the index increases
+			c.Emit(OpCodes.Brtrue,
+				jumpTarget!.Target.Previous.Previous.Previous.Previous); // jump to where the index increases
 		}
 		public static explicit operator ItemDef(Asset asset) => (ItemDef)GetObjectOrThrow<IItem>(asset);
 		public static implicit operator ItemIndex(Asset asset) => ((ItemDef)GetObjectOrThrow<IItem>(asset)).itemIndex;
@@ -345,7 +360,9 @@ namespace KamunagiOfChains.Data
 		public static implicit operator SkinDef(Asset asset) => (SkinDef)GetObjectOrThrow<ISkin>(asset);
 
 		public static implicit operator SkillDef(Asset asset) => (SkillDef)GetObjectOrThrow<ISkill>(asset);
-		public static implicit operator MusicTrackDef(Asset asset) => (MusicTrackDef)GetObjectOrThrow<IMusicTrack>(asset);
+
+		public static implicit operator MusicTrackDef(Asset asset) =>
+			(MusicTrackDef)GetObjectOrThrow<IMusicTrack>(asset);
 
 
 		public static implicit operator SkillFamily(Asset asset) => (SkillFamily)GetObjectOrThrow<ISkillFamily>(asset);
@@ -353,7 +370,7 @@ namespace KamunagiOfChains.Data
 		public static implicit operator SkillFamily.Variant(Asset asset) =>
 			(SkillFamily.Variant)GetObjectOrThrow<IVariant>(asset);
 
-		public virtual void Initialize() {}
+		public virtual void Initialize() { }
 	}
 
 	public class AssetTypeInvalidException : Exception

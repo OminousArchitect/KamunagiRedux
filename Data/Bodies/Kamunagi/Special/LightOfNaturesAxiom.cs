@@ -116,7 +116,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			Sunmesh.gameObject.SetActive(true);
 			Sunmesh.material =
 				new Material(Sunmesh
-					.material); //todo this is probably why your remap ramps aren't working, do it the way Dragonyck does it like right here
+					.material); 
 			Sunmesh.material.SetTexture("_RemapTex",
 				LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
 			var sunP = chargeSunEffect.GetComponentInChildren<ParticleSystemRenderer>(true);
@@ -206,9 +206,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		GameObject IEffect.BuildObject()
 		{
-			var sunExplosion =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSunSpawn.prefab")!.InstantiateClone(
-					"SunExplosion", false);
+			var sunExplosion = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSunSpawn.prefab")!.InstantiateClone("TwinsSunExplosion", false);
 			var sunPP = LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset");
 			var sunePP = sunExplosion.GetComponentInChildren<PostProcessVolume>();
 			sunePP.profile = sunPP;
@@ -218,16 +216,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			suneL.range = 40;
 			suneL.color = new Color(0.45f, 0, 1);
 			var remapTex = LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png");
-			foreach (var r in sunExplosion.GetComponentsInChildren<ParticleSystemRenderer>())
+			foreach (ParticleSystemRenderer r in sunExplosion.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{
-				if (!r.material) continue;
-				var material = new Material(r.material);
-				r.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
-				r.material.SetTexture("_RemapTex", remapTex);
-				r.trailMaterial = material;
-				r.material = material;
+				if (r.material)
+				{
+					r.material = new Material(r.material);
+					r.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
+					r.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+					r.trailMaterial = r.material;
+				}
 			}
-
 			return sunExplosion;
 		}
 
@@ -434,7 +432,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				while (cycleIndex < num2)
 				{
 					HurtBox hurtBox = cycleTargets[cycleIndex];
-					if (hurtBox && hurtBox.healthComponent)
+					if (hurtBox)
 					{
 						CharacterBody body = hurtBox.healthComponent.body;
 						if ((body.bodyFlags & CharacterBody.BodyFlags.OverheatImmune) == CharacterBody.BodyFlags.None)
@@ -445,9 +443,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 							if (!Physics.Linecast(position, corePosition, out raycastHit, LayerIndex.world.mask,
 								    QueryTriggerInteraction.Ignore))
 							{
-								float num3 = Mathf.Max(1f, raycastHit.distance);
-								body.AddTimedBuff(overheatBuffDef,
-									overheatBuffDuration / num3); //the interesting stuff starts here
+								float num3 = Mathf.Max(1f, raycastHit.distance); body.AddTimedBuff(overheatBuffDef, overheatBuffDuration / num3); //the interesting stuff starts here
 								if (overheatApplyEffect)
 								{
 									EffectData effectData = new EffectData

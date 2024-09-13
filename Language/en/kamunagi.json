@@ -8,10 +8,10 @@
     "NINES_URURUU_UTILITY": "<color=#D0A1F8>Ururuu Utility</color>",
     "NINES_SARAANA_SPECIAL": "Saraana Final Strike",
     "NINES_URURUU_SPECIAL": "<color=#D0A1F8>Ururuu Final Strike</color>",
-    "NINES_SARAANA_EXTRA": "Saraana Extra",
+    "NINES_SARAANA_EXTRA": "Divine Skill",
     "NINES_URURUU_EXTRA": "<color=#D0A1F8>Ururuu Extra</color>",
 
-    "NINES_KAMUNAGI_BODY_NAME": "Kamunagi of Chains",
+    "NINES_KAMUNAGI_BODY_NAME": "Kamunagi",
     "NINES_KAMUNAGI_BODY_DESCRIPTION": "Description<color=#CCD3E0>\n\n< ! > \n\n< ! > \n\n< ! > \n\n< ! > \n\n</color>",
     "NINES_KAMUNAGI_BODY_SUBTITLE": "of Chains",
     "NINES_KAMUNAGI_BODY_LORE": "lorem ipsum",
@@ -25,8 +25,11 @@
     "NINES_KAMUNAGI_BODY_TWINSSHOCK_KEYWORD": "<style=cKeywordName><color=#000FFF>Shocking</color></style><style=cSub>Interrupts enemies and stuns them. The stun is removed if the target takes more than <style=cIsHealth>10%</style> of their maximum health in damage.",
     "NINES_KAMUNAGI_BODY_TWINSCURSE_KEYWORD": "<style=cKeywordName><color=#7700FF>Curse</color></style><style=cSub>Deals <style=cIsDamage>???% damage</style> over time.",
 
-    "WOSHISGHOST_NAME": "This is a token",
-
+    "WOSHISGHOST_NAME": "never trust the yaoi artist",
+	
+	"NINES_KAMUNAGI_BODY_OTHERPASSIVE_NAME": "Dark Ascension",
+	"NINES_KAMUNAGI_BODY_OTHERPASSIVE_DESCRIPTION": "Charge a directional dash",
+	  
     "NINES_KAMUNAGI_BODY_PASSIVE_NAME": "Ever Turning, Ever Swaying, Ever Drifting",
     "NINES_KAMUNAGI_BODY_PASSIVE_DESCRIPTION": "Ururuu and Saraana have independent loadouts and <style=cIsUtility>switch turns</style> upon reaching maximum <color=#EDA717>Zeal</color>.",
 
@@ -73,8 +76,8 @@
     "NINES_KAMUNAGI_BODY_EXTRA4_NAME": "Summon Shikigami: Mothmoth",
     "NINES_KAMUNAGI_BODY_EXTRA4_DESCRIPTION": "Call forth Mothmoth to buff your allies with <style=cIsHealth>lifesteal</style>.",
     "NINES_KAMUNAGI_BODY_EXTRA5_NAME": "Summon Shikigami: Spirits of Origin",
-    "NINES_KAMUNAGI_BODY_EXTRA5_DESCRIPTION": "Summon a ",
-    "NINES_KAMUNAGI_BODY_EXTRA6_NAME": "Summon: Blighted Tatari",
-    "NINES_KAMUNAGI_BODY_EXTRA6_DESCRIPTION": "(writing here)"
+    "NINES_KAMUNAGI_BODY_EXTRA5_DESCRIPTION": "Summon a primal spirit",
+    "NINES_KAMUNAGI_BODY_EXTRA6_NAME": "Mashiro's Blessing",
+    "NINES_KAMUNAGI_BODY_EXTRA6_DESCRIPTION": ""
   }
 }

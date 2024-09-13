@@ -22,7 +22,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		{
 			base.OnEnter();
 			hoverStateMachine = EntityStateMachine.FindByCustomName(gameObject, "Hover");
-			passiveSkill = skillLocator.FindSkill("SaraanaPassive");
+			passiveSkill = skillLocator.FindSkill("AscensionPassive");
 			var childLocator = GetModelChildLocator();
 			UBone = childLocator.FindChild("U Bone");
 			SBone = childLocator.FindChild("S Bone");

@@ -41,8 +41,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				};
 				summon.preSpawnSetupCallback += master =>
 				{
-					var whichWisp =
-						possibleElites[possibleElites.Length > 1 ? xoro.RangeInt(0, possibleElites.Length - 1) : 0];
+					var whichWisp = possibleElites[possibleElites.Length > 1 ? xoro.RangeInt(0, possibleElites.Length - 1) : 0]; 
 					master.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichWisp));
 					twinBehaviour.masterBehaviour.wispies[whichWisp] = master;
 				};
@@ -71,6 +70,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Weapon";
+			skill.skillName = "Extra Skill 5";
+			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
+			skill.icon = LoadAsset<Sprite>("n");
 			// TODO i dont know what else to put here
 			return skill;
 		}

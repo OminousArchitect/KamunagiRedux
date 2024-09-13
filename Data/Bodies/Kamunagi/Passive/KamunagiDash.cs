@@ -68,7 +68,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		public override void OnExit()
 		{
-			log.LogDebug("exiting channeldash");
+			//log.LogDebug("exiting channeldash");
 			base.OnExit();
 		}
 
@@ -105,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override void OnExit()
 		{
 			base.OnExit();
-			log.LogDebug("dash exiting" + new StackTrace());
+			//log.LogDebug("dash exiting" + new StackTrace());
 		}
 
 		private void CreateBlinkEffect(Vector3 origin)
@@ -132,18 +132,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			characterBody.isSprinting = true; //magic
 			flyVector = inputBank.interact.wasDown ? -flyRay.direction * speedMult : flyRay.direction * speedMult;
 
-			log.LogDebug("flyVector: " + flyVector);
+			//log.LogDebug("flyVector: " + flyVector);
 			characterMotor.rootMotion +=
 				flyVector * (moveSpeedStat * flyCurve.Evaluate(fixedAge / duration) * Time.deltaTime);
 
-			log.LogDebug("rootMotion: " + characterMotor.rootMotion);
+			//log.LogDebug("rootMotion: " + characterMotor.rootMotion);
 			
 			var motor = characterMotor as IPhysMotor;
 			var motorVelocityAuthority = motor.velocityAuthority;
 			motorVelocityAuthority.y = 0f;
 			motor.velocityAuthority = motorVelocityAuthority;
 
-			log.LogDebug("Velo:" + motor.velocityAuthority);
+			//log.LogDebug("Velo:" + motor.velocityAuthority);
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.PrioritySkill;
@@ -157,6 +157,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			skill.activationStateMachineName = "Hover";
 			skill.baseRechargeInterval = 5f;
 			skill.cancelSprintingOnActivation = false;
+			skill.skillName = "Other 1";
+			skill.skillNameToken = KamunagiAsset.tokenPrefix + "OTHERPASSIVE_NAME";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "OTHERPASSIVE_DESCRIPTION";
 			return skill;
 		}
 

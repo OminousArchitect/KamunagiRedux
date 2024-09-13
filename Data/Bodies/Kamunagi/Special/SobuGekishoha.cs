@@ -114,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					hitEffectPrefab = LoadAsset<GameObject>("RoR2/DLC1/MissileVoid/VoidImpactEffect.prefab"),
 					isCrit = RollCrit(),
 					radius = 0.2f,
-					procCoefficient = 0.3f,
+					procCoefficient = 0.35f,
 					smartCollision = true,
 					damageType = DamageType.Generic
 				}.Fire();

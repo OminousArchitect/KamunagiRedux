@@ -115,7 +115,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			impact.lifetime = 0.5f;
 			impact.impactEffect = GetGameObject<ReaverMusou, IEffect>();
 			//impact.blastRadius = 5f;
-			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<ReaverMusou, IProjectileGhost>();
+			var controller = proj.GetComponent<ProjectileController>();
+			controller.procCoefficient = 0.8f;
+			controller.ghostPrefab = GetGameObject<ReaverMusou, IProjectileGhost>();
 			proj.transform.GetChild(0).gameObject.SetActive(false);
 			return proj;
 		}

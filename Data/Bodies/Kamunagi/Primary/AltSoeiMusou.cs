@@ -19,7 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public float maxChargeTime = 3f;
 		public Transform muzzleTransform = null!;
 		public EffectManagerHelper? chargeEffectInstance;
-		public float projectileFireFrequency = 0.4f;
+		public float projectileFireFrequency = 0.2f;
 		public float ballDamageCoefficient = 6f;
 		public float stopwatch;
 		public bool charged;
@@ -93,9 +93,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			}
 
 			stopwatch += Time.deltaTime;
-			if (stopwatch < projectileFireFrequency) return;
 			//0.2 frequency is equal to 5 times per second
 			//0.1 would be 10 times per second
+			if (stopwatch < projectileFireFrequency) return;
 			stopwatch = 0;
 			FireProjectiles();
 		}
@@ -138,6 +138,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					.InstantiateClone("TwinsTrackingProjectile");
 			if (TryGetGameObject<AltSoeiMusou, IProjectileGhost>(out var ghost))
 				projectile.GetComponent<ProjectileController>().ghostPrefab = ghost;
+			projectile.GetComponent<ProjectileController>().procCoefficient = 0.6f;
 			//projectile.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 15f;
 			projectile.GetComponent<ProjectileDamage>().damage = 1f;
 			return projectile;
@@ -271,6 +272,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					.InstantiateClone("TwinsAltChargeBallProjectile");
 			if (TryGetGameObject<AltMusouChargeBall, IProjectileGhost>(out var ghost))
 				projectile.GetComponent<ProjectileController>().ghostPrefab = ghost;
+			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
 			return projectile;
 		}
 

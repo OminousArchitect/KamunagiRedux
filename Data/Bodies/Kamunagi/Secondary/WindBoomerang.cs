@@ -118,7 +118,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
 			var windDamage = proj.GetComponent<ProjectileDotZone>();
 			windDamage.damageCoefficient = 0.5f;
-			windDamage.overlapProcCoefficient = 0.2f;
+			windDamage.overlapProcCoefficient = 0.3f;
 			windDamage.fireFrequency = 25f;
 			windDamage.resetFrequency = 10f;
 			windDamage.impactEffect = GetGameObject<WindHitEffect, IEffect>();

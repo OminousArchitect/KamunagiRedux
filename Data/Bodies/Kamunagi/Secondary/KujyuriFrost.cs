@@ -51,7 +51,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				muzzleName = twinMuzzle,
 				isCrit = RollCrit(),
 				radius = 0.8f,
-				procCoefficient = 0.4f,
+				procCoefficient = 1f,
 				smartCollision = true,
 				falloffModel = BulletAttack.FalloffModel.None,
 				damageType = DamageType.Freeze2s

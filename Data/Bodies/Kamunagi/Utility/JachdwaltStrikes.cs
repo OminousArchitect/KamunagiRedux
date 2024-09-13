@@ -39,7 +39,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			bullet.hitEffectPrefab = null;
 			bullet.isCrit = base.RollCrit();
 			bullet.radius = 1.5f;
-			bullet.procCoefficient = 0.4f;
+			bullet.procCoefficient = 0.1f;
 			bullet.smartCollision = true;
 			bullet.falloffModel = BulletAttack.FalloffModel.None;
 
@@ -153,7 +153,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			public static float duration = 2f;
 			public static float damageCoefficient = 1.1f;
 			public static float damageFrequency = 7f;
-			public static float procCoefficient = 1f;
+			public static float procCoefficient = 0.5f;
 			public static string beginSoundString = "Play_merc_R_start";
 			public static string endSoundString = "Play_merc_R_end";
 			public static float maxRadius = 16f;

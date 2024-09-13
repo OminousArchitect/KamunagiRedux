@@ -54,8 +54,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			{
 				ProjectileManager.instance.FireProjectile(Asset.GetGameObject<MikazuchiLightningOrb, IProjectile>(),
 					centerPoint,
-					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) *
-					                                forward),
+					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
 					gameObject,
 					damageStat,
 					10f,
@@ -179,8 +178,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var projectile =
 				LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricOrbProjectile.prefab")!
 					.InstantiateClone("MikazuchiLightningOrbProjectile");
-			projectile.GetComponent<ProjectileController>().ghostPrefab =
-				GetGameObject<MikazuchiLightningOrb, IProjectileGhost>();
+			var controller = projectile.GetComponent<ProjectileController>();
+			controller.ghostPrefab = GetGameObject<MikazuchiLightningOrb, IProjectileGhost>();
+			controller.procCoefficient = 0.8f;
+			
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Shock5s;
 			var lightningImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			lightningImpact.impactEffect = GetGameObject<MikazuchiLightningStrikeSilent, IEffect>();

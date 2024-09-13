@@ -75,8 +75,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulder.prefab")!.InstantiateClone(
 					"BoulderProjectile", true);
 			projectile.transform.localScale = Vector3.one * 0.3f;
-			projectile.GetComponent<ProjectileController>().ghostPrefab =
-				GetGameObject<EnnakamuyEarth, IProjectileGhost>();
+			projectile.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<EnnakamuyEarth, IProjectileGhost>();
+			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
 			var boulderImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			boulderImpact.bonusBlastForce = new Vector3(20, 20, 20);
 			boulderImpact.blastRadius = 5f;

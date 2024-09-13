@@ -12,8 +12,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	{
 		public override int meterGain => 0;
 
-		public static GameObject MuzzlePrefab =
-			LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab")!;
+		public static GameObject MuzzlePrefab = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab")!;
 
 		public float duration;
 
@@ -77,7 +76,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigProjectile.prefab")!
 					.InstantiateClone("VoidProjectileSimple");
 			if (!TryGetGameObject<SoeiMusou, IProjectileGhost>(out var ghost)) throw new Exception("Ghost not loaded");
-			projectile.GetComponent<ProjectileController>().ghostPrefab = ghost;
+			var controller = projectile.GetComponent<ProjectileController>();
+			controller.ghostPrefab = ghost;
+			controller.procCoefficient = 1;
 			var rb = projectile.GetComponent<Rigidbody>();
 			rb.useGravity = true;
 			var antiGrav = projectile.AddComponent<AntiGravityForce>();

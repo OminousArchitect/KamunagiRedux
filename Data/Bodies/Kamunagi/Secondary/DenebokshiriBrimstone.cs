@@ -137,7 +137,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			proxBeam.attackRange = 15f; //radius
 			proxBeam.minAngleFilter = 0;
 			proxBeam.maxAngleFilter = 180;
-			proxBeam.procCoefficient = 0.3f;
+			proxBeam.procCoefficient = 0.9f;
 			proxBeam.damageCoefficient = 0.1f;
 			proxBeam.bounces = 0;
 			proxBeam.lightningType = (LightningOrb.LightningType)204957; // some random constant bullshit

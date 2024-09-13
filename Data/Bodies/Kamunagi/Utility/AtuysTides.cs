@@ -88,6 +88,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var projectileController = tidalProjectile.GetComponent<ProjectileController>();
 			projectileController.ghostPrefab = GetGameObject<AtuysTides, IProjectileGhost>();
 			projectileController.startSound = null;
+			projectileController.procCoefficient = 1.2f;
 			tidalProjectile.GetComponent<Rigidbody>().useGravity = false;
 			tidalProjectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
 			tidalProjectile.GetComponent<ProjectileImpactExplosion>().impactEffect =

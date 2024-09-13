@@ -16,6 +16,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public Transform SBone;
 		public EffectManagerHelper? chainsLeftInstance;
 		public EffectManagerHelper? chainsRightInstance;
+		public bool chainsSpawned;
 
 		public override void OnEnter()
 		{
@@ -30,19 +31,31 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			if (passiveSkill.IsReady() && chainsLeftInstance == null && chainsRightInstance == null)
+			if (!chainsSpawned && passiveSkill.IsReady())
 			{
-				chainsLeftInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, UBone,
+				if (chainsLeftInstance == null || !chainsLeftInstance)
+					chainsLeftInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, UBone,
 					data: new EffectData() { rootObject = UBone.gameObject, });
-				chainsRightInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, SBone,
-					data: new EffectData() { rootObject = SBone.gameObject });
+				if (chainsRightInstance == null || !chainsRightInstance)
+					chainsRightInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, SBone,
+						data: new EffectData() { rootObject = SBone.gameObject });
+				chainsSpawned = true;
 			}
-			else if (!passiveSkill.IsReady() && chainsLeftInstance != null && chainsRightInstance != null)
+			else if (chainsSpawned && !passiveSkill.IsReady())
 			{
-				chainsLeftInstance.ReturnToPool();
-				chainsLeftInstance = null;
-				chainsRightInstance.ReturnToPool();
-				chainsRightInstance = null;
+				if (chainsLeftInstance != null || chainsLeftInstance)
+				{
+					chainsLeftInstance!.ReturnToPool();
+					chainsLeftInstance = null;
+				}
+
+				if (chainsRightInstance != null || chainsRightInstance)
+				{
+					chainsRightInstance!.ReturnToPool();
+					chainsRightInstance = null;
+				}
+
+				chainsSpawned = false;
 			}
 		}
 

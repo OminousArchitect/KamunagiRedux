@@ -151,7 +151,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			private Transform modelTransform;
 			public static GameObject blinkPrefab;
 			public static float duration = 2f;
-			public static float damageCoefficient = 1.1f;
 			public static float damageFrequency = 7f;
 			public static float procCoefficient = 0.5f;
 			public static string beginSoundString = "Play_merc_R_start";
@@ -235,7 +234,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 							if (NetworkServer.active)
 							{
 								DamageInfo damageInfo = new DamageInfo();
-								damageInfo.damage = damageCoefficient * damageStat;
+								damageInfo.damage = 1.3f * damageStat;
 								damageInfo.attacker = base.gameObject;
 								damageInfo.procCoefficient = procCoefficient;
 								damageInfo.position = hurtBox2.transform.position;

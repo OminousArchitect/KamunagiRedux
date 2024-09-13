@@ -30,7 +30,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var blastAttack = new BlastAttack
 			{
 				attacker = gameObject,
-				baseDamage = damageStat * 8.5f,
+				baseDamage = damageStat * 7f,
 				baseForce = 1800,
 				crit = RollCrit(),
 				damageType = DamageType.Shock5s,
@@ -56,7 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					centerPoint,
 					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
 					gameObject,
-					damageStat,
+					damageStat * 4.5f,
 					10f,
 					RollCrit(),
 					speedOverride: xoro.RangeInt(13, 28)

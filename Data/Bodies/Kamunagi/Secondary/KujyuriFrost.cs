@@ -46,7 +46,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				origin = aimRay.origin,
 				aimVector = aimRay.direction,
 				maxSpread = 0.4f,
-				damage = damageStat * 1f,
+				damage = damageStat * 2.5f,
 				force = 155,
 				muzzleName = twinMuzzle,
 				isCrit = RollCrit(),
@@ -63,7 +63,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			new BlastAttack
 			{
 				attacker = gameObject,
-				baseDamage = damageStat * 1.65f,
+				baseDamage = damageStat * 1.75f,
 				baseForce = 200f,
 				crit = RollCrit(),
 				damageType = DamageType.SlowOnHit | DamageType.Stun1s | DamageType.Freeze2s,

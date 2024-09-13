@@ -82,7 +82,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			boulderImpact.blastRadius = 5f;
 			boulderImpact.childrenProjectilePrefab = GetGameObject<EnnakamuyEarthChild, IProjectile>();
 			boulderImpact.blastDamageCoefficient = 1f;
-			boulderImpact.childrenDamageCoefficient = 0.5f;
+			boulderImpact.childrenDamageCoefficient = 0.43f;
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
 			projectile.GetComponent<Rigidbody>().useGravity = false;
 			projectile.GetComponent<SphereCollider>().radius = 3.5f;

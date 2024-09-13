@@ -38,7 +38,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 						crit = RollCrit(),
 						projectilePrefab = Asset.GetGameObject<ReaverMusou, IProjectile>(),
 						owner = gameObject,
-						damage = characterBody.damage * 3.1f,
+						damage = characterBody.damage * 2.8f,
 						force = 200
 					});
 					return false;

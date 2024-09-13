@@ -43,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				aimRay.origin,
 				Util.QuaternionSafeLookRotation(aimRay.direction),
 				gameObject,
-				damageStat * 1.2f,
+				damageStat * 3f,
 				20f,
 				RollCrit(),
 				speedOverride: 80f
@@ -126,7 +126,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			gImpact.impactEffect = GetGameObject<AtuysTidesImpact, IEffect>();
 			gImpact.fireChildren = true;
 			gImpact.childrenCount = 1;
-			gImpact.childrenDamageCoefficient = 1;
+			gImpact.childrenDamageCoefficient = 1.7f;
 			gImpact.childrenProjectilePrefab = GetGameObject<AtuysTides, IProjectile>();
 			luckyTidalProjectile.GetComponent<ProjectileController>().ghostPrefab =
 				GetGameObject<AtuysTides, IProjectileGhost>();

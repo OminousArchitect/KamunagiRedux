@@ -37,7 +37,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 			if (projectilesFired > Mathf.FloorToInt(duration / totalProjectileCount * fixedAge)) return;
 			var aimRay = GetAimRay();
-			var wasLucky = Util.CheckRoll(critStat + 17f, characterBody.master);
+			bool wasLucky = Util.CheckRoll(critStat + 17f, characterBody.master);
 			ProjectileManager.instance.FireProjectile(
 				projectilePrefab = wasLucky ? luckyProjectilePrefab : projectilePrefab,
 				aimRay.origin,
@@ -106,7 +106,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY1_DESCRIPTION";
 			skill.activationState = new SerializableEntityStateType(typeof(AtuysTides));
 			skill.icon = LoadAsset<Sprite>("bundle:Atuy");
-			skill.activationStateMachineName = "Weapon";
+			skill.activationStateMachineName = "Jet";
 			skill.baseRechargeInterval = 4f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
@@ -214,8 +214,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					"TwinsGeyserEruptionProjectile", true);
 			/*geyserEruptionProjectile.GetComponent<ProjectileController>().ghostPrefab = geyserEruptionEffect;*/
 			//These kinds of projectiles don't have ghosts?????? Why are they even projectiles then???? This is just functionally a blast attack???
-			tidalEruptionProjectile.GetComponent<ProjectileImpactExplosion>().impactEffect =
-				GetGameObject<AtuysTidesEruption, IEffect>();
+			tidalEruptionProjectile.GetComponent<ProjectileImpactExplosion>().impactEffect = GetGameObject<AtuysTidesEruption, IEffect>();
 			var gParticles = tidalEruptionProjectile.GetComponentsInChildren<ParticleSystemRenderer>();
 			gParticles[0].enabled = false;
 			gParticles[1].enabled = false;

@@ -281,9 +281,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			{
 				var skill = bodyPrefab.AddComponent<GenericSkill>();
 				var family = (SkillFamily)skillFamilyPassive;
-				skill.hideInCharacterSelect = family.variants.Length == 1;
-				skill.skillName = "SaraanaPassive";
+				skill.skillName = "AscensionPassive";
 				skill._skillFamily = family;
+				skill.hideInCharacterSelect = true;
 			}
 
 			skillLocator.passiveSkill = new SkillLocator.PassiveSkill

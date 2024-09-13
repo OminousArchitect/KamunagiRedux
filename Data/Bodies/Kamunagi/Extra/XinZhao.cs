@@ -113,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		SkillDef ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
-			skill.skillName = "Extra Skill 4";
+			skill.skillName = "Extra Skill 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA3_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle:no-type");

@@ -6,7 +6,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	{
 		public Type[] GetSkillAssets() => new[] { typeof(SoeiMusou), typeof(ReaverMusou), typeof(AltSoeiMusou) };
 
-		public string GetNameToken(GenericSkill skill) =>
-			skill.skillName == "SaraanaPrimary" ? "NINES_SARAANA_PRIMARY" : "NINES_URURUU_PRIMARY";
+		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaPrimary" ? "NINES_SARAANA_PRIMARY" : "NINES_URURUU_PRIMARY";
 	}
 }

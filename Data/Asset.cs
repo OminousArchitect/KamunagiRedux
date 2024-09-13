@@ -310,6 +310,22 @@ namespace KamunagiOfChains.Data
 			});
 		}
 
+		[HarmonyILManipulator, HarmonyPatch(typeof(LoadoutPanelController), nameof(LoadoutPanelController.Rebuild))]
+		public static void FixLoadOutPanelControllerShowingHiddenSkillsInLoadOutTab(ILContext il)
+		{
+			var c = new ILCursor(il);
+			ILLabel? jumpTarget = null;
+			if (!c.TryGotoNext(MoveType.After, x => x.MatchBr(out jumpTarget), x => x.MatchLdloc(out _), x=>x.MatchLdloc(out _), x => x.MatchCallOrCallvirt(out _), x => x.MatchStloc(out _)))
+			{
+				log.LogError("Failed to match il in loadout panel hidden skills fix.");
+				return;
+			}
+			c.Index--;
+			c.Emit(OpCodes.Dup);
+			c.Index++;
+			c.Emit(OpCodes.Ldfld, typeof(GenericSkill).GetField(nameof(GenericSkill.hideInCharacterSelect)));
+			c.Emit(OpCodes.Brtrue, jumpTarget!.Target.Previous.Previous.Previous.Previous); // jump to where the index increases
+		}
 		public static explicit operator ItemDef(Asset asset) => (ItemDef)GetObjectOrThrow<IItem>(asset);
 		public static implicit operator ItemIndex(Asset asset) => ((ItemDef)GetObjectOrThrow<IItem>(asset)).itemIndex;
 

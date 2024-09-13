@@ -283,7 +283,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				var family = (SkillFamily)skillFamilyPassive;
 				skill.skillName = "AscensionPassive";
 				skill._skillFamily = family;
-				skill.hideInCharacterSelect = true;
+				skill.hideInCharacterSelect = family.variants.Length == 1;
 			}
 
 			skillLocator.passiveSkill = new SkillLocator.PassiveSkill

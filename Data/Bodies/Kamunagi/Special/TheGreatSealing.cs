@@ -282,7 +282,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			onkamiObelisk.transform.SetParent(scaleChild);
 			onkamiObelisk.transform.localScale = Vector3.one * 0.6f;
 			onkamiObelisk.transform.localPosition = ghost.transform.position;
-			onkamiObelisk.transform.position = new Vector3(0f, -10f, 0f); //todo obelisk second (2) position
+			onkamiObelisk.transform.position = new Vector3(0f, -10f, 0f);
 
 			var onkamiMeshR = onkamiObelisk.GetComponent<MeshRenderer>();
 			onkamiMeshR.materials = TheGreatSealing.onKamiMats; //this is how you make a completely new array
@@ -372,7 +372,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sealingMeshObject.GetComponent<MeshFilter>().mesh = sealingObelisk;
 			sealingMeshObject.transform.rotation = obeliskChildRotation; //I should get an award for this
 			sealingMeshObject.transform.position = new Vector3(sealingMeshObject.transform.position.x, -8f,
-				sealingMeshObject.transform.position.z); //todo obelisk third (3) position
+				sealingMeshObject.transform.position.z);
 			//the detonation and priming obelisk use the same Vector3
 			sealingMeshObject.GetComponent<MeshRenderer>().materials = TheGreatSealing.onKamiMats;
 			sealingMeshObject.GetComponent<ObjectScaleCurve>().baseScale = Vector3.one * 0.7f;

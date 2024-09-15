@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using EntityStates.GrandParent;
+using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -73,6 +74,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Death;
 	}
 
+	[HarmonyPatch]
 	public class LightOfNaturesAxiom : Asset, ISkill, IEffect
 	{
 		SkillDef ISkill.BuildObject()
@@ -241,6 +243,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return buffDef;
 		}
 
+		[HarmonyPrefix, HarmonyPatch(typeof(CharacterBody),  nameof(CharacterBody.AddTimedBuff), typeof(BuffDef), typeof(float) )]
+		private static void AddTimedBuffHook(CharacterBody __instance, BuffDef buffDef, float duration)
+		{
+			if (!TryGetAsset<NaturesAxiom, IBuff>(out var customOverheat)) return;
+			var overheatDef = (BuffDef)customOverheat;
+			if (buffDef != overheatDef) return;
+			foreach (var timedBuff in __instance.timedBuffs)
+			{
+				if (timedBuff.buffIndex != overheatDef.buffIndex) continue;
+				if (!(timedBuff.timer < duration)) continue;
+				timedBuff.timer = duration; 
+				//this is making sure all stacks of the
+                //buff are refreshed, which would be the opposite behaviour of Collapse
+			}
+		}
+		
 		public static DotController.DotIndex CurseIndex;
 
 		public override void Initialize()

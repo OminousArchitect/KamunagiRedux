@@ -56,7 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					centerPoint,
 					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
 					gameObject,
-					damageStat * 4.5f,
+					damageStat,
 					10f,
 					RollCrit(),
 					speedOverride: xoro.RangeInt(13, 28)
@@ -186,10 +186,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var lightningImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			lightningImpact.impactEffect = GetGameObject<MikazuchiLightningStrikeSilent, IEffect>();
 			lightningImpact.childrenProjectilePrefab = GetGameObject<MikazuchiLightningSeeker, IProjectile>();
-			lightningImpact.childrenDamageCoefficient = 1.7f;
+			lightningImpact.childrenDamageCoefficient = 0.5f;
 			var lightpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
-			lightpact.blastDamageCoefficient = 5f;
+			lightpact.blastDamageCoefficient = 4.5f;
 			return projectile;
 		}
 

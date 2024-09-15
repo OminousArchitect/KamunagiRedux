@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace KamunagiOfChains.Data
 {
-	public class BossMusic : Asset, IMusicTrack //
+	public class BossMusic //: Asset, IMusicTrack //
 	{
-		MusicTrackDef IMusicTrack.BuildObject()
+		/*MusicTrackDef IMusicTrack.BuildObject()
 		{
 			var customMusicData = new SoundAPI.Music.CustomMusicData();
 			customMusicData.BanksFolderPath = pluginPath;
@@ -33,6 +33,6 @@ namespace KamunagiOfChains.Data
 			var sceneDef = LoadAsset<SceneDef>("RoR2/DLC1/ancientloft/ancientloft.asset");
 			customMusicData.SceneDefToTracks.Add(sceneDef, new List<SoundAPI.Music.MainAndBossTracks>() { new SoundAPI.Music.MainAndBossTracks(null, musicTrackDef) });
 			return musicTrackDef;
-		}
+		}*/
 	}
 }

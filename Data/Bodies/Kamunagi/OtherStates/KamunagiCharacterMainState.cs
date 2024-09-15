@@ -62,16 +62,25 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void ProcessJump()
 		{
 			base.ProcessJump();
-			
-			if (!hasInputBank || characterMotor.isGrounded || (characterMotor as IPhysMotor).velocity.y > 0) return;
-			if (inputBank.jump.justPressed &&
-			    passiveSkill.ExecuteIfReady())
+			if (characterMotor.isGrounded)
 			{
-				return;
+				base.ProcessJump();
 			}
+			else
+			{
+				if (hasInputBank && (characterMotor as IPhysMotor).velocity.y <= 0) // Is falling
+				{
+					if (inputBank.jump.justPressed &&
+					    passiveSkill.ExecuteIfReady())
+					{
+						return;
+					}
 
-			if (inputBank.jump.down)
-				hoverStateMachine.SetInterruptState(new KamunagiHoverState(), InterruptPriority.Any);
+					if (inputBank.jump.down)
+						hoverStateMachine.SetInterruptState(new KamunagiHoverState(), InterruptPriority.Any);
+				}
+				base.ProcessJump();
+			}
 		}
 	}
 

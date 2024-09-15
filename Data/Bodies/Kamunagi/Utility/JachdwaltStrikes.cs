@@ -290,12 +290,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					huntressFlashExpanded.originalMaterial = purpleStuff;
 					huntressFlashExpanded.AddToCharacterModel(modelTransform.GetComponent<CharacterModel>());
 				}
-				
+
 				if (NetworkServer.active)
 				{
 					base.characterBody.RemoveBuff(RoR2Content.Buffs.HiddenInvincibility);
-					base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, lingeringInvincibilityDuration);
+					base.characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility,
+						lingeringInvincibilityDuration);
 				}
+
 				Util.PlaySound(endSoundString, base.gameObject);
 				base.OnExit();
 			}

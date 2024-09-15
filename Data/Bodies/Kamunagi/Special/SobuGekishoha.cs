@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -29,14 +30,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			characterMotor.useGravity = false;
 			centerFarMuzzle = FindModelChild("MuzzleCenterFar");
 			centerMuzzle = FindModelChild("MuzzleCenter");
+
 			Vector3 additive = characterDirection.forward * 0.5f;
 			Vector3 vectorMath = centerMuzzle.position + additive;
-			darkSigilEffect = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha.DarkSigil, IEffect>(), centerFarMuzzle, true);
-			tracerInstance = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha, IEffect>(), centerFarMuzzle, true);
+			darkSigilEffect =
+				EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha.DarkSigil, IEffect>(),
+					centerFarMuzzle, true);
+			tracerInstance = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha, IEffect>(),
+				centerFarMuzzle, true);
 			tracerInstance.transform.localScale = new Vector3(1, 1, 0.03f * 180);
-			voidSphereMuzzle = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha.VoidSphere, IEffect>(), centerFarMuzzle, true);
+			voidSphereMuzzle =
+				EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha.VoidSphere, IEffect>(),
+					centerFarMuzzle, true);
 			voidSphereMuzzle.transform.localRotation = Quaternion.identity;
 			voidSphereMuzzle.transform.localScale = Vector3.one;
+
+			characterBody.AddBuff(Asset.GetAsset<SobuGekishoha>());
 			var component = voidSphereMuzzle.GetComponent<ScaleParticleSystemDuration>();
 			if (component)
 			{
@@ -44,33 +53,27 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				for (var i = 0; i < component.particleSystems.Length; i++)
 				{
 					var p = component.particleSystems[i];
-					if (p && i != 2 && i != 3)
-					{
-						var main = p.main;
-						main.duration = duration;
-						main.startLifetime = duration;
-						var scale = p.sizeOverLifetime;
-						scale.enabled = false;
-					}
+					if (!p || i == 2 || i == 3) continue;
+					var main = p.main;
+					main.duration = duration;
+					main.startLifetime = duration;
+					var scale = p.sizeOverLifetime;
+					scale.enabled = false;
 				}
 			}
 
-			if (cameraTargetParams)
-			{
-				request = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
-			}
+			if (!cameraTargetParams) return;
+			request = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
 		}
 
 		public override void Update()
 		{
 			base.Update();
 			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
-			if (tracerInstance && centerFarMuzzle)
-			{
-				var aimRay = GetAimRay();
-				tracerInstance.transform.position = centerFarMuzzle.position;
-				tracerInstance.transform.forward = aimRay.direction;
-			}
+			if (!tracerInstance || !centerFarMuzzle) return;
+			var aimRay = GetAimRay();
+			tracerInstance.transform.position = centerFarMuzzle.position;
+			tracerInstance.transform.forward = aimRay.direction;
 		}
 
 		public override void FixedUpdate()
@@ -93,32 +96,30 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		private void Fire()
 		{
-			if (isAuthority)
+			if (!isAuthority) return;
+			var aimRay = GetAimRay();
+			new BulletAttack
 			{
-				var aimRay = GetAimRay();
-				new BulletAttack
-				{
-					maxDistance = 180f,
-					stopperMask = LayerIndex.noCollision.mask,
-					owner = gameObject,
-					weapon = gameObject,
-					origin = aimRay.origin,
-					aimVector = aimRay.direction,
-					minSpread = 0,
-					maxSpread = 0.4f,
-					bulletCount = 1U,
-					damage = damageStat * damageCoefficient,
-					force = 155,
-					tracerEffectPrefab = null,
-					muzzleName = twinMuzzle,
-					hitEffectPrefab = LoadAsset<GameObject>("RoR2/DLC1/MissileVoid/VoidImpactEffect.prefab"),
-					isCrit = RollCrit(),
-					radius = 0.2f,
-					procCoefficient = 0.35f,
-					smartCollision = true,
-					damageType = DamageType.Generic
-				}.Fire();
-			}
+				maxDistance = 180f,
+				stopperMask = LayerIndex.noCollision.mask,
+				owner = gameObject,
+				weapon = gameObject,
+				origin = aimRay.origin,
+				aimVector = aimRay.direction,
+				minSpread = 0,
+				maxSpread = 0.4f,
+				bulletCount = 1U,
+				damage = damageStat * damageCoefficient,
+				force = 155,
+				tracerEffectPrefab = null,
+				muzzleName = twinMuzzle,
+				hitEffectPrefab = LoadAsset<GameObject>("RoR2/DLC1/MissileVoid/VoidImpactEffect.prefab"),
+				isCrit = RollCrit(),
+				radius = 0.2f,
+				procCoefficient = 0.35f,
+				smartCollision = true,
+				damageType = DamageType.Generic
+			}.Fire();
 		}
 
 		public override void OnExit()
@@ -128,6 +129,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				request.Dispose();
 			}
 
+			characterBody.RemoveBuff(Asset.GetAsset<SobuGekishoha>());
 			Util.PlaySound(EntityStates.VoidRaidCrab.SpinBeamWindDown.enterSoundString, gameObject);
 			characterMotor.useGravity = true;
 			if (tracerInstance)
@@ -151,7 +153,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.PrioritySkill;
 	}
 
-	public class SobuGekishoha : Asset, ISkill, IEffect
+	[HarmonyPatch]
+	public class SobuGekishoha : Asset, ISkill, IEffect, IBuff
 	{
 		SkillDef ISkill.BuildObject()
 		{
@@ -173,11 +176,25 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return skill;
 		}
 
+		BuffDef IBuff.BuildObject()
+		{
+			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
+			buffDef.name = "TwinsArmorBuff";
+			buffDef.buffColor = Colors.twinsDarkColor;
+			buffDef.canStack = false;
+			buffDef.isDebuff = false;
+			buffDef.iconSprite = LoadAsset<Sprite>("RoR2/Junk/Common/texBuffBodyArmorIcon.tif");
+			buffDef.isHidden = false;
+			return buffDef;
+		}
+
 		Type[] ISkill.GetEntityStates() => new[] { typeof(SobuGekishohaState) };
 
 		GameObject IEffect.BuildObject()
 		{
-			var tracer = LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamVFX.prefab")!.InstantiateClone("VoidTracer", false);
+			var tracer =
+				LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamVFX.prefab")!.InstantiateClone(
+					"VoidTracer", false);
 			var particles = tracer.GetComponentsInChildren<ParticleSystemRenderer>();
 			particles[particles.Length - 1].transform.localScale = new Vector3(0, 0, 0.25f);
 			UnityEngine.Object.Destroy(tracer.GetComponentInChildren<ShakeEmitter>());
@@ -189,27 +206,39 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			rarted.GetComponent<PostProcessVolume>().blendDistance = 19f;
 			return tracer;
 		}
-
-		public class DarkSigil : Asset, IEffect
+		
+		[HarmonyPostfix, HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.RecalculateStats))]
+		private static void RecalcStats(CharacterBody __instance)
 		{
-			GameObject IEffect.BuildObject()
+			if (!__instance) return;
+			if (__instance.HasBuff(GetAsset<SobuGekishoha>()))
 			{
-				var effect = LoadAsset<GameObject>("bundle:LaserMuzzle.prefab");
-				effect.transform.localScale = Vector3.one * 0.6f;
-				return effect;
-			}
-		}
-
-		public class VoidSphere : Asset, IEffect
-		{
-			GameObject IEffect.BuildObject()
-			{
-				var effect =
-					LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamChargeUp.prefab")!
-						.InstantiateClone("VoidTracerSphere", false);
-				effect.GetOrAddComponent<Light>().range = 30f;
-				return effect;
+				__instance.armor += 80f;
 			}
 		}
 	}
+
+	public class DarkSigil : Asset, IEffect
+	{
+		GameObject IEffect.BuildObject()
+		{
+			var effect = LoadAsset<GameObject>("bundle:LaserMuzzle.prefab");
+			effect.transform.localScale = Vector3.one * 0.6f;
+			return effect;
+		}
+
+	}
+
+	public class VoidSphere : Asset, IEffect
+	{
+		GameObject IEffect.BuildObject()
+		{
+			var effect =
+				LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamChargeUp.prefab")!
+					.InstantiateClone("VoidTracerSphere", false);
+			effect.GetOrAddComponent<Light>().range = 30f;
+			return effect;
+		}
+	}
 }
+	

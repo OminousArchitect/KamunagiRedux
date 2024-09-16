@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -55,6 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 	}
 
+	[HarmonyPatch]
 	public class TheGreatSealing : Asset, ISkill, IEffect
 	{
 		public static Material[] onKamiMats;
@@ -106,6 +108,40 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 
 		Type[] ISkill.GetEntityStates() => new[] { typeof(TheGreatSealingState) };
+		
+		public static DamageAPI.ModdedDamageType Uitsalnemetia;
+
+		public override void Initialize()
+		{
+			Uitsalnemetia = DamageAPI.ReserveDamageType();
+		}
+
+		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
+		{
+			if (damageInfo.HasModdedDamageType(Uitsalnemetia))
+			{
+				var fractionOfHealth = __instance.fullHealth * 0.3f;
+				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
+
+				if (__instance.health >= fractionOfHealth)
+				{
+					damageInfo.damage = attackerBody.damage * 6.5f;
+				}
+
+				else if (__instance.health <= fractionOfHealth)
+				{
+					damageInfo.damageType = DamageType.VoidDeath;
+					EffectManager.SpawnEffect(
+						LoadAsset<GameObject>("RoR2/DLC1/CritGlassesVoid/CritGlassesVoidExecuteEffect.prefab"),
+						new EffectData
+						{
+							origin = __instance.body.corePosition,
+							rotation = Util.QuaternionSafeLookRotation(attackerBody.characterDirection.forward)
+						}, false);
+				}
+			}
+		}
 
 		SkillDef ISkill.BuildObject()
 		{

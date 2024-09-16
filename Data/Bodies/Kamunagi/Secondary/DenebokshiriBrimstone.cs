@@ -84,6 +84,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
+	[HarmonyPatch]
 	public class DenebokshiriBrimstone : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
 	{
 		SkillDef ISkill.BuildObject()
@@ -122,7 +123,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			minisunController.ghostPrefab = GetGameObject<DenebokshiriBrimstone, IProjectileGhost>();
 			minisunController.flightSoundLoop = null;
 			minisunController.startSound = "Play_fireballsOnHit_impact";
-			//proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Denebokshiri); //todo ModdedDamageTypes later
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Denebokshiri);
 			var minisunSimple = proj.AddComponent<ProjectileSimple>();
 			minisunSimple.desiredForwardSpeed = 20f;
 			minisunSimple.lifetime = 5f;
@@ -184,6 +185,27 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			scale.overallCurve = AnimationCurve.Linear(0, 0, 1, 1);
 			effect.transform.GetChild(1).gameObject.SetActive(true);
 			return effect;
+		}
+
+		public static DamageAPI.ModdedDamageType Denebokshiri;
+
+		public override void Initialize()
+		{
+			Denebokshiri = DamageAPI.ReserveDamageType();
+		}
+		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
+		{
+			if (damageInfo.HasModdedDamageType(Denebokshiri))
+			{
+				DotController.InflictDot(
+					__instance.gameObject,
+					damageInfo.attacker,
+					DotController.DotIndex.StrongerBurn,
+					2f,
+					damageInfo.damage * 0.4f
+				);
+			}
 		}
 	}
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{A98E73E0-3EA0-4941-9150-3BAABFA1648D}" SchemaVersion="119">
+	<SoundBanks>
+		<WorkUnit Name="Default Work Unit" ID="{A98E73E0-3EA0-4941-9150-3BAABFA1648D}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="KamunagiMusic" ID="{A371FE6E-D680-4A3C-B732-6CEB6831EC8F}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Default Work Unit" ID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}" WorkUnitID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Default Work Unit" ID="{13F79B02-D27E-4861-92DF-9541D6ADA36D}" WorkUnitID="{13F79B02-D27E-4861-92DF-9541D6ADA36D}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>

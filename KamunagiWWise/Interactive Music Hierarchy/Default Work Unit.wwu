@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}" SchemaVersion="119">
+	<InteractiveMusic>
+		<WorkUnit Name="Default Work Unit" ID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}" PersistMode="Standalone">
+			<ChildrenList>
+				<MusicSwitchContainer Name="KamunagiBossMusic" ID="{50C56D57-4D52-4DAE-8C61-76E41AD5C82D}" ShortID="775195667">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+						</Reference>
+						<Reference Name="TransitionRoot">
+							<Custom>
+								<MusicTransition Name="Root" ID="{9BD976F4-F086-4867-B89E-5176AE4B264F}">
+									<PropertyList>
+										<Property Name="IsFolder" Type="bool" Value="True"/>
+									</PropertyList>
+									<ChildrenList>
+										<MusicTransition Name="Transition" ID="{A14A5891-7B8E-4F3F-BC02-442341726976}">
+											<PropertyList>
+												<Property Name="EnableDestinationFadeIn" Type="bool" Value="True"/>
+												<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+												<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+												<Property Name="PlayDestinationPreEntry" Type="bool" Value="False"/>
+												<Property Name="PlaySourcePostExit" Type="bool" Value="False"/>
+											</PropertyList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</ChildrenList>
+									<TransitionInfo/>
+								</MusicTransition>
+							</Custom>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<MusicPlaylistContainer Name="Playing" ID="{69A3C54A-544A-4A14-A847-1920BEC5ECAC}" ShortID="901194324">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+								</Reference>
+								<Reference Name="PlaylistRoot">
+									<Custom>
+										<MusicPlaylistItem Name="" ID="{2B7F2FF2-1874-4135-98CB-A8B3EAE4055A}" ShortID="262653538">
+											<PropertyList>
+												<Property Name="LoopCount" Type="int16" Value="0"/>
+												<Property Name="PlayMode" Type="int16" Value="2"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{8A653B76-9321-47E2-933A-4779D9FE9DED}" ShortID="988695206">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Segment">
+															<ObjectRef Name="Ikusamanui" ID="{8255C3F8-7E18-4E4D-827A-537D09046758}" WorkUnitID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}"/>
+														</Reference>
+													</ReferenceList>
+												</MusicPlaylistItem>
+												<MusicPlaylistItem Name="" ID="{BED078AB-5D2B-4946-BBC6-15687DAE5743}" ShortID="451576423">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Segment">
+															<ObjectRef Name="Ranse no Tourai" ID="{F24B685B-C05C-4928-9F48-34E239A7FC91}" WorkUnitID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}"/>
+														</Reference>
+													</ReferenceList>
+												</MusicPlaylistItem>
+												<MusicPlaylistItem Name="" ID="{001384C9-0BB5-413A-A7B9-8592B5FAA49F}" ShortID="858682181">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Segment">
+															<ObjectRef Name="Senran" ID="{2340B7F2-F99C-4772-BB6A-2FD5A4CA2E21}" WorkUnitID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}"/>
+														</Reference>
+													</ReferenceList>
+												</MusicPlaylistItem>
+											</ChildrenList>
+										</MusicPlaylistItem>
+									</Custom>
+								</Reference>
+								<Reference Name="TransitionRoot">
+									<Custom>
+										<MusicTransition Name="Root" ID="{D75C4901-A8AB-4B16-B534-65E7F57132F2}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{6E79ED2F-C3D0-41A0-94E1-47000559A093}">
+													<TransitionInfo/>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</Custom>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicSegment Name="Ikusamanui" ID="{8255C3F8-7E18-4E4D-827A-537D09046758}" ShortID="698671856">
+									<PropertyList>
+										<Property Name="EndPosition" Type="Real64" Value="99218.8662131519"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicTrack Name="Ikusamanui" ID="{304A3051-5207-4AB0-A894-4C6B7706EAD7}" ShortID="1072542866">
+											<PropertyList>
+												<Property Name="IsStreamingEnabled" Type="bool">
+													<ValueList>
+														<Value>True</Value>
+													</ValueList>
+												</Property>
+												<Property Name="IsZeroLatency" Type="bool">
+													<ValueList>
+														<Value>True</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+												</Reference>
+												<Reference Name="TransitionRoot">
+													<Custom>
+														<MusicTransition Name="Root" ID="{3E31B4CD-CEE1-4215-9B0E-DEB1FC46CF06}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</Custom>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Ikusamanui" ID="{A5AF8779-88ED-428C-B724-20479E6CB959}">
+													<Language>SFX</Language>
+													<AudioFile>Ikusamanui.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="496611040"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Sequences">
+													<Reference>
+														<Local>
+															<MusicTrackSequence Name="" ID="{83FBCB87-5B57-424F-9D30-6C9BB67EC768}">
+																<ObjectLists>
+																	<ObjectList Name="Clips">
+																		<Reference>
+																			<Local>
+																				<MusicClip Name="Ikusamanui" ID="{427680CC-E938-4D3B-BB17-C4A671D8506C}">
+																					<PropertyList>
+																						<Property Name="EndTrimOffset" Type="Real64" Value="99218.8662131519"/>
+																						<Property Name="FadeInMode" Type="int16" Value="0"/>
+																						<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																					</PropertyList>
+																					<AudioSourceRef Name="Ikusamanui" ID="{A5AF8779-88ED-428C-B724-20479E6CB959}"/>
+																				</MusicClip>
+																			</Local>
+																		</Reference>
+																	</ObjectList>
+																</ObjectLists>
+															</MusicTrackSequence>
+														</Local>
+													</Reference>
+												</ObjectList>
+											</ObjectLists>
+										</MusicTrack>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Cues">
+											<Reference>
+												<Local>
+													<MusicCue Name="Entry Cue" ID="{8B4B095D-036E-4CCF-A72B-87E06B9D70E8}"/>
+												</Local>
+											</Reference>
+											<Reference>
+												<Local>
+													<MusicCue Name="Exit Cue" ID="{92EC7552-3232-4B00-AF49-00786CFACB66}">
+														<PropertyList>
+															<Property Name="CueType" Type="int16" Value="1"/>
+															<Property Name="TimeMs" Type="Real64" Value="99218.8662131519"/>
+														</PropertyList>
+													</MusicCue>
+												</Local>
+											</Reference>
+										</ObjectList>
+									</ObjectLists>
+								</MusicSegment>
+								<MusicSegment Name="Ranse no Tourai" ID="{F24B685B-C05C-4928-9F48-34E239A7FC91}" ShortID="775282346">
+									<PropertyList>
+										<Property Name="EndPosition" Type="Real64" Value="179977.868480726"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicTrack Name="Ranse no Tourai" ID="{99CC95CE-2EAF-490C-9136-70748AE3315F}" ShortID="541470009">
+											<PropertyList>
+												<Property Name="IsStreamingEnabled" Type="bool">
+													<ValueList>
+														<Value>True</Value>
+													</ValueList>
+												</Property>
+												<Property Name="IsZeroLatency" Type="bool">
+													<ValueList>
+														<Value>True</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+												</Reference>
+												<Reference Name="TransitionRoot">
+													<Custom>
+														<MusicTransition Name="Root" ID="{902C8D74-9E54-4D19-96F7-75DC8CB8CE20}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</Custom>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Ranse no Tourai" ID="{29111E6A-7139-46EB-B98B-7B9EF632EEDF}">
+													<Language>SFX</Language>
+													<AudioFile>Ranse no Tourai.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="576479314"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Sequences">
+													<Reference>
+														<Local>
+															<MusicTrackSequence Name="" ID="{0A296718-9550-4BBF-858A-ED27D3AC1946}">
+																<ObjectLists>
+																	<ObjectList Name="Clips">
+																		<Reference>
+																			<Local>
+																				<MusicClip Name="Ranse no Tourai" ID="{AA9CD977-3A58-4053-952B-3A31D287D989}">
+																					<PropertyList>
+																						<Property Name="EndTrimOffset" Type="Real64" Value="179977.868480726"/>
+																						<Property Name="FadeInMode" Type="int16" Value="0"/>
+																						<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																					</PropertyList>
+																					<AudioSourceRef Name="Ranse no Tourai" ID="{29111E6A-7139-46EB-B98B-7B9EF632EEDF}"/>
+																				</MusicClip>
+																			</Local>
+																		</Reference>
+																	</ObjectList>
+																</ObjectLists>
+															</MusicTrackSequence>
+														</Local>
+													</Reference>
+												</ObjectList>
+											</ObjectLists>
+										</MusicTrack>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Cues">
+											<Reference>
+												<Local>
+													<MusicCue Name="Entry Cue" ID="{2B6B070B-713D-4745-99B9-3407157DD00D}"/>
+												</Local>
+											</Reference>
+											<Reference>
+												<Local>
+													<MusicCue Name="Exit Cue" ID="{3AD63727-01C5-4CFF-95C0-9012A55B4CFC}">
+														<PropertyList>
+															<Property Name="CueType" Type="int16" Value="1"/>
+															<Property Name="TimeMs" Type="Real64" Value="179977.868480726"/>
+														</PropertyList>
+													</MusicCue>
+												</Local>
+											</Reference>
+										</ObjectList>
+									</ObjectLists>
+								</MusicSegment>
+								<MusicSegment Name="Senran" ID="{2340B7F2-F99C-4772-BB6A-2FD5A4CA2E21}" ShortID="91819886">
+									<PropertyList>
+										<Property Name="EndPosition" Type="Real64" Value="219776.870748299"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicTrack Name="Senran" ID="{1227EB33-E820-4C3A-B26C-F0F6E440BBE3}" ShortID="954495387">
+											<PropertyList>
+												<Property Name="IsStreamingEnabled" Type="bool">
+													<ValueList>
+														<Value>True</Value>
+													</ValueList>
+												</Property>
+												<Property Name="IsZeroLatency" Type="bool">
+													<ValueList>
+														<Value>True</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+												</Reference>
+												<Reference Name="TransitionRoot">
+													<Custom>
+														<MusicTransition Name="Root" ID="{606952AC-C6DB-4011-AD18-D6113134E734}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</Custom>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Senran" ID="{3C13DC48-467D-4AD3-9755-F9722210355B}">
+													<Language>SFX</Language>
+													<AudioFile>Senran.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="280942812"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Sequences">
+													<Reference>
+														<Local>
+															<MusicTrackSequence Name="" ID="{AD9CEBE8-D8BE-419E-9869-FD349B85292B}">
+																<ObjectLists>
+																	<ObjectList Name="Clips">
+																		<Reference>
+																			<Local>
+																				<MusicClip Name="Senran" ID="{1212FA8F-F30F-4A8E-A121-2EB2E8786F0C}">
+																					<PropertyList>
+																						<Property Name="EndTrimOffset" Type="Real64" Value="219776.870748299"/>
+																						<Property Name="FadeInMode" Type="int16" Value="0"/>
+																						<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																					</PropertyList>
+																					<AudioSourceRef Name="Senran" ID="{3C13DC48-467D-4AD3-9755-F9722210355B}"/>
+																				</MusicClip>
+																			</Local>
+																		</Reference>
+																	</ObjectList>
+																</ObjectLists>
+															</MusicTrackSequence>
+														</Local>
+													</Reference>
+												</ObjectList>
+											</ObjectLists>
+										</MusicTrack>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Cues">
+											<Reference>
+												<Local>
+													<MusicCue Name="Entry Cue" ID="{8503158F-D95E-445D-9E37-BC2929EBF504}"/>
+												</Local>
+											</Reference>
+											<Reference>
+												<Local>
+													<MusicCue Name="Exit Cue" ID="{8A86477A-20CC-4D7A-A801-424B46E2FF62}">
+														<PropertyList>
+															<Property Name="CueType" Type="int16" Value="1"/>
+															<Property Name="TimeMs" Type="Real64" Value="219776.870748299"/>
+														</PropertyList>
+													</MusicCue>
+												</Local>
+											</Reference>
+										</ObjectList>
+									</ObjectLists>
+								</MusicSegment>
+							</ChildrenList>
+						</MusicPlaylistContainer>
+					</ChildrenList>
+					<StateInfo>
+						<StateGroupList>
+							<StateGroupInfo>
+								<StateGroupRef Name="KamunagiMusicGroup" ID="{45BAB78F-D387-40D3-AEF6-621AEB080CDF}"/>
+							</StateGroupInfo>
+						</StateGroupList>
+						<CustomStateList>
+							<CustomState>
+								<StateRef Name="Playing" ID="{400C0D6E-885D-457C-B124-9290AD598335}"/>
+								<CustomState Name="" ID="{6EAEAE41-BEE9-4E82-A942-FDA788454EA0}" ShortID="628164341"/>
+							</CustomState>
+						</CustomStateList>
+					</StateInfo>
+					<ObjectLists>
+						<ObjectList Name="Arguments">
+							<Reference>
+								<ObjectRef Name="KamunagiMusicGroup" ID="{45BAB78F-D387-40D3-AEF6-621AEB080CDF}" WorkUnitID="{700A1064-BDF1-42C7-9CC1-D00DF70FA444}"/>
+							</Reference>
+						</ObjectList>
+						<ObjectList Name="Entries">
+							<Reference>
+								<Local>
+									<MultiSwitchEntry Name="" ID="{4AE91745-90BF-43A4-91FD-9FC5EA39E407}">
+										<ReferenceList>
+											<Reference Name="AudioNode">
+												<ObjectRef Name="Playing" ID="{69A3C54A-544A-4A14-A847-1920BEC5ECAC}" WorkUnitID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}"/>
+											</Reference>
+										</ReferenceList>
+										<ObjectLists>
+											<ObjectList Name="EntryPath">
+												<Reference>
+													<ObjectRef Name="Playing" ID="{400C0D6E-885D-457C-B124-9290AD598335}" WorkUnitID="{700A1064-BDF1-42C7-9CC1-D00DF70FA444}"/>
+												</Reference>
+											</ObjectList>
+										</ObjectLists>
+									</MultiSwitchEntry>
+								</Local>
+							</Reference>
+						</ObjectList>
+					</ObjectLists>
+				</MusicSwitchContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</InteractiveMusic>
+</WwiseDocument>

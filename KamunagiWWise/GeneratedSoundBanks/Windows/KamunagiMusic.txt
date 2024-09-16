@@ -1,0 +1,20 @@
+Event	ID	Name			Wwise Object Path	Notes
+	4103318377	Play_KamunagiBossMusic			\Default Work Unit\Play_KamunagiBossMusic	
+
+State Group	ID	Name			Wwise Object Path	Notes
+	1533728782	KamunagiMusicGroup			\Default Work Unit\KamunagiMusicGroup	
+
+State	ID	Name	State Group			Notes
+	748895195	None	KamunagiMusicGroup			
+	1852808225	Playing	KamunagiMusicGroup			
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	280942812	Senran	C:\Development\Personal\C#\KamunagiRedux\KamunagiWWise\.cache\Windows\SFX\Senran_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran		17736
+	496611040	Ikusamanui	C:\Development\Personal\C#\KamunagiRedux\KamunagiWWise\.cache\Windows\SFX\Ikusamanui_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ikusamanui\Ikusamanui		17736
+	576479314	Ranse no Tourai	C:\Development\Personal\C#\KamunagiRedux\KamunagiWWise\.cache\Windows\SFX\Ranse no Tourai_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ranse no Tourai\Ranse no Tourai		17736
+
+Streamed Audio	ID	Name	Audio source file	Generated audio file	Wwise Object Path	Notes
+	280942812	Senran	C:\Development\Personal\C#\KamunagiRedux\KamunagiWWise\.cache\Windows\SFX\Senran_FBC78EF0.wem	280942812.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran	
+	496611040	Ikusamanui	C:\Development\Personal\C#\KamunagiRedux\KamunagiWWise\.cache\Windows\SFX\Ikusamanui_FBC78EF0.wem	496611040.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ikusamanui\Ikusamanui	
+	576479314	Ranse no Tourai	C:\Development\Personal\C#\KamunagiRedux\KamunagiWWise\.cache\Windows\SFX\Ranse no Tourai_FBC78EF0.wem	576479314.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ranse no Tourai\Ranse no Tourai	
+

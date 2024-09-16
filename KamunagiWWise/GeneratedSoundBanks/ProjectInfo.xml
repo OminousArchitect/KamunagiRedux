@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo>
+	<Project Name="KamunagiWWise" GUID="{587E69DA-848C-41E6-9F7C-7B2E02B9716D}" Generator="2023.1.4.8496"/>
+	<CacheRoot>../.cache</CacheRoot>
+	<Platforms>
+		<Platform Name="Windows" GUID="{ED31EBA0-CB13-4EFC-8FCF-AFC071AF43AC}" BasePlatform="Windows" BasePlatformGUID="{6E0CB257-C6C8-4C5C-8366-2740DFC441EB}" Path="Windows"/>
+	</Platforms>
+	<Languages>
+		<Language Name="English(US)" Id="684519430" GUID="{E72F70B8-35F1-4099-BF2D-E87F7AD26EF6}" Default="true" UseAsStandIn="true"/>
+	</Languages>
+	<FileHash>{ACA776FF-9DE8-E87F-7C3E-5AFAB4233F89}</FileHash>
+</ProjectInfo>

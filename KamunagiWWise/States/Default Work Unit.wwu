@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{700A1064-BDF1-42C7-9CC1-D00DF70FA444}" SchemaVersion="119">
+	<States>
+		<WorkUnit Name="Default Work Unit" ID="{700A1064-BDF1-42C7-9CC1-D00DF70FA444}" PersistMode="Standalone">
+			<ChildrenList>
+				<StateGroup Name="KamunagiMusicGroup" ID="{45BAB78F-D387-40D3-AEF6-621AEB080CDF}">
+					<ChildrenList>
+						<State Name="None" ID="{F5EB19AD-47A6-4692-A3C9-9B05AB9B151B}"/>
+						<State Name="Playing" ID="{400C0D6E-885D-457C-B124-9290AD598335}"/>
+					</ChildrenList>
+				</StateGroup>
+			</ChildrenList>
+		</WorkUnit>
+	</States>
+</WwiseDocument>

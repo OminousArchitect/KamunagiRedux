@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="16" SoundBankVersion="150">
+	<RootPaths>
+		<ProjectRoot>../..</ProjectRoot>
+		<SourceFilesRoot>../../.cache/Windows</SourceFilesRoot>
+		<SoundBanksRoot>.</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>.</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<SoundBanks>
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{796CC2EA-E485-D2C1-C358-5E7124123B9A}">
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+			<Plugins>
+				<AudioDevices>
+					<Plugin Id="2317455096" Name="No_Output" LibName="No Output" LibId="11862023"/>
+					<Plugin Id="3859886410" Name="System" LibName="System" LibId="11403271"/>
+				</AudioDevices>
+			</Plugins>
+			<Busses>
+				<Bus Id="3803692087" Name="Master Audio Bus"/>
+			</Busses>
+			<StateGroups>
+				<StateGroup Id="1533728782" Name="KamunagiMusicGroup">
+					<States>
+						<State Id="748895195" Name="None"/>
+						<State Id="1852808225" Name="Playing"/>
+					</States>
+				</StateGroup>
+			</StateGroups>
+		</SoundBank>
+		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{FA749BF7-90BE-C320-D323-EFB6E6AD412F}">
+			<ShortName>KamunagiMusic</ShortName>
+			<Path>KamunagiMusic.bnk</Path>
+			<Media>
+				<File Id="280942812" Language="SFX" Streaming="true" Location="Memory">
+					<ShortName>Senran.wav</ShortName>
+					<Path>Media/280942812.wem</Path>
+					<CachePath>SFX/Senran_FBC78EF0.wem</CachePath>
+					<PrefetchSize>17736</PrefetchSize>
+				</File>
+				<File Id="496611040" Language="SFX" Streaming="true" Location="Memory">
+					<ShortName>Ikusamanui.wav</ShortName>
+					<Path>Media/496611040.wem</Path>
+					<CachePath>SFX/Ikusamanui_FBC78EF0.wem</CachePath>
+					<PrefetchSize>17736</PrefetchSize>
+				</File>
+				<File Id="576479314" Language="SFX" Streaming="true" Location="Memory">
+					<ShortName>Ranse no Tourai.wav</ShortName>
+					<Path>Media/576479314.wem</Path>
+					<CachePath>SFX/Ranse no Tourai_FBC78EF0.wem</CachePath>
+					<PrefetchSize>17736</PrefetchSize>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="4103318377" Name="Play_KamunagiBossMusic">
+					<SwitchContainers>
+						<SwitchContainer>
+							<SwitchValue GroupType="State" GroupId="1533728782" Id="1852808225"/>
+							<MediaRefs>
+								<MediaRef Id="280942812"/>
+								<MediaRef Id="496611040"/>
+								<MediaRef Id="576479314"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="State" GroupId="1533728782" Id="1852808225"/>
+							<MediaRefs>
+								<MediaRef Id="280942812"/>
+								<MediaRef Id="496611040"/>
+								<MediaRef Id="576479314"/>
+							</MediaRefs>
+						</SwitchContainer>
+					</SwitchContainers>
+				</Event>
+			</Events>
+			<StateGroups>
+				<StateGroup Id="1533728782" Name="KamunagiMusicGroup">
+					<States>
+						<State Id="748895195" Name="None"/>
+						<State Id="1852808225" Name="Playing"/>
+					</States>
+				</StateGroup>
+			</StateGroups>
+		</SoundBank>
+	</SoundBanks>
+	<FileHash>{6E473F87-1CE8-A61C-1B95-E4B040B2E257}</FileHash>
+</SoundBanksInfo>

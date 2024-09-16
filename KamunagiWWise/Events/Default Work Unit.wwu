@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{13F79B02-D27E-4861-92DF-9541D6ADA36D}" SchemaVersion="119">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{13F79B02-D27E-4861-92DF-9541D6ADA36D}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Play_KamunagiBossMusic" ID="{C97076F2-1566-4117-B21F-64E96590537A}">
+					<ChildrenList>
+						<Action Name="" ID="{C3B053A5-CECF-4436-8806-7F0A4D212A5E}" ShortID="1069488251">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="KamunagiBossMusic" ID="{50C56D57-4D52-4DAE-8C61-76E41AD5C82D}" WorkUnitID="{8D3DC8FE-1B46-40B3-A8C2-076CD7E3E615}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

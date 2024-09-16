@@ -1,38 +1,68 @@
-﻿using R2API;
+﻿using AK.Wwise;
+using HarmonyLib;
 using RoR2;
+using RoR2.WwiseUtils;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace KamunagiOfChains.Data
 {
-	public class BossMusic //: Asset, IMusicTrack //
+	[HarmonyPatch]
+	public class BossMusic : Asset, IMusicTrack //
 	{
-		/*MusicTrackDef IMusicTrack.BuildObject()
+		MusicTrackDef IMusicTrack.BuildObject()
 		{
-			var customMusicData = new SoundAPI.Music.CustomMusicData();
-			customMusicData.BanksFolderPath = pluginPath;
-			customMusicData.BepInPlugin = instance.Info.Metadata;
-			customMusicData.InitBankName = "KamunagiMusic";
-			customMusicData.PlayMusicSystemEventName = "KamunagiPlayMusic";
-			customMusicData.SoundBankName = "KamunagiMusic";
+			var musicTrackDef = ScriptableObject.CreateInstance<MusicTrackDef>();
+			var group = ScriptableObject.CreateInstance<WwiseStateGroupReference>();
+			group.id = 1533728782;
+			var state = ScriptableObject.CreateInstance<WwiseStateReference>();
+			state.id = 1852808225;
+			state.GroupObjectReference = group;
 
-			customMusicData.SceneDefToTracks = new Dictionary<SceneDef, IEnumerable<SoundAPI.Music.MainAndBossTracks>>();
 			
-			var musicTrackDef = ScriptableObject.CreateInstance<SoundAPI.Music.CustomMusicTrackDef>();
+			musicTrackDef.states = new[]
+			{
+				new State { WwiseObjectReference = state }
+			};
 			musicTrackDef.cachedName = "kamunagiCustomMusic";
-			musicTrackDef.SoundBankName = customMusicData.SoundBankName;
-			musicTrackDef.CustomStates = new List<SoundAPI.Music.CustomMusicTrackDef.CustomState>();
-			var myCustomState = new SoundAPI.Music.CustomMusicTrackDef.CustomState();
-			myCustomState.GroupId = 1378295094u; // The Kamunagi State Group ID
-			myCustomState.StateId = 1560169506u; // The Kamunagi State ID
-			musicTrackDef.CustomStates.Add(myCustomState);
-			var hopooMusicState = new SoundAPI.Music.CustomMusicTrackDef.CustomState();
-			hopooMusicState.GroupId = 792781730U; // gathered from the Init bank txt file. Vanilla Group ID Music_system
-			hopooMusicState.StateId = 2607556080; // gathered from the Init bank txt file. Denote where the track will be played, in this case it uses the vanilla state Bossfight
-			musicTrackDef.CustomStates.Add(hopooMusicState);
-			
-			var sceneDef = LoadAsset<SceneDef>("RoR2/DLC1/ancientloft/ancientloft.asset");
-			customMusicData.SceneDefToTracks.Add(sceneDef, new List<SoundAPI.Music.MainAndBossTracks>() { new SoundAPI.Music.MainAndBossTracks(null, musicTrackDef) });
 			return musicTrackDef;
-		}*/
+		}
+
+		public override void Initialize()
+		{
+			base.Initialize();
+			// golem plains,  sundered grove, sirens call
+
+			MusicController.pickTrackHook += PickTrack;
+		}
+
+		private void PickTrack(MusicController musicController, ref MusicTrackDef newTrack)
+		{
+			if (!musicController.enableMusicSystem) return;
+			var isBossMusic = TeleporterInteraction.instance && !TeleporterInteraction.instance.isIdle;
+			if (SceneCatalog.mostRecentSceneDef == null) return;
+			var currentScene = SceneCatalog.mostRecentSceneDef.baseSceneName;
+			if (isBossMusic && currentScene == "golemplains" || currentScene == "shipgraveyard" ||
+			    currentScene == "rootjungle")
+			{
+				newTrack = this;
+			}
+		}
+
+		[HarmonyPostfix, HarmonyPatch(typeof(MusicController), nameof(MusicController.StartIntroMusic))]
+		// ReSharper disable once InconsistentNaming
+		public static void PlayMusic(MusicController __instance)
+		{
+			AkSoundEngine.PostEvent("Play_KamunagiBossMusic", __instance.gameObject);
+		}
+		
+		[HarmonyPrefix, HarmonyPatch(typeof(StateSetter), nameof(StateSetter.FlushIfChanged))]
+		// ReSharper disable once InconsistentNaming
+		public static void StateSwap(StateSetter __instance)
+		{
+			// bossStatus ID
+			if (__instance.id != 549431000 || __instance.expectedEngineValueId.Equals(__instance.valueId)) return;
+			AkSoundEngine.SetState(((MusicTrackDef)GetAsset<BossMusic, IMusicTrack>()).states[0].GroupId, 0); // could also be a seperate state for exiting the track
+		}
 	}
 }

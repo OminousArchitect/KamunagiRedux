@@ -25,6 +25,7 @@ namespace KamunagiOfChains
 	[BepInDependency(ColorsAPI.PluginGUID)]
 	[BepInDependency(DeployableAPI.PluginGUID)]
 	[BepInDependency(DotAPI.PluginGUID)]
+	[BepInDependency(DamageAPI.PluginGUID)]
 	[BepInDependency(ExtraSkillSlotsPlugin.GUID)]
 	[NetworkCompatibility]
 	[BepInPlugin(Guid, Name, Version)]
@@ -103,6 +104,7 @@ namespace KamunagiOfChains
 			if (soundBankQueued) return;
 			log.LogDebug("Soundbank Added To Queue");
 			AkSoundEngine.AddBasePath(pluginPath);
+			//AkSoundEngine.LoadBank(SoundBankName, out var bankID);
 			__instance.soundbankStrings = __instance.soundbankStrings
 				.AddItem(SoundBankName).ToArray();
 			soundBankQueued = true;

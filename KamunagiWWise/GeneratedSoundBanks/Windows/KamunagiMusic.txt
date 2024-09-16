@@ -8,6 +8,9 @@ State	ID	Name	State Group			Notes
 	748895195	None	KamunagiMusicGroup			
 	1852808225	Playing	KamunagiMusicGroup			
 
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	3729143042	Volume_MSX			\Default Work Unit\Volume_MSX	
+
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	280942812	Senran	C:\Development\Personal\C#\KamunagiRedux\KamunagiWWise\.cache\Windows\SFX\Senran_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran		17736
 	496611040	Ikusamanui	C:\Development\Personal\C#\KamunagiRedux\KamunagiWWise\.cache\Windows\SFX\Ikusamanui_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ikusamanui\Ikusamanui		17736

@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{796CC2EA-E485-D2C1-C358-5E7124123B9A}">
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{D60C6070-3D57-5D7A-CFF7-45FF792AD84B}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -21,6 +21,9 @@
 			<Busses>
 				<Bus Id="3803692087" Name="Master Audio Bus"/>
 			</Busses>
+			<GameParameters>
+				<GameParameter Id="3729143042" Name="Volume_MSX"/>
+			</GameParameters>
 			<StateGroups>
 				<StateGroup Id="1533728782" Name="KamunagiMusicGroup">
 					<States>
@@ -30,7 +33,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{FA749BF7-90BE-C320-D323-EFB6E6AD412F}">
+		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{F72A2225-5AEF-6968-92D6-66595945ACAD}">
 			<ShortName>KamunagiMusic</ShortName>
 			<Path>KamunagiMusic.bnk</Path>
 			<Media>
@@ -75,6 +78,9 @@
 					</SwitchContainers>
 				</Event>
 			</Events>
+			<GameParameters>
+				<GameParameter Id="3729143042" Name="Volume_MSX"/>
+			</GameParameters>
 			<StateGroups>
 				<StateGroup Id="1533728782" Name="KamunagiMusicGroup">
 					<States>
@@ -85,5 +91,5 @@
 			</StateGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{6E473F87-1CE8-A61C-1B95-E4B040B2E257}</FileHash>
+	<FileHash>{360EDA49-54CA-B42D-0D35-2D1265E83C47}</FileHash>
 </SoundBanksInfo>

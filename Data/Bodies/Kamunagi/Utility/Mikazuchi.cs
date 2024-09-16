@@ -127,10 +127,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			comp.positionAtReferencedTransform = true;
 			comp.soundName = "Play_item_use_lighningArm";
 
-			var pp = effect.GetComponentInChildren<PostProcessVolume>();
-			pp.profile =
-				LoadAsset<PostProcessProfile>("addressable:RoR2/Base/title/PostProcessing/ppLocalGrandparent.asset");
+			var postProcess = effect.transform.Find("PostProcess").gameObject;
+			var pp = postProcess.GetComponent<PostProcessVolume>();
+			pp.profile = LoadAsset<PostProcessProfile>("RoR2/Base/title/PostProcessing/ppLocalGrandparent.asset");
 			pp.sharedProfile = pp.profile;
+			postProcess.GetComponent<PostProcessDuration>().destroyOnEnd = false;
 
 			var rampTeleport =
 				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png");
@@ -164,8 +165,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		GameObject IEffect.BuildObject()
 		{
-			var effect = GetGameObject<MikazuchiLightningStrike, IEffect>()
-				.InstantiateClone("MikazuchiSilentImpact", false);
+			var effect = GetGameObject<MikazuchiLightningStrike, IEffect>().InstantiateClone("MikazuchiSilentImpact", false);
 			effect.GetOrAddComponent<EffectComponent>().soundName = "";
 			return effect;
 		}
@@ -245,17 +245,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		GameObject IEffect.BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("addressable:RoR2/Base/EliteLightning/LightningStakeNova.prefab")!
-					.InstantiateClone("MikazuchiStakeNova", false);
+				LoadAsset<GameObject>("addressable:RoR2/Base/EliteLightning/LightningStakeNova.prefab")!.InstantiateClone("MikazuchiStakeNova", false);
 			effect.transform.localScale = Vector3.one * 2;
 			var (novaPr, _) = effect.GetComponentsInChildren<ParticleSystemRenderer>();
-			novaPr.material.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png"));
+			novaPr.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png"));
 			//novaPr[3].material.DisableKeyword("VERTEXCOLOR");
-			foreach (var p in effect.GetComponentsInChildren<ParticleSystem>())
+			foreach (ParticleSystem p in effect.GetComponentsInChildren<ParticleSystem>())
 			{
-				switch (p.name)
+				var name = p.name;
+				switch (name)
 				{
+					case "Nova Sphere":
 					case "AreaIndicatorRing, Billboard":
 					case "UnscaledHitsparks 1":
 					case "Flash":
@@ -264,7 +264,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						break;
 				}
 			}
-
 			effect.GetComponentInChildren<Light>().color = Color.yellow;
 
 			var comp = effect.GetOrAddComponent<EffectComponent>();

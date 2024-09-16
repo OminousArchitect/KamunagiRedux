@@ -25,7 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				targetPosition,
 				Quaternion.identity,
 				gameObject,
-				1f,
+				damageStat,
 				1f,
 				RollCrit()
 			);
@@ -55,8 +55,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (isAuthority) characterMotor.useGravity = true;
 		}
 	}
-
-	[HarmonyPatch]
+	
 	public class TheGreatSealing : Asset, ISkill, IEffect
 	{
 		public static Material[] onKamiMats;
@@ -108,40 +107,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 
 		Type[] ISkill.GetEntityStates() => new[] { typeof(TheGreatSealingState) };
-		
-		public static DamageAPI.ModdedDamageType Uitsalnemetia;
-
-		public override void Initialize()
-		{
-			Uitsalnemetia = DamageAPI.ReserveDamageType();
-		}
-
-		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
-		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
-		{
-			if (damageInfo.HasModdedDamageType(Uitsalnemetia))
-			{
-				var fractionOfHealth = __instance.fullHealth * 0.3f;
-				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
-
-				if (__instance.health >= fractionOfHealth)
-				{
-					damageInfo.damage = attackerBody.damage * 6.5f;
-				}
-
-				else if (__instance.health <= fractionOfHealth)
-				{
-					damageInfo.damageType = DamageType.VoidDeath;
-					EffectManager.SpawnEffect(
-						LoadAsset<GameObject>("RoR2/DLC1/CritGlassesVoid/CritGlassesVoidExecuteEffect.prefab"),
-						new EffectData
-						{
-							origin = __instance.body.corePosition,
-							rotation = Util.QuaternionSafeLookRotation(attackerBody.characterDirection.forward)
-						}, false);
-				}
-			}
-		}
 
 		SkillDef ISkill.BuildObject()
 		{
@@ -175,13 +140,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			projectile.GetComponent<ProjectileController>().ghostPrefab =
 				GetGameObject<PrimedObelisk, IProjectileGhost>();
 			Object.Destroy(projectile.transform.GetChild(0).gameObject);
-			//not needed? projectile.transform.position = new Vector3(sealingMeshObject.transform.position.x, -8f, sealingMeshObject.transform.position.z); //todo first (1) position
 			projectile.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 			var onkamiImpact = projectile.GetComponent<ProjectileImpactExplosion>();
-			onkamiImpact.blastRadius = 1f;
+			onkamiImpact.blastRadius = 0.01f;
 			onkamiImpact.fireChildren = true;
-			onkamiImpact.blastDamageCoefficient = 0f;
+			onkamiImpact.blastDamageCoefficient = 1f;
 			onkamiImpact.childrenProjectilePrefab = GetGameObject<TickingFuseObelisk, IProjectile>();
+			onkamiImpact.childrenDamageCoefficient = 6.5f;
 			onkamiImpact.impactEffect = null;
 			onkamiImpact.lifetimeExpiredSound = null;
 			return projectile;
@@ -209,8 +174,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	}
 
 	// second
+	[HarmonyPatch]
 	public class TickingFuseObelisk : Asset, IProjectile, IProjectileGhost
 	{
+		public static DamageAPI.ModdedDamageType Uitsalnemetia;
+
+		public override void Initialize()
+		{
+			Uitsalnemetia = DamageAPI.ReserveDamageType();
+		}
 		GameObject IProjectile.BuildObject()
 		{
 			var projectile =
@@ -223,10 +195,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sealingImpact.blastRadius = 15f;
 			sealingImpact.fireChildren = false;
 			sealingImpact.impactEffect = GetGameObject<ExplodingObelisk, IEffect>();
-			sealingImpact.blastDamageCoefficient = 6f; //todo you dont set it here
+			sealingImpact.blastDamageCoefficient = 1f; //todo you dont set it here
 			sealingImpact.blastProcCoefficient = 1f;
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
-			//tickingFuseObelisk.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Uitsalnemetia);
+			var onkamiDamage = GetAsset<TheGreatSealing>(); //uhhhhh
+			projectile.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Uitsalnemetia);
 			return projectile;
 		}
 
@@ -324,6 +297,24 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			onkamiMeshR.materials = TheGreatSealing.onKamiMats; //this is how you make a completely new array
 
 			return ghost;
+		}
+		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
+		{
+			if (damageInfo.HasModdedDamageType(Uitsalnemetia))
+			{
+				var fractionOfHealth = __instance.fullHealth * 0.3f;
+				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
+				if (!(__instance.health <= fractionOfHealth)) return;
+				damageInfo.damageType = DamageType.VoidDeath;
+				EffectManager.SpawnEffect(
+					LoadAsset<GameObject>("RoR2/DLC1/CritGlassesVoid/CritGlassesVoidExecuteEffect.prefab"),
+					new EffectData
+					{
+						origin = __instance.body.corePosition,
+						rotation = Util.QuaternionSafeLookRotation(attackerBody.characterDirection.forward)
+					}, false);
+			}
 		}
 	}
 

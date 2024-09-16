@@ -10,6 +10,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 {
 	internal class ReaverMusouState : BaseTwinState
 	{
+		public override int meterGain => 0;
 		public override void OnEnter()
 		{
 			base.OnEnter();

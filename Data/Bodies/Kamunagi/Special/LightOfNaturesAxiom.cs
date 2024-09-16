@@ -168,7 +168,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sunPP.sharedProfile = sunPP.profile;
 			sunPP.gameObject.AddComponent<SphereCollider>().radius = 40;
 			var sunP = GetGameObject<NaturesAxiom, IEffect>().GetComponentInChildren<ParticleSystemRenderer>(true);
-			;
+			var destroyed = naturesAxiom.transform.Find("VfxRoot/Particles/GlowParticles, Fast").gameObject;
+			UnityEngine.Object.Destroy(destroyed);
 			foreach (var r in naturesAxiom.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{
 				var name = r.name;

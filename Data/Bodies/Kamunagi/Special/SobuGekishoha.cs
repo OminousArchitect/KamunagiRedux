@@ -33,9 +33,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 			Vector3 additive = characterDirection.forward * 0.5f;
 			Vector3 vectorMath = centerMuzzle.position + additive;
-			darkSigilEffect =
-				EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<DarkSigil, IEffect>(),
+			darkSigilEffect = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<DarkSigil, IEffect>(),
 					centerFarMuzzle, true);
+			darkSigilEffect.transform.localScale = Vector3.one * 0.7f;
 			tracerInstance = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha, IEffect>(),
 				centerFarMuzzle, true);
 			tracerInstance.transform.localScale = new Vector3(1, 1, 0.03f * 180);
@@ -223,7 +223,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		GameObject IEffect.BuildObject()
 		{
 			var effect = LoadAsset<GameObject>("bundle:LaserMuzzle.prefab");
-			effect.transform.localScale = Vector3.one * 0.6f;
+			effect.transform.localScale = Vector3.one * 0.7f;
+			var comp = effect.GetOrAddComponent<EffectComponent>();
+			comp.applyScale = true;
 			return effect;
 		}
 

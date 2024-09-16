@@ -33,7 +33,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			var effect = Asset.GetGameObject<HonokasVeil, IEffect>();
 			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
-
+			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
+			{
+				origin = Util.GetCorePosition(base.gameObject),
+				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
+			}, false);
 			veilEffect = EffectManager.GetAndActivatePooledEffect(effect, characterBody.coreTransform, true);
 		}
 
@@ -53,6 +57,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			if (veilEffect != null) veilEffect.ReturnToPool();
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
+			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
+			{
+				origin = Util.GetCorePosition(base.gameObject),
+				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
+			}, false);
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)
 			{
 				charModel.invisibilityCount--;
@@ -74,6 +83,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = true;
+			skill.mustKeyPress = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSBLESSING_KEYWORD" };
 			return skill;
@@ -86,10 +96,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var impBoss = LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab")!;
 			var dustCenter = impBoss.transform.Find("ModelBase/mdlImpBoss/DustCenter");
 
-			var effect = dustCenter.gameObject.InstantiateClone("VeilVisualEffect", false);
+			var effect = dustCenter.gameObject.InstantiateClone("VeilParticles", false);
+			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
 			var distortion = effect.AddComponent<ParticleSystem>();
 			var coreR = effect.GetComponent<ParticleSystemRenderer>();
-			Material decalMaterial = new Material(LoadAsset<Material>("RoR2/Base/Brother/matLunarShardImpactEffect.mat"));
+			Material decalMaterial = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat"));
 			decalMaterial.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 			coreR.material = decalMaterial;
 			coreR.renderMode = ParticleSystemRenderMode.Billboard;
@@ -115,6 +126,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			sparkleSize.separateAxes = true;
 			//sparkleSize.sizeMultiplier = 0.75f;
 			sparkleSize.xMultiplier = 1.3f;
+			effect.transform.localScale = Vector3.one * 1.5f;
+			effect.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
+			var spikyImpStuff = effect.transform.Find("LocalRing").gameObject;
+			var pMain = spikyImpStuff.GetComponent<ParticleSystem>().main;
+			pMain.startColor = Colors.twinsLightColor;
+			var pMat = spikyImpStuff.GetComponent<ParticleSystemRenderer>().material;
+			pMat = new Material(pMat);
+			pMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:purpleramp"));
+			pMat.SetFloat("_AlphaBias", 0.1f);
+			pMat.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
 			return effect;
 		}
 	}

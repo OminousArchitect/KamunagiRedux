@@ -28,6 +28,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			SBone = childLocator.FindChild("S Bone");
 		}
 
+		public override void OnExit() {
+			base.OnExit();
+			if (chainsLeftInstance != null || chainsLeftInstance)
+			{
+				chainsLeftInstance!.ReturnToPool();
+				chainsLeftInstance = null;
+			}
+
+			if (chainsRightInstance != null || chainsRightInstance)
+			{
+				chainsRightInstance!.ReturnToPool();
+				chainsRightInstance = null;
+			}
+		}
+
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();

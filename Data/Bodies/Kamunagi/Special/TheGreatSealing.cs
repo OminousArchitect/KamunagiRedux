@@ -379,9 +379,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				}
 			}
 
-			effect.transform.localScale = Vector3.one * 11.25f;
+			effect.transform.localScale = Vector3.one * 10f;
 			effect.GetComponentInChildren<Light>().color = Colors.sealingColor;
-			//explodingObelisk.transform.position = new Vector3(explodingObelisk.transform.position.x, 4f, explodingObelisk.transform.position.z);
+			//effect.transform.position = new Vector3(effect.transform.position.x, 4f, effect.transform.position.z);
 			var sealMeshR = effect.GetComponentInChildren<MeshRenderer>();
 			sealMeshR.materials = TheGreatSealing.onKamiMats;
 

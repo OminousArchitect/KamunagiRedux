@@ -224,8 +224,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			var effect = LoadAsset<GameObject>("bundle:LaserMuzzle.prefab");
 			effect.transform.localScale = Vector3.one * 0.7f;
-			var comp = effect.GetOrAddComponent<EffectComponent>();
-			comp.applyScale = true;
+			effect.GetOrAddComponent<EffectComponent>().applyScale = true;
 			return effect;
 		}
 

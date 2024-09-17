@@ -127,15 +127,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			//sparkleSize.sizeMultiplier = 0.75f;
 			sparkleSize.xMultiplier = 1.3f;
 			effect.transform.localScale = Vector3.one * 1.5f;
+			effect.GetOrAddComponent<EffectComponent>().applyScale = true;
 			effect.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
 			var spikyImpStuff = effect.transform.Find("LocalRing").gameObject;
-			var pMain = spikyImpStuff.GetComponent<ParticleSystem>().main;
-			pMain.startColor = Colors.twinsLightColor;
-			var pMat = spikyImpStuff.GetComponent<ParticleSystemRenderer>().material;
-			pMat = new Material(pMat);
-			pMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:purpleramp"));
-			pMat.SetFloat("_AlphaBias", 0.1f);
-			pMat.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
+			if (spikyImpStuff)
+			{
+				var pMain = spikyImpStuff.GetComponent<ParticleSystem>().main;
+				pMain.startColor = Colors.twinsLightColor;
+				var renderer = spikyImpStuff.GetComponent<ParticleSystemRenderer>();
+				renderer.material = new Material(renderer.material);
+				renderer.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:purpleramp"));
+				renderer.material.SetFloat("_AlphaBias", 0.1f);
+				renderer.material.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
+			}
 			return effect;
 		}
 	}

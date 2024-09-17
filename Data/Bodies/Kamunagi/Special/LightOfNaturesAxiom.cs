@@ -118,7 +118,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			Sunmesh.gameObject.SetActive(true);
 			Sunmesh.material =
 				new Material(Sunmesh
-					.material); 
+					.material);
 			Sunmesh.material.SetTexture("_RemapTex",
 				LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
 			var sunP = chargeSunEffect.GetComponentInChildren<ParticleSystemRenderer>(true);
@@ -209,7 +209,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		GameObject IEffect.BuildObject()
 		{
-			var sunExplosion = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSunSpawn.prefab")!.InstantiateClone("TwinsSunExplosion", false);
+			var sunExplosion =
+				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSunSpawn.prefab")!.InstantiateClone(
+					"TwinsSunExplosion", false);
 			var sunPP = LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset");
 			var sunePP = sunExplosion.GetComponentInChildren<PostProcessVolume>();
 			sunePP.profile = sunPP;
@@ -225,10 +227,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				{
 					r.material = new Material(r.material);
 					r.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
-					r.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+					r.material.SetTexture("_RemapTex",
+						LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 					r.trailMaterial = r.material;
 				}
 			}
+
 			return sunExplosion;
 		}
 
@@ -244,7 +248,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return buffDef;
 		}
 
-		[HarmonyPrefix, HarmonyPatch(typeof(CharacterBody),  nameof(CharacterBody.AddTimedBuff), typeof(BuffDef), typeof(float) )]
+		[HarmonyPrefix,
+		 HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.AddTimedBuff), typeof(BuffDef), typeof(float))]
 		private static void AddTimedBuffHook(CharacterBody __instance, BuffDef buffDef, float duration)
 		{
 			if (!TryGetAsset<NaturesAxiom, IBuff>(out var customOverheat)) return;
@@ -254,349 +259,445 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			{
 				if (timedBuff.buffIndex != overheatDef.buffIndex) continue;
 				if (!(timedBuff.timer < duration)) continue;
-				timedBuff.timer = duration; 
+				timedBuff.timer = duration;
 				//this is making sure all stacks of the
-                //buff are refreshed, which would be the opposite behaviour of Collapse
+				//buff are refreshed, which would be the opposite behaviour of Collapse
 			}
 		}
-		
+
 		public static DotController.DotIndex CurseIndex;
 
 		public override void Initialize()
 		{
-			CurseIndex = DotAPI.RegisterDotDef(new DotController.DotDef
-			{
-				interval = 0.2f,
-				damageCoefficient = 0.1f,
-				damageColorIndex = DamageColorIndex.Void,
-				associatedBuff = (BuffDef)GetAsset<AxiomBurn, IBuff>()
-			}, (self, stack) =>
-			{
-				if (stack.dotIndex != CurseIndex) return;
-				var pos = self.victimBody.corePosition;
-				Debug.Log("A stack was added");
-			}, self =>
-			{
-				if (!self || !self.victimObject) return;
-				var modelLocator = self.victimObject.GetComponent<ModelLocator>();
-				if (!modelLocator || !modelLocator.modelTransform) return;
-				if (self.GetComponent<KamunagiBurnEffectController>()) return;
-				var kamunagiEffectController = self.gameObject.AddComponent<KamunagiBurnEffectController>();
-				kamunagiEffectController.effectParams = new KamunagiBurnEffectController.KamunagiEffectParams
+			CurseIndex = DotAPI.RegisterDotDef(
+				new DotController.DotDef
 				{
-					startSound = "Play_item_proc_igniteOnKill_Loop",
-					stopSound = "Stop_item_proc_igniteOnKill_Loop",
-					overlayMaterial = GetAsset<AxiomBurn, IMaterial>()
-				};;
-				kamunagiEffectController.target = modelLocator.modelTransform.gameObject;
-				Debug.LogWarning("added Kamunagi Controller");
-			});
+					interval = 0.2f,
+					damageCoefficient = 0.1f,
+					damageColorIndex = DamageColorIndex.Void,
+					associatedBuff = (BuffDef)GetAsset<AxiomBurn, IBuff>()
+				}, (self, stack) =>
+				{
+					if (stack.dotIndex != CurseIndex) return;
+					var pos = self.victimBody.corePosition;
+					Debug.Log("A stack was added");
+				}, self =>
+				{
+					if (!self || !self.victimObject) return;
+					var modelLocator = self.victimObject.GetComponent<ModelLocator>();
+					if (!modelLocator || !modelLocator.modelTransform) return;
+					if (self.GetComponent<KamunagiBurnEffectController>()) return;
+					var kamunagiEffectController = self.gameObject.AddComponent<KamunagiBurnEffectController>();
+					kamunagiEffectController.effectParams = KamunagiBurnEffectController.defaultEffect;
+					kamunagiEffectController.target = modelLocator.modelTransform.gameObject;
+					Debug.LogWarning("added Kamunagi Controller");
+				});
 		}
-		
-		 public class KamunagiBurnEffectController : MonoBehaviour
-    {
-        public class KamunagiEffectParams
-        {
-            public string startSound;
 
-            public string stopSound;
-
-            public Material overlayMaterial;
-        }
-        
-        private Transform theTransform;
-        public GameObject curseParticles;
-        public CharacterBody victimBody;
-        public DotController dotController;
-        public ModelLocator modelLocator;
-        public GameObject target;
-        public GameObject mdlObject;
-        public TemporaryOverlayInstance burnEffectInstance;
-        public CharacterModel charModel;
-        public KamunagiEffectParams effectParams;
-
-        private void Awake()
-        {
-	        dotController = GetComponent<DotController>();
-            victimBody = dotController.victimBody;
-            modelLocator = dotController.victimObject.GetComponent<ModelLocator>();
-            charModel = modelLocator.modelTransform.GetComponent<CharacterModel>();
-            mdlObject = modelLocator.modelTransform.gameObject;
-        }
-
-        private void Start()
-        {
-            //Util.PlaySound(effectType.startSound, dotController.gameObject);
-            if (!target)
-            {
-                return;
-            }
-
-            burnEffectInstance = TemporaryOverlayManager.AddOverlay(mdlObject);
-            // TODO do a pooled effect and remove it on destroy
-        }
-
-        private void OnDestroy()
-        {
-            //Util.PlaySound(effectType.stopSound, base.gameObject);
-            burnEffectInstance.RemoveFromCharacterModel();
-        }
-    }
-
-		[RequireComponent(typeof(TeamFilter))]
-		[RequireComponent(typeof(GenericOwnership))]
-		public class UmbralSunController : MonoBehaviour
+		public class CurseParticles : Asset, IEffect
 		{
-			private TeamFilter teamFilter;
-			private GenericOwnership ownership;
+			GameObject IEffect.BuildObject()
+			{
+				var voidFogMild = LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab");
+				var effect = voidFogMild.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false);
+				effect.transform.position = new Vector3(0f, 1f, 0f);
+				//there was a destroyontimer component here but maybe we don't need it because pool
+				return effect;
+			}
+		}
 
-			public float overheatBuffDuration = 2f;
-			public float cycleInterval = 0.5f;
-			public float maxDistance = 75f;
-			public int minimumStacksBeforeBurning = 2;
-			public float burnDuration = 1f;
+		public class KamunagiBurnEffectController : MonoBehaviour
+		{
+			public class KamunagiEffectParams
+			{
+				public string startSound;
+				public string stopSound;
+				public Material overlayMaterial;
+				public GameObject particleEffectPrefab;
+			}
 
-			[SerializeField] private LoopSoundDef activeLoopDef =
-				LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunActive.asset")!;
-
-			[SerializeField] private LoopSoundDef damageLoopDef =
-				LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunDamage.asset")!;
-
-			[SerializeField] private string stopSoundName = "Play_grandParent_attack3_sun_destroy";
-
-			private Run.FixedTimeStamp previousCycle = Run.FixedTimeStamp.negativeInfinity;
-			private int cycleIndex;
-			private List<HurtBox> cycleTargets = new List<HurtBox>();
-			internal BullseyeSearch bullseyeSearch = new BullseyeSearch();
-			private bool isLocalPlayerDamaged;
-			private uint activeSoundLoop;
-			private uint damageSoundLoop;
-			private BuffIndex overheatBuffDef;
-			private GameObject overheatApplyEffect;
-
+			private List<BurnEffectControllerHelper> burnEffectInstances;
+			public GameObject target;
+			private TemporaryOverlayInstance temporaryOverlay;
+			private int soundID;
+			public KamunagiEffectParams effectParams = defaultEffect;
+			public static KamunagiEffectParams defaultEffect;
+			public float fireParticleSize = 5f;
+			
 			private void Awake()
 			{
-				teamFilter = base.GetComponent<TeamFilter>();
-				ownership = base.GetComponent<GenericOwnership>();
+				defaultEffect = new KamunagiEffectParams
+				{
+					startSound = "",
+					stopSound = "",
+					overlayMaterial = GetAsset<AxiomBurn, IMaterial>(),
+					particleEffectPrefab = GetGameObject<CurseParticles, IEffect>()
+				};
 			}
 
 			private void Start()
 			{
-				activeSoundLoop = AkSoundEngine.PostEvent(activeLoopDef.startSoundName, base.gameObject);
-				overheatBuffDef = GetAsset<NaturesAxiom, IBuff>();
-				overheatApplyEffect = GetGameObject<AxiomBurn, IEffect>();
+				if (effectParams == null)
+				{
+					Debug.LogError("KamunagiBurnEffectController on " + base.gameObject.name + " has no effect type!");
+					return;
+				}
+
+				Util.PlaySound(effectParams.startSound, base.gameObject);
+				burnEffectInstances = new List<BurnEffectControllerHelper>();
+				if (effectParams.overlayMaterial != null)
+				{
+					temporaryOverlay = TemporaryOverlayManager.AddOverlay(base.gameObject);
+					temporaryOverlay.originalMaterial = effectParams.overlayMaterial;
+				}
+
+				if (!target)
+				{
+					return;
+				}
+
+				CharacterModel component = target.GetComponent<CharacterModel>();
+				if (!component)
+				{
+					return;
+				}
+
+				if (temporaryOverlay != null)
+				{
+					temporaryOverlay.AddToCharacterModel(component);
+				}
+
+				CharacterBody body = component.body;
+				CharacterModel.RendererInfo[] baseRendererInfos = component.baseRendererInfos;
+				if (!body)
+				{
+					return;
+				}
+
+				for (int i = 0; i < baseRendererInfos.Length; i++)
+				{
+					if (!baseRendererInfos[i].ignoreOverlays)
+					{
+						BurnEffectControllerHelper burnEffectControllerHelper =
+							AddFireParticles(baseRendererInfos[i].renderer, body.coreTransform);
+						if ((bool)burnEffectControllerHelper)
+						{
+							burnEffectInstances.Add(burnEffectControllerHelper);
+						}
+					}
+				}
 			}
 
 			private void OnDestroy()
 			{
-				AkSoundEngine.StopPlayingID(activeSoundLoop);
-				//Util.PlaySound(activeLoopDef.stopSoundName, base.gameObject);
-				//Util.PlaySound(damageLoopDef.stopSoundName, base.gameObject);
-				Util.PlaySound(stopSoundName, base.gameObject);
+				Util.PlaySound(effectParams.stopSound, base.gameObject);
+				if (temporaryOverlay != null)
+				{
+					temporaryOverlay.Destroy();
+				}
+
+				for (int i = 0; i < burnEffectInstances.Count; i++)
+				{
+					if ((bool)burnEffectInstances[i])
+					{
+						burnEffectInstances[i].EndEffect();
+					}
+				}
 			}
 
-			private void FixedUpdate()
+			private BurnEffectControllerHelper AddFireParticles(Renderer modelRenderer, Transform targetParentTransform)
 			{
-				if (NetworkServer.active)
+				if (modelRenderer is MeshRenderer || modelRenderer is SkinnedMeshRenderer)
 				{
-					ServerFixedUpdate();
-				}
-
-				bool wtf = isLocalPlayerDamaged;
-				isLocalPlayerDamaged = false;
-				foreach (HurtBox hurtBox in cycleTargets)
-				{
-					CharacterBody characterBody = null;
-					if (hurtBox && hurtBox.healthComponent)
+					GameObject fireEffectPrefab = effectParams.particleEffectPrefab;
+					EffectManagerHelper andActivatePooledEffect =
+						EffectManager.GetAndActivatePooledEffect(fireEffectPrefab, targetParentTransform);
+					if (!andActivatePooledEffect)
 					{
-						characterBody = hurtBox.healthComponent.body;
+						Debug.LogWarning("Could not spawn the ParticleEffect prefab: " +
+						                 ((object)fireEffectPrefab)?.ToString() + ".");
+						return null;
 					}
 
-					if (characterBody &&
-					    (characterBody.bodyFlags & CharacterBody.BodyFlags.OverheatImmune) !=
-					    CharacterBody.BodyFlags.None && characterBody.hasEffectiveAuthority)
+					BurnEffectControllerHelper component =
+						andActivatePooledEffect.GetComponent<BurnEffectControllerHelper>();
+					if (!component)
 					{
-						Vector3 position = base.transform.position;
-						Vector3 corePosition = characterBody.corePosition;
-						RaycastHit raycastHit;
-						if (!Physics.Linecast(position, corePosition, out raycastHit, LayerIndex.world.mask,
-							    QueryTriggerInteraction.Ignore))
-						{
-							isLocalPlayerDamaged = true;
-						}
+						Debug.LogWarning("Burn effect " + ((object)fireEffectPrefab)?.ToString() +
+						                 " doesn't have a BurnEffectControllerHelper applied.  It can't be applied.");
+						andActivatePooledEffect.ReturnToPool();
+						return null;
 					}
+
+					component.InitializeBurnEffect(modelRenderer);
+					return component;
 				}
 
-				if (isLocalPlayerDamaged && !wtf)
-				{
-					//Util.PlaySound(damageLoopDef.startSoundName, base.gameObject);
+				return null;
+			}
+		}
 
-					damageSoundLoop = AkSoundEngine.PostEvent(damageLoopDef.startSoundName, base.gameObject);
-					return;
+		[RequireComponent(typeof(TeamFilter))]
+			[RequireComponent(typeof(GenericOwnership))]
+			public class UmbralSunController : MonoBehaviour
+			{
+				private TeamFilter teamFilter;
+				private GenericOwnership ownership;
+
+				public float overheatBuffDuration = 2f;
+				public float cycleInterval = 0.5f;
+				public float maxDistance = 75f;
+				public int minimumStacksBeforeBurning = 2;
+				public float burnDuration = 1f;
+
+				[SerializeField] private LoopSoundDef activeLoopDef =
+					LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunActive.asset")!;
+
+				[SerializeField] private LoopSoundDef damageLoopDef =
+					LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunDamage.asset")!;
+
+				[SerializeField] private string stopSoundName = "Play_grandParent_attack3_sun_destroy";
+
+				private Run.FixedTimeStamp previousCycle = Run.FixedTimeStamp.negativeInfinity;
+				private int cycleIndex;
+				private List<HurtBox> cycleTargets = new List<HurtBox>();
+				internal BullseyeSearch bullseyeSearch = new BullseyeSearch();
+				private bool isLocalPlayerDamaged;
+				private uint activeSoundLoop;
+				private uint damageSoundLoop;
+				private BuffIndex overheatBuffDef;
+				private GameObject overheatApplyEffect;
+
+				private void Awake()
+				{
+					teamFilter = base.GetComponent<TeamFilter>();
+					ownership = base.GetComponent<GenericOwnership>();
 				}
 
-				if (!isLocalPlayerDamaged && wtf)
+				private void Start()
 				{
+					activeSoundLoop = AkSoundEngine.PostEvent(activeLoopDef.startSoundName, base.gameObject);
+					overheatBuffDef = GetAsset<NaturesAxiom, IBuff>();
+					overheatApplyEffect = GetGameObject<AxiomBurn, IEffect>();
+				}
+
+				private void OnDestroy()
+				{
+					AkSoundEngine.StopPlayingID(activeSoundLoop);
+					//Util.PlaySound(activeLoopDef.stopSoundName, base.gameObject);
 					//Util.PlaySound(damageLoopDef.stopSoundName, base.gameObject);
-
-					AkSoundEngine.StopPlayingID(damageSoundLoop);
+					Util.PlaySound(stopSoundName, base.gameObject);
 				}
-			}
 
-			private void ServerFixedUpdate()
-			{
-				float num = Mathf.Clamp01(previousCycle.timeSince / cycleInterval);
-				int num2 = (num == 1f) ? cycleTargets.Count : Mathf.FloorToInt((float)cycleTargets.Count * num);
-				Vector3 position = base.transform.position;
-				while (cycleIndex < num2)
+				private void FixedUpdate()
 				{
-					HurtBox hurtBox = cycleTargets[cycleIndex];
-					if (hurtBox)
+					if (NetworkServer.active)
 					{
-						CharacterBody body = hurtBox.healthComponent.body;
-						if ((body.bodyFlags & CharacterBody.BodyFlags.OverheatImmune) == CharacterBody.BodyFlags.None)
+						ServerFixedUpdate();
+					}
+
+					bool wtf = isLocalPlayerDamaged;
+					isLocalPlayerDamaged = false;
+					foreach (HurtBox hurtBox in cycleTargets)
+					{
+						CharacterBody characterBody = null;
+						if (hurtBox && hurtBox.healthComponent)
 						{
-							Vector3 corePosition = body.corePosition;
-							Ray ray = new Ray(position, corePosition - position);
+							characterBody = hurtBox.healthComponent.body;
+						}
+
+						if (characterBody &&
+						    (characterBody.bodyFlags & CharacterBody.BodyFlags.OverheatImmune) !=
+						    CharacterBody.BodyFlags.None && characterBody.hasEffectiveAuthority)
+						{
+							Vector3 position = base.transform.position;
+							Vector3 corePosition = characterBody.corePosition;
 							RaycastHit raycastHit;
 							if (!Physics.Linecast(position, corePosition, out raycastHit, LayerIndex.world.mask,
 								    QueryTriggerInteraction.Ignore))
 							{
-								float num3 = Mathf.Max(1f, raycastHit.distance); body.AddTimedBuff(overheatBuffDef, overheatBuffDuration / num3); //the interesting stuff starts here
-								if (overheatApplyEffect)
-								{
-									EffectData effectData = new EffectData
-									{
-										origin = corePosition,
-										rotation = Util.QuaternionSafeLookRotation(-ray.direction),
-										scale = body.bestFitRadius
-									};
-									effectData.SetHurtBoxReference(hurtBox);
-									EffectManager.SpawnEffect(overheatApplyEffect, effectData, true);
-								}
-
-								int theNumber = body.GetBuffCount(overheatBuffDef) - minimumStacksBeforeBurning;
-								if (theNumber > 0)
-								{
-									var inflictDotInfo = new InflictDotInfo();
-									inflictDotInfo.dotIndex = NaturesAxiom.CurseIndex;
-									inflictDotInfo.attackerObject = ownership.ownerObject;
-									inflictDotInfo.victimObject = body.gameObject;
-									inflictDotInfo.damageMultiplier = 1f;
-
-									GenericOwnership genericOwnership = ownership;
-									CharacterBody characterBody;
-									if (genericOwnership == null)
-									{
-										characterBody = null;
-									}
-									else
-									{
-										GameObject ownerObject = genericOwnership.ownerObject;
-										characterBody = ((ownerObject != null)
-											? ownerObject.GetComponent<CharacterBody>()
-											: null);
-									}
-
-									CharacterBody characterBody2 = characterBody;
-									if (characterBody2 && characterBody2.inventory)
-									{
-										inflictDotInfo.totalDamage =
-											0.5f * characterBody2.damage * burnDuration * theNumber;
-									}
-
-									DotController.InflictDot(ref inflictDotInfo);
-								}
+								isLocalPlayerDamaged = true;
 							}
 						}
 					}
 
-					cycleIndex++;
+					if (isLocalPlayerDamaged && !wtf)
+					{
+						//Util.PlaySound(damageLoopDef.startSoundName, base.gameObject);
+
+						damageSoundLoop = AkSoundEngine.PostEvent(damageLoopDef.startSoundName, base.gameObject);
+						return;
+					}
+
+					if (!isLocalPlayerDamaged && wtf)
+					{
+						//Util.PlaySound(damageLoopDef.stopSoundName, base.gameObject);
+
+						AkSoundEngine.StopPlayingID(damageSoundLoop);
+					}
 				}
 
-				if (previousCycle.timeSince >= cycleInterval)
+				private void ServerFixedUpdate()
 				{
-					previousCycle = Run.FixedTimeStamp.now;
-					cycleIndex = 0;
-					cycleTargets.Clear();
-					SearchForTargets(cycleTargets);
+					float num = Mathf.Clamp01(previousCycle.timeSince / cycleInterval);
+					int num2 = (num == 1f) ? cycleTargets.Count : Mathf.FloorToInt((float)cycleTargets.Count * num);
+					Vector3 position = base.transform.position;
+					while (cycleIndex < num2)
+					{
+						HurtBox hurtBox = cycleTargets[cycleIndex];
+						if (hurtBox)
+						{
+							CharacterBody body = hurtBox.healthComponent.body;
+							if ((body.bodyFlags & CharacterBody.BodyFlags.OverheatImmune) ==
+							    CharacterBody.BodyFlags.None)
+							{
+								Vector3 corePosition = body.corePosition;
+								Ray ray = new Ray(position, corePosition - position);
+								RaycastHit raycastHit;
+								if (!Physics.Linecast(position, corePosition, out raycastHit, LayerIndex.world.mask,
+									    QueryTriggerInteraction.Ignore))
+								{
+									float num3 = Mathf.Max(1f, raycastHit.distance);
+									body.AddTimedBuff(overheatBuffDef,
+										overheatBuffDuration / num3); //the interesting stuff starts here
+									if (overheatApplyEffect)
+									{
+										EffectData effectData = new EffectData
+										{
+											origin = corePosition,
+											rotation = Util.QuaternionSafeLookRotation(-ray.direction),
+											scale = body.bestFitRadius
+										};
+										effectData.SetHurtBoxReference(hurtBox);
+										EffectManager.SpawnEffect(overheatApplyEffect, effectData, true);
+									}
+
+									int theNumber = body.GetBuffCount(overheatBuffDef) - minimumStacksBeforeBurning;
+									if (theNumber > 0)
+									{
+										var inflictDotInfo = new InflictDotInfo();
+										inflictDotInfo.dotIndex = NaturesAxiom.CurseIndex;
+										inflictDotInfo.attackerObject = ownership.ownerObject;
+										inflictDotInfo.victimObject = body.gameObject;
+										inflictDotInfo.damageMultiplier = 1f;
+
+										GenericOwnership genericOwnership = ownership;
+										CharacterBody characterBody;
+										if (genericOwnership == null)
+										{
+											characterBody = null;
+										}
+										else
+										{
+											GameObject ownerObject = genericOwnership.ownerObject;
+											characterBody = ((ownerObject != null)
+												? ownerObject.GetComponent<CharacterBody>()
+												: null);
+										}
+
+										CharacterBody characterBody2 = characterBody;
+										if (characterBody2 && characterBody2.inventory)
+										{
+											inflictDotInfo.totalDamage =
+												0.5f * characterBody2.damage * burnDuration * theNumber;
+										}
+
+										DotController.InflictDot(ref inflictDotInfo);
+									}
+								}
+							}
+						}
+
+						cycleIndex++;
+					}
+
+					if (previousCycle.timeSince >= cycleInterval)
+					{
+						previousCycle = Run.FixedTimeStamp.now;
+						cycleIndex = 0;
+						cycleTargets.Clear();
+						SearchForTargets(cycleTargets);
+					}
 				}
-			}
 
-			private void SearchForTargets(List<HurtBox> dest)
-			{
-				bullseyeSearch.searchOrigin = transform.position;
-				bullseyeSearch.minAngleFilter = 0f;
-				bullseyeSearch.maxAngleFilter = 180f;
-				bullseyeSearch.maxDistanceFilter = maxDistance;
-				bullseyeSearch.filterByDistinctEntity = true;
-				bullseyeSearch.sortMode = BullseyeSearch.SortMode.Distance;
-				bullseyeSearch.viewer = null;
-				bullseyeSearch.RefreshCandidates();
-				dest.AddRange(bullseyeSearch.GetResults());
-			}
-		}
-	}
-
-	public class AxiomBurn : Asset, IEffect, IBuff, IMaterial
-	{
-		public GameObject BuildObject()
-		{
-			var curseBurnFx =
-				LoadAsset<GameObject>("RoR2/Base/GreaterWisp/GreaterWispDeath.prefab")!.InstantiateClone("TwinsCurseFx",
-					false);
-			curseBurnFx.transform.localScale = Vector3.one * 0.4f; //0.65
-			foreach (var r in curseBurnFx.GetComponentsInChildren<ParticleSystemRenderer>(true))
-			{
-				switch (r.name)
+				private void SearchForTargets(List<HurtBox> dest)
 				{
-					case "Ring":
-						r.material = new Material(r.material);
-						r.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
-						r.material.SetTexture("_RemapTex",
-							LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
-						break;
-					case "Chunks":
-					case "Mask":
-					case "Chunks, Sharp":
-					case "Flames":
-					case "Flash":
-					case "Distortion":
-						r.enabled = false;
-						break;
+					bullseyeSearch.searchOrigin = transform.position;
+					bullseyeSearch.minAngleFilter = 0f;
+					bullseyeSearch.maxAngleFilter = 180f;
+					bullseyeSearch.maxDistanceFilter = maxDistance;
+					bullseyeSearch.filterByDistinctEntity = true;
+					bullseyeSearch.sortMode = BullseyeSearch.SortMode.Distance;
+					bullseyeSearch.viewer = null;
+					bullseyeSearch.RefreshCandidates();
+					dest.AddRange(bullseyeSearch.GetResults());
 				}
 			}
 
-			foreach (var r in curseBurnFx.GetComponentsInChildren<ParticleSystem>(false))
+			public class AxiomBurn : Asset, IEffect, IBuff, IMaterial
+		{
+			public GameObject BuildObject()
 			{
-				if (r.name != "Ring") continue;
-				var main = r.main;
-				main.simulationSpeed = 3.5f;
+				var curseBurnFx =
+					LoadAsset<GameObject>("RoR2/Base/GreaterWisp/GreaterWispDeath.prefab")!.InstantiateClone(
+						"TwinsCurseFx",
+						false);
+				curseBurnFx.transform.localScale = Vector3.one * 0.4f; //0.65
+				foreach (var r in curseBurnFx.GetComponentsInChildren<ParticleSystemRenderer>(true))
+				{
+					switch (r.name)
+					{
+						case "Ring":
+							r.material = new Material(r.material);
+							r.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
+							r.material.SetTexture("_RemapTex",
+								LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+							break;
+						case "Chunks":
+						case "Mask":
+						case "Chunks, Sharp":
+						case "Flames":
+						case "Flash":
+						case "Distortion":
+							r.enabled = false;
+							break;
+					}
+				}
+
+				foreach (var r in curseBurnFx.GetComponentsInChildren<ParticleSystem>(false))
+				{
+					if (r.name != "Ring") continue;
+					var main = r.main;
+					main.simulationSpeed = 3.5f;
+				}
+
+				UnityEngine.Object.Destroy(curseBurnFx.GetComponent<ShakeEmitter>());
+				curseBurnFx.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
+				return curseBurnFx;
 			}
 
-			UnityEngine.Object.Destroy(curseBurnFx.GetComponent<ShakeEmitter>());
-			curseBurnFx.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
-			return curseBurnFx;
-		}
+			BuffDef IBuff.BuildObject()
+			{
+				var buff = ScriptableObject.CreateInstance<BuffDef>();
+				buff.name = "KamunagiCurseDebuff";
+				buff.iconSprite = LoadAsset<Sprite>("bundle:CurseScroll");
+				buff.buffColor = Color.white;
+				buff.canStack = true;
+				buff.isDebuff = true;
+				buff.isHidden = false;
+				return buff;
+			}
 
-		BuffDef IBuff.BuildObject()
-		{
-			var buff = ScriptableObject.CreateInstance<BuffDef>();
-			buff.name = "KamunagiCurseDebuff";
-			buff.iconSprite = LoadAsset<Sprite>("bundle:CurseScroll");
-			buff.buffColor = Color.white;
-			buff.canStack = true;
-			buff.isDebuff = true;
-			buff.isHidden = false;
-			return buff;
-		}
-
-		Material IMaterial.BuildObject() {
-			// TODO this probably should use IOverlay instead?
-			var purpleFireOverlay = new Material(LoadAsset<Material>("RoR2/Base/BurnNearby/matOnHelfire.mat"));
-			purpleFireOverlay.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
-			purpleFireOverlay.SetFloat("_FresnelPower", -15.8f);
-			return purpleFireOverlay;
+			Material IMaterial.BuildObject()
+			{
+				//this probably should use IOverlay instead?
+				//nah it doesn't need to actually
+				var purpleFireOverlay = new Material(LoadAsset<Material>("RoR2/Base/BurnNearby/matOnHelfire.mat"));
+				purpleFireOverlay.SetTexture("_RemapTex",
+					LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+				purpleFireOverlay.SetFloat("_FresnelPower", -15.8f);
+				return purpleFireOverlay;
+			}
 		}
 	}
 }

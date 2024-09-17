@@ -42,8 +42,7 @@ namespace KamunagiOfChains.Data
 			var isBossMusic = TeleporterInteraction.instance && !TeleporterInteraction.instance.isIdle;
 			if (SceneCatalog.mostRecentSceneDef == null) return;
 			var currentScene = SceneCatalog.mostRecentSceneDef.baseSceneName;
-			if (isBossMusic && currentScene == "golemplains" || currentScene == "shipgraveyard" ||
-			    currentScene == "rootjungle")
+			if (isBossMusic && (currentScene == "golemplains" || currentScene == "shipgraveyard" || currentScene == "rootjungle"))
 			{
 				newTrack = this;
 			}

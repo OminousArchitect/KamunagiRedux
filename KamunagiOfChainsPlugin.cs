@@ -35,6 +35,7 @@ namespace KamunagiOfChains
 		public const string AssetBundleName = "kamunagiassets";
 		public const string SoundBankName = "KamunagiMusic.bnk";
 		public static AssetBundle? bundle;
+		public static AssetBundle? bundle2;
 		public static string? pluginPath;
 		public static KamunagiOfChainsPlugin instance = null!;
 		public static ManualLogSource log = null!;
@@ -67,6 +68,11 @@ namespace KamunagiOfChains
 				log.LogDebug("Loading ContentPack");
 				ContentPackProvider.Initialize(Info.Metadata.GUID, Asset.BuildContentPack());
 			};
+			AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(pluginPath, AssetBundleName+"2")).completed += operation =>
+			{
+				log.LogDebug("Bundle2 Loaded");
+				bundle2 = (operation as AssetBundleCreateRequest)?.assetBundle;
+			};
 
 			Language.collectLanguageRootFolders +=
 				folders => folders.Add(System.IO.Path.Combine(pluginPath, "Language"));
@@ -86,6 +92,12 @@ namespace KamunagiOfChains
 				return !bundle
 					? null
 					: bundle!.LoadAsset<T>(assetPath["bundle:".Length..]);
+			}
+			if (assetPath.StartsWith("bundle2:"))
+			{
+				return !bundle2
+					? null
+					: bundle2!.LoadAsset<T>(assetPath["bundle2:".Length..]);
 			}
 
 			if (assetPath.StartsWith("legacy:"))

@@ -64,7 +64,7 @@ namespace KamunagiOfChains
 
 	public class ZealBar : MonoBehaviour
 	{
-		public UIElementPairAllocator<Image, HealthBar.BarInfo> barAllocator;
+		public UIElementPairAllocator<Image, BarInfo> barAllocator;
 		public RectTransform barContainer;
 		public SpriteAsNumberManager spriteAsNumberManager;
 		public HUD hud;
@@ -74,15 +74,17 @@ namespace KamunagiOfChains
 		public GameObject barPrefab;
 		public HealthBarStyle.BarStyle zealStyle;
 
-		public List<HealthBar.BarInfo> barInfos = new List<HealthBar.BarInfo>()
+		public List<BarInfo> barInfos = new List<BarInfo>()
 		{
-			new HealthBar.BarInfo(),
-			new HealthBar.BarInfo()
+			new BarInfo(),
+			new BarInfo()
 		};
 
 		public float cachedZealForLerp;
 		public float zealVelocity;
 		public HealthBarStyle.BarStyle trailingOverZealStyle;
+		public Material zealMat;
+		public Material defaultMaterial;
 
 		public void InitFromHealthBar(HealthBar healthBar)
 		{
@@ -91,14 +93,18 @@ namespace KamunagiOfChains
 			spriteAsNumberManager = healthBar.spriteAsNumberManager;
 			trailingOverZealStyle = healthBar.style.trailingOverHealthBarStyle;
 			trailingOverZealStyle.baseColor = Colors.zealColor;
+			
 			zealStyle = healthBar.style.instantHealthBarStyle;
 			zealStyle.baseColor = Colors.zealColor * new Color(1.1f, 1.1f, 1.1f);
+
+			zealMat = LoadAsset<Material>("bundle2:ZealMat")!;
+			defaultMaterial = barPrefab.GetComponentInChildren<Image>().material;
 		}
 
 		public void Awake()
 		{
 			hud = GetComponentInParent<HUD>();
-			barAllocator = new UIElementPairAllocator<Image, HealthBar.BarInfo>(barContainer, barPrefab);
+			barAllocator = new UIElementPairAllocator<Image, BarInfo>(barContainer, barPrefab);
 		}
 
 		public void Update()
@@ -120,15 +126,15 @@ namespace KamunagiOfChains
 			
 			barInfos.Clear();
 
-			var zealInfo = new HealthBar.BarInfo();
-			ApplyStyle(ref zealInfo, zealStyle);
+			var zealInfo = new BarInfo();
+			ApplyStyle(ref zealInfo, zealStyle, defaultMaterial);
 			zealInfo.normalizedXMax = twinsBehaviour.zealMeterNormalized;
 			zealInfo.enabled = !zealInfo.normalizedXMax.Equals(0);
 			if (zealInfo.enabled)
 				barInfos.Add(zealInfo);
 			
-			var trailingOverZeal = new HealthBar.BarInfo();
-			ApplyStyle(ref trailingOverZeal, trailingOverZealStyle);
+			var trailingOverZeal = new BarInfo();
+			ApplyStyle(ref trailingOverZeal, trailingOverZealStyle, zealMat);
 			cachedZealForLerp = Mathf.SmoothDamp(cachedZealForLerp, twinsBehaviour.zealMeterNormalized, ref zealVelocity, 0.2f,
 				float.PositiveInfinity, Time.deltaTime);
 			trailingOverZeal.normalizedXMax = cachedZealForLerp > 0.01 ? cachedZealForLerp : 0;
@@ -146,16 +152,17 @@ namespace KamunagiOfChains
 			}
 		}
 
-		public static void ApplyStyle(ref HealthBar.BarInfo barInfo, HealthBarStyle.BarStyle barStyle)
+		public static void ApplyStyle(ref BarInfo barInfo, HealthBarStyle.BarStyle barStyle, Material material)
 		{
 			barInfo.enabled &= barStyle.enabled;
 			barInfo.color = barStyle.baseColor;
 			barInfo.sprite = barStyle.sprite;
 			barInfo.imageType = barStyle.imageType;
 			barInfo.sizeDelta = barStyle.sizeDelta;
+			barInfo.material = material;
 		}
 
-		public void HandleBar(int i, ref HealthBar.BarInfo barInfo)
+		public void HandleBar(int i, ref BarInfo barInfo)
 		{
 			if (!barInfo.enabled) return;
 			var image = barAllocator.elements[i];
@@ -185,6 +192,12 @@ namespace KamunagiOfChains
 				image.color = barInfo.color;
 			}
 
+			if (barInfo.material != image.material)
+			{
+				cachedBarInfo.material = barInfo.material;
+				image.material = barInfo.material;
+			}
+
 			if (Mathf.Abs(barInfo.normalizedXMin - cachedBarInfo.normalizedXMin) > 0.01)
 				cachedBarInfo.normalizedXMin = barInfo.normalizedXMin;
 			if (Mathf.Abs(barInfo.normalizedXMax - cachedBarInfo.normalizedXMax) > 0.01)
@@ -199,5 +212,29 @@ namespace KamunagiOfChains
 			rectTransform.anchoredPosition = Vector2.zero;
 			rectTransform.sizeDelta = new Vector2(sizeDelta * 0.5f + 1f, sizeDelta + 1f);
 		}
+	}
+	public struct BarInfo
+	{
+		public bool DimsEqual(BarInfo rhs)
+		{
+			return this.normalizedXMin == rhs.normalizedXMin && this.normalizedXMax == rhs.normalizedXMax && this.sizeDelta == rhs.sizeDelta;
+		}
+		
+		public void SetDims(BarInfo rhs)
+		{
+			normalizedXMin = rhs.normalizedXMin;
+			normalizedXMax = rhs.normalizedXMax;
+			sizeDelta = rhs.sizeDelta;
+		}
+		
+		public bool enabled;
+		public Color color;
+		public Sprite sprite;
+		public Image.Type imageType;
+		public int index;
+		public float normalizedXMin;
+		public float normalizedXMax;
+		public float sizeDelta;
+		public Material material;
 	}
 }

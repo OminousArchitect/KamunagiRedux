@@ -83,15 +83,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			}
 			else
 			{
-				if (hasInputBank && (characterMotor as IPhysMotor).velocity.y <= 0) // Is falling
+				if (hasInputBank)
 				{
-					if (inputBank.jump.justPressed &&
+					if (inputBank.jump.justPressed && (characterMotor as IPhysMotor).velocity.y <= -10f &&
 					    passiveSkill.ExecuteIfReady())
 					{
 						return;
 					}
 
-					if (inputBank.jump.down)
+					if (inputBank.jump.down && (characterMotor as IPhysMotor).velocity.y <= 0)
 						hoverStateMachine.SetInterruptState(new KamunagiHoverState(), InterruptPriority.Any);
 				}
 				base.ProcessJump();

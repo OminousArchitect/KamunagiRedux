@@ -4,7 +4,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 {
 	public class KamunagiSkillFamilySpecial : Asset, ISkillFamily
 	{
-		public Type[] GetSkillAssets() =>
+		public IEnumerable<Type> GetSkillAssets() =>
 			new[] { typeof(SobuGekishoha), typeof(TheGreatSealing), typeof(LightOfNaturesAxiom) };
 
 		public string GetNameToken(GenericSkill skill) =>

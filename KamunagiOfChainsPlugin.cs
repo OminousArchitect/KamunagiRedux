@@ -1,4 +1,5 @@
 ﻿global using static KamunagiOfChains.KamunagiOfChainsPlugin;
+global using CodedAssets;
 using System.Collections;
 using System.Security;
 using System.Security.Permissions;
@@ -6,7 +7,6 @@ using BepInEx;
 using BepInEx.Logging;
 using ExtraSkillSlots;
 using HarmonyLib;
-using KamunagiOfChains.Data;
 using R2API;
 using R2API.Utils;
 using RoR2;

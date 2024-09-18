@@ -52,7 +52,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			return master;
 		}
 
-		Asset[] IModel.GetSkins() => new Asset[] { this };
+		IEnumerable<Asset> IModel.GetSkins() => new Asset[] { this };
 
 		GameObject IModel.BuildObject()
 		{

@@ -28,6 +28,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Reference Include="CodedAssets">
+          <HintPath>Libs\CodedAssets.dll</HintPath>
+        </Reference>
         <Reference Include="Decalicious">
             <HintPath>Libs\Decalicious-nstrip.dll</HintPath>
         </Reference>

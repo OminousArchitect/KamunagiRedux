@@ -4,7 +4,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
 	public class KamunagiSkillFamilySecondary : Asset, ISkillFamily
 	{
-		public Type[] GetSkillAssets() =>
+		public IEnumerable<Type> GetSkillAssets() =>
 			new[]
 			{
 				typeof(EnnakamuyEarth), typeof(WindBoomerang), typeof(DenebokshiriBrimstone), typeof(KujyuriFrost)

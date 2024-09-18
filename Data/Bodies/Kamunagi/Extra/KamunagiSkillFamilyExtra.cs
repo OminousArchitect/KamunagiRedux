@@ -4,7 +4,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	public class KamunagiSkillFamilyExtra : Asset, ISkillFamily
 	{
-		public Type[] GetSkillAssets() => new[]
+		public IEnumerable<Type> GetSkillAssets() => new[]
 		{
 			typeof(MothMoth), typeof(XinZhao), typeof(SummonFriendlyEnemy), typeof(MashiroBlessing)
 		};

@@ -57,7 +57,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class SummonFriendlyEnemy : Asset, ISkill, IMaster, IBody
+	public class SummonFriendlyEnemy : Asset, ISkill, IMaster
 	{
 		public static DeployableSlot deployableSlot;
 
@@ -78,36 +78,68 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 
-		GameObject IBody.BuildObject()
-		{
-			Material wispMat1 = new Material(LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
-			wispMat1.SetFloat("_BrightnessBoost", 2.63f);
-			wispMat1.SetFloat("_AlphaBoost", 1.2f);
-			wispMat1.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
-			wispMat1.SetColor("_TintColor", Colors.wispNeonGreen);
-
-			var customWisp1Body = LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab")!.InstantiateClone("CustomWisp1", true);
-			customWisp1Body.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI1_BODY_NAME";
-			var wispPs = customWisp1Body.GetComponentsInChildren<ParticleSystemRenderer>();
-			var firePs = wispPs[0]; //this is verified to be "Fire"
-			firePs.material = wispMat1;
-			var wtfModel = customWisp1Body.GetComponentInChildren<CharacterModel>();
-			wtfModel.baseRendererInfos[1].defaultMaterial = wispMat1;
-			wtfModel.baseLightInfos[0].defaultColor = Colors.wispNeonGreen;
-			var stuffIdk = customWisp1Body.transform.GetChild(1).gameObject;
-			var moreParticles = stuffIdk.GetComponentsInChildren<ParticleSystemRenderer>();
-			moreParticles[0].material = wispMat1;
-			stuffIdk.GetComponentInChildren<Light>().color = Colors.wispNeonGreen;
-			return customWisp1Body;
-		}
-
 		GameObject IMaster.BuildObject()
 		{
 			var master = LoadAsset<GameObject>("RoR2/Base/Wisp/WispMaster.prefab")!.InstantiateClone("TwinsWispMaster", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<SummonFriendlyEnemy, IBody>();
+			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<NugwisomkamiTwo, IBody>();
 			return master;
 		}
 
 		public Type[] GetEntityStates() => new []{typeof(SummonFriendlyEnemyState)};
+	}
+	
+	public class NugwisomkamiOne : Asset, IBody
+	{
+		GameObject IBody.BuildObject()
+		{
+			Material wispMat = new Material(LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
+			wispMat.SetFloat("_BrightnessBoost", 2.63f);
+			wispMat.SetFloat("_AlphaBoost", 1.2f);
+			wispMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
+			wispMat.SetColor("_TintColor", Colors.wispNeonGreen);
+
+			var customWispBody = LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab")!.InstantiateClone("Nugwiso1", true);
+			customWispBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI1_BODY_NAME";
+			var wispPs = customWispBody.GetComponentsInChildren<ParticleSystemRenderer>();
+			var firePs = wispPs[0]; //this is verified to be "Fire"
+			firePs.material = wispMat;
+			var wtfModel = customWispBody.GetComponentInChildren<CharacterModel>();
+			wtfModel.baseRendererInfos[1].defaultMaterial = wispMat;
+			wtfModel.baseLightInfos[0].defaultColor = Colors.wispNeonGreen;
+			var stuffIdk = customWispBody.transform.GetChild(1).gameObject;
+			var moreParticles = stuffIdk.GetComponentsInChildren<ParticleSystemRenderer>();
+			moreParticles[0].material = wispMat;
+			stuffIdk.GetComponentInChildren<Light>().color = Colors.wispNeonGreen;
+			return customWispBody;
+		}
+	}
+	
+	public class NugwisomkamiTwo : Asset, IBody
+	{
+		GameObject IBody.BuildObject()
+		{
+			Material wispMat = new Material(LoadAsset<Material>("RoR2/Base/LunarWisp/matLunarWispFlames.mat"));
+			//wispMat.SetFloat("_BrightnessBoost", 2.63f);
+			//wispMat.SetFloat("_AlphaBoost", 1.2f);
+			wispMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:purpleramp"));
+			wispMat.SetColor("_TintColor", Color.white);
+
+			var wispBody = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispBody.prefab")!.InstantiateClone("Nugwiso2", true);
+			var mdl = wispBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+			Vector3 smaller = new Vector3(0.2f, 0.2f, 0.2f);
+			mdl.transform.localScale = new Vector3(0.18f, 0.18f, 0.18f);
+			mdl.transform.GetChild(1).localScale = smaller;
+			mdl.transform.GetChild(2).localScale = smaller;
+			mdl.transform.GetChild(4).localScale = smaller; //particle center
+			mdl.transform.GetChild(5).localScale = smaller; //particle left
+			mdl.transform.GetChild(6).localScale = smaller; //particle right
+			var light = mdl.transform.Find("StandableSurface/Point light").gameObject;
+			light.GetComponent<Light>().color = Colors.twinsLightColor;
+			var cb = wispBody.GetComponent<CharacterBody>();
+			cb.baseNameToken = "NUGWISOMKAMI2_BODY_NAME";
+			cb.moveSpeed = 15f;
+			cb.acceleration = 14f;
+			return wispBody;
+		}
 	}
 }

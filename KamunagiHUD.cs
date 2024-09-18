@@ -93,10 +93,11 @@ namespace KamunagiOfChains
 			spriteAsNumberManager = healthBar.spriteAsNumberManager;
 			trailingOverZealStyle = healthBar.style.trailingOverHealthBarStyle;
 			trailingOverZealStyle.baseColor = Colors.zealColor;
+			trailingOverZealStyle.sprite = null;
 			
 			zealStyle = healthBar.style.instantHealthBarStyle;
 			zealStyle.baseColor = Colors.zealColor * new Color(1.1f, 1.1f, 1.1f);
-
+			
 			zealMat = LoadAsset<Material>("bundle2:ZealMat")!;
 			defaultMaterial = barPrefab.GetComponentInChildren<Image>().material;
 		}

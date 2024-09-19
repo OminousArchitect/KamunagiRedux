@@ -102,11 +102,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 	public class MasterTwinBehaviour : MonoBehaviour
 	{
 		public CharacterMaster master;
-		public Dictionary<GameObject, CharacterMaster?> NugwisomkamiSpiritDefs = new Dictionary<GameObject, CharacterMaster?>()
+		public Dictionary<GameObject, CharacterMaster?> NugwisoSpiritDefs = new Dictionary<GameObject, CharacterMaster?>()
 		{
 			{ Asset.GetGameObject<NugwisomkamiOne, IMaster>(), null },
-			{ Asset.GetGameObject<NugwisomkamiTwo, IMaster>(), null }
-			//{Asset.GetAsset<>()} three would go here
+			{ Asset.GetGameObject<NugwisomkamiTwo, IMaster>(), null },
+			{ Asset.GetGameObject<NugwisomkamiThree, IMaster>(), null }
 		};
 		public void Awake()
 		{

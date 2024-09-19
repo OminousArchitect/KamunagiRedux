@@ -10,59 +10,62 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class SummonFriendlyEnemyState : BaseTwinState
 	{
 		public override int meterGain => 0;
-		public override int meterGainOnExit => possibleElites.Length != 0 || deadElites.Length != 0 ? 10 : 0;
-		public GameObject[] possibleElites;
-		public CharacterMaster[] deadElites;
+		public override int meterGainOnExit => possibleSpirits.Length != 0 || deadSpirits.Length != 0 ? 10 : 0;
+		public GameObject[] possibleSpirits;
+		public CharacterMaster[] deadSpirits;
 
-		public static Dictionary<GameObject, List<string>> NugwisomkamiEliteDef = new Dictionary<GameObject, List<string>>()
+		public static Dictionary<GameObject, List<string>> NugwisoDualEliteAspects = new Dictionary<GameObject, List<string>>()
 		{
 			{
 				Asset.GetGameObject<NugwisomkamiOne, IMaster>(),
 				new List<string>() { "EliteIceEquipment", "EliteFireEquipment" }
 			},
+			
 			{
 				Asset.GetGameObject<NugwisomkamiTwo, IMaster>(),
 				new List<string>() { "EliteLightningEquipment", "EliteLunarEquipment" }
+			},
+
+			{
+				Asset.GetGameObject<NugwisomkamiThree, IMaster>(),
+				new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
 			}
-			
-			//mending or malachite goes here
 		};
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			//collect the dictionary values,
-			//then put the keys in an array, if they are not null
-			possibleElites = twinBehaviour.masterBehaviour.NugwisomkamiSpiritDefs.Where(x => x.Value == null).Select(x => x.Key).ToArray(); 
+			//collect dictionary
+			//then put the keys with null value into an array
+			possibleSpirits = twinBehaviour.masterBehaviour.NugwisoSpiritDefs.Where(x => x.Value == null).Select(x => x.Key).ToArray();
+			deadSpirits = twinBehaviour.masterBehaviour.NugwisoSpiritDefs.Where(x => x.Value != null && x.Value && x.Value.lostBodyToDeath).Select(x => x.Value!).ToArray();
 			
-			deadElites = twinBehaviour.masterBehaviour.NugwisomkamiSpiritDefs.Where(x => x.Value != null && x.Value && x.Value.lostBodyToDeath).Select(x => x.Value!).ToArray();
-			if (possibleElites.Length == 0 && deadElites.Length == 0) outer.SetNextStateToMain();
-			var position = characterBody.corePosition + Vector3.up * 3;
-			SpawnSpirit(position);
+			if (possibleSpirits.Length == 0 && deadSpirits.Length == 0) outer.SetNextStateToMain();
+			var pos = characterBody.corePosition + Vector3.up * 4;
+			SpawnSpirit(pos);
 		}
 
-		public void SpawnSpirit(Vector3 targetPosition)
+		public void SpawnSpirit(Vector3 spawnPosition)
 		{
 			var rollBody = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
 			var rollEquip = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
-			var spawnPosition = targetPosition +
-			               Vector3.up;
-			if (possibleElites.Length != 0)
+			
+			if (possibleSpirits.Length != 0)
 			{
-				var whichWisp = possibleElites[possibleElites.Length > 1 ? rollBody.RangeInt(0, possibleElites.Length - 1) : 0];
+				var whichSpirit = possibleSpirits[possibleSpirits.Length > 1 ? rollBody.RangeInt(0, possibleSpirits.Length - 1) : 0];
 				var summon = new MasterSummon
 				{
-					masterPrefab = whichWisp,
+					masterPrefab = whichSpirit,
 					position = spawnPosition,
 					summonerBodyObject = gameObject,
 					ignoreTeamMemberLimit = true
 				};
 				summon.preSpawnSetupCallback += master =>
 				{
-					var equipList = NugwisomkamiEliteDef[whichWisp];
+					var equipList = NugwisoDualEliteAspects[whichSpirit];
 					var whichEquip = equipList[equipList.Count > 1 ? rollEquip.RangeInt(0, equipList.Count - 1) : 0];
 					master.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichEquip));
-					twinBehaviour.masterBehaviour.NugwisomkamiSpiritDefs[whichWisp] = master;
+					twinBehaviour.masterBehaviour.NugwisoSpiritDefs[whichSpirit] = master;
 				};
 				var characterMaster = summon.Perform();
 				var deployable = characterMaster.gameObject.AddComponent<Deployable>();
@@ -71,13 +74,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				
 				characterBody.master.AddDeployable(deployable, SummonFriendlyEnemy.deployableSlot);
 				
-			} else if (deadElites.Length != 0)
+			} else if (deadSpirits.Length != 0)
 			{
-				var nextMaster = deadElites[deadElites.Length > 1 ? rollBody.RangeInt(0, deadElites.Length - 1) : 0];
-				nextMaster.Respawn(spawnPosition, Quaternion.identity);
-				var equipList = NugwisomkamiEliteDef.First(x => x.Key.GetComponent<CharacterMaster>().masterIndex == nextMaster.masterIndex).Value;
+				var nextSpiritMaster = deadSpirits[deadSpirits.Length > 1 ? rollBody.RangeInt(0, deadSpirits.Length - 1) : 0];
+				nextSpiritMaster.Respawn(spawnPosition, Quaternion.identity);
+				var equipList = NugwisoDualEliteAspects.First(x => x.Key.GetComponent<CharacterMaster>().masterIndex == nextSpiritMaster.masterIndex).Value;
 				var whichEquip = equipList[equipList.Count > 1 ? rollEquip.RangeInt(0, equipList.Count - 1) : 0];
-				nextMaster.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichEquip));
+				nextSpiritMaster.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichEquip));
 			}
 		}
 	}
@@ -110,27 +113,32 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		GameObject IBody.BuildObject()
 		{
-			Material wispMat = new Material(LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
-			wispMat.SetFloat("_BrightnessBoost", 2.63f);
-			wispMat.SetFloat("_AlphaBoost", 1.2f);
-			wispMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
-			wispMat.SetColor("_TintColor", Colors.wispNeonGreen);
+			Material fireMat = new Material(LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
+			fireMat.SetFloat("_BrightnessBoost", 2.63f);
+			fireMat.SetFloat("_AlphaBoost", 1.2f);
+			fireMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
+			fireMat.SetColor("_TintColor", Colors.wispNeonGreen);
 
 			var wispBody = LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab")!.InstantiateClone("Nugwiso1", true);
 			wispBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI1_BODY_NAME";
 			var charModel = wispBody.GetComponentInChildren<CharacterModel>();
-			charModel.baseRendererInfos[0].defaultMaterial = LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"); //mesh
-			charModel.baseRendererInfos[1].defaultMaterial = wispMat; //fire particle system
 			charModel.baseLightInfos[0].defaultColor = Colors.wispNeonGreen;
+			//charModel.baseRendererInfos[0].ignoreOverlays = true;
 			var mdl = wispBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
 			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
-			mdl.GetComponentInChildren<ParticleSystemRenderer>().transform.SetParent(mdl.transform); //do the same to the fire particles
+			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
 			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it
 			var meshObject = mdl.transform.GetChild(0).gameObject;
 			UnityEngine.Object.Destroy(meshObject.GetComponent<SkinnedMeshRenderer>());
 			UnityEngine.Object.Destroy(mdl.GetComponentInChildren<SkinnedMeshRenderer>());
 			meshObject.AddComponent<MeshFilter>().mesh = LoadAsset<Mesh>("bundle2:TheMask");
-			meshObject.AddComponent<MeshRenderer>().material = LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat");
+			var theRenderer = meshObject.AddComponent<MeshRenderer>();
+			theRenderer.material = LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat");
+			charModel.baseRendererInfos[0].renderer = theRenderer;
+			charModel.baseRendererInfos[0].defaultMaterial = LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"); //mesh
+			charModel.baseRendererInfos[1].renderer = thePSR;
+			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
 			meshObject.transform.localPosition = new Vector3(0, -4.8f, 0);
 			return wispBody;
 		}
@@ -162,8 +170,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			mdl.transform.GetChild(4).localScale = smaller; //particle center
 			mdl.transform.GetChild(5).localScale = smaller; //particle left
 			mdl.transform.GetChild(6).localScale = smaller; //particle right
-			var light = mdl.transform.Find("StandableSurface/Point light").gameObject;
-			light.GetComponent<Light>().color = Colors.twinsLightColor;
+			mdl.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
 			var cb = wispBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI2_BODY_NAME";
 			cb.moveSpeed = 15f;
@@ -179,11 +186,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	/*public class NugwisomkamiThree : Asset, IBody
+	public class NugwisomkamiThree : Asset, IBody, IMaster
 	{
 		GameObject IBody.BuildObject()
 		{
-			var wispBody
+			var wispBody = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispBody.prefab")!.InstantiateClone("Nugwiso3", true);
+			wispBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI3_BODY_NAME";
+			return wispBody;
 		}
-	}*/
+
+		GameObject IMaster.BuildObject()
+		{
+			var master = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispMaster.prefab")!.InstantiateClone("Nugwiso3Master", true);
+			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<NugwisomkamiThree, IBody>();
+			return master;
+		}
+	}
 }

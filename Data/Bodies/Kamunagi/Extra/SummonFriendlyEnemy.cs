@@ -31,7 +31,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
 			}
 		};
-
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -47,12 +46,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		public void SpawnSpirit(Vector3 spawnPosition)
 		{
-			var rollBody = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
-			var rollEquip = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
 			
 			if (possibleSpirits.Length != 0)
 			{
-				var whichSpirit = possibleSpirits[possibleSpirits.Length > 1 ? rollBody.RangeInt(0, possibleSpirits.Length - 1) : 0];
+				var index = Mathf.RoundToInt(UnityEngine.Random.Range(0, possibleSpirits.Length));
+				log.LogInfo("Index: " + index);
+				var whichSpirit = possibleSpirits[index];
 				var summon = new MasterSummon
 				{
 					masterPrefab = whichSpirit,
@@ -63,7 +62,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				summon.preSpawnSetupCallback += master =>
 				{
 					var equipList = NugwisoDualEliteAspects[whichSpirit];
-					var whichEquip = equipList[equipList.Count > 1 ? rollEquip.RangeInt(0, equipList.Count - 1) : 0];
+					var whichEquip = equipList[Mathf.RoundToInt(UnityEngine.Random.Range(0, equipList.Count))];
 					master.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichEquip));
 					twinBehaviour.masterBehaviour.NugwisoSpiritDefs[whichSpirit] = master;
 				};
@@ -76,10 +75,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				
 			} else if (deadSpirits.Length != 0)
 			{
-				var nextSpiritMaster = deadSpirits[deadSpirits.Length > 1 ? rollBody.RangeInt(0, deadSpirits.Length - 1) : 0];
+				var nextSpiritMaster = deadSpirits[Mathf.RoundToInt(UnityEngine.Random.Range(0, deadSpirits.Length))];
 				nextSpiritMaster.Respawn(spawnPosition, Quaternion.identity);
 				var equipList = NugwisoDualEliteAspects.First(x => x.Key.GetComponent<CharacterMaster>().masterIndex == nextSpiritMaster.masterIndex).Value;
-				var whichEquip = equipList[equipList.Count > 1 ? rollEquip.RangeInt(0, equipList.Count - 1) : 0];
+				var whichEquip = equipList[Mathf.RoundToInt(UnityEngine.Random.Range(0, equipList.Count))];
 				nextSpiritMaster.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichEquip));
 			}
 		}

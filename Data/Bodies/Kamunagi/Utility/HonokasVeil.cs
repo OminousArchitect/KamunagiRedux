@@ -89,7 +89,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			return skill;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(HonokasVeilState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(HonokasVeilState) };
 
 		GameObject IEffect.BuildObject()
 		{

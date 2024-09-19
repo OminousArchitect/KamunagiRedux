@@ -322,7 +322,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				return skill;
 			}
 
-			Type[] ISkill.GetEntityStates() => new[] { typeof(JachdwaltTestForTarget), typeof(JachdwaltInitEvis), typeof(JachdwaltDoEvis) };
+			IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(JachdwaltTestForTarget), typeof(JachdwaltInitEvis), typeof(JachdwaltDoEvis) };
 
 			GameObject IEffect.BuildObject()
 			{

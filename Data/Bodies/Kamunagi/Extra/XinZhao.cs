@@ -154,6 +154,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return forceField;
 		}
 
-		public Type[] GetEntityStates() => new []{typeof(XinZhaoState), typeof(XinZhaoForceFieldState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(XinZhaoState), typeof(XinZhaoForceFieldState)};
 	}
 }

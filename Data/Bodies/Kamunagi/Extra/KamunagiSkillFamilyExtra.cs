@@ -4,9 +4,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	public class KamunagiSkillFamilyExtra : Asset, ISkillFamily
 	{
-		public IEnumerable<Type> GetSkillAssets() => new[]
+		public IEnumerable<Asset> GetSkillAssets() => new Asset[]
 		{
-			typeof(MothMoth), typeof(XinZhao), typeof(SummonFriendlyEnemy), typeof(MashiroBlessing)
+			GetAsset<MothMoth>(), GetAsset<XinZhao>(), GetAsset<SummonFriendlyEnemy>(), GetAsset<MashiroBlessing>()
 		};
 
 		public string GetNameToken(GenericSkill skill) =>

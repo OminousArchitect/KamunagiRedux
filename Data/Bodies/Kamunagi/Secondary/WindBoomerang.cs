@@ -89,7 +89,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	public class WindBoomerang : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
 	{
-		Type[] ISkill.GetEntityStates() => new[] { typeof(WindBoomerangState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(WindBoomerangState) };
 
 		SkillDef ISkill.BuildObject()
 		{

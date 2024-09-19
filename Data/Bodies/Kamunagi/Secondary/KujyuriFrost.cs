@@ -130,7 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return effect;
 		}
 
-		public Type[] GetEntityStates() => new []{typeof(KujyuriFrostState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(KujyuriFrostState)};
 	}
 
 	public class KujyuriFrostBlast : Asset, IEffect

@@ -105,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 
-		public Type[] GetEntityStates() => new []{typeof(SummonFriendlyEnemyState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(SummonFriendlyEnemyState)};
 	}
 	
 	public class NugwisomkamiOne : Asset, IBody, IMaster

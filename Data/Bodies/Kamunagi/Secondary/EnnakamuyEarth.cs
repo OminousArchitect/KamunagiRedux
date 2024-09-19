@@ -55,7 +55,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return skill;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(EnnakamuyEarthState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(EnnakamuyEarthState) };
 
 		GameObject IEffect.BuildObject()
 		{

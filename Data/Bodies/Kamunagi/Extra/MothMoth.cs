@@ -93,7 +93,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return mothMoth;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(SummonMothMoth) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(SummonMothMoth) };
 
 		SkillDef ISkill.BuildObject()
 		{

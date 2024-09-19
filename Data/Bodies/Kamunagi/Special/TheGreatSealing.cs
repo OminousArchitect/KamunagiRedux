@@ -106,7 +106,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return effect;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(TheGreatSealingState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(TheGreatSealingState) };
 
 		SkillDef ISkill.BuildObject()
 		{

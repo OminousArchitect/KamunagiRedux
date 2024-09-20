@@ -1,4 +1,6 @@
 ﻿using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Secondary;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -22,8 +24,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			},
 			
 			{
-				Asset.GetGameObject<NugwisomkamiTwo, IMaster>(),
-				new List<string>() { "EliteLightningEquipment", "EliteLunarEquipment" }
+				Asset.GetGameObject<HunterKillerDrone, IMaster>(),
+				new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" }
 			},
 
 			{
@@ -108,6 +110,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public Type[] GetEntityStates() => new []{typeof(SummonFriendlyEnemyState)};
 	}
 	
+	#region Nugwiso1
 	public class NugwisomkamiOne : Asset, IBody, IMaster
 	{
 		GameObject IBody.BuildObject()
@@ -118,12 +121,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			fireMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
 			fireMat.SetColor("_TintColor", Colors.wispNeonGreen);
 
-			var wispBody = LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab")!.InstantiateClone("Nugwiso1", true);
-			wispBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI1_BODY_NAME";
-			var charModel = wispBody.GetComponentInChildren<CharacterModel>();
+			var nugwisoBody = LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab")!.InstantiateClone("Nugwiso1", true);
+			nugwisoBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI1_BODY_NAME";
+			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
 			charModel.baseLightInfos[0].defaultColor = Colors.wispNeonGreen;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
-			var mdl = wispBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
 			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
 			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
 			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
@@ -139,7 +142,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			charModel.baseRendererInfos[1].renderer = thePSR;
 			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
 			meshObject.transform.localPosition = new Vector3(0, -4.8f, 0);
-			return wispBody;
+			return nugwisoBody;
 		}
 		
 		GameObject IMaster.BuildObject()
@@ -149,8 +152,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return master;
 		}
 	}
-	
-	public class NugwisomkamiTwo : Asset, IBody, IMaster
+	#endregion
+
+	#region Nugwiso2
+	public class HunterKillerDrone : Asset, IBody, IMaster
 	{
 		GameObject IBody.BuildObject()
 		{
@@ -160,8 +165,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			wispMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:purpleramp"));
 			wispMat.SetColor("_TintColor", Color.white);
 
-			var wispBody = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispBody.prefab")!.InstantiateClone("Nugwiso2", true);
-			var mdl = wispBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+			var nugwisoBody = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispBody.prefab")!.InstantiateClone("Nugwiso2", true);
+			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
 			Vector3 smaller = new Vector3(0.2f, 0.2f, 0.2f);
 			mdl.transform.localScale = new Vector3(0.18f, 0.18f, 0.18f);
 			mdl.transform.GetChild(1).localScale = smaller;
@@ -170,28 +175,71 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			mdl.transform.GetChild(5).localScale = smaller; //particle left
 			mdl.transform.GetChild(6).localScale = smaller; //particle right
 			mdl.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
-			var cb = wispBody.GetComponent<CharacterBody>();
+			var cb = nugwisoBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI2_BODY_NAME";
 			cb.moveSpeed = 15f;
 			cb.acceleration = 14f;
-			return wispBody;
-		}
 
+			var array = nugwisoBody.GetComponents<GenericSkill>();
+			array[0]._skillFamily = GetAsset<Wisp2PrimaryFamily>();
+			return nugwisoBody;
+		}
+		
 		GameObject IMaster.BuildObject()
 		{
 			var master = LoadAsset<GameObject>("RoR2/Base/Wisp/WispMaster.prefab")!.InstantiateClone("Nugwiso2Master", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<NugwisomkamiTwo, IBody>();
+			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<HunterKillerDrone, IBody>();
 			return master;
 		}
 	}
 
+	public class Wisp2PrimaryFamily : Asset, ISkillFamily
+	{
+		public IEnumerable<Type> GetSkillAssets() => new[] { typeof(ReplaceWisp2Primary) };
+	}
+
+	internal class ReplaceWisp2Primary : Asset, ISkill
+	{
+		SkillDef ISkill.BuildObject()
+		{
+			var skill = ScriptableObject.CreateInstance<SkillDef>();
+			skill.activationStateMachineName = "Weapon";
+			skill.skillName = "Extra Skill 5";
+			skill.skillNameToken = "";
+			skill.skillDescriptionToken = "";
+			skill.icon = LoadAsset<Sprite>("n");
+			return skill;
+		}
+		
+		Type[] ISkill.GetEntityStates() => new[] { typeof(AtuysTidesState) };
+	}
+	
+	#endregion
+	
+	#region Nugwiso3
 	public class NugwisomkamiThree : Asset, IBody, IMaster
 	{
 		GameObject IBody.BuildObject()
 		{
-			var wispBody = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispBody.prefab")!.InstantiateClone("Nugwiso3", true);
-			wispBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI3_BODY_NAME";
-			return wispBody;
+			var nugwisoBody = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispBody.prefab")!.InstantiateClone("Nugwiso3", true);
+			nugwisoBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI3_BODY_NAME";
+			/*var mdl = wispBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
+			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
+			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
+			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it
+			var meshObject = mdl.transform.GetChild(0).gameObject;
+			UnityEngine.Object.Destroy(meshObject.GetComponent<SkinnedMeshRenderer>());
+			UnityEngine.Object.Destroy(mdl.GetComponentInChildren<SkinnedMeshRenderer>());
+			meshObject.AddComponent<MeshFilter>().mesh = LoadAsset<Mesh>("bundle2:TheMask");
+			var theRenderer = meshObject.AddComponent<MeshRenderer>();
+			theRenderer.material = LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat");
+			charModel.baseRendererInfos[0].renderer = theRenderer;
+			charModel.baseRendererInfos[0].defaultMaterial = LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"); //mesh
+			charModel.baseRendererInfos[1].renderer = thePSR;
+			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
+			meshObject.transform.localPosition = new Vector3(0, -4.8f, 0);*/
+			return nugwisoBody;
 		}
 
 		GameObject IMaster.BuildObject()
@@ -201,4 +249,5 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return master;
 		}
 	}
+	#endregion
 }

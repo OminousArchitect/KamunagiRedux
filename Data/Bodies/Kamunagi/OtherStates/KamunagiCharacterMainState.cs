@@ -157,7 +157,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 	public class KamunagiHover : Asset, IEntityStates, IEffect
 	{
-		public Type[] GetEntityStates() => new[] { typeof(KamunagiHoverState) };
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(KamunagiHoverState) };
 
 		GameObject IEffect.BuildObject()
 		{

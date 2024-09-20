@@ -4,10 +4,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
 	public class KamunagiSkillFamilySecondary : Asset, ISkillFamily
 	{
-		public IEnumerable<Type> GetSkillAssets() =>
-			new[]
+		public IEnumerable<Asset> GetSkillAssets() =>
+			new Asset[]
 			{
-				typeof(EnnakamuyEarth), typeof(WindBoomerang), typeof(DenebokshiriBrimstone), typeof(KujyuriFrost)
+				GetAsset<EnnakamuyEarth>(), GetAsset<WindBoomerang>(), GetAsset<DenebokshiriBrimstone>(), GetAsset<KujyuriFrost>()
 			};
 
 		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaSecondary"

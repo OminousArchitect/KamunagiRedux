@@ -132,7 +132,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return chargeSunEffect;
 		}
 
-		public Type[] GetEntityStates() => new[] { typeof(LightOfNaturesAxiomState) };
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(LightOfNaturesAxiomState) };
 	}
 
 	public class NaturesAxiom : Asset, INetworkedObject, IEffect, IBuff

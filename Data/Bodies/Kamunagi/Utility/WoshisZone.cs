@@ -49,7 +49,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			return skill;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(WoshisZoneState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(WoshisZoneState) };
 
 		GameObject INetworkedObject.BuildObject()
 		{

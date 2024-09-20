@@ -20,7 +20,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 	{
 		public const string tokenPrefix = "NINES_KAMUNAGI_BODY_";
 
-		Type[] IEntityStates.GetEntityStates() =>
+		IEnumerable<Type> IEntityStates.GetEntityStates() =>
 			new[]
 			{
 				typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState),

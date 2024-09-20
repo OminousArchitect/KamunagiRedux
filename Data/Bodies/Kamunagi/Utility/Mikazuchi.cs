@@ -93,7 +93,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			return effect;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(MikazuchiState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(MikazuchiState) };
 
 		SkillDef ISkill.BuildObject()
 		{

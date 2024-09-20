@@ -129,7 +129,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			return skill;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(AltSoeiMusouState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(AltSoeiMusouState) };
 
 		GameObject IProjectile.BuildObject()
 		{

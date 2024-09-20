@@ -107,7 +107,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 
-		public Type[] GetEntityStates() => new []{typeof(SummonFriendlyEnemyState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(SummonFriendlyEnemyState)};
 	}
 	
 	#region Nugwiso1

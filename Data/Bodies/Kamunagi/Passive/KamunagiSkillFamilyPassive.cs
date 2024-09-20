@@ -2,6 +2,6 @@
 {
 	public class KamunagiSkillFamilyPassive : Asset, ISkillFamily
 	{
-		public IEnumerable<Type> GetSkillAssets() => new[] { typeof(KamunagiDash) };
+		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<KamunagiDash>() };
 	}
 }

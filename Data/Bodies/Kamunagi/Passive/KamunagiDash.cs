@@ -162,7 +162,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			return skill;
 		}
 
-		public Type[] GetEntityStates() => new[] { typeof(KamunagiChannelDashState), typeof(KamunagiDashState) };
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(KamunagiChannelDashState), typeof(KamunagiDashState) };
 
 		GameObject IProjectile.BuildObject()
 		{

@@ -108,7 +108,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return skill;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(DenebokshiriBrimstoneState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(DenebokshiriBrimstoneState) };
 
 		GameObject IProjectile.BuildObject()
 		{

@@ -93,7 +93,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return effect;
 		}
 
-		public Type[] GetEntityStates() => new []{typeof(MashiroBlessingState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(MashiroBlessingState)};
 		
 		SkillDef ISkill.BuildObject()
 		{

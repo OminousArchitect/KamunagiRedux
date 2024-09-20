@@ -188,7 +188,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return buffDef;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(SobuGekishohaState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(SobuGekishohaState) };
 
 		GameObject IEffect.BuildObject()
 		{

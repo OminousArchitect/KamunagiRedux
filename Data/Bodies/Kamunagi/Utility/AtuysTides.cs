@@ -97,7 +97,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			return tidalProjectile;
 		}
 
-		Type[] ISkill.GetEntityStates() => new[] { typeof(AtuysTidesState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(AtuysTidesState) };
 
 		SkillDef ISkill.BuildObject()
 		{

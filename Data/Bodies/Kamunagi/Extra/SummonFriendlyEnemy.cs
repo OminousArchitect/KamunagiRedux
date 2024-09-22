@@ -20,7 +20,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			{
 				Asset.GetGameObject<NugwisomkamiOne, IMaster>(),
-				new List<string>() { "EliteIceEquipment", "EliteFireEquipment" }
+				new List<string>() { "EliteLightningEquipment", "EliteFireEquipment" }
 			},
 			
 			{
@@ -29,7 +29,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			},
 
 			{
-				Asset.GetGameObject<NugwisomkamiThree, IMaster>(),
+				Asset.GetGameObject<BigTankyBoi, IMaster>(),
 				new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
 			}
 		};
@@ -181,24 +181,25 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.acceleration = 14f;
 
 			var array = nugwisoBody.GetComponents<GenericSkill>();
-			array[0]._skillFamily = GetAsset<Wisp2PrimaryFamily>();
+			array[0]._skillFamily = GetAsset<HKPrimaryFamily>();
 			return nugwisoBody;
 		}
 		
 		GameObject IMaster.BuildObject()
 		{
-			var master = LoadAsset<GameObject>("RoR2/Base/Wisp/WispMaster.prefab")!.InstantiateClone("Nugwiso2Master", true);
+			var master = LoadAsset<GameObject>("RoR2/Base/Wisp/WispMaster.prefab")!.InstantiateClone("TwinsHunterKillerWisp", true);
 			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<HunterKillerDrone, IBody>();
+			master.AddComponent<SetDontDestroyOnLoad>();
 			return master;
 		}
 	}
 
-	public class Wisp2PrimaryFamily : Asset, ISkillFamily
+	public class HKPrimaryFamily : Asset, ISkillFamily
 	{
-		public IEnumerable<Type> GetSkillAssets() => new[] { typeof(ReplaceWisp2Primary) };
+		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<ReplaceHKPrimary>() };
 	}
 
-	internal class ReplaceWisp2Primary : Asset, ISkill
+	internal class ReplaceHKPrimary : Asset, ISkill
 	{
 		SkillDef ISkill.BuildObject()
 		{
@@ -207,46 +208,55 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
+			skill.baseRechargeInterval = 8f;
 			skill.icon = LoadAsset<Sprite>("n");
 			return skill;
 		}
-		
-		Type[] ISkill.GetEntityStates() => new[] { typeof(AtuysTidesState) };
+
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(EntityStates.LunarWisp.FireLunarGuns) };
 	}
-	
 	#endregion
 	
 	#region Nugwiso3
-	public class NugwisomkamiThree : Asset, IBody, IMaster
+	public class BigTankyBoi : Asset, IBody, IMaster
 	{
 		GameObject IBody.BuildObject()
 		{
 			var nugwisoBody = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispBody.prefab")!.InstantiateClone("Nugwiso3", true);
 			nugwisoBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI3_BODY_NAME";
-			/*var mdl = wispBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
-			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
-			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
-			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it
-			var meshObject = mdl.transform.GetChild(0).gameObject;
-			UnityEngine.Object.Destroy(meshObject.GetComponent<SkinnedMeshRenderer>());
-			UnityEngine.Object.Destroy(mdl.GetComponentInChildren<SkinnedMeshRenderer>());
-			meshObject.AddComponent<MeshFilter>().mesh = LoadAsset<Mesh>("bundle2:TheMask");
-			var theRenderer = meshObject.AddComponent<MeshRenderer>();
-			theRenderer.material = LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat");
-			charModel.baseRendererInfos[0].renderer = theRenderer;
-			charModel.baseRendererInfos[0].defaultMaterial = LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"); //mesh
-			charModel.baseRendererInfos[1].renderer = thePSR;
-			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
-			meshObject.transform.localPosition = new Vector3(0, -4.8f, 0);*/
+			var array = nugwisoBody.GetComponents<GenericSkill>();
+			array[0]._skillFamily = GetAsset<TankyBoiPrimaryFamily>();
 			return nugwisoBody;
 		}
 
 		GameObject IMaster.BuildObject()
 		{
 			var master = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispMaster.prefab")!.InstantiateClone("Nugwiso3Master", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<NugwisomkamiThree, IBody>();
+			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<BigTankyBoi, IBody>();
 			return master;
+		}
+		
+		public class TankyBoiPrimaryFamily : Asset, ISkillFamily
+		{
+			public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<ReplaceAWPrimary>() };
+		}
+
+		internal class ReplaceAWPrimary : Asset, ISkill
+		{
+			SkillDef ISkill.BuildObject()
+			{
+				var skill = ScriptableObject.CreateInstance<SkillDef>();
+				skill.activationStateMachineName = "Weapon";
+				skill.skillName = "Extra Skill 5";
+				skill.skillNameToken = "";
+				skill.skillDescriptionToken = "";
+				skill.baseRechargeInterval = 7f;
+				skill.beginSkillCooldownOnSkillEnd = true;
+				skill.icon = LoadAsset<Sprite>("n");
+				return skill;
+			}
+
+			IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(EntityStates.GravekeeperMonster.Weapon.GravekeeperBarrage) };
 		}
 	}
 	#endregion

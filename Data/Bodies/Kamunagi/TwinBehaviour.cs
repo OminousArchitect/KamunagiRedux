@@ -106,7 +106,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		{
 			{ Asset.GetGameObject<NugwisomkamiOne, IMaster>(), null },
 			{ Asset.GetGameObject<HunterKillerDrone, IMaster>(), null },
-			{ Asset.GetGameObject<NugwisomkamiThree, IMaster>(), null }
+			{ Asset.GetGameObject<BigTankyBoi, IMaster>(), null }
 		};
 		public void Awake()
 		{

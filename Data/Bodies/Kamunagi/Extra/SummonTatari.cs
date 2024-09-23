@@ -71,12 +71,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var mdl = model.GetComponent<CharacterModel>();
 			mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
 			mdl.baseRendererInfos[1].renderer.enabled = false; //attempt #2
+			var lr = model.AddComponent<LegRemover>();
 			foreach (SkinnedMeshRenderer m in model.GetComponentsInChildren<SkinnedMeshRenderer>())
 			{
 				switch (m.name)
 				{
-					case "mdlGup.003": 
-						m.enabled = false; //attempt #3
+					case "mdlGup.003":
+						lr.legs = m.gameObject;
 						break;
 				}
 			}
@@ -89,6 +90,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			tatariMaster.AddComponent<SetDontDestroyOnLoad>();
 			tatariMaster.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<TatariBody, IBody>();
 			return tatariMaster;
+		}
+
+		public class LegRemover : MonoBehaviour
+		{
+			public GameObject legs;
+
+			public void Awake()
+			{
+				legs.SetActive(false);
+			}
 		}
 	}
 }

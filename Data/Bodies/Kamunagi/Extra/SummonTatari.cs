@@ -65,9 +65,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			//mat.SetFloat("");
 			
 			var gupBody = LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab")!.InstantiateClone("LargeTatariBody", true);
+			var legs = gupBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
+			legs.GetComponent<SkinnedMeshRenderer>().enabled = false; //attempt #1
 			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;
 			var mdl = model.GetComponent<CharacterModel>();
 			mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
+			mdl.baseRendererInfos[1].renderer.enabled = false; //attempt #2
+			foreach (SkinnedMeshRenderer m in model.GetComponentsInChildren<SkinnedMeshRenderer>())
+			{
+				switch (m.name)
+				{
+					case "mdlGup.003": 
+						m.enabled = false; //attempt #3
+						break;
+				}
+			}
 			return gupBody;
 		}
 

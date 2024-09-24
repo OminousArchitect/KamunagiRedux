@@ -37,7 +37,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 			if (projectilesFired > Mathf.FloorToInt(duration / totalProjectileCount * fixedAge)) return;
 			var aimRay = GetAimRay();
-			bool wasLucky = Util.CheckRoll(critStat + 17f, characterBody.master);
+			bool wasLucky = Util.CheckRoll(critStat + 7f, characterBody.master);
 			ProjectileManager.instance.FireProjectile(
 				projectilePrefab = wasLucky ? luckyProjectilePrefab : projectilePrefab,
 				aimRay.origin,

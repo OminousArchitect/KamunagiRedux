@@ -168,7 +168,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.baseRechargeInterval = 10f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = false;
-			skill.fullRestockOnAssign = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = true;
 			skill.mustKeyPress = true;

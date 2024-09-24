@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
-	public class SummonFriendlyEnemyState : BaseTwinState
+	public class SummonNugwisomkamiState : BaseTwinState
 	{
 		public override int meterGain => 0;
 		public override int meterGainOnExit => possibleSpirits.Length != 0 || deadSpirits.Length != 0 ? 10 : 0;
@@ -73,7 +73,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				deployable.onUndeploy ??= new UnityEvent();
 				deployable.onUndeploy.AddListener(characterMaster.TrueKill);
 				
-				characterBody.master.AddDeployable(deployable, SummonFriendlyEnemy.deployableSlot);
+				characterBody.master.AddDeployable(deployable, SummonNugwisomkami.deployableSlot);
 				
 			} else if (deadSpirits.Length != 0)
 			{
@@ -86,11 +86,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class SummonFriendlyEnemy : Asset, ISkill
+	public class SummonNugwisomkami : Asset, ISkill
 	{
 		public static DeployableSlot deployableSlot;
 
-		public SummonFriendlyEnemy()
+		public SummonNugwisomkami()
 		{
 			deployableSlot = DeployableAPI.RegisterDeployableSlot((_,_) => 3);
 		}
@@ -102,12 +102,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("n");
+			skill.icon = LoadAsset<Sprite>("Uitsalnemetia");
 			// TODO i dont know what else to put here
 			return skill;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new []{typeof(SummonFriendlyEnemyState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(SummonNugwisomkamiState)};
 	}
 	
 	#region Nugwiso1

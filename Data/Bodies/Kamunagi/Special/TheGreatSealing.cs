@@ -13,7 +13,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	public class TheGreatSealingState : IndicatorSpellState
 	{
 		public EffectManagerHelper? chargeEffectInstance;
-		public override int meterGain => 0;
 		public override float duration => 10f;
 		public override float failedCastCooldown => 1f;
 
@@ -116,11 +115,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL1_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle:Special1");
 			skill.activationStateMachineName = "Body";
-			skill.baseMaxStock = 2;
-			skill.baseRechargeInterval = 3f;
+			skill.baseMaxStock = 1;
+			skill.baseRechargeInterval = 8f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = false;
-			skill.fullRestockOnAssign = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = true;
 			skill.mustKeyPress = true;

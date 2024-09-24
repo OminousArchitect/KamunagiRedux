@@ -19,7 +19,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public EffectManagerHelper rightMuzzleInstance;
 		public GameObject sun;
 		public uint channelSound;
-		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{
@@ -88,7 +87,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = true;
-			skill.fullRestockOnAssign = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = true;

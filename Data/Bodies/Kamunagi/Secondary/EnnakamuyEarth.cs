@@ -47,7 +47,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;
-			skill.fullRestockOnAssign = false;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = false;

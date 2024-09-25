@@ -15,39 +15,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
 		public EffectManagerHelper? veilEffect;
+		private GameObject childTpFx;
+		private Vector3 teleportPosition;
 		public override int meterGain => 0;
-		
-		public static GameObject projectilePrefab;
-
-		public static GameObject effectPrefab;
-
-		public static GameObject tpEffectPrefab;
-
-		public static float baseDuration = 2f;
-
-		public static float damageCoefficient = 1.2f;
-
-		public static float force = 20f;
-
-		public static string attackString;
-
-		public static float tpDuration = 0.5f;
-
-		public static float fireFrolicDuration = 0.3f;
-
-		public static float frolicCooldownDuration = 18f;
-
-		private float duration;
-
-		private bool frolicFireFired;
-
-		private bool tpFired;
-
-		private Transform position;
+		private float duration = 0.45f;
+		private bool teleported;
+		private NodeGraph? availableNodes;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
+			childTpFx = LoadAsset<GameObject>("RoR2/DLC2/Child/FrolicTeleportVFX.prefab")!;
 			var mdl = GetModelTransform();
 			if (mdl)
 			{
@@ -59,91 +37,54 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
-
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
-			var effect = Asset.GetGameObject<HonokasVeil, IEffect>();
-			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
+
+			NodeGraph airNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Air);
+			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
+			if (twinBehaviour)
+			{
+				availableNodes = characterMotor.isGrounded ? groundNodes : airNodes;
+			}
+			else
+			{
+				availableNodes = airNodes;
+			}
+			var nodesInRange = availableNodes.FindNodesInRange(characterBody.footPosition, 25f, 37f, HullMask.Human);
+			NodeGraph.NodeIndex nodeIndex = nodesInRange.ElementAt(UnityEngine.Random.Range(1, nodesInRange.Count));
+			availableNodes.GetNodePosition(nodeIndex, out var footPosition);
+			footPosition += Vector3.up * 1.5f;
+			teleportPosition = footPosition;
 			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
 			}, false);
-			//veilEffect = EffectManager.GetAndActivatePooledEffect(effect, characterBody.coreTransform, true);
-			var hurtBoxes = new SphereSearch
-				{
-					origin = characterBody.corePosition, radius = 30, mask = LayerIndex.entityPrecise.mask
-				}
-				.RefreshCandidates()
-				.FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(teamComponent.teamIndex))
-				.OrderCandidatesByDistance()
-				.FilterCandidatesByDistinctHurtBoxEntities()
-				.GetHurtBoxes();
-			if (hurtBoxes[0]) position = hurtBoxes[0].transform;
 		}
 
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			if (!isAuthority) return;
-			if (base.fixedAge > tpDuration && !tpFired)
+
+			if (fixedAge > 0.2f && !teleported)
 			{
-				FireTPEffect();
-				tpFired = true;
-				TeleportAroundPlayer();
+				teleported = true;
+				Vector3 effectPos = FindModelChild("MuzzleCenter").transform.position;
+				EffectManager.SpawnEffect(childTpFx, new EffectData
+				{
+					origin = effectPos,
+					scale = 1f
+				}, transmit: true);
+				Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
+				TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
 			}
-			if (base.fixedAge > fireFrolicDuration && !frolicFireFired)
-			{
-				frolicFireFired = true;
-				FireTPEffect();
-				Transform position1 = position;
-				base.characterBody.transform.LookAt(position1.position);
-			}
-			if (base.fixedAge >= duration && base.isAuthority)
+			
+			if (base.fixedAge >= duration)
 			{
 				outer.SetNextStateToMain();
 			}
 		}
-		
-		public void TeleportAroundPlayer()
-		{
-			GetComponent<ModelLocator>().modelTransform.GetComponent<CharacterModel>();
-			_ = base.characterBody.corePosition;
-			NodeGraph nodeGraph = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
-			Vector3 variable = position.position;
-			List<NodeGraph.NodeIndex> list = nodeGraph.FindNodesInRange(variable, 25f, 37f, HullMask.Human);
-			Vector3 nodePosition = default(Vector3);
-			bool flag = false;
-			int num = 35;
-			while (!flag)
-			{
-				NodeGraph.NodeIndex nodeIndex = list.ElementAt(UnityEngine.Random.Range(1, list.Count));
-				nodeGraph.GetNodePosition(nodeIndex, out nodePosition);
-				float num2 = Vector3.Distance(base.characterBody.coreTransform.position, nodePosition);
-				num--;
-				if (num2 > 55f || num < 0)
-				{
-					flag = true;
-				}
-			}
-			if (num < 0)
-			{
-				Debug.LogWarning("Twins.Frolic state entered a loop where it ran more than 35 times without getting out");
-			}
-			nodePosition += Vector3.up * 1.5f;
-			TeleportHelper.TeleportBody(base.characterBody, nodePosition);
-		}
 
-		public void FireTPEffect()
-		{
-			Vector3 position = FindModelChild("Chest").transform.position;
-			EffectManager.SpawnEffect(tpEffectPrefab, new EffectData
-			{
-				origin = position,
-				scale = 1f
-			}, transmit: true);
-			Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
-		}
-		
 		public override void OnExit()
 		{
 			base.OnExit();

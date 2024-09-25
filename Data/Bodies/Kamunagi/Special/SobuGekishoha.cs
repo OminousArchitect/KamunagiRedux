@@ -69,7 +69,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public override void Update()
 		{
 			base.Update();
-			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 			if (!tracerInstance || !centerFarMuzzle) return;
 			var aimRay = GetAimRay();
 			tracerInstance.transform.position = centerFarMuzzle.position;
@@ -80,6 +79,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			base.FixedUpdate();
 			stopwatch += Time.deltaTime;
+			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 			if (stopwatch >= 0.15f)
 			{
 				stopwatch = 0;

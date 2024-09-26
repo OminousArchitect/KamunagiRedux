@@ -105,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public Dictionary<GameObject, CharacterMaster?> NugwisoSpiritDefs = new Dictionary<GameObject, CharacterMaster?>()
 		{
 			{ Asset.GetGameObject<AssassinSpirit, IMaster>(), null },
-			{ Asset.GetGameObject<HunterKillerDrone, IMaster>(), null },
+			{ Asset.GetGameObject<HunterKillerWisp, IMaster>(), null },
 			{ Asset.GetGameObject<TankyArchWisp, IMaster>(), null }
 		};
 		public void Awake()

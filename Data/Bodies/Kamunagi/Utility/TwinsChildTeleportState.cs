@@ -41,14 +41,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 			NodeGraph airNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Air);
 			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
-			if (twinBehaviour)
-			{
-				availableNodes = characterMotor.isGrounded ? groundNodes : airNodes;
-			}
-			else
-			{
-				availableNodes = airNodes;
-			}
+			availableNodes = characterMotor.isGrounded ? groundNodes : airNodes;
 			var nodesInRange = availableNodes.FindNodesInRange(characterBody.footPosition, 25f, 37f, HullMask.Human);
 			NodeGraph.NodeIndex nodeIndex = nodesInRange.ElementAt(UnityEngine.Random.Range(1, nodesInRange.Count));
 			availableNodes.GetNodePosition(nodeIndex, out var footPosition);

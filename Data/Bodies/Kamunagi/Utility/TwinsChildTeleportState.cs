@@ -2,22 +2,30 @@
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
+using RoR2.CharacterAI;
+using RoR2.Navigation;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-	public class HonokasVeilState : BaseTwinState
+	public class TwinsChildTeleportState : BaseTwinState
 	{
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
 		public EffectManagerHelper? veilEffect;
+		private GameObject childTpFx;
+		private Vector3 teleportPosition;
 		public override int meterGain => 0;
+		private float duration = 0.45f;
+		private bool teleported;
+		private NodeGraph? availableNodes;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
+			childTpFx = LoadAsset<GameObject>("RoR2/DLC2/Child/FrolicTeleportVFX.prefab")!;
 			var mdl = GetModelTransform();
 			if (mdl)
 			{
@@ -29,24 +37,49 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
-
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
-			var effect = Asset.GetGameObject<HonokasVeil, IEffect>();
-			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
+
+			NodeGraph airNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Air);
+			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
+			if (twinBehaviour)
+			{
+				availableNodes = characterMotor.isGrounded ? groundNodes : airNodes;
+			}
+			else
+			{
+				availableNodes = airNodes;
+			}
+			var nodesInRange = availableNodes.FindNodesInRange(characterBody.footPosition, 25f, 37f, HullMask.Human);
+			NodeGraph.NodeIndex nodeIndex = nodesInRange.ElementAt(UnityEngine.Random.Range(1, nodesInRange.Count));
+			availableNodes.GetNodePosition(nodeIndex, out var footPosition);
+			footPosition += Vector3.up * 1.5f;
+			teleportPosition = footPosition;
 			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
 			}, false);
-			veilEffect = EffectManager.GetAndActivatePooledEffect(effect, characterBody.coreTransform, true);
-			characterMotor.useGravity = false;
 		}
 
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			if (!isAuthority) return;
-			if (!inputBank.skill3.down || fixedAge > 25f)
+
+			if (fixedAge > 0.2f && !teleported)
+			{
+				teleported = true;
+				Vector3 effectPos = FindModelChild("MuzzleCenter").transform.position;
+				EffectManager.SpawnEffect(childTpFx, new EffectData
+				{
+					origin = effectPos,
+					scale = 1f
+				}, transmit: true);
+				Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
+				TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
+			}
+			
+			if (base.fixedAge >= duration)
 			{
 				outer.SetNextStateToMain();
 			}
@@ -58,7 +91,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			if (veilEffect != null) veilEffect.ReturnToPool();
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
-			characterMotor.useGravity = true;
 			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
@@ -72,7 +104,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class HonokasVeil : Asset, ISkill, IEffect
+	public class TwinsChildTeleport : Asset, ISkill, IEffect
 	{
 		SkillDef ISkill.BuildObject()
 		{
@@ -91,7 +123,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			return skill;
 		}
 
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(HonokasVeilState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(TwinsChildTeleportState) };
 
 		GameObject IEffect.BuildObject()
 		{

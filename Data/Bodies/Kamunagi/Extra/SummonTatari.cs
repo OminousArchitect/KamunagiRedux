@@ -1,4 +1,5 @@
-﻿using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+﻿using EntityStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -33,7 +34,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		public SummonTatari()
 		{
-			deployableSlot = DeployableAPI.RegisterDeployableSlot((_,_) => 3);
+			deployableSlot = DeployableAPI.RegisterDeployableSlot((_,_) => 1);
 		}
 
 		SkillDef ISkill.BuildObject()
@@ -68,6 +69,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var legs = gupBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
 			legs.GetComponent<SkinnedMeshRenderer>().enabled = false; //attempt #1
 			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+			gupBody.GetComponent<CharacterDeathBehavior>().deathState = new SerializableEntityStateType(typeof(GenericCharacterDeath));
 			var mdl = model.GetComponent<CharacterModel>();
 			mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
 			mdl.baseRendererInfos[1].renderer.enabled = false; //attempt #2

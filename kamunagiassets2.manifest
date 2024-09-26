@@ -1,22 +1,27 @@
 ManifestFileVersion: 0
-CRC: 2515042654
+CRC: 1551673046
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 51c0de0330dcf13bfdcdc97b53181fb1
+    Hash: 82425e54a2cdcbf3e60d0b061eed755a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 5738d5144726bd397c25f523f01cc102
+    Hash: 05e8629778cd54a3675bf1d857b68d25
 HashAppended: 0
 ClassTypes:
 - Class: 21
+  Script: {instanceID: 0}
+- Class: 28
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/172714677590348517.png
 - Assets/Zeal.shader
 - Assets/TheMask.mesh
 - Assets/ZealMat.mat

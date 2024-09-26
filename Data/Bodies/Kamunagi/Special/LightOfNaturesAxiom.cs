@@ -19,7 +19,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public EffectManagerHelper rightMuzzleInstance;
 		public GameObject sun;
 		public uint channelSound;
-		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{
@@ -43,6 +42,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			base.FixedUpdate();
 			if (isAuthority && !IsKeyDownAuthority()) outer.SetNextStateToMain();
+			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 			if (!NetworkServer.active || fixedAge < 1 || sun) return;
 			sun = UnityEngine.Object.Instantiate(Asset.GetGameObject<NaturesAxiom, INetworkedObject>(), spawnPos,
 				Quaternion.identity);
@@ -88,7 +88,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = true;
-			skill.fullRestockOnAssign = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = true;
@@ -248,8 +247,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return buffDef;
 		}
 
-		[HarmonyPrefix,
-		 HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.AddTimedBuff), typeof(BuffDef), typeof(float))]
+		[HarmonyPrefix, HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.AddTimedBuff), typeof(BuffDef), typeof(float))]
 		private static void AddTimedBuffHook(CharacterBody __instance, BuffDef buffDef, float duration)
 		{
 			if (!TryGetAsset<NaturesAxiom, IBuff>(out var customOverheat)) return;
@@ -298,10 +296,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			GameObject IEffect.BuildObject()
 			{
-				var voidFogMild = LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab");
-				var effect = voidFogMild.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false);
+				var effect = LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab")!.InstantiateClone("CurseParticles", false);
 				effect.transform.position = new Vector3(0f, 1f, 0f);
-				//there was a destroyontimer component here but maybe we don't need it because pool
+				var timer = effect.AddComponent<DestroyOnTimer>();
+				timer.age = 2f;
+				var helperControler = effect.AddComponent<BurnEffectControllerHelper>();
+				helperControler.burnParticleSystem = effect.GetComponent<ParticleSystem>();
+				helperControler.destroyOnTimer = timer;
+				UnityEngine.Object.Destroy(effect.GetComponent<TemporaryVisualEffect>());
+				UnityEngine.Object.Destroy(effect.GetComponent<EffectComponent>());
 				return effect;
 			}
 		}

@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
-	public class SummonFriendlyEnemyState : BaseTwinState
+	public class SummonNugwisomkamiState : BaseTwinState
 	{
 		public override int meterGain => 0;
 		public override int meterGainOnExit => possibleSpirits.Length != 0 || deadSpirits.Length != 0 ? 10 : 0;
@@ -19,7 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public static Dictionary<GameObject, List<string>> NugwisoDualEliteAspects = new Dictionary<GameObject, List<string>>()
 		{
 			{
-				Asset.GetGameObject<NugwisomkamiOne, IMaster>(),
+				Asset.GetGameObject<AssassinSpirit, IMaster>(),
 				new List<string>() { "EliteLightningEquipment", "EliteFireEquipment" }
 			},
 			
@@ -29,7 +29,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			},
 
 			{
-				Asset.GetGameObject<BigTankyBoi, IMaster>(),
+				Asset.GetGameObject<TankyArchWisp, IMaster>(),
 				new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
 			}
 		};
@@ -73,7 +73,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				deployable.onUndeploy ??= new UnityEvent();
 				deployable.onUndeploy.AddListener(characterMaster.TrueKill);
 				
-				characterBody.master.AddDeployable(deployable, SummonFriendlyEnemy.deployableSlot);
+				characterBody.master.AddDeployable(deployable, SummonNugwisomkami.deployableSlot);
 				
 			} else if (deadSpirits.Length != 0)
 			{
@@ -86,11 +86,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class SummonFriendlyEnemy : Asset, ISkill
+	public class SummonNugwisomkami : Asset, ISkill
 	{
 		public static DeployableSlot deployableSlot;
 
-		public SummonFriendlyEnemy()
+		public SummonNugwisomkami()
 		{
 			deployableSlot = DeployableAPI.RegisterDeployableSlot((_,_) => 3);
 		}
@@ -102,16 +102,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("n");
+			skill.icon = LoadAsset<Sprite>("bundle:Uitsalnemetia");
 			// TODO i dont know what else to put here
 			return skill;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new []{typeof(SummonFriendlyEnemyState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(SummonNugwisomkamiState)};
 	}
 	
 	#region Nugwiso1
-	public class NugwisomkamiOne : Asset, IBody, IMaster
+	public class AssassinSpirit : Asset, IBody, IMaster
 	{
 		GameObject IBody.BuildObject()
 		{
@@ -142,15 +142,39 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			charModel.baseRendererInfos[1].renderer = thePSR;
 			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
 			meshObject.transform.localPosition = new Vector3(0, -4.8f, 0);
+			var array = nugwisoBody.GetComponents<GenericSkill>();
+			array[0]._skillFamily = GetAsset<AssassinSpiritPrimarySkillFamily>();
 			return nugwisoBody;
 		}
 		
 		GameObject IMaster.BuildObject()
 		{
 			var master = LoadAsset<GameObject>("RoR2/Base/Wisp/WispMaster.prefab")!.InstantiateClone("Nugwiso1Master", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<NugwisomkamiOne, IBody>();
+			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<AssassinSpirit, IBody>();
 			return master;
 		}
+	}
+	
+	public class AssassinSpiritPrimarySkillFamily : Asset, ISkillFamily
+	{
+		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<ReplaceAWPrimary>() };
+	}
+
+	internal class ReplaceAWPrimary : Asset, ISkill
+	{
+		SkillDef ISkill.BuildObject()
+		{
+			var skill = ScriptableObject.CreateInstance<SkillDef>();
+			skill.activationStateMachineName = "Weapon";
+			skill.skillName = "Extra Skill 5";
+			skill.skillNameToken = "";
+			skill.skillDescriptionToken = "";
+			skill.baseRechargeInterval = 8f;
+			skill.icon = LoadAsset<Sprite>("n");
+			return skill;
+		}
+
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(TwinsChildTeleportState) };
 	}
 	#endregion
 
@@ -167,7 +191,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 			var nugwisoBody = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispBody.prefab")!.InstantiateClone("Nugwiso2", true);
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			Vector3 smaller = new Vector3(0.2f, 0.2f, 0.2f);
+			Vector3 smaller = Vector3.one * 0.23f;
 			mdl.transform.localScale = new Vector3(0.18f, 0.18f, 0.18f);
 			mdl.transform.GetChild(1).localScale = smaller;
 			mdl.transform.GetChild(2).localScale = smaller;
@@ -218,7 +242,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	#endregion
 	
 	#region Nugwiso3
-	public class BigTankyBoi : Asset, IBody, IMaster
+	public class TankyArchWisp : Asset, IBody, IMaster
 	{
 		GameObject IBody.BuildObject()
 		{
@@ -232,7 +256,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		GameObject IMaster.BuildObject()
 		{
 			var master = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispMaster.prefab")!.InstantiateClone("Nugwiso3Master", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<BigTankyBoi, IBody>();
+			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<TankyArchWisp, IBody>();
 			return master;
 		}
 		
@@ -256,7 +280,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				return skill;
 			}
 
-			IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(EntityStates.GravekeeperMonster.Weapon.GravekeeperBarrage) };
+			IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(EntityStates.Idle /*GravekeeperMonster.Weapon.GravekeeperBarrage*/) }; //todo Gravekeeper state is broken, fix later
 		}
 	}
 	#endregion

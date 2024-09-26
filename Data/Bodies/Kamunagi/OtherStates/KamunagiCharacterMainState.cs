@@ -85,7 +85,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			{
 				if (hasInputBank)
 				{
-					if (inputBank.jump.justPressed && (characterMotor as IPhysMotor).velocity.y <= -10f &&
+					if (inputBank.jump.justPressed && (characterMotor as IPhysMotor).velocity.y <= -15f &&
 					    passiveSkill.ExecuteIfReady())
 					{
 						return;

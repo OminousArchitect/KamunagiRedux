@@ -12,6 +12,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class SummonMothMoth : BaseTwinState
 	{
 		private float duration = 0.55f;
+		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{

@@ -42,6 +42,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			charModel.baseRendererInfos[1].renderer = thePSR;
 			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
 			meshObject.transform.localPosition = new Vector3(0, -4.8f, 0);
+			var cb = nugwisoBody.GetComponent<CharacterBody>();
+			cb.baseMaxHealth = 150f;
 			
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
@@ -67,100 +69,71 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		private float stopwatch;
 		private float missileStopwatch;
-		public static float baseDuration;
-		public static string muzzleString;
-		public static float missileSpawnFrequency;
-		public static float missileSpawnDelay;
-		public static float missileForce;
-		public static float damageCoefficient;
-		public static float maxSpread;
-		public static GameObject projectilePrefab;
-		public static GameObject muzzleflashPrefab;
-		public static string jarEffectChildLocatorString;
-		public static string jarOpenSoundString;
-		public static string jarCloseSoundString;
-		public static GameObject jarOpenEffectPrefab;
-		public static GameObject jarCloseEffectPrefab;
-		private ChildLocator childLocator;
+		public static float firingDuration = 3f;
+		public static float missileForce = 1000f;
+		public static float damageCoefficient = 1f;
+		public static float maxSpread = 180f;
+		
+		public static string muzzleString = "Head";
+		public static string jarOpenSoundString = "Play_gravekeeper_attack1_open";
+		public static string jarCloseSoundString = "Play_gravekeeper_attack1_close";
+		public static GameObject? jarOpenEffectPrefab;
+		public static GameObject? jarCloseEffectPrefab;
+		public static GameObject? muzzleflashPrefab;
 		private static int BeginGravekeeperBarrageStateHash = Animator.StringToHash("BeginGravekeeperBarrage");
 		private static int EndGravekeeperBarrageStateHash = Animator.StringToHash("EndGravekeeperBarrage");
 		
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			this.missileStopwatch -= missileSpawnDelay;
-			Transform modelTransform = base.GetModelTransform();
-			if (modelTransform)
-			{
-				this.childLocator = modelTransform.GetComponent<ChildLocator>();
-				if (this.childLocator)
-				{
-					this.childLocator.FindChild("JarEffectLoop").gameObject.SetActive(true);
-				}
-			}
-			this.PlayAnimation("Jar, Override", BeginGravekeeperBarrageStateHash);
-			EffectManager.SimpleMuzzleFlash(jarOpenEffectPrefab, base.gameObject, jarEffectChildLocatorString, false);
+			muzzleflashPrefab = LoadAsset<GameObject>("RoR2/Base/Gravekeeper/MuzzleflashTrackingFireball.prefab")!;
+			jarOpenEffectPrefab = LoadAsset<GameObject>("RoR2/Base/Gravekeeper/GravekeeperJarOpen.prefab")!;
+			jarCloseEffectPrefab = LoadAsset<GameObject>("RoR2/Base/Gravekeeper/GravekeeperJarOpen.prefab")!;
+			
+			EffectManager.SimpleMuzzleFlash(jarOpenEffectPrefab, base.gameObject, muzzleString, false);
 			Util.PlaySound(jarOpenSoundString, base.gameObject);
-			base.characterBody.SetAimTimer(baseDuration + 2f);
+			base.characterBody.SetAimTimer(firingDuration + 1f);
 		}
 		
-		private void FireBlob(Ray projectileRay, float bonusPitch, float bonusYaw)
+		private void FireWispyBall(Ray projectileRay, float bonusPitch, float bonusYaw)
 		{
 			projectileRay.direction = Util.ApplySpread(projectileRay.direction, 0f, maxSpread, 1f, 1f, bonusYaw, bonusPitch);
 			EffectManager.SimpleMuzzleFlash(muzzleflashPrefab, base.gameObject, muzzleString, false);
-			if (NetworkServer.active)
+			if (base.isAuthority)
 			{
 				ProjectileManager.instance.FireProjectile(
-					projectilePrefab, 
-					projectileRay.origin, 
-					Util.QuaternionSafeLookRotation(projectileRay.direction), 
-					base.gameObject, 
-					this.damageStat * damageCoefficient, missileForce, 
-					Util.CheckRoll(this.critStat, base.characterBody.master), 
-					DamageColorIndex.Default, 
-					null, 
+					LoadAsset<GameObject>("RoR2/Base/Gravekeeper/GravekeeperTrackingFireball.prefab"),
+					projectileRay.origin + Vector3.forward * 3f,
+					Util.QuaternionSafeLookRotation(projectileRay.direction),
+					base.gameObject,
+					damageStat * damageCoefficient, missileForce,
+					Util.CheckRoll(this.critStat, base.characterBody.master),
+					DamageColorIndex.Default,
+					null,
 					-1f
-					);
+				);
 			}
 		}
-		
+
 		public override void OnExit()
 		{
-			base.PlayCrossfade("Jar, Override", EndGravekeeperBarrageStateHash, 0.06f);
-			EffectManager.SimpleMuzzleFlash(jarCloseEffectPrefab, base.gameObject, jarEffectChildLocatorString, false);
+			EffectManager.SimpleMuzzleFlash(jarCloseEffectPrefab, base.gameObject, muzzleString, false);
 			Util.PlaySound(jarCloseSoundString, base.gameObject);
-			if (this.childLocator)
-			{
-				this.childLocator.FindChild("JarEffectLoop").gameObject.SetActive(false);
-			}
 			base.OnExit();
 		}
 		
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			float deltaTime = base.GetDeltaTime();
-			this.stopwatch += deltaTime;
-			this.missileStopwatch += deltaTime;
-			if (this.missileStopwatch >= 1f / missileSpawnFrequency)
+			stopwatch += Time.deltaTime;
+			missileStopwatch += Time.deltaTime;
+			
+			if (missileStopwatch >= 0.8f)
 			{
-				this.missileStopwatch -= 1f / missileSpawnFrequency;
-				Transform transform = this.childLocator.FindChild(muzzleString);
-				if (transform)
-				{
-					Ray projectileRay = default(Ray);
-					projectileRay.origin = transform.position;
-					projectileRay.direction = base.GetAimRay().direction;
-					float maxDistance = 1000f;
-					RaycastHit raycastHit;
-					if (Physics.Raycast(base.GetAimRay(), out raycastHit, maxDistance, LayerIndex.world.mask))
-					{
-						projectileRay.direction = raycastHit.point - transform.position;
-					}
-					this.FireBlob(projectileRay, 0f, 0f);
-				}
+				FireWispyBall(GetAimRay(), 5f, 5f);
+				missileStopwatch = 0f;
 			}
-			if (this.stopwatch >= baseDuration && base.isAuthority)
+			if (this.stopwatch >= firingDuration && base.isAuthority)
 			{
 				this.outer.SetNextStateToMain();
 			}
@@ -221,7 +194,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				origin = effectPos,
 				scale = 1f
 			}, transmit: true);
-			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			NodeGraph airNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Air);
 			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
 			availableNodes = airNodes;
@@ -255,7 +227,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			base.OnExit();
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			if (veilEffect != null) veilEffect.ReturnToPool();
-			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)
 			{
 				charModel.invisibilityCount--;

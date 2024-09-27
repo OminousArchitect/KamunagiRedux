@@ -1,8 +1,31 @@
-﻿using RoR2.Skills;
+﻿using R2API;
+using RoR2;
+using RoR2.Skills;
 using UnityEngine;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
+	#region BodyAndMaster
+	public class TankyArchWisp : Asset, IBody, IMaster
+	{
+		GameObject IBody.BuildObject()
+		{
+			var nugwisoBody = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispBody.prefab")!.InstantiateClone("Nugwiso3", true);
+			nugwisoBody.GetComponent<CharacterBody>().baseNameToken = "NUGWISOMKAMI3_BODY_NAME";
+			var array = nugwisoBody.GetComponents<GenericSkill>();
+			array[0]._skillFamily = GetAsset<LargeArchWispPrimaryFamily>();
+			return nugwisoBody;
+		}
+
+		GameObject IMaster.BuildObject()
+		{
+			var master = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab")!.InstantiateClone("Nugwiso3Master", true);
+			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<TankyArchWisp, IBody>();
+			return master;
+		}
+	}
+	#endregion
+	
 	public class LargeArchWispPrimaryFamily : Asset, ISkillFamily
 	{
 		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<LargeArchWispPrimary>() };

@@ -19,12 +19,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public EffectManagerHelper rightMuzzleInstance;
 		public GameObject sun;
 		public uint channelSound;
+		public Animator animator;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
 
 			var childLocator = GetModelChildLocator();
+			PlayAnimation("Saraana Override", "Cast2");
+			PlayAnimation("Ururuu Override", "Cast2");
+			animator = GetModelAnimator();
+			animator.SetBool("inAxiom", true);
 			spawnPos = childLocator.FindChild("MuzzleCenter").position + characterDirection.forward * 5;
 			leftMuzzleInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(
 				Asset.GetGameObject<LightOfNaturesAxiom, IEffect>(), childLocator.FindChild("MuzzleLeft"), true,
@@ -63,7 +68,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				EffectManager.SimpleEffect(Asset.GetGameObject<NaturesAxiom, IEffect>(), spawnPos, Quaternion.identity,
 					true);
 			}
-
+			animator.SetBool("inAxiom", false);
 			if (leftMuzzleInstance != null) leftMuzzleInstance.ReturnToPool();
 			if (rightMuzzleInstance != null) rightMuzzleInstance.ReturnToPool();
 			AkSoundEngine.StopPlayingID(channelSound);

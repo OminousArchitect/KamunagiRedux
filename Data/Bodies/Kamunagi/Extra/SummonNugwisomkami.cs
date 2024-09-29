@@ -16,22 +16,27 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public GameObject[] possibleSpirits;
 		public CharacterMaster[] deadSpirits;
 
-		public static Dictionary<GameObject, List<string>> NugwisoDualEliteAspects = new Dictionary<GameObject, List<string>>()
+		public static Dictionary<GameObject, List<string>> NugwisoEliteDefs = new Dictionary<GameObject, List<string>>()
 		{
 			{
 				Asset.GetGameObject<AssassinSpirit, IMaster>(),
-				new List<string>() { "", "" }
-			},
+				new List<string>() { "EliteLightningEquipment" } //needs recoloring, then done(?)
+			}, //Mischief
 			
 			{
-				Asset.GetGameObject<HunterKillerWisp, IMaster>(),
-				new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" }
-			},
+				Asset.GetGameObject<WarMachine, IMaster>(),
+				new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" } //completely done
+			}, //Hubris
 
 			{
-				Asset.GetGameObject<TankyArchWisp, IMaster>(),
+				Asset.GetGameObject<VirusArchWisp, IMaster>(),
 				new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
-			}
+			}, //Pestilence
+
+			{
+				Asset.GetGameObject<IceTank, IMaster>(),
+				new List<string>() { "EliteIceEquipment" }
+			} //Solitude
 		};
 		public override void OnEnter()
 		{
@@ -68,7 +73,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				};
 				summon.preSpawnSetupCallback += master =>
 				{
-					var equipList = NugwisoDualEliteAspects[whichSpirit];
+					var equipList = NugwisoEliteDefs[whichSpirit];
 					var whichEquip = equipList[Mathf.RoundToInt(UnityEngine.Random.Range(0, equipList.Count))];
 					master.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichEquip));
 					twinBehaviour.masterBehaviour.NugwisoSpiritDefs[whichSpirit] = master;
@@ -84,7 +89,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				var nextSpiritMaster = deadSpirits[Mathf.RoundToInt(UnityEngine.Random.Range(0, deadSpirits.Length))];
 				nextSpiritMaster.Respawn(spawnPosition, Quaternion.identity);
-				var equipList = NugwisoDualEliteAspects.First(x => x.Key.GetComponent<CharacterMaster>().masterIndex == nextSpiritMaster.masterIndex).Value;
+				var equipList = NugwisoEliteDefs.First(x => x.Key.GetComponent<CharacterMaster>().masterIndex == nextSpiritMaster.masterIndex).Value;
 				var whichEquip = equipList[Mathf.RoundToInt(UnityEngine.Random.Range(0, equipList.Count))];
 				nextSpiritMaster.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichEquip));
 			}

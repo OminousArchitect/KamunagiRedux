@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2147897436
+CRC: 188307505
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e4dc31005af225edd50e681690adc1bc
+    Hash: f1b861160fb424e3bc622fb5b666bb34
   TypeTreeHash:
     serializedVersion: 2
     Hash: ee6edcc9cd502629224af9af345b62e4
@@ -63,6 +63,7 @@ Assets:
 - Assets/HenryAssets/Materials/Saraana/CLOTH 02/CLOTH 02_thickness.jpg
 - Assets/HenryAssets/Materials/Saraana/ITEMS/GIRL _ITEMS _Metallic.jpg
 - Assets/HenryAssets/Sprites/texRampGhost.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U EnterAxiom.anim
 - Assets/HenryAssets/Materials/Ururuu/CLOTH 02/GIRL _CLOTH 02_Height.jpg
 - Assets/HenryAssets/ImportFromBlender/animHenry Experimental.controller
 - Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Dodge.anim
@@ -72,6 +73,7 @@ Assets:
 - Assets/HenryAssets/Materials/Saraana/CLOTH 02/S Cloth 2.mat
 - Assets/HenryAssets/Materials/Saraana/ITEMS/GIRL _ITEMS _Height.jpg
 - Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth 01_BaseColor.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/S AxiomLoop1.anim
 - Assets/HenryAssets/Materials/Saraana/SHOE/GIRL _SHOE_Metallic.jpg
 - Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Dodge.anim
 - Assets/HenryAssets/Sprites/RoU.png
@@ -92,6 +94,7 @@ Assets:
 - Assets/HenryAssets/Materials/Ururuu/SHOE/GIRL _SHOE_Roughness.jpg
 - Assets/HenryAssets/Materials/Saraana/CLOTH 01/MasterFile B.fbx
 - Assets/HenryAssets/Sprites/firepng2.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U AxiomLoop.anim
 - Assets/HenryAssets/Materials/Ururuu/CLOTH 01/cloth 01_ambient_occlusion.jpg
 - Assets/HenryAssets/Materials/Saraana/CLOTH 02/GIRL _CLOTH 02_Height.jpg
 - Assets/HenryAssets/Materials/Ururuu/BODY/Body _id.jpg
@@ -155,7 +158,9 @@ Assets:
 - Assets/HenryAssets/Materials/Saraana/SHOE/GIRL _SHOE_Height.jpg
 - Assets/HenryAssets/Sprites/lightpng.png
 - Assets/HenryAssets/Materials/Ururuu/CLOTH 02/GIRL _CLOTH 02_Roughness.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/S EnterAxiom.anim
 - Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Idle.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U spin_DoubleSpinAttack.anim
 - Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth 01_Normal.jpg
 - Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Land.anim
 - Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U Channel.anim

@@ -10,9 +10,9 @@ using Object = UnityEngine.Object;
 namespace KamunagiOfChains
 {
 	[HarmonyPatch]
-	public class KamunagiHUD : Asset, IGameObject
+	public class KamunagiHUD : Asset, IGenericObject
 	{
-		GameObject IGameObject.BuildObject()
+		GameObject IGenericObject.BuildObject()
 		{
 			var healthBarObject = LoadAsset<GameObject>("RoR2/Base/UI/HUDSimple.prefab")!.GetComponent<HUD>().healthBar
 				.gameObject.InstantiateClone("ZealBar", false);

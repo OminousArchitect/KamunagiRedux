@@ -269,12 +269,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				skill2._skillFamily = GetAsset<KamunagiSkillFamilySpecial2>();
 			}
 
-			if (TryGetAsset<KamunagiSkillFamilyExtra>(out var skillFamilyExtra))
+			if (TryGetAsset<KamunagiSkillFamilyExtra1>(out var skillFamilyExtra1))
 			{
 				var skill = bodyPrefab.AddComponent<GenericSkill>();
 				skill.skillName = "SaraanaExtra";
-				skill._skillFamily = skillFamilyExtra;
+				skill._skillFamily = skillFamilyExtra1;
 				extraSkillLocator.extraFourth = skill;
+			}
+			
+			if (TryGetAsset<KamunagiSkillFamilyExtra2>(out var skillFamilyExtra2))
+			{
+				var skill = bodyPrefab.AddComponent<GenericSkill>();
+				skill.skillName = "UruruuExtra";
+				skill._skillFamily = skillFamilyExtra2;
+				extraSkillLocator.extraSecond = skill;
 			}
 
 			if (TryGetAsset<KamunagiSkillFamilyPassive>(out var skillFamilyPassive))

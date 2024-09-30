@@ -10,9 +10,9 @@ using Object = UnityEngine.Object;
 namespace KamunagiOfChains
 {
 	[HarmonyPatch]
-	public class KamunagiHUD : Asset, IGenericObject
+	public class KamunagiHUD : Asset, IGameObject
 	{
-		GameObject IGenericObject.BuildObject()
+		GameObject IGameObject.BuildObject()
 		{
 			var healthBarObject = LoadAsset<GameObject>("RoR2/Base/UI/HUDSimple.prefab")!.GetComponent<HUD>().healthBar
 				.gameObject.InstantiateClone("ZealBar", false);
@@ -32,7 +32,7 @@ namespace KamunagiOfChains
 		public static void AddZealBar(HUD __instance)
 		{
 			var healthBarTransform = __instance.healthBar.gameObject.transform;
-			var zealBar = Object.Instantiate(GetGameObject<KamunagiHUD, IGenericObject>(), healthBarTransform.parent.parent);
+			var zealBar = Object.Instantiate(GetGameObject<KamunagiHUD, IGameObject>(), healthBarTransform.parent.parent);
 			zealBar.transform.rotation = healthBarTransform.rotation;
 			zealBar.transform.localScale = healthBarTransform.localScale;
 			zealBar.transform.localPosition = healthBarTransform.localPosition;

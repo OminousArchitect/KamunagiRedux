@@ -47,11 +47,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			availableNodes.GetNodePosition(nodeIndex, out var footPosition);
 			footPosition += Vector3.up * 1.5f;
 			teleportPosition = footPosition;
-			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
+			/*EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
-			}, false);
+			}, false);*/
 		}
 
 		public override void FixedUpdate()
@@ -83,12 +83,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			base.OnExit();
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			if (veilEffect != null) veilEffect.ReturnToPool();
-			Util.PlaySound("Play_imp_attack_blink", gameObject);
-			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
+			/*EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
-			}, false);
+			}, false);*/
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)
 			{
 				charModel.invisibilityCount--;

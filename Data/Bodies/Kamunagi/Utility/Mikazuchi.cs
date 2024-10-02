@@ -89,7 +89,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var vfx = effect.GetOrAddComponent<VFXAttributes>();
 			vfx.DoNotPool = false;
 			vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
-
+			
 			return effect;
 		}
 

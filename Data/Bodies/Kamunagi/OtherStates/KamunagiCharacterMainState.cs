@@ -187,7 +187,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			pinkTrails[0].material.SetColor("_TintColor", pink);
 			pinkTrails[1].material.SetColor("_TintColor", pink);
 			electricOrbPink.GetComponentInChildren<Light>().color = Colors.twinsDarkColor;
-			
+			electricOrbPink.SetActive(false);
 			return electricOrbPink;
 		}
 	}

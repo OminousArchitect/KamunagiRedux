@@ -128,6 +128,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			}
 			effect.GetComponentInChildren<Light>().color = Color.cyan;
 			effect.EffectWithSound("Play_mage_m2_iceSpear_charge");
+			effect.SetActive(false);
 			return effect;
 		}
 

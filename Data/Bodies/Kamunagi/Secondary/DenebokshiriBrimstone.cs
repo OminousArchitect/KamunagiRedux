@@ -5,6 +5,7 @@ using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 using HarmonyLib;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RoR2.Orbs;
@@ -201,7 +202,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				DotController.InflictDot(
 					__instance.gameObject,
 					damageInfo.attacker,
-					DotController.DotIndex.StrongerBurn,
+					NaturesAxiom.CurseIndex,
 					2f,
 					damageInfo.damage * 0.2f
 				);

@@ -210,9 +210,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 	{
 		public GameObject BuildObject()
 		{
-			var mandatory =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab")!.InstantiateClone(
-					"ImTooLazyToDoThis", false);
+			var mandatory = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab")!.InstantiateClone("InvisibleTether", false);
 			mandatory.GetComponent<LineRenderer>().enabled = false;
 			return mandatory;
 		}

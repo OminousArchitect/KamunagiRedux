@@ -236,6 +236,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				charModel.invisibilityCount--;
 				hurtBoxGroup.hurtBoxesDeactivatorCounter--;
 			}
+			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			Vector3 effectPos = characterBody.corePosition;
 			EffectManager.SpawnEffect(childTpFx, new EffectData
 			{

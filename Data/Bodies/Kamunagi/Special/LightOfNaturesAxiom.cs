@@ -414,7 +414,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				{
 					GameObject fireEffectPrefab = effectParams.particleEffectPrefab;
 					EffectManagerHelper andActivatePooledEffect =
-						EffectManager.GetAndActivatePooledEffect(fireEffectPrefab, targetParentTransform);
+						EffectManagerKamunagi.GetAndActivatePooledEffect(fireEffectPrefab, targetParentTransform);
 					if (!andActivatePooledEffect)
 					{
 						Debug.LogWarning("Could not spawn the ParticleEffect prefab: " +

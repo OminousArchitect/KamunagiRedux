@@ -32,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			muzzleTransform = FindModelChild("MuzzleCenter");
 			if (muzzleTransform && Asset.TryGetGameObject<AltSoeiMusou, IEffect>(out var muzzleEffect))
 			{
-				chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
+				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
 				var scale = chargeEffectInstance.effectComponent.GetComponent<ObjectScaleCurve>();
 				scale.baseScale = Vector3.one * 0.7f;
 				scale.timeMax = projectileFireFrequency;

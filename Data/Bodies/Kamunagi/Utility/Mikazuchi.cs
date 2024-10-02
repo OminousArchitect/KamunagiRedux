@@ -21,7 +21,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
 			if (!muzzleTransform || !Asset.TryGetGameObject<Mikazuchi, IEffect>(out var muzzleEffect)) return;
-			chargeEffectInstance = EffectManager.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
+			chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
 		}
 
 		public override void Fire(Vector3 targetPosition)

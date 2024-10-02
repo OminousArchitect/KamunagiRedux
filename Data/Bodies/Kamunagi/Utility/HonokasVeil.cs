@@ -38,7 +38,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
 			}, false);
-			veilEffect = EffectManager.GetAndActivatePooledEffect(effect, characterBody.coreTransform, true);
+			veilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, characterBody.coreTransform, true);
 			characterMotor.useGravity = false;
 		}
 

@@ -19,9 +19,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		public override void OnEnter() {
 			base.OnEnter();
-			muzzleEffectInstance = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<KujyuriFrost, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true);
+			muzzleEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<KujyuriFrost, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true);
 			var toggling = twinMuzzle;
-			iceMagicInstance = EffectManager.GetAndActivatePooledEffect(Asset.GetGameObject<IceMagicEffect, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true); 
+			iceMagicInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<IceMagicEffect, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true); 
 		}
 
 		public override void OnExit()

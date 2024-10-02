@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using RoR2;
+using UnityEngine;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {

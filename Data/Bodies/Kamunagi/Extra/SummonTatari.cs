@@ -42,9 +42,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Weapon";
 			skill.skillName = "Extra Skill 6";
-			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA6_NAME";
-			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA6_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("n");
+			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA7_NAME";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA7_DESCRIPTION";
+			skill.icon = LoadAsset<Sprite>("bundle:Uitsalnemetia");
 			// TODO i dont know what else to put here
 			return skill;
 		}

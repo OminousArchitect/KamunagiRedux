@@ -41,14 +41,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 			NodeGraph airNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Air);
 			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
-			if (twinBehaviour)
-			{
-				availableNodes = characterMotor.isGrounded ? groundNodes : airNodes;
-			}
-			else
-			{
-				availableNodes = airNodes;
-			}
+			availableNodes = characterMotor.isGrounded ? groundNodes : airNodes;
 			var nodesInRange = availableNodes.FindNodesInRange(characterBody.footPosition, 25f, 37f, HullMask.Human);
 			NodeGraph.NodeIndex nodeIndex = nodesInRange.ElementAt(UnityEngine.Random.Range(1, nodesInRange.Count));
 			availableNodes.GetNodePosition(nodeIndex, out var footPosition);
@@ -110,9 +103,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Utility 9";
-			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA1_NAME";
-			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA1_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:HonokasVeil");
+			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA2_NAME";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
+			skill.icon = LoadAsset<Sprite>("bundle2:Flashbang");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;

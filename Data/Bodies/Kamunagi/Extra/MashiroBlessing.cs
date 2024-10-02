@@ -101,7 +101,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 6";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA6_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix +  "EXTRA6_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:Uitsalnemetia");
+			skill.icon = LoadAsset<Sprite>("bundle2:Mashiro");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;

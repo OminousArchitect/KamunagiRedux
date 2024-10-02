@@ -276,14 +276,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				skill._skillFamily = skillFamilyExtra1;
 				extraSkillLocator.extraFourth = skill;
 			}
-			
-			if (TryGetAsset<KamunagiSkillFamilyExtra2>(out var skillFamilyExtra2))
-			{
-				var skill = bodyPrefab.AddComponent<GenericSkill>();
-				skill.skillName = "UruruuExtra";
-				skill._skillFamily = skillFamilyExtra2;
-				extraSkillLocator.extraSecond = skill;
-			}
 
 			if (TryGetAsset<KamunagiSkillFamilyPassive>(out var skillFamilyPassive))
 			{

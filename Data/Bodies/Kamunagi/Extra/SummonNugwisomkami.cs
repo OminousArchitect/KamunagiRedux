@@ -112,7 +112,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:Uitsalnemetia");
+			skill.icon = LoadAsset<Sprite>("bundle2:Nugwisomkami");
 			// TODO i dont know what else to put here
 			return skill;
 		}

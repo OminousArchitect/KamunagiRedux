@@ -60,8 +60,6 @@
 	  "NINES_KAMUNAGI_BODY_UTILITY2_DESCRIPTION": "Send a tiriryarai call to Jachdwalt. His afterimages strike enemies for <style=cIsDamage>?x???% damage</style>.",
 	  "NINES_KAMUNAGI_BODY_UTILITY3_NAME": "Woshis' Miasma",
 	  "NINES_KAMUNAGI_BODY_UTILITY3_DESCRIPTION": "(description",
-	  "NINES_KAMUNAGI_BODY_EXTRA1_NAME": "Honoka's Veil",
-	  "NINES_KAMUNAGI_BODY_EXTRA1_DESCRIPTION": "Dissappear into the aether and <style=cIsUtility>become invulnerable</style> but unable to attack.",
 
 	  "NINES_KAMUNAGI_BODY_SPECIAL0_NAME": "Sobu Gekishoha",
 	  "NINES_KAMUNAGI_BODY_SPECIAL0_DESCRIPTION": "Channel a great roar of darkness for <style=cIsDamage>9800%</style> total <style=cIsDamage>damage</style>.",
@@ -69,7 +67,11 @@
 	  "NINES_KAMUNAGI_BODY_SPECIAL1_DESCRIPTION": "Mark an area to be sealed after <style=cIsUtility>2.5 seconds</style>. Once primed, the seal detonates for <style=cIsDamage>650% damage</style>. Enemies below <style=cIsHealth>20% health are executed.</style>",
 	  "NINES_KAMUNAGI_BODY_SPECIAL2_NAME": "Light of Nature's Axiom",
 	  "NINES_KAMUNAGI_BODY_SPECIAL2_DESCRIPTION": "Manifest the power of an umbral sun, <style=cIsDamage>poisoning</style> enemies each tick with <color=#5D00FF>void fog</color>.",
-	  
+
+	  "NINES_KAMUNAGI_BODY_EXTRA1_NAME": "Honoka's Veil",
+	  "NINES_KAMUNAGI_BODY_EXTRA1_DESCRIPTION": "Dissappear into the aether and <style=cIsUtility>become invulnerable</style> but unable to attack.",
+	  "NINES_KAMUNAGI_BODY_EXTRA2_NAME": "Kuon's Flashbang",
+	  "NINES_KAMUNAGI_BODY_EXTRA2_DESCRIPTION": "Stun enemies and dissappear",
 	  "NINES_KAMUNAGI_BODY_EXTRA4_NAME": "Summon Shikigami: Mothmoth",
 	  "NINES_KAMUNAGI_BODY_EXTRA4_DESCRIPTION": "Call forth Mothmoth to buff your allies with <style=cIsHealth>lifesteal</style>.",
 	  "NINES_KAMUNAGI_BODY_EXTRA3_NAME": "Kokusou Gekka",

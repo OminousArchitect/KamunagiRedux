@@ -29,8 +29,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
-
-			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			var effect = Asset.GetGameObject<HonokasVeil, IEffect>();
 			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
 			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
@@ -46,7 +44,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			base.FixedUpdate();
 			if (!isAuthority) return;
-			if (!inputBank.skill3.down || fixedAge > 25f)
+			if (!IsKeyDownAuthority() || fixedAge > 25f)
 			{
 				outer.SetNextStateToMain();
 			}

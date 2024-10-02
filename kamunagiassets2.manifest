@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1551673046
+CRC: 4066012017
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 82425e54a2cdcbf3e60d0b061eed755a
+    Hash: 01401de2b4d146f87126f8b8e505be36
   TypeTreeHash:
     serializedVersion: 2
     Hash: 05e8629778cd54a3675bf1d857b68d25
@@ -21,8 +21,16 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/OtherMask.mesh
+- Assets/Mothmoth.png
 - Assets/172714677590348517.png
+- Assets/Atuy2.png
 - Assets/Zeal.shader
+- Assets/Mashiro.png
+- Assets/Flashbang.png
 - Assets/TheMask.mesh
+- Assets/Nugwisomkami.png
+- Assets/HonokasVeil.png
 - Assets/ZealMat.mat
+- Assets/IceMask.mesh
 Dependencies: []

@@ -32,7 +32,7 @@ namespace KamunagiOfChains
 		public static void AddZealBar(HUD __instance)
 		{
 			var healthBarTransform = __instance.healthBar.gameObject.transform;
-			var zealBar = Object.Instantiate(GetGameObject<KamunagiHUD, IGameObject>(), healthBarTransform.parent.parent);
+			var zealBar = Object.Instantiate(GetGameObject<KamunagiHUD, IGenericObject>(), healthBarTransform.parent.parent);
 			zealBar.transform.rotation = healthBarTransform.rotation;
 			zealBar.transform.localScale = healthBarTransform.localScale;
 			zealBar.transform.localPosition = healthBarTransform.localPosition;

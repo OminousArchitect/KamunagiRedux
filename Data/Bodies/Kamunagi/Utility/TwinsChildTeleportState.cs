@@ -103,9 +103,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Utility 9";
-			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA1_NAME";
-			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA1_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:HonokasVeil");
+			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA2_NAME";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
+			skill.icon = LoadAsset<Sprite>("bundle2:Flashbang");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;

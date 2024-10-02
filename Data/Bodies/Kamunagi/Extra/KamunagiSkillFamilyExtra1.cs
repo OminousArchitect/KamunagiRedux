@@ -1,3 +1,4 @@
+using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using RoR2;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
@@ -6,7 +7,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		public IEnumerable<Asset> GetSkillAssets() => new Asset[]
 		{
-			GetAsset<MothMoth>(), GetAsset<XinZhao>(), GetAsset<SummonNugwisomkami>(), GetAsset<MashiroBlessing>(), GetAsset<SummonTatari>()
+			GetAsset<XinZhao>(), GetAsset<SummonNugwisomkami>(), GetAsset<SummonTatari>(), GetAsset<MashiroBlessing>(),
+			GetAsset<MothMoth>(), GetAsset<HonokasVeil>(), GetAsset<TwinsChildTeleport>(), GetAsset<WoshisZone>()
 		};
 
 		public string GetNameToken(GenericSkill skill) =>

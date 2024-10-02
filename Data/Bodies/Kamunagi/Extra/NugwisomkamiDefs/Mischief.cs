@@ -179,7 +179,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			childTpFx = LoadAsset<GameObject>("RoR2/DLC2/Child/FrolicTeleportVFX.prefab")!;
+			childTpFx = LoadAsset<GameObject>("RoR2/Base/Imp/ImpBlinkEffect.prefab")!;
 			var mdl = GetModelTransform();
 			if (mdl)
 			{
@@ -191,6 +191,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
+			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			Vector3 effectPos = characterBody.corePosition;
 			EffectManager.SpawnEffect(childTpFx, new EffectData
 			{

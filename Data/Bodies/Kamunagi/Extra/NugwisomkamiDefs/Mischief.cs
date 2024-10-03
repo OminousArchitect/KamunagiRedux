@@ -23,6 +23,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 			var nugwisoBody = LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab")!.InstantiateClone("Nugwiso1", true);
 			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
+			
+			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
+			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
+			var group = idrs.FindDisplayRuleGroup(LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset"));
+			group.rules[0].localPos = new Vector3(0.2f, 0f, 0f);
+			charModel.itemDisplayRuleSet = idrs;
+			
 			charModel.baseLightInfos[0].defaultColor = Colors.wispNeonGreen;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;

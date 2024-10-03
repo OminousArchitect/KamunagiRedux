@@ -16,12 +16,12 @@ namespace KamunagiOfChains
 				gameObject.transform.localRotation = Quaternion.identity;
 				gameObject.transform.localScale = Vector3.one;
 			}
-
+			
 			var effectComponent = gameObject.GetComponent<EffectComponent>();
-			if (data != null && effectComponent)
+			if (effectComponent)
 			{
+				data ??= new EffectData { rootObject = parentTransform.gameObject };
 				effectComponent.effectData = data.Clone();
-				effectComponent.effectData.rootObject = parentTransform.gameObject;
 				pooledEffect.Reset(true);
 				pooledEffect.gameObject.SetActive(true);
 			}

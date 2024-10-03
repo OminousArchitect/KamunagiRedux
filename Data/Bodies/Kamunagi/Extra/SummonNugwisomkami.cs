@@ -20,7 +20,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			{
 				Asset.GetGameObject<AssassinSpirit, IMaster>(),
-				new List<string>() { "EliteLightningEquipment" } //needs recoloring, then done(?)
+				new List<string>() { "EliteLightningEquipment", "EliteFireEquipment" } //needs recoloring, then done(?)
 			}, //Mischief
 			
 			{
@@ -35,7 +35,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 			{
 				Asset.GetGameObject<IceTank, IMaster>(),
-				new List<string>() { "EliteIceEquipment" }
+				new List<string>() { "EliteIceEquipment", "EliteHauntedEquipment" }
 			} //Solitude
 		};
 		public override void OnEnter()

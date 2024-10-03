@@ -303,15 +303,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		GameObject IEffect.BuildObject()
 		{
+			var sizeFactor = 6.2f;
 			var voidFog = LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab");
 			var effect = voidFog.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
 			effect.transform.position = new Vector3(0f, 1f, 0f);
+			effect.transform.localScale = Vector3.one * sizeFactor;
+			var ps = effect.GetComponentInChildren<ParticleSystem>();
 			var timer = effect.AddComponent<DestroyOnTimer>();
 			timer.duration = 2f;
-			
+			var main = ps.main;
+			main.scalingMode = ParticleSystemScalingMode.Local;
+			main.startSize = 2f;
 			var helper = effect.AddComponent<BurnEffectControllerHelper>();
-			helper.burnParticleSystem = effect.GetComponentInChildren<ParticleSystem>();
+			helper.burnParticleSystem = ps;
 			helper.destroyOnTimer = timer;
 			return effect;
 		}
@@ -419,13 +424,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			if (modelRenderer is MeshRenderer || modelRenderer is SkinnedMeshRenderer)
 			{
-				GameObject fireEffectPrefab = effectParams.particleEffectPrefab;
-				EffectManagerHelper andActivatePooledEffect =
-					EffectManager.GetAndActivatePooledEffect(fireEffectPrefab, targetParentTransform);
+				var particles = effectParams.particleEffectPrefab;
+				EffectManagerHelper andActivatePooledEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(particles, targetParentTransform);
 				if (!andActivatePooledEffect)
 				{
 					Debug.LogWarning("Could not spawn the ParticleEffect prefab: " +
-					                 ((object)fireEffectPrefab)?.ToString() + ".");
+					                 ((object)particles)?.ToString() + ".");
 					return null;
 				}
 
@@ -433,7 +437,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					andActivatePooledEffect.GetComponent<BurnEffectControllerHelper>();
 				if (!component)
 				{
-					Debug.LogWarning("Burn effect " + ((object)fireEffectPrefab)?.ToString() +
+					Debug.LogWarning("Burn effect " + ((object)particles)?.ToString() +
 					                 " doesn't have a BurnEffectControllerHelper applied.  It can't be applied.");
 					andActivatePooledEffect.ReturnToPool();
 					return null;

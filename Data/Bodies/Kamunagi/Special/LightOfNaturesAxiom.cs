@@ -424,13 +424,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			if (modelRenderer is MeshRenderer || modelRenderer is SkinnedMeshRenderer)
 			{
-				GameObject fireEffectPrefab = effectParams.particleEffectPrefab;
-				EffectManagerHelper andActivatePooledEffect =
-					EffectManager.GetAndActivatePooledEffect(fireEffectPrefab, targetParentTransform);
+				var particles = effectParams.particleEffectPrefab;
+				EffectManagerHelper andActivatePooledEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(particles, targetParentTransform);
 				if (!andActivatePooledEffect)
 				{
 					Debug.LogWarning("Could not spawn the ParticleEffect prefab: " +
-					                 ((object)fireEffectPrefab)?.ToString() + ".");
+					                 ((object)particles)?.ToString() + ".");
 					return null;
 				}
 
@@ -438,7 +437,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					andActivatePooledEffect.GetComponent<BurnEffectControllerHelper>();
 				if (!component)
 				{
-					Debug.LogWarning("Burn effect " + ((object)fireEffectPrefab)?.ToString() +
+					Debug.LogWarning("Burn effect " + ((object)particles)?.ToString() +
 					                 " doesn't have a BurnEffectControllerHelper applied.  It can't be applied.");
 					andActivatePooledEffect.ReturnToPool();
 					return null;

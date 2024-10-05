@@ -303,21 +303,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		GameObject IEffect.BuildObject()
 		{
-			var sizeFactor = 6.2f;
 			var voidFog = LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab");
-			var effect = voidFog.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false);
+			var effect = voidFog.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false); //revisit this
 			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
-			effect.transform.position = new Vector3(0f, 1f, 0f);
-			effect.transform.localScale = Vector3.one * sizeFactor;
 			var ps = effect.GetComponentInChildren<ParticleSystem>();
-			var timer = effect.AddComponent<DestroyOnTimer>();
-			timer.duration = 2f;
 			var main = ps.main;
-			main.scalingMode = ParticleSystemScalingMode.Local;
-			main.startSize = 2f;
-			var helper = effect.AddComponent<BurnEffectControllerHelper>();
+			main.startSize = new ParticleSystem.MinMaxCurve(0.4f);
+
+			KamunagiBurnEffectControllerHelper helper = effect.AddComponent<KamunagiBurnEffectControllerHelper>();
 			helper.burnParticleSystem = ps;
-			helper.destroyOnTimer = timer;
+			effect.GetOrAddComponent<VFXAttributes>().DoNotPool = false;
 			return effect;
 		}
 	}
@@ -332,21 +327,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			public GameObject particleEffectPrefab;
 		}
 		
-		private List<BurnEffectControllerHelper> burnEffectInstances;
+		private List<KamunagiBurnEffectControllerHelper> burnEffectInstances;
 		public GameObject target;
 		private TemporaryOverlayInstance temporaryOverlay;
 		private int soundID;
 		public KamunagiEffectParams effectParams = defaultEffect;
 		public static KamunagiEffectParams defaultEffect;
-		public float fireParticleSize = 5f;
-			
+
 		private void Awake()
 		{
 			defaultEffect = new KamunagiEffectParams
 			{
 				startSound = "",
 				stopSound = "",
-				overlayMaterial = Asset.GetAsset<AxiomBurn, IMaterial>(),
+				overlayMaterial = Asset.GetAsset<AxiomBurn, IMaterial>()!,
 				particleEffectPrefab = Asset.GetGameObject<CurseParticles, IEffect>()
 			};
 		}
@@ -360,7 +354,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			}
 
 			Util.PlaySound(effectParams.startSound, base.gameObject);
-			burnEffectInstances = new List<BurnEffectControllerHelper>();
+			burnEffectInstances = new List<KamunagiBurnEffectControllerHelper>();
 			if (effectParams.overlayMaterial != null)
 			{
 				temporaryOverlay = TemporaryOverlayManager.AddOverlay(base.gameObject);
@@ -372,32 +366,24 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				return;
 			}
 
-			CharacterModel component = target.GetComponent<CharacterModel>();
-			if (!component)
+			CharacterModel charModel = target.GetComponent<CharacterModel>();
+			if (!charModel)
 			{
 				return;
 			}
-
-			if (temporaryOverlay != null)
-			{
-				temporaryOverlay.AddToCharacterModel(component);
-			}
-
-			CharacterBody body = component.body;
-			CharacterModel.RendererInfo[] baseRendererInfos = component.baseRendererInfos;
-			if (!body)
-			{
-				return;
-			}
+			
+			temporaryOverlay.AddToCharacterModel(charModel);
+			var body = charModel.body;
+			var baseRendererInfos = charModel.baseRendererInfos;
 
 			for (int i = 0; i < baseRendererInfos.Length; i++)
 			{
 				if (!baseRendererInfos[i].ignoreOverlays)
 				{
-					BurnEffectControllerHelper burnEffectControllerHelper = AddFireParticles(baseRendererInfos[i].renderer, body.coreTransform);
-					if ((bool)burnEffectControllerHelper)
+					var helper = AddFireParticles(baseRendererInfos[i].renderer, body.coreTransform);
+					if (helper)
 					{
-						burnEffectInstances.Add(burnEffectControllerHelper);
+						burnEffectInstances.Add(helper);
 					}
 				}
 			}
@@ -413,41 +399,35 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 			for (int i = 0; i < burnEffectInstances.Count; i++)
 			{
-				if ((bool)burnEffectInstances[i])
+				if (burnEffectInstances[i])
 				{
 					burnEffectInstances[i].EndEffect();
 				}
 			}
 		}
 
-		private BurnEffectControllerHelper AddFireParticles(Renderer modelRenderer, Transform targetParentTransform)
+		private KamunagiBurnEffectControllerHelper AddFireParticles(Renderer modelRenderer, Transform targetParentTransform)
 		{
-			if (modelRenderer is MeshRenderer || modelRenderer is SkinnedMeshRenderer)
+			if (modelRenderer is not MeshRenderer && modelRenderer is not SkinnedMeshRenderer) return null;
+			var particles = effectParams.particleEffectPrefab;
+			EffectManagerHelper getandactivate = EffectManagerKamunagi.GetAndActivatePooledEffect(particles, targetParentTransform, false, new EffectData { scale = 3f } );
+			if (!getandactivate)
 			{
-				var particles = effectParams.particleEffectPrefab;
-				EffectManagerHelper andActivatePooledEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(particles, targetParentTransform);
-				if (!andActivatePooledEffect)
-				{
-					Debug.LogWarning("Could not spawn the ParticleEffect prefab: " +
-					                 ((object)particles)?.ToString() + ".");
-					return null;
-				}
-
-				BurnEffectControllerHelper component =
-					andActivatePooledEffect.GetComponent<BurnEffectControllerHelper>();
-				if (!component)
-				{
-					Debug.LogWarning("Burn effect " + ((object)particles)?.ToString() +
-					                 " doesn't have a BurnEffectControllerHelper applied.  It can't be applied.");
-					andActivatePooledEffect.ReturnToPool();
-					return null;
-				}
-
-				component.InitializeBurnEffect(modelRenderer);
-				return component;
+				Debug.LogWarning("Could not spawn the ParticleEffect prefab: " + particles + ".");
+				return null;
 			}
 
-			return null;
+			var kamunagiHelper = getandactivate.GetComponent<KamunagiBurnEffectControllerHelper>();
+			if (!kamunagiHelper)
+			{
+				Debug.LogWarning("Burn effect " + particles + " doesn't have a BurnEffectControllerHelper applied.  It can't be applied.");
+				getandactivate.ReturnToPool();
+				return null;
+			}
+
+			kamunagiHelper.InitializeBurnEffect(modelRenderer);
+			return kamunagiHelper;
+
 		}
 	}
 
@@ -507,30 +487,27 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			{
 				shape.shapeType = ParticleSystemShapeType.SkinnedMeshRenderer;
 				shape.skinnedMeshRenderer = skinnedMeshRenderer;
-				if ((bool)boneParticleController)
+				if (boneParticleController)
 				{
 					boneParticleController.skinnedMeshRenderer = skinnedMeshRenderer;
 				}
 			}
-			if ((bool)normalizeParticleScale)
+			if (normalizeParticleScale)
 			{
 				normalizeParticleScale.UpdateParticleSystem();
 			}
-			burnParticleSystem.gameObject.SetActive(value: true);
+			burnParticleSystem.gameObject.SetActive(true);
 		}
 			
 		public void EndEffect() 
 		{
-			if ((bool)burnParticleSystem)
+			if (burnParticleSystem)
 			{
 				ParticleSystem.EmissionModule emission = burnParticleSystem.emission;
 				emission.enabled = false;
 			}
-			if ((bool)destroyOnTimer)
-			{
-				destroyOnTimer.enabled = true;
-			}
-			if ((bool)lightIntensityCurve)
+			
+			if (lightIntensityCurve)
 			{
 				lightIntensityCurve.enabled = true;
 			}

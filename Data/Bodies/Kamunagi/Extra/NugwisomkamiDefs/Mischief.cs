@@ -23,13 +23,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 			var nugwisoBody = LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab")!.InstantiateClone("Nugwiso1", true);
 			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
-			
-			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
-			var group = idrs.FindDisplayRuleGroup(LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset"));
-			group.rules[0].localPos = new Vector3(0.2f, 0f, 0f);
-			charModel.itemDisplayRuleSet = idrs;
-			
 			charModel.baseLightInfos[0].defaultColor = Colors.wispNeonGreen;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
@@ -54,6 +47,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseMaxHealth = 200f;
 			cb.baseDamage = 12f;
 			cb.baseMoveSpeed = 13f;
+			var array = mdl.GetComponent<ChildLocator>().transformPairs;
+			array[0].transform = mdl.transform;
+
+			#region itemdisplays
+			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
+			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
+			
+			var fireDisplay = idrs.FindDisplayRuleGroup(LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset"));
+			fireDisplay.rules[0].localPos = new Vector3(0.2f, 0f, 0f);
+			fireDisplay.rules[0].childName = "Muzzle";
+			var lightningDisplay = idrs.FindDisplayRuleGroup(LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset"));
+			lightningDisplay.rules[0].localPos = new Vector3(0.2f, 0f, 0f);
+			lightningDisplay.rules[0].childName = "Muzzle";
+			
+			charModel.itemDisplayRuleSet = idrs;
+			#endregion
 			
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
@@ -61,8 +70,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			secondary.baseSkill = GetAsset<AssassinSpiritSecondary, ISkill>();
 			nugwisoBody.GetComponent<SkillLocator>().secondary = secondary;
 			
-			var array = nugwisoBody.GetComponents<GenericSkill>();
-			array[0]._skillFamily = GetAsset<AssassinSpiritPrimaryFamily>();
+			var skills = nugwisoBody.GetComponents<GenericSkill>();
+			skills[0]._skillFamily = GetAsset<AssassinSpiritPrimaryFamily>();
 			return nugwisoBody;
 		}
 		

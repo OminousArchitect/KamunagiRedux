@@ -107,7 +107,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY1_DESCRIPTION";
 			skill.activationState = new SerializableEntityStateType(typeof(AtuysTides));
 			skill.icon = LoadAsset<Sprite>("bundle2:Atuy2");
-			skill.activationStateMachineName = "Jet";
+			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 4f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;

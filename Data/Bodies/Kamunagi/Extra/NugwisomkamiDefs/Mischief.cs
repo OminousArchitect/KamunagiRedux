@@ -199,12 +199,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				}
 			}
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
-			Vector3 effectPos = characterBody.corePosition;
-			EffectManager.SpawnEffect(childTpFx, new EffectData
-			{
-				origin = effectPos,
-				scale = 1f
-			}, transmit: true);
+			DoChildFx(characterBody.corePosition);
 			NodeGraph airNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Air);
 			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
 			availableNodes = airNodes;
@@ -213,6 +208,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			availableNodes.GetNodePosition(nodeIndex, out var footPosition);
 			footPosition += Vector3.up * 1.5f;
 			teleportPosition = footPosition;
+		}
+		
+		public void DoChildFx(Vector3 effectPos)
+		{
+			EffectManager.SpawnEffect(childTpFx, new EffectData
+			{
+				origin = effectPos,
+				scale = 1f
+			}, transmit: true);
 		}
 
 		public override void FixedUpdate()
@@ -244,12 +248,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				hurtBoxGroup.hurtBoxesDeactivatorCounter--;
 			}
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
-			Vector3 effectPos = characterBody.corePosition;
-			EffectManager.SpawnEffect(childTpFx, new EffectData
-			{
-				origin = effectPos,
-				scale = 1f
-			}, transmit: true);
+			DoChildFx(characterBody.corePosition);
 		}
 	}
 	

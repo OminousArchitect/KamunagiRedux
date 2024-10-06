@@ -144,9 +144,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			forceMesh.sharedMaterials[0] = new Material(forceMaterials[0]);
 			forceMesh.sharedMaterials[0].SetColor("_TintColor", new Color(0.07843f, 0, 1));
 			forceMesh.sharedMaterials[0].SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampMoonLighting.png"));
-			forceMesh.sharedMaterials[1] = new Material(forceMaterials[1]);
-			forceMesh.sharedMaterials[1].SetColor("_TintColor", new Color(0.39215f, 0, 1));
-			forceMesh.sharedMaterials[1].SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampHippoVoidEye.png"));
+			forceMesh.sharedMaterials[1] = new Material(LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierZoneAreaIndicatorLookingIn.mat")); //new Material(forceMaterials[1]);
+			/*forceMesh.sharedMaterials[1].SetColor("_TintColor", new Color(0.39215f, 0, 1));
+			forceMesh.sharedMaterials[1].SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampHippoVoidEye.png"));*/
 			var forceP = forceField.GetComponentInChildren<ParticleSystemRenderer>();
 			forceP.material = new Material(forceP.material);
 			forceP.material.SetColor("_TintColor", new Color(0.07843f, 0.02745f, 1));

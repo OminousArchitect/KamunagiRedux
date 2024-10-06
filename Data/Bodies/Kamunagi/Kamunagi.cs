@@ -207,7 +207,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			weaponStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
 			weaponStateMachine.mainStateType = weaponStateMachine.initialStateType;
 
-			networkStateMachine.stateMachines = new[] { bodyStateMachine, weaponStateMachine, hoverStateMachine };
+			var spellStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
+			spellStateMachine.customName = "Spell";
+			spellStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
+			spellStateMachine.mainStateType = spellStateMachine.initialStateType;
+			
+			networkStateMachine.stateMachines = new[] { bodyStateMachine, weaponStateMachine, hoverStateMachine, spellStateMachine };
 
 			var deathBehaviour = bodyPrefab.GetOrAddComponent<CharacterDeathBehavior>();
 			deathBehaviour.deathStateMachine = bodyStateMachine;

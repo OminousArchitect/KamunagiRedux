@@ -47,11 +47,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			availableNodes.GetNodePosition(nodeIndex, out var footPosition);
 			footPosition += Vector3.up * 1.5f;
 			teleportPosition = footPosition;
-			/*EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
+			
+			new BlastAttack
 			{
-				origin = Util.GetCorePosition(base.gameObject),
-				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
-			}, false);*/
+				attacker = gameObject,
+				baseDamage = damageStat * 1.75f,
+				baseForce = 50f,
+				crit = false,
+				damageType = DamageType.Stun1s,
+				falloffModel = BlastAttack.FalloffModel.None,
+				procCoefficient = 1.3f,
+				radius = 8f,
+				position = characterBody.corePosition,
+				attackerFiltering = AttackerFiltering.NeverHitSelf,
+				teamIndex = teamComponent.teamIndex
+			}.Fire();
+			DoChildFx(characterBody.corePosition);
 		}
 
 		public override void FixedUpdate()
@@ -62,12 +73,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			if (fixedAge > 0.2f && !teleported)
 			{
 				teleported = true;
-				Vector3 effectPos = FindModelChild("MuzzleCenter").transform.position;
-				EffectManager.SpawnEffect(childTpFx, new EffectData
-				{
-					origin = effectPos,
-					scale = 1f
-				}, transmit: true);
 				Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
 				TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
 			}
@@ -77,17 +82,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				outer.SetNextStateToMain();
 			}
 		}
+		
+		public void DoChildFx(Vector3 effectPos)
+		{
+			EffectManager.SpawnEffect(childTpFx, new EffectData
+			{
+				origin = effectPos,
+				scale = 1f
+			}, transmit: true);
+		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			if (veilEffect != null) veilEffect.ReturnToPool();
-			/*EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
-			{
-				origin = Util.GetCorePosition(base.gameObject),
-				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
-			}, false);*/
+			DoChildFx(characterBody.corePosition);
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)
 			{
 				charModel.invisibilityCount--;

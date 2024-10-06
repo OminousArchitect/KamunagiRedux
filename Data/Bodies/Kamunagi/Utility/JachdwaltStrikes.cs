@@ -312,7 +312,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY2_NAME";
 				skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY2_DESCRIPTION";
 				skill.icon = LoadAsset<Sprite>("bundle:Jachdwalt");
-				skill.activationStateMachineName = "Weapon";
+				skill.activationStateMachineName = "Spell";
 				skill.baseRechargeInterval = 4f;
 				skill.beginSkillCooldownOnSkillEnd = true;
 				skill.interruptPriority = InterruptPriority.Any;

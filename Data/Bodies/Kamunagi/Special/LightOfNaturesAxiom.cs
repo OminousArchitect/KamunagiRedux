@@ -672,8 +672,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 										CharacterBody characterBody2 = characterBody;
 										if (characterBody2 && characterBody2.inventory)
 										{
-											inflictDotInfo.totalDamage =
-												0.5f * characterBody2.damage * burnDuration * theNumber;
+											inflictDotInfo.totalDamage = 2f * characterBody2.damage * burnDuration * theNumber;
 										}
 
 										DotController.InflictDot(ref inflictDotInfo);

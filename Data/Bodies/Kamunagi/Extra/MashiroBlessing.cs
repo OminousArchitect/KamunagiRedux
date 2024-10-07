@@ -69,6 +69,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				damageType = DamageType.BypassArmor,
 				procCoefficient = 0f,
 			};
+			
 			healthComponent.TakeDamage(damageInfo);
 		}
 	}

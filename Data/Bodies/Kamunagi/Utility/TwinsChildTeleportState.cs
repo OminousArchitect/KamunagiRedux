@@ -56,7 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				crit = false,
 				damageType = DamageType.Stun1s,
 				falloffModel = BlastAttack.FalloffModel.None,
-				procCoefficient = 1.3f,
+				procCoefficient = 2f,
 				radius = 8f,
 				position = characterBody.corePosition,
 				attackerFiltering = AttackerFiltering.NeverHitSelf,

@@ -190,13 +190,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				GetGameObject<TickingFuseObelisk, IProjectileGhost>();
 			var sealingImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			sealingImpact.lifetime = 1.5f;
-			sealingImpact.blastRadius = 15f;
+			sealingImpact.blastRadius = 25.5f;
 			sealingImpact.fireChildren = false;
 			sealingImpact.impactEffect = GetGameObject<ExplodingObelisk, IEffect>();
 			sealingImpact.blastDamageCoefficient = 1f; //todo you dont set it here
 			sealingImpact.blastProcCoefficient = 1f;
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
-			var onkamiDamage = GetAsset<TheGreatSealing>(); //uhhhhh
 			projectile.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Uitsalnemetia);
 			return projectile;
 		}
@@ -226,7 +225,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				.InstantiateClone("OnkamiSealPhase2Ghost", false);
 			ghost.transform.localScale = Vector3.one * 2f;
 			var sealingScale = ghost.transform.GetChild(0).gameObject;
-			sealingScale.transform.localScale = Vector3.one * 5.625f;
+			sealingScale.transform.localScale = Vector3.one * 9.3f; //scale child
 			foreach (var r in ghost.GetComponentsInChildren<ParticleSystemRenderer>())
 			{
 				var name = r.name;
@@ -279,8 +278,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			scaleChild.transform.position = new Vector3(0f, 4f, 0f);
 			var frontIndicator = scaleChild.GetChild(8).gameObject;
 			var backIndicator = scaleChild.GetChild(9).gameObject;
-			frontIndicator.transform.localScale = Vector3.one * 1.3f; // sealing frontIndicator
-			backIndicator.transform.localScale = Vector3.one * 1.3f; // sealing backIndicator
+			frontIndicator.transform.localScale = Vector3.one * 1.5f; // sealing frontIndicator
+			backIndicator.transform.localScale = Vector3.one * 1.5f; // sealing backIndicator
+			var enableCulling = frontIndicator.GetComponent<ParticleSystemRenderer>();
+			enableCulling.materials[0].SetFloat("_Cull", 2);
 
 			var sealingMeshObject = GetGameObject<ExplodingObelisk, IEffect>().transform.GetChild(7).gameObject;
 			var onkamiObelisk = PrefabAPI.InstantiateClone(sealingMeshObject, "OnkamiObelisk", false);
@@ -288,11 +289,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			onkamiObelisk.transform.localScale = Vector3.one;
 			onkamiObelisk.transform.SetParent(scaleChild);
 			onkamiObelisk.transform.localScale = Vector3.one * 0.6f;
-			onkamiObelisk.transform.localPosition = ghost.transform.position;
-			onkamiObelisk.transform.position = new Vector3(0f, -10f, 0f);
-
+			onkamiObelisk.transform.localPosition = new Vector3(0, -1.25f, 0);
 			var onkamiMeshR = onkamiObelisk.GetComponent<MeshRenderer>();
-			onkamiMeshR.materials = TheGreatSealing.onKamiMats; //this is how you make a completely new array
+			onkamiMeshR.materials = TheGreatSealing.onKamiMats;
 
 			return ghost;
 		}
@@ -403,12 +402,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sealingMeshObject.GetComponent<ObjectScaleCurve>().baseScale = Vector3.one * 0.7f;
 
 			var blastIndicator = effect.transform.GetChild(10).gameObject;
-			blastIndicator.transform.localScale = Vector3.one * 1.4f; //blast indicator
-			blastIndicator.transform.position = new Vector3(blastIndicator.transform.position.x, 0.5f,
-				blastIndicator.transform.position.z);
+			blastIndicator.transform.localScale = Vector3.one * 1.25f; //blast indicator
+			blastIndicator.transform.localPosition = new Vector3(0, 0.25f, 0);
 
 			effect.EffectWithSound("Play_item_void_bleedOnHit_explo");
-
 			return effect;
 		}
 	}

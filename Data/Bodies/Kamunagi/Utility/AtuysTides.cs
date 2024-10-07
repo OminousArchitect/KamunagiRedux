@@ -35,7 +35,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				return;
 			}
 
-			if (projectilesFired > Mathf.FloorToInt(duration / totalProjectileCount * fixedAge)) return;
+			if (projectilesFired > Mathf.FloorToInt(fixedAge / (duration / totalProjectileCount))) return;
 			var aimRay = GetAimRay();
 			bool wasLucky = Util.CheckRoll(critStat + 7f, characterBody.master);
 			ProjectileManager.instance.FireProjectile(

@@ -202,9 +202,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				DotController.InflictDot(
 					__instance.gameObject,
 					damageInfo.attacker,
-					NaturesAxiom.CurseIndex,
+					DotController.DotIndex.StrongerBurn,
 					2f,
-					damageInfo.damage * 0.2f
+					damageInfo.damage * 0.1f
 				);
 			}
 		}

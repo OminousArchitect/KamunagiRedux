@@ -57,6 +57,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var fireDisplay = idrs.FindDisplayRuleGroup(LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset"));
 			fireDisplay.rules[0].localPos = new Vector3(0.2f, 0f, 0f);
 			fireDisplay.rules[0].childName = "Muzzle";
+			fireDisplay.rules[1].localPos = new Vector3(0.2f, 0f, 0f);
+			fireDisplay.rules[1].childName = "Muzzle";
+			
 			var lightningDisplay = idrs.FindDisplayRuleGroup(LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset"));
 			lightningDisplay.rules[0].localPos = new Vector3(0.2f, 0f, 0f);
 			lightningDisplay.rules[0].childName = "Muzzle";

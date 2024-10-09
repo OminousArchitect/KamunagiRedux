@@ -90,8 +90,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				var damageInfo = new DamageInfo();
 				damageInfo.damage = 4;
 				// might need to network this too, if it feels inconsistent on multiplayer
-				damageInfo.force = (healthComponent.body.footPosition - characterBody.footPosition).normalized * mass *
-				                   55;
+				damageInfo.force = (healthComponent.body.footPosition - characterBody.footPosition).normalized * mass * 1;//55;
 				damageInfo.canRejectForce = false;
 				damageInfo.position = position;
 				damageInfo.inflictor = gameObject;
@@ -104,7 +103,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			if (fixedAge >= 0.35f / attackSpeedStat) outer.SetNextStateToMain();
+			if (fixedAge >= 0.35f) outer.SetNextStateToMain();
 		}
 	}
 
@@ -118,7 +117,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA3_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle:no-type");
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 15f;
+			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = false;
 			skill.fullRestockOnAssign = false;
@@ -130,6 +129,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		GameObject INetworkedObject.BuildObject()
 		{
+			Material coolStuff = new Material(LoadAsset<Material>("RoR2/Base/EliteHaunted/matHauntedEliteAreaIndicator.mat"));
+			coolStuff.SetTexture("_RemapTex",LoadAsset<Texture2D>("RoR2/DLC1/voidraid/texRaidPlanetPurple.png"));
+			coolStuff.SetFloat("_DstBlendFloat", 1f);
+			coolStuff.SetTexture("_Cloud2Tex", LoadAsset<Texture2D>("RoR2/Base/Common/texCloudCaustic3.jpg"));
+			
 			var forceField = LoadAsset<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MajorConstructBubbleShield.prefab")!.InstantiateClone("ForceField", true);
 			forceField.GetComponentInChildren<MeshCollider>().gameObject.layer = 3;
 			forceField.transform.localScale = Vector3.one * 0.7f;
@@ -138,15 +142,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var ffScale = forceField.GetComponentInChildren<ObjectScaleCurve>();
 			ffScale.useOverallCurveOnly = true;
 			ffScale.overallCurve = AnimationCurve.Linear(0, 0.35f, 1, 1);
-			forceField.AddComponent<DestroyOnTimer>().duration = 6;
+			forceField.AddComponent<DestroyOnTimer>().duration = 15;
 			var forceMesh = forceField.GetComponentInChildren<MeshRenderer>();
-			var forceMaterials = forceMesh.sharedMaterials;
-			forceMesh.sharedMaterials[0] = new Material(forceMaterials[0]);
-			forceMesh.sharedMaterials[0].SetColor("_TintColor", new Color(0.07843f, 0, 1));
-			forceMesh.sharedMaterials[0].SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampMoonLighting.png"));
-			forceMesh.sharedMaterials[1] = new Material(LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierZoneAreaIndicatorLookingIn.mat")); //new Material(forceMaterials[1]);
-			/*forceMesh.sharedMaterials[1].SetColor("_TintColor", new Color(0.39215f, 0, 1));
-			forceMesh.sharedMaterials[1].SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampHippoVoidEye.png"));*/
+
+			forceMesh.sharedMaterials = new[]
+			{
+				coolStuff
+			};
+
 			var forceP = forceField.GetComponentInChildren<ParticleSystemRenderer>();
 			forceP.material = new Material(forceP.material);
 			forceP.material.SetColor("_TintColor", new Color(0.07843f, 0.02745f, 1));

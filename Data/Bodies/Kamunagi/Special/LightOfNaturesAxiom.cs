@@ -26,10 +26,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			base.OnEnter();
 
 			var childLocator = GetModelChildLocator();
-			PlayAnimation("Saraana Override", "Cast2");
-			PlayAnimation("Ururuu Override", "Cast2");
-			animator = GetModelAnimator();
-			animator.SetBool("inAxiom", true);
+			PlayAnimation("Saraana Override", "EnterAxiom");
+			PlayAnimation("Ururuu Override", "EnterAxiom");
 			spawnPos = childLocator.FindChild("MuzzleCenter").position + characterDirection.forward * 5;
 			leftMuzzleInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(
 				Asset.GetGameObject<LightOfNaturesAxiom, IEffect>(), childLocator.FindChild("MuzzleLeft"), true,
@@ -41,6 +39,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (!isAuthority) return;
 			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 			characterMotor.useGravity = false;
+			animator = GetModelAnimator();
+			animator.SetBool("inAxiom", true);
 		}
 
 		public override void FixedUpdate()
@@ -173,6 +173,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sunPP.gameObject.AddComponent<SphereCollider>().radius = 40;
 			var sunP = GetGameObject<NaturesAxiom, IEffect>().GetComponentInChildren<ParticleSystemRenderer>(true);
 			var destroyed = naturesAxiom.transform.Find("VfxRoot/Particles/GlowParticles, Fast").gameObject;
+			var indicator = naturesAxiom.transform.Find("VfxRoot/Mesh/AreaIndicator");
+			indicator.transform.localScale = Vector3.one * 100f;
 			UnityEngine.Object.Destroy(destroyed);
 			foreach (var r in naturesAxiom.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{

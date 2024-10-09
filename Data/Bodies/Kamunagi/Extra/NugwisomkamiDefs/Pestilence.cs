@@ -57,7 +57,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillDescriptionToken = "";
 			skill.baseRechargeInterval = 7f;
 			skill.beginSkillCooldownOnSkillEnd = true;
-			skill.icon = LoadAsset<Sprite>("n");
+			skill.icon = LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
 			return skill;
 		}
 

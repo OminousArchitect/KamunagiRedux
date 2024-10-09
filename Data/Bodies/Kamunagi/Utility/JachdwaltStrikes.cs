@@ -91,6 +91,25 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			base.OnEnter();
 			aimDirectionVector = base.inputBank.aimDirection;
+			var modelTransform = GetModelTransform();
+			Material coloredOverlay = new Material(LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashExpanded"));
+			coloredOverlay.SetColor("_TintColor", Colors.wispNeonGreen);
+					
+			TemporaryOverlayInstance mercEvisTarget = TemporaryOverlayManager.AddOverlay(modelTransform.gameObject);
+			mercEvisTarget.duration = 0.6f;
+			mercEvisTarget.animateShaderAlpha = true;
+			mercEvisTarget.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+			mercEvisTarget.destroyComponentOnEnd = true;
+			mercEvisTarget.originalMaterial = LegacyResourcesAPI.Load<Material>("Materials/matMercEvisTarget");
+			mercEvisTarget.AddToCharacterModel(modelTransform.GetComponent<CharacterModel>());
+					
+			TemporaryOverlayInstance huntressFlashExpanded = TemporaryOverlayManager.AddOverlay(modelTransform.gameObject);
+			huntressFlashExpanded.duration = 0.7f;
+			huntressFlashExpanded.animateShaderAlpha = true;
+			huntressFlashExpanded.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+			huntressFlashExpanded.destroyComponentOnEnd = true;
+			huntressFlashExpanded.originalMaterial = coloredOverlay;
+			huntressFlashExpanded.AddToCharacterModel(modelTransform.GetComponent<CharacterModel>());
 		}
 
 		private void CreateBlinkEffect(Vector3 origin)
@@ -172,12 +191,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			public override void OnEnter()
 			{
 				base.OnEnter();
+				blinkPrefab = Asset.GetGameObject<CherryBlossoms, IEffect>();
 				CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
 				Util.PlayAttackSpeedSound(beginSoundString, base.gameObject, 1.2f);
 				crit = Util.CheckRoll(critStat, base.characterBody.master);
 				modelTransform = GetModelTransform();
-				//mdl = modelTransform.GetComponent<CharacterModel>();
-				
 				if (NetworkServer.active)
 				{
 					base.characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
@@ -259,8 +277,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			private void CreateBlinkEffect(Vector3 origin)
 			{
 				EffectData effectData = new EffectData();
-				effectData.rotation = Util.QuaternionSafeLookRotation(Vector3.up);
+				effectData.rotation = Quaternion.Euler(0f, 0f, 0f);
 				effectData.origin = origin;
+				effectData.scale = 1f;
 				EffectManager.SpawnEffect(blinkPrefab, effectData, false);
 			}
 			
@@ -272,7 +291,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				if (modelTransform)
 				{
 					Material purpleStuff = new Material(LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashExpanded"));
-					purpleStuff.SetColor("_TintColor", new Color(0.24f, 0f, 0.58f));
+					purpleStuff.SetColor("_TintColor", Colors.wispNeonGreen);
 					
 					TemporaryOverlayInstance mercEvisTarget = TemporaryOverlayManager.AddOverlay(modelTransform.gameObject);
 					mercEvisTarget.duration = 0.6f;
@@ -411,6 +430,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					}
 				}
 
+				return effect;
+			}
+		}
+
+		public class CherryBlossoms : Asset, IEffect
+		{
+			GameObject IEffect.BuildObject()
+			{
+				var effect = LoadAsset<GameObject>("bundle:CherryBlossom");
+				effect.GetOrAddComponent<DestroyOnParticleEnd>();
 				return effect;
 			}
 		}

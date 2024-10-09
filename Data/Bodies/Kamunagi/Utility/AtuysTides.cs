@@ -119,9 +119,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		GameObject IProjectile.BuildObject()
 		{
-			var luckyTidalProjectile =
-				LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelProjectile.prefab")!.InstantiateClone(
-					"TwinsGeyserSpawnChild", true);
+			var luckyTidalProjectile = LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelProjectile.prefab")!.InstantiateClone("TwinsGeyserSpawnChild", true);
 			var gImpact = luckyTidalProjectile.GetComponent<ProjectileImpactExplosion>();
 			gImpact.impactEffect = GetGameObject<AtuysTidesImpact, IEffect>();
 			gImpact.fireChildren = true;

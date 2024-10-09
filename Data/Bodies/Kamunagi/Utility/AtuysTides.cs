@@ -43,9 +43,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				aimRay.origin,
 				Util.QuaternionSafeLookRotation(aimRay.direction),
 				gameObject,
-				damageStat * 3f,
+				damageStat * 2.5f,
 				20f,
-				RollCrit(),
+				false,
 				speedOverride: 80f
 			);
 			projectilesFired++;
@@ -60,7 +60,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			var tidalProjectileGhost =
 				LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelGhost.prefab")!.InstantiateClone(
-					"TwinsGeyserGhost", false);
+					"TidalProjectileGhost", false);
 			tidalProjectileGhost.transform.localScale = Vector3.one * 0.5f;
 			var gPsr = tidalProjectileGhost.GetComponentInChildren<ParticleSystemRenderer>();
 			var material = new Material(gPsr.material);
@@ -84,15 +84,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			var tidalProjectile =
 				LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelProjectile.prefab")!.InstantiateClone(
-					"TwinsGeyserProjectile", true);
+					"TidalProjectile", true);
 			var projectileController = tidalProjectile.GetComponent<ProjectileController>();
 			projectileController.ghostPrefab = GetGameObject<AtuysTides, IProjectileGhost>();
 			projectileController.startSound = null;
 			projectileController.procCoefficient = 1.2f;
 			tidalProjectile.GetComponent<Rigidbody>().useGravity = false;
 			tidalProjectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
-			tidalProjectile.GetComponent<ProjectileImpactExplosion>().impactEffect =
-				GetGameObject<AtuysTidesImpact, IEffect>();
+			var impact = tidalProjectile.GetComponent<ProjectileImpactExplosion>();
+			impact.impactEffect = GetGameObject<AtuysTidesImpact, IEffect>();
+			impact.falloffModel = BlastAttack.FalloffModel.None;
 			tidalProjectile.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
 			return tidalProjectile;
 		}
@@ -119,15 +120,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		GameObject IProjectile.BuildObject()
 		{
-			var luckyTidalProjectile = LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelProjectile.prefab")!.InstantiateClone("TwinsGeyserSpawnChild", true);
+			var luckyTidalProjectile = LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelProjectile.prefab")!.InstantiateClone("LuckyTidalProjectile", true);
 			var gImpact = luckyTidalProjectile.GetComponent<ProjectileImpactExplosion>();
 			gImpact.impactEffect = GetGameObject<AtuysTidesImpact, IEffect>();
+			gImpact.falloffModel = BlastAttack.FalloffModel.None;
 			gImpact.fireChildren = true;
 			gImpact.childrenCount = 1;
-			gImpact.childrenDamageCoefficient = 1.7f;
-			gImpact.childrenProjectilePrefab = GetGameObject<AtuysTides, IProjectile>();
-			luckyTidalProjectile.GetComponent<ProjectileController>().ghostPrefab =
-				GetGameObject<AtuysTides, IProjectileGhost>();
+			gImpact.childrenDamageCoefficient = 0.9f;
+			gImpact.childrenProjectilePrefab = GetGameObject<AtuysTidesEruption, IProjectile>();
+			luckyTidalProjectile.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<AtuysTides, IProjectileGhost>();
 			luckyTidalProjectile.GetComponent<Rigidbody>().useGravity = false;
 			luckyTidalProjectile.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
 			return luckyTidalProjectile;
@@ -140,7 +141,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			var tidalEruptionEffect =
 				LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierMortarExplosion.prefab")!.InstantiateClone(
-					"TwinsGeyserEruptionEffect", false);
+					"TidalEruptionEffect", false);
 			var eruptionDecal = tidalEruptionEffect.GetComponentInChildren<Decal>();
 			var eruptionDecalMaterial = new Material(eruptionDecal.Material);
 			eruptionDecalMaterial.SetTexture("_RemapTex",
@@ -186,7 +187,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						break;
 				}
 			}
-
 			foreach (var p in tidalEruptionEffect.GetComponentsInChildren<ParticleSystem>())
 			{
 				switch (p.name)
@@ -201,7 +201,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						break;
 				}
 			}
-
 			tidalEruptionEffect.EffectWithSound("Play_clayGrenadier_attack1_explode");
 			return tidalEruptionEffect;
 		}
@@ -209,8 +208,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		GameObject IProjectile.BuildObject()
 		{
 			var tidalEruptionProjectile =
-				LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierMortarProjectile.prefab")!.InstantiateClone(
-					"TwinsGeyserEruptionProjectile", true);
+				LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierMortarProjectile.prefab")!.InstantiateClone("TidalEruptionProjectile", true);
 			/*geyserEruptionProjectile.GetComponent<ProjectileController>().ghostPrefab = geyserEruptionEffect;*/
 			//These kinds of projectiles don't have ghosts?????? Why are they even projectiles then???? This is just functionally a blast attack???
 			tidalEruptionProjectile.GetComponent<ProjectileImpactExplosion>().impactEffect = GetGameObject<AtuysTidesEruption, IEffect>();
@@ -231,9 +229,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		GameObject IEffect.BuildObject()
 		{
-			var tidalImpactEffect =
-				LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelExplosion.prefab")!.InstantiateClone(
-					"TwinsGeyserGhostImpact", false);
+			var tidalImpactEffect = LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelExplosion.prefab")!.InstantiateClone("TidalImpactEffect", false);
 			tidalImpactEffect.transform.localScale = Vector3.one * 3f;
 			var giDecal = tidalImpactEffect.GetComponentInChildren<Decal>();
 			var giDecalMaterial = new Material(giDecal.Material);

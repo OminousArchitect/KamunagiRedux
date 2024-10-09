@@ -88,7 +88,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			Debug.Log($"{speedMult} remapped");
+			//Debug.Log($"{speedMult} remapped");
 			PlayAnimation("Saraana", "FlyUp");
 			PlayAnimation("Ururuu", "FlyUp");
 			CreateBlinkEffect(effectPosition);
@@ -98,7 +98,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 				false);
 			if (!isAuthority) return;
 			characterMotor.Motor.ForceUnground();
-			log.LogDebug("dash is entering");
+			//log.LogDebug("dash is entering");
 		}
 
 		public override void OnExit()

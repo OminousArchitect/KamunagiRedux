@@ -102,7 +102,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		public override void OnExit()
 		{
-			StartAimMode();
 			if (chargeEffectInstance != null) chargeEffectInstance.ReturnToPool();
 			if (fixedAge >= maxChargeTime) FireBall();
 			base.OnExit();

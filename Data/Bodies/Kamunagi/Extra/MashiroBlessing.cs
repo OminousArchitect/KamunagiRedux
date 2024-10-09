@@ -40,7 +40,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.FixedUpdate();
 
-			if (isAuthority && fixedAge > 2f)
+			if (isAuthority && characterBody.outOfDanger && fixedAge > 2f)
 			{
 				characterBody.AddTimedBuffAuthority(Asset.GetAsset<MashiroBlessing>(), 10f);
 				outer.SetNextStateToMain();
@@ -69,7 +69,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				damageType = DamageType.BypassArmor,
 				procCoefficient = 0f,
 			};
-			
 			healthComponent.TakeDamage(damageInfo);
 		}
 	}
@@ -103,7 +102,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA6_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix +  "EXTRA6_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle2:Mashiro");
-			skill.activationStateMachineName = "Weapon";
+			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;

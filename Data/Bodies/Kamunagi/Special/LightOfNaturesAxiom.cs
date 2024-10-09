@@ -286,7 +286,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				{
 					if (stack.dotIndex != CurseIndex) return;
 					var pos = self.victimBody.corePosition;
-					Debug.Log("A stack was added");
+					//Debug.Log("A stack was added");
 				}, self =>
 				{
 					if (!self || !self.victimObject) return;
@@ -296,7 +296,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					var kamunagiEffectController = self.gameObject.AddComponent<KamunagiBurnEffectController>();
 					kamunagiEffectController.effectParams = KamunagiBurnEffectController.defaultEffect;
 					kamunagiEffectController.target = modelLocator.modelTransform.gameObject;
-					Debug.LogWarning("added Kamunagi Controller");
+					log.LogDebug("added Kamunagi Controller");
 				});
 		}
 	}

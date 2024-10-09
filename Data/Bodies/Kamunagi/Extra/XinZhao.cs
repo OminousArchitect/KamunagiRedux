@@ -90,7 +90,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				var damageInfo = new DamageInfo();
 				damageInfo.damage = 4;
 				// might need to network this too, if it feels inconsistent on multiplayer
-				damageInfo.force = (healthComponent.body.footPosition - characterBody.footPosition).normalized * mass * 1;//55;
+				damageInfo.force = (healthComponent.body.footPosition - characterBody.footPosition).normalized * mass * 55;
 				damageInfo.canRejectForce = false;
 				damageInfo.position = position;
 				damageInfo.inflictor = gameObject;
@@ -136,7 +136,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			
 			var forceField = LoadAsset<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MajorConstructBubbleShield.prefab")!.InstantiateClone("ForceField", true);
 			forceField.GetComponentInChildren<MeshCollider>().gameObject.layer = 3;
-			forceField.transform.localScale = Vector3.one * 0.7f;
+			forceField.transform.localScale = Vector3.one * 0.45f;
 			UnityEngine.Object.Destroy(forceField.GetComponent<NetworkedBodyAttachment>());
 			UnityEngine.Object.Destroy(forceField.GetComponent<VFXAttributes>());
 			var ffScale = forceField.GetComponentInChildren<ObjectScaleCurve>();

@@ -139,6 +139,7 @@ namespace KamunagiOfChains
 				float.PositiveInfinity, Time.deltaTime);
 			trailingOverZeal.normalizedXMax = cachedZealForLerp > 0.01 ? cachedZealForLerp : 0;
 			trailingOverZeal.enabled = !trailingOverZeal.normalizedXMax.Equals(0);
+			trailingOverZeal.color = Color.Lerp(trailingOverZealStyle.baseColor, Color.red, trailingOverZeal.normalizedXMax);
 			if (trailingOverZeal.enabled)
 				barInfos.Add(trailingOverZeal);
 			

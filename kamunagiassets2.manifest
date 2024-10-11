@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4066012017
+CRC: 3912996879
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 01401de2b4d146f87126f8b8e505be36
+    Hash: 9fbede120fae49076ceccf4f357cf57d
   TypeTreeHash:
     serializedVersion: 2
     Hash: 05e8629778cd54a3675bf1d857b68d25
@@ -26,6 +26,7 @@ Assets:
 - Assets/172714677590348517.png
 - Assets/Atuy2.png
 - Assets/Zeal.shader
+- Assets/TatariIcon.png
 - Assets/Mashiro.png
 - Assets/Flashbang.png
 - Assets/TheMask.mesh

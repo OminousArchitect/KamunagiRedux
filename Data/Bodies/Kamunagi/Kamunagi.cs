@@ -179,6 +179,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var bodyModelLocator = bodyPrefab.GetComponent<ModelLocator>();
 			Object.Destroy(bodyModelLocator.modelTransform.gameObject);
 			model.transform.parent = bodyModelLocator.modelBaseTransform;
+			model.GetComponent<CharacterModel>().body = bodyComponent;
 			bodyModelLocator.modelTransform = model.transform;
 
 			#endregion

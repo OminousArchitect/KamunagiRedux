@@ -11,9 +11,9 @@
 	  "NINES_SARAANA_EXTRA": "Divine Skill",
 	  "NINES_URURUU_EXTRA": "<color=#D0A1F8>Ururuu Extra</color>",
 
-	  "NINES_KAMUNAGI_BODY_NAME": "Kamunagi",
+	  "NINES_KAMUNAGI_BODY_NAME": "Kamunagi Of Chains",
 	  "NINES_KAMUNAGI_BODY_DESCRIPTION": "Description<color=#CCD3E0>\n\n< ! > \n\n< ! > \n\n< ! > \n\n< ! > \n\n</color>",
-	  "NINES_KAMUNAGI_BODY_SUBTITLE": "of Chains",
+	  "NINES_KAMUNAGI_BODY_SUBTITLE": "",
 	  "NINES_KAMUNAGI_BODY_LORE": "lorem ipsum",
 	  "NINES_KAMUNAGI_BODY_OUTRO_FLAVOR": "",
 	  "NINES_KAMUNAGI_BODY_OUTRO_FAILURE": "",
@@ -35,6 +35,8 @@
 	  "NUGWISOMKAMI2_BODY_NAME": "Onvitaikayan Hubris",
 	  "NUGWISOMKAMI3_BODY_NAME": "Ambivalent Pestilence",
 	  "NUGWISOMKAMI4_BODY_NAME": "Solitude",
+	  
+	  "TATARI_BODY_NAME": "Tatari",
 	  
 	  "NINES_KAMUNAGI_BODY_PRIMARY0_NAME": "Soei Musou: Basic",
 	  "NINES_KAMUNAGI_BODY_PRIMARY0_DESCRIPTION": "Fire a dark sphere that explodes on impact for <style=cIsDamage>290% damage</style>. <style=cIsUtility>Hold up to 4</style>.",

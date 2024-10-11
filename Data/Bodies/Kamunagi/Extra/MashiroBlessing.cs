@@ -17,6 +17,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		private EffectManagerHelper muzzleInstanceLeft;
 		private EffectManagerHelper muzzleInstanceRight;
 		private float stopwatch;
+		private float duration = 2f;
 
 		public override void OnEnter()
 		{
@@ -34,19 +35,35 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			base.OnExit();
 			if (muzzleInstanceLeft != null) muzzleInstanceLeft.ReturnToPool();
 			if (muzzleInstanceRight != null) muzzleInstanceRight.ReturnToPool();
+			var chargeFraction = fixedAge / duration;
+			
+			var damageInfo = new DamageInfo
+			{
+				damage = (healthComponent.combinedHealth * 0.25f) * chargeFraction,
+				position = characterBody.corePosition,
+				damageColorIndex = MashiroBlessing.damageColorIndex,
+				damageType = DamageType.BypassArmor,
+				procCoefficient = 0f
+			};
+			if (!NetworkServer.active || !healthComponent) return;
+			healthComponent.TakeDamage(damageInfo);
 		}
 
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 
-			if (isAuthority && characterBody.outOfDanger && fixedAge > 2f)
+			if (isAuthority && !characterBody.outOfDanger || fixedAge > duration)
 			{
-				characterBody.AddTimedBuffAuthority(Asset.GetAsset<MashiroBlessing>(), 10f);
+				if (fixedAge > duration)
+				{
+					characterBody.AddTimedBuffAuthority(Asset.GetAsset<MashiroBlessing>(), 10f);
+				}
 				outer.SetNextStateToMain();
 				return;
 			}
 
+			
 			if (!IsKeyDownAuthority())
 			{
 				outer.SetNextStateToMain();
@@ -57,19 +74,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (stopwatch < 0.075f) return;
 			//0.2 frequency is equal to 5 times per second
 			//0.1 would be 10 times per second
-
 			//0.075 is 24 times in 2 seconds
 			stopwatch = 0;
-			if (!NetworkServer.active || !healthComponent) return;
-			var damageInfo = new DamageInfo
-			{
-				damage = healthComponent.combinedHealth * 0.01f,
-				position = characterBody.corePosition,
-				damageColorIndex = MashiroBlessing.damageColorIndex,
-				damageType = DamageType.BypassArmor,
-				procCoefficient = 0f,
-			};
-			healthComponent.TakeDamage(damageInfo);
 		}
 	}
 	

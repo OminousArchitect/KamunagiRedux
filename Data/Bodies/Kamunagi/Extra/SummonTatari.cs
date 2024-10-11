@@ -1,5 +1,8 @@
-﻿using EntityStates;
+﻿using BepInEx.Configuration;
+using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -18,7 +21,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				masterPrefab = Asset.GetGameObject<TatariBody, IMaster>(),
 				position = position + Vector3.up * 4,
 				summonerBodyObject = gameObject,
-				ignoreTeamMemberLimit = true
+				ignoreTeamMemberLimit = true,
+				useAmbientLevel = true,
 			};
 			var tatariMaster = tatariSummon.Perform();
 			var deployable = tatariMaster.gameObject.AddComponent<Deployable>();
@@ -54,6 +58,34 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class TatariBody : Asset, IBody, IMaster
 	{
+		private static ConfigEntry<string> debuffBlacklist;
+		
+		private static BuffIndex[] _eligibleDebuffs;
+		public static BuffIndex[] EligibleDebuffs
+		{
+			get
+			{
+				if (_eligibleDebuffs == null)
+				{
+					DebuffBlacklistOnSettingChanged(null, null);
+				}
+				return _eligibleDebuffs;
+			}
+		}
+		public static BodyIndex _tatariIndex;
+		public static BodyIndex tatariIndex
+		{
+			get
+			{
+				if (_tatariIndex == (BodyIndex) 0)
+				{
+					var tatari = GetGameObject<TatariBody, IBody>();
+					_tatariIndex = tatari.GetComponent<CharacterBody>().bodyIndex;
+				}
+				return _tatariIndex;
+			}
+		}
+
 		GameObject IBody.BuildObject()
 		{
 			Material tatariMat = new Material(LoadAsset<Material>("RoR2/DLC1/Gup/matGupBodySimple.mat"));
@@ -69,10 +101,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var legs = gupBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
 			legs.GetComponent<SkinnedMeshRenderer>().enabled = false; //attempt #1
 			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			gupBody.GetComponent<CharacterDeathBehavior>().deathState = new SerializableEntityStateType(typeof(GenericCharacterDeath));
+			gupBody.GetComponent<CharacterDeathBehavior>().deathState = new SerializableEntityStateType(typeof(VoidDeathState));
 			var mdl = model.GetComponent<CharacterModel>();
 			mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
 			mdl.baseRendererInfos[1].renderer.enabled = false; //attempt #2
+			var cb = gupBody.GetComponent<CharacterBody>();
+			cb.baseNameToken = "TATARI_BODY_NAME";
+			cb.baseDamage = 14f;
+			cb.portraitIcon = LoadAsset<Texture>("bundle2:TatariIcon");
+
 			var lr = model.AddComponent<LegRemover>();
 			foreach (SkinnedMeshRenderer m in model.GetComponentsInChildren<SkinnedMeshRenderer>())
 			{
@@ -92,6 +129,35 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			tatariMaster.AddComponent<SetDontDestroyOnLoad>();
 			tatariMaster.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<TatariBody, IBody>();
 			return tatariMaster;
+		}
+
+		public override void Initialize()
+		{
+			debuffBlacklist = KamunagiOfChains.KamunagiOfChainsPlugin.instance.Config.Bind("Tatari", "DebuffBlacklist",
+				$"bdBleeding bdBlight bdOnFire bdFracture bdDisableAllSkills bdSuperBleed bdLunarSecondaryRoot bdlunarruin bdNullifyStack bdNullified bdOverheat bdPoisoned bdPulverizeBuildup bdLunarDetonationCharge bdSoulCost bdStrongerBurn " +
+				$"{((BuffDef)GetAsset<NaturesAxiom, IBuff>()).name} {((BuffDef)GetAsset<AxiomBurn, IBuff>()).name} {((BuffDef)GetAsset<NaturesAxiom, IBuff>()).name} {((BuffDef)GetAsset<SobuGekishoha, IBuff>()).name} {((BuffDef)GetAsset<WoshisZone, IBuff>()).name}" +
+				$"{((BuffDef)GetAsset<MashiroBlessing, IBuff>()).name}",
+				"description");
+			
+			RoR2.GlobalEventManager.onServerDamageDealt += GlobalEventManagerOnonServerDamageDealt;
+			debuffBlacklist.SettingChanged += DebuffBlacklistOnSettingChanged;
+		}
+
+		private static void DebuffBlacklistOnSettingChanged(object sender, EventArgs eventArgs)
+		{
+			var blacklist = debuffBlacklist.Value.Split(' ')
+				.Select(str => BuffCatalog.FindBuffIndex(str))
+				.Where(index => index != BuffIndex.None);
+			_eligibleDebuffs = BuffCatalog.debuffBuffIndices.Except(blacklist).ToArray();
+		}
+
+		private static void GlobalEventManagerOnonServerDamageDealt(DamageReport damageReport)
+		{
+			if (damageReport.attackerBody == null) return;
+			if (damageReport.victimBody.bodyIndex != tatariIndex) return;
+			if (!Util.CheckRoll((1 - damageReport.victimBody.healthComponent.health / damageReport.victimBody.healthComponent.fullHealth) * 100, damageReport.victimMaster)) return;
+			var theDebuff = EligibleDebuffs[UnityEngine.Random.Range(0, EligibleDebuffs.Length)];
+			damageReport.attackerBody.AddTimedBuff(theDebuff, 3f);
 		}
 
 		public class LegRemover : MonoBehaviour

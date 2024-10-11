@@ -123,6 +123,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.isCombatSkill = true;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = true;
+			skill.stockToConsume = 1;
 			return skill;
 		}
 	}
@@ -190,7 +191,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				GetGameObject<TickingFuseObelisk, IProjectileGhost>();
 			var sealingImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			sealingImpact.lifetime = 1.5f;
-			sealingImpact.blastRadius = 25.5f;
+			sealingImpact.blastRadius = 22f;
 			sealingImpact.fireChildren = false;
 			sealingImpact.impactEffect = GetGameObject<ExplodingObelisk, IEffect>();
 			sealingImpact.blastDamageCoefficient = 1f; //todo you dont set it here
@@ -225,7 +226,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				.InstantiateClone("OnkamiSealPhase2Ghost", false);
 			ghost.transform.localScale = Vector3.one * 2f;
 			var sealingScale = ghost.transform.GetChild(0).gameObject;
-			sealingScale.transform.localScale = Vector3.one * 9.3f; //scale child
+			sealingScale.transform.localScale = Vector3.one * 8.2f; //scale child
 			foreach (var r in ghost.GetComponentsInChildren<ParticleSystemRenderer>())
 			{
 				var name = r.name;
@@ -305,7 +306,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				if (!(__instance.health <= fractionOfHealth)) return;
 				damageInfo.damageType = DamageType.VoidDeath;
 				EffectManager.SpawnEffect(
-					LoadAsset<GameObject>("RoR2/DLC1/CritGlassesVoid/CritGlassesVoidExecuteEffect.prefab"),
+					GetGameObject<CyanDamageNumbers, IEffect>(),
 					new EffectData
 					{
 						origin = __instance.body.corePosition,
@@ -315,6 +316,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 	}
 
+	public class CyanDamageNumbers : Asset, IEffect
+	{
+		GameObject IEffect.BuildObject()
+		{
+			var effect = LoadAsset<GameObject>("RoR2/DLC1/CritGlassesVoid/CritGlassesVoidExecuteEffect.prefab")!.InstantiateClone("SealExecuteEffect", false);
+			var numbers = effect.transform.GetChild(9).gameObject;
+			var pRender = numbers.GetComponent<ParticleSystemRenderer>();
+			pRender.material.SetColor("_TintColor", new Color(0f, 1f, 0.98f));
+			effect.EffectWithSound("Play_nullifier_death_vortex_explode");
+			return effect;
+		}
+	}
 
 	// third
 	public class ExplodingObelisk : Asset, IEffect
@@ -375,18 +388,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					r.enabled = false;
 				}
 			}
-
 			effect.transform.localScale = Vector3.one * 10f;
 			effect.GetComponentInChildren<Light>().color = Colors.sealingColor;
-			//effect.transform.position = new Vector3(effect.transform.position.x, 4f, effect.transform.position.z);
 			var sealMeshR = effect.GetComponentInChildren<MeshRenderer>();
 			sealMeshR.materials = TheGreatSealing.onKamiMats;
-
-
 			//obtaining the perfect obelisk mesh
 			var loftPrefab = LoadAsset<GameObject>("addressable:RoR2/DLC1/ancientloft/AL_LightStatue_On.prefab")!;
 			var obelisk = loftPrefab.transform.GetChild(4).gameObject;
-			// TODO??
+			//
 			var theObelisk = PrefabAPI.InstantiateClone(obelisk, "TwinsObelisk", false);
 			theObelisk.transform.position = Vector3.zero;
 			var obeliskChildRotation = theObelisk.transform.rotation;
@@ -395,14 +404,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var sealingMeshObject = effect.transform.GetChild(7).gameObject;
 			sealingMeshObject.GetComponent<MeshFilter>().mesh = sealingObelisk;
 			sealingMeshObject.transform.rotation = obeliskChildRotation; //I should get an award for this
-			sealingMeshObject.transform.position = new Vector3(sealingMeshObject.transform.position.x, -8f,
-				sealingMeshObject.transform.position.z);
+			sealingMeshObject.transform.position = new Vector3(sealingMeshObject.transform.position.x, -8f, sealingMeshObject.transform.position.z);
 			//the detonation and priming obelisk use the same Vector3
 			sealingMeshObject.GetComponent<MeshRenderer>().materials = TheGreatSealing.onKamiMats;
 			sealingMeshObject.GetComponent<ObjectScaleCurve>().baseScale = Vector3.one * 0.7f;
 
 			var blastIndicator = effect.transform.GetChild(10).gameObject;
-			blastIndicator.transform.localScale = Vector3.one * 1.25f; //blast indicator
+			blastIndicator.transform.localScale = Vector3.one * 1.15f; //blast indicator
 			blastIndicator.transform.localPosition = new Vector3(0, 0.25f, 0);
 
 			effect.EffectWithSound("Play_item_void_bleedOnHit_explo");

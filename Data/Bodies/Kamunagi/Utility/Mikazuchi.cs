@@ -243,12 +243,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		GameObject IEffect.BuildObject()
 		{
-			var effect =
-				LoadAsset<GameObject>("addressable:RoR2/Base/EliteLightning/LightningStakeNova.prefab")!.InstantiateClone("MikazuchiStakeNova", false);
+			var effect = LoadAsset<GameObject>("addressable:RoR2/Base/EliteLightning/LightningStakeNova.prefab")!.InstantiateClone("MikazuchiStakeNova", false);
 			effect.transform.localScale = Vector3.one * 2;
 			var (novaPr, _) = effect.GetComponentsInChildren<ParticleSystemRenderer>();
 			novaPr.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png"));
-			//novaPr[3].material.DisableKeyword("VERTEXCOLOR");
+			var indicator = effect.transform.GetChild(1).gameObject;
+			var yellow = indicator.GetComponent<ParticleSystemRenderer>().material;
+			yellow.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png"));
 			foreach (ParticleSystem p in effect.GetComponentsInChildren<ParticleSystem>())
 			{
 				var name = p.name;

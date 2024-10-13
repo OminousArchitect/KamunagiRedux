@@ -89,7 +89,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			outlineMaterial.SetColor(TintColor, new Color(0f, 0.274509804f, 1f));
 			outlineMaterial.SetFloat("_RimPower", 3.8f);
 			mothMoth.GetComponentInChildren<MeshRenderer>().material = outlineMaterial;
-
+			mothMoth.GetComponent<BuffWard>().radius = 2.8f;
 			mothMoth.AddComponent<DestroyOnTimer>().duration = 10;
 			return mothMoth;
 		}

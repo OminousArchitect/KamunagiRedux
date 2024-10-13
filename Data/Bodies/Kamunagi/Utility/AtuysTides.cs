@@ -16,12 +16,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		public GameObject projectilePrefab = Asset.GetGameObject<AtuysTides, IProjectile>();
 		public GameObject luckyProjectilePrefab = Asset.GetGameObject<AtuysTidesLucky, IProjectile>();
+		private float chanceToSweep;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			//bubbetMath no idea wtf is going on here
 			totalProjectileCount = Mathf.RoundToInt(10f/3f * characterBody.attackSpeed - 0.3f);
+			chanceToSweep = critStat + 7f;
 		}
 
 		public override void FixedUpdate()
@@ -34,23 +36,29 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				outer.SetNextStateToMain();
 				return;
 			}
-			for (int projs = 0; projs < totalProjectileCount; projs++)
-			{
-				if (projectilesFired > Mathf.FloorToInt(fixedAge / (duration / totalProjectileCount))) return;
-				var aimRay = GetAimRay();
-				bool wasLucky = Util.CheckRoll(critStat + 7f, characterBody.master);
-				ProjectileManager.instance.FireProjectile(
-					projectilePrefab = wasLucky ? luckyProjectilePrefab : projectilePrefab,
-					aimRay.origin,
-					Util.QuaternionSafeLookRotation(aimRay.direction),
-					gameObject,
-					damageStat * 2.5f,
-					20f,
-					false,
-					speedOverride: 80f
-				);
-				projectilesFired++;
-			} 
+
+			if (projectilesFired > Mathf.FloorToInt(fixedAge / (duration / totalProjectileCount))) return;
+			FireTide();
+		}
+
+		private void FireTide()
+		{
+			var aimRay = GetAimRay();
+			var roll = Util.CheckRoll(chanceToSweep);
+			
+			ProjectileManager.instance.FireProjectile(
+				projectilePrefab = roll ? luckyProjectilePrefab : projectilePrefab,
+				aimRay.origin,
+				Util.QuaternionSafeLookRotation(aimRay.direction),
+				gameObject,
+				damageStat * 2.5f,
+				20f,
+				false,
+				speedOverride: 80f
+			);
+			log.LogDebug($"Rolling out of {chanceToSweep}...");
+			log.LogDebug($"----{roll}----");
+			projectilesFired++;
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;

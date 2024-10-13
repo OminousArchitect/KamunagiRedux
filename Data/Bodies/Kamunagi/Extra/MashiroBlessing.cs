@@ -36,17 +36,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (muzzleInstanceLeft != null) muzzleInstanceLeft.ReturnToPool();
 			if (muzzleInstanceRight != null) muzzleInstanceRight.ReturnToPool();
 			var chargeFraction = fixedAge / duration;
+			var amountToDecrease = healthComponent.fullHealth * chargeFraction;
 			
-			var damageInfo = new DamageInfo
+			if (!NetworkServer.active || !healthComponent) return;
+			/*var damageInfo = new DamageInfo
 			{
 				damage = (healthComponent.combinedHealth * 0.25f) * chargeFraction,
 				position = characterBody.corePosition,
 				damageColorIndex = MashiroBlessing.damageColorIndex,
 				damageType = DamageType.BypassArmor,
 				procCoefficient = 0f
-			};
-			if (!NetworkServer.active || !healthComponent) return;
-			healthComponent.TakeDamage(damageInfo);
+			};*/
+			//healthComponent.TakeDamage(damageInfo);
 		}
 
 		public override void FixedUpdate()

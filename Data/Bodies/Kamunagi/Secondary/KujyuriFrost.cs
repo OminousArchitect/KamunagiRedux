@@ -46,6 +46,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				origin = aimRay.origin,
 				aimVector = aimRay.direction,
 				maxSpread = 0.4f,
+				hitEffectPrefab = Asset.GetGameObject<IceHitEffect, IEffect>(),
 				damage = damageStat * 2.5f,
 				force = 155,
 				muzzleName = twinMuzzle,
@@ -56,6 +57,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				falloffModel = BulletAttack.FalloffModel.None,
 				damageType = DamageType.Freeze2s
 			}.Fire();
+
+			var muzzle = twinMuzzle;
 		}
 
 		public override void Fire(Vector3 targetPosition) {
@@ -80,6 +83,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				rotation = Util.QuaternionSafeLookRotation(GetAimRay().direction),
 				scale = 10f
 			}, true);
+		}
+	}
+
+	public class IceHitEffect : Asset, IEffect
+	{
+		GameObject IEffect.BuildObject()
+		{
+			Material iceImpact = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matGenericFlash.mat"));
+			
+			var effect = LoadAsset<GameObject>("RoR2/Base/Huntress/HuntressFireArrowRain.prefab")!.InstantiateClone("TwinsIceHitspark", false);
+			var sparksLarge = effect.transform.GetChild(0).gameObject;
+			Material sparksOne = sparksLarge.GetComponent<ParticleSystemRenderer>().material;
+			return effect;
 		}
 	}
 	public class KujyuriFrost : Asset, ISkill, IEffect

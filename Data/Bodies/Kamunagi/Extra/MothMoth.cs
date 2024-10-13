@@ -66,6 +66,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
 			impMat.SetTexture(PrintRamp,
 				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampHuntressSoft.png"));
+			
 			mothMoth.GetComponentInChildren<SkinnedMeshRenderer>().material = impMat;
 
 			//Main color, Emission color, Fresnel ramp, and Print Ramp are your 4 big ticket items here
@@ -84,10 +85,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			particlesTransform.localPosition = new Vector3(0f, 0.3f, 0f);
 			particlesTransform.localScale = Vector3.one * 0.3f;
 
-			var outlineMaterial =
-				new Material(
-					LoadAsset<Material>("addressable:RoR2/Base/Nullifier/matNullifierZoneAreaIndicatorLookingIn.mat"));
+			var outlineMaterial = new Material(LoadAsset<Material>("addressable:RoR2/Base/Nullifier/matNullifierZoneAreaIndicatorLookingIn.mat"));
 			outlineMaterial.SetColor(TintColor, new Color(0f, 0.274509804f, 1f));
+			outlineMaterial.SetFloat("_RimPower", 3.8f);
 			mothMoth.GetComponentInChildren<MeshRenderer>().material = outlineMaterial;
 
 			mothMoth.AddComponent<DestroyOnTimer>().duration = 10;

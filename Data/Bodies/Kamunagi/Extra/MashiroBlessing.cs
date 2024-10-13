@@ -113,6 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;
+			skill.mustKeyPress = true;
 			return skill;
 		}
 

@@ -101,7 +101,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 	public class KamunagiHoverState : BaseState, IZealState
 	{
-		public float hoverVelocity = -0.04f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
+		public float hoverVelocity = -0.02f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
 		public float hoverAcceleration = 80;
 		public static GameObject muzzleEffect = Asset.GetGameObject<KamunagiHover, IEffect>();
 		private EffectManagerHelper muzzleInstanceLeft;

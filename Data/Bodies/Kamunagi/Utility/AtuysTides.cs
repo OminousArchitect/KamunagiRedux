@@ -34,21 +34,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				outer.SetNextStateToMain();
 				return;
 			}
-
-			if (projectilesFired > Mathf.FloorToInt(fixedAge / (duration / totalProjectileCount))) return;
-			var aimRay = GetAimRay();
-			bool wasLucky = Util.CheckRoll(critStat + 7f, characterBody.master);
-			ProjectileManager.instance.FireProjectile(
-				projectilePrefab = wasLucky ? luckyProjectilePrefab : projectilePrefab,
-				aimRay.origin,
-				Util.QuaternionSafeLookRotation(aimRay.direction),
-				gameObject,
-				damageStat * 2.5f,
-				20f,
-				false,
-				speedOverride: 80f
-			);
-			projectilesFired++;
+			for (int projs = 0; projs < totalProjectileCount; projs++)
+			{
+				if (projectilesFired > Mathf.FloorToInt(fixedAge / (duration / totalProjectileCount))) return;
+				var aimRay = GetAimRay();
+				bool wasLucky = Util.CheckRoll(critStat + 7f, characterBody.master);
+				ProjectileManager.instance.FireProjectile(
+					projectilePrefab = wasLucky ? luckyProjectilePrefab : projectilePrefab,
+					aimRay.origin,
+					Util.QuaternionSafeLookRotation(aimRay.direction),
+					gameObject,
+					damageStat * 2.5f,
+					20f,
+					false,
+					speedOverride: 80f
+				);
+				projectilesFired++;
+			} 
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;

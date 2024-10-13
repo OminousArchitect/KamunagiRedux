@@ -44,20 +44,36 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		private void FireTide()
 		{
 			var aimRay = GetAimRay();
-			var roll = Util.CheckRoll(chanceToSweep);
-			
-			ProjectileManager.instance.FireProjectile(
-				projectilePrefab = roll ? luckyProjectilePrefab : projectilePrefab,
-				aimRay.origin,
-				Util.QuaternionSafeLookRotation(aimRay.direction),
-				gameObject,
-				damageStat * 2.5f,
-				20f,
-				false,
-				speedOverride: 80f
-			);
-			log.LogDebug($"Rolling out of {chanceToSweep}...");
-			log.LogDebug($"----{roll}----");
+			FireProjectileInfo unluckyInfo = new FireProjectileInfo
+			{
+				crit = false,
+				damage = damageStat * 2.5f,
+				force = 20,
+				owner = gameObject,
+				position = aimRay.origin,
+				projectilePrefab = Asset.GetGameObject<AtuysTides, IProjectile>(),
+				rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
+				speedOverride = 80f
+			};
+			FireProjectileInfo luckyInfo = new FireProjectileInfo
+			{
+				crit = false,
+				damage = damageStat * 2.5f,
+				force = 20,
+				owner = gameObject,
+				position = aimRay.origin,
+				projectilePrefab = Asset.GetGameObject<AtuysTidesLucky, IProjectile>(),
+				rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
+				speedOverride = 80f
+			};
+			if (Util.CheckRoll(chanceToSweep))
+			{
+				ProjectileManager.instance.FireProjectile(luckyInfo);
+			}
+			else
+			{
+				ProjectileManager.instance.FireProjectile(unluckyInfo);
+			}
 			projectilesFired++;
 		}
 

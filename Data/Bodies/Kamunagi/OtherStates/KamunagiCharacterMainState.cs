@@ -17,6 +17,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public EffectManagerHelper? chainsLeftInstance;
 		public EffectManagerHelper? chainsRightInstance;
 		public bool chainsSpawned;
+		public SceneDef? currentStage;
 
 		public override void OnEnter()
 		{
@@ -26,6 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			var childLocator = GetModelChildLocator();
 			UBone = childLocator.FindChild("U Bone");
 			SBone = childLocator.FindChild("S Bone");
+			currentStage = SceneCatalog.GetSceneDefForCurrentScene();
 		}
 
 		public override void OnExit() {
@@ -46,6 +48,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+			var sulfurPoolsDef = LoadAsset<SceneDef>("RoR2/DLC1/sulfurpools/sulfurpools.asset");
+			var meridianDef = LoadAsset<SceneDef>("RoR2/DLC2/meridian/meridian.asset");
+			if (currentStage == meridianDef || currentStage == sulfurPoolsDef) return;
 			if (!chainsSpawned && passiveSkill.IsReady())
 			{
 				if (chainsLeftInstance == null || !chainsLeftInstance)
@@ -85,8 +90,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			{
 				if (hasInputBank)
 				{
-					if (inputBank.jump.justPressed && (characterMotor as IPhysMotor).velocity.y <= -15f &&
-					    passiveSkill.ExecuteIfReady())
+					if (inputBank.jump.justPressed && (characterMotor as IPhysMotor).velocity.y <= -14f && passiveSkill.ExecuteIfReady()) //ascension threshold
 					{
 						return;
 					}

@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-	public class TwinsChildTeleportState : BaseTwinState
+	public class KuonFlashbangState : BaseTwinState
 	{
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
@@ -37,7 +37,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
-			Util.PlaySound("Play_imp_attack_blink", gameObject);
+			Util.PlaySound("Play_child_attack2_teleport", gameObject);
 
 			NodeGraph airNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Air);
 			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
@@ -106,7 +106,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class TwinsChildTeleport : Asset, ISkill, IEffect
+	public class KuonFlashbang : Asset, ISkill, IEffect
 	{
 		SkillDef ISkill.BuildObject()
 		{
@@ -116,16 +116,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle2:Flashbang");
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 0f;
+			skill.baseRechargeInterval = 1f;
 			skill.beginSkillCooldownOnSkillEnd = true;
-			skill.canceledFromSprinting = true;
+			skill.canceledFromSprinting = false;
 			skill.mustKeyPress = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSBLESSING_KEYWORD" };
 			return skill;
 		}
 
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(TwinsChildTeleportState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(KuonFlashbangState) };
 
 		GameObject IEffect.BuildObject()
 		{

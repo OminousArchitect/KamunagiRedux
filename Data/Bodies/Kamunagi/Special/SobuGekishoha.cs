@@ -16,11 +16,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private float stopwatch;
 		private float damageCoefficient = 3;
 		private Transform centerFarMuzzle;
-		private Transform centerMuzzle;
 		private EffectManagerHelper voidSphereMuzzle;
 		private EffectManagerHelper darkSigilEffect;
 		private EffectManagerHelper tracerInstance;
 		private CameraTargetParams.AimRequest request;
+		private TemporaryOverlayInstance overlay;
+		private CharacterModel charModel;
 
 		public override void OnEnter()
 		{
@@ -29,10 +30,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			Util.PlaySound(EntityStates.VoidRaidCrab.SpinBeamAttack.enterSoundString, gameObject);
 			characterMotor.useGravity = false;
 			centerFarMuzzle = FindModelChild("MuzzleCenterFar");
-			centerMuzzle = FindModelChild("MuzzleCenter");
+			charModel = GetModelTransform().GetComponent<CharacterModel>();
 
 			Vector3 additive = characterDirection.forward * 0.5f;
-			Vector3 vectorMath = centerMuzzle.position + additive;
 			darkSigilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<DarkSigil, IEffect>(), centerFarMuzzle, true);
 			darkSigilEffect.transform.localScale = Vector3.one * 0.7f;
 			tracerInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha, IEffect>(), centerFarMuzzle, true);
@@ -40,7 +40,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			voidSphereMuzzle = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<VoidSphere, IEffect>(), centerFarMuzzle, true);
 			voidSphereMuzzle.transform.localRotation = Quaternion.identity;
 			voidSphereMuzzle.transform.localScale = Vector3.one;
-
+			
+			overlay = TemporaryOverlayManager.AddOverlay(gameObject);
+			overlay.originalMaterial = LoadAsset<Material>("RoR2/DLC1/voidstage/matVoidCrystal.mat");
+			overlay.AddToCharacterModel(charModel);
 			characterBody.AddBuff(Asset.GetAsset<SobuGekishoha>());
 			var component = voidSphereMuzzle.GetComponent<ScaleParticleSystemDuration>();
 			if (component)
@@ -142,7 +145,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			{
 				darkSigilEffect.ReturnToPool();
 			}
-
+			
+			overlay.RemoveFromCharacterModel();
 			base.OnExit();
 		}
 
@@ -150,7 +154,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	}
 
 	[HarmonyPatch]
-	public class SobuGekishoha : Asset, ISkill, IEffect, IBuff
+	public class SobuGekishoha : Asset, ISkill, IEffect, IBuff, IOverlay
 	{
 		SkillDef ISkill.BuildObject()
 		{
@@ -163,24 +167,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.baseMaxStock = 1;
 			skill.baseRechargeInterval = 10f;
 			skill.beginSkillCooldownOnSkillEnd = true;
-			skill.canceledFromSprinting = false;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = true;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = false;
 			return skill;
-		}
-
-		BuffDef IBuff.BuildObject()
-		{
-			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
-			buffDef.name = "TwinsArmorBuff";
-			buffDef.buffColor = Colors.twinsDarkColor;
-			buffDef.canStack = false;
-			buffDef.isDebuff = false;
-			buffDef.iconSprite = LoadAsset<Sprite>("RoR2/Junk/Common/texBuffBodyArmorIcon.tif");
-			buffDef.isHidden = false;
-			return buffDef;
 		}
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(SobuGekishohaState) };
@@ -201,6 +192,30 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			rarted.GetComponent<PostProcessVolume>().blendDistance = 19f;
 			return tracer;
 		}
+		
+		BuffDef IBuff.BuildObject()
+		{
+			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
+			buffDef.name = "TwinsArmorBuff";
+			buffDef.buffColor = Colors.twinsDarkColor;
+			buffDef.canStack = false;
+			buffDef.isDebuff = false;
+			buffDef.iconSprite = LoadAsset<Sprite>("RoR2/Junk/Common/texBuffBodyArmorIcon.tif");
+			buffDef.isHidden = false;
+			return buffDef;
+		}
+
+		Material IOverlay.BuildObject()
+		{
+			var material = new Material(LoadAsset<Material>("RoR2/Base/Brother/maBrotherGlassOverlay.mat"));
+			
+			return material;
+		}
+
+		bool IOverlay.CheckEnabled(CharacterModel model)
+		{
+			return model.body && model.body.HasBuff(GetAsset<SobuGekishoha, IBuff>());
+		} 
 		
 		[HarmonyPostfix, HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.RecalculateStats))]
 		private static void RecalcStats(CharacterBody __instance)

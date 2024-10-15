@@ -186,7 +186,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			private bool crit;
 			private static float minimumDuration = 0.5f;
 			public Vector3 theVector3;
-			private TemporaryOverlayInstance cosmicOverlay;
 
 			public override void OnEnter()
 			{

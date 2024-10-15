@@ -55,8 +55,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sun.GetComponent<UmbralSunController>().bullseyeSearch.teamMaskFilter =
 				TeamMask.GetEnemyTeams(teamComponent.teamIndex);
 			NetworkServer.Spawn(sun);
-			EffectManager.SimpleEffect(Asset.GetGameObject<NaturesAxiom, IEffect>(), spawnPos, Quaternion.identity,
-				true);
+			EffectManager.SimpleEffect(Asset.GetGameObject<NaturesAxiom, IEffect>(), spawnPos, Quaternion.identity, true);
 		}
 
 		public override void OnExit()
@@ -78,7 +77,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Death;
 	}
-
+	
 	[HarmonyPatch]
 	public class LightOfNaturesAxiom : Asset, ISkill, IEffect
 	{
@@ -137,8 +136,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(LightOfNaturesAxiomState) };
+		
+
+		[HarmonyPostfix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		private static void TakeDamage(HealthComponent __instance, DamageInfo damageInfo)
+		{
+			if (!__instance.body) return;
+			var debuff = (BuffDef)GetAsset<AxiomBurn, IBuff>();
+			if (__instance.body.HasBuff(debuff) && damageInfo.damage >= __instance.fullCombinedHealth * 0.1f)
+			{
+				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
+				var fractionOfHealth = attackerBody.healthComponent.fullHealth * 0.1f;
+				if (attackerBody && attackerBody.healthComponent.alive)
+				{
+					attackerBody.healthComponent.Heal(fractionOfHealth, default);
+				}
+			}
+		}
 	}
 
+	[HarmonyPatch]
 	public class NaturesAxiom : Asset, INetworkedObject, IEffect, IBuff
 	{
 		GameObject INetworkedObject.BuildObject()

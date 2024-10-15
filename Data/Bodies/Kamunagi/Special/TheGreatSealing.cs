@@ -33,25 +33,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			if (isAuthority) characterMotor.useGravity = false;
 			var muzzleTransform = FindModelChild("MuzzleCenter");
 			if (!muzzleTransform || !Asset.TryGetGameObject<TheGreatSealing, IEffect>(out var muzzleEffect)) return;
 			chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform,
-				true, new EffectData() { rootObject = muzzleTransform.gameObject, scale = 0.0625f });
-		}
-
-		public override void Update()
-		{
-			base.Update();
-			if (!isAuthority) return;
-			((IPhysMotor)characterMotor).velocityAuthority = Vector3.zero;
+				true, new EffectData() { rootObject = muzzleTransform.gameObject, scale = 0.1f });
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
 			if (chargeEffectInstance != null) chargeEffectInstance.ReturnToPool();
-			if (isAuthority) characterMotor.useGravity = true;
 		}
 	}
 	
@@ -78,10 +69,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		GameObject IEffect.BuildObject()
 		{
-			var effect =
-				LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonGhost.prefab")!
-					.InstantiateClone("AntimatterMuzzleEffect", false);
-
+			var effect = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonGhost.prefab")!.InstantiateClone("AntimatterMuzzleEffect", false);
 			var comp = effect.GetOrAddComponent<EffectComponent>();
 			comp.applyScale = true;
 			comp.parentToReferencedTransform = true;
@@ -96,12 +84,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var scaler = effect.transform.GetChild(0).gameObject;
 			var blackSphere = scaler.transform.GetChild(1).gameObject;
 			var (emissionMat, (rampMat, _)) = blackSphere.GetComponent<MeshRenderer>().materials;
-			emissionMat.SetTexture("_Emission",
-				LoadAsset<Texture2D>("addressable:RoR2/Base/ElectricWorm/ElectricWormBody.png"));
-			rampMat.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
-			scaler.GetComponentInChildren<Light>().range = 20f;
+			emissionMat.SetTexture("_Emission", LoadAsset<Texture2D>("addressable:RoR2/Base/ElectricWorm/ElectricWormBody.png"));
+			rampMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
 			Object.Destroy(scaler.transform.GetChild(3).gameObject);
+			Object.Destroy(scaler.transform.GetChild(2).gameObject);
+			Object.Destroy(scaler.transform.GetChild(0).gameObject);
+			
+			var warp = PrefabAPI.InstantiateClone(scaler.transform.GetChild(1).gameObject, "DistortionSphere", false);
+			warp.transform.parent = effect.transform;
+			warp.transform.localScale = Vector3.one * 10f;
+			warp.transform.localPosition = Vector3.zero;
+			
+			Material distortion = new Material(LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierDeathDistortion.mat"));
+			Material outline = new Material(LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOverlay.mat"));
+			outline.SetTexture("_Emission", LoadAsset<Texture2D>("addressable:RoR2/Base/ElectricWorm/ElectricWormBody.png"));
+			outline.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
+
+			warp.GetComponent<MeshRenderer>().materials = new[] { distortion, outline}; 
 			return effect;
 		}
 
@@ -114,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL1_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle:Special1");
-			skill.activationStateMachineName = "Body";
+			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 1;
 			skill.baseRechargeInterval = 8f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -301,17 +300,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			if (damageInfo.HasModdedDamageType(Uitsalnemetia))
 			{
-				var fractionOfHealth = __instance.fullHealth * 0.3f;
+				var fractionOfHealth = __instance.fullCombinedHealth * 0.35f;
 				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
-				if (!(__instance.health <= fractionOfHealth)) return;
-				damageInfo.damageType = DamageType.VoidDeath;
-				EffectManager.SpawnEffect(
-					GetGameObject<CyanDamageNumbers, IEffect>(),
-					new EffectData
-					{
-						origin = __instance.body.corePosition,
-						rotation = Util.QuaternionSafeLookRotation(attackerBody.characterDirection.forward)
-					}, false);
+				if (__instance.health <= fractionOfHealth || damageInfo.damage >= __instance.health)
+				{
+					damageInfo.damageType = DamageType.VoidDeath;
+					EffectManager.SpawnEffect(
+						GetGameObject<CyanDamageNumbers, IEffect>(),
+						new EffectData
+						{
+							origin = __instance.body.corePosition,
+							rotation = Util.QuaternionSafeLookRotation(attackerBody.characterDirection.forward)
+						}, false);
+				}
 			}
 		}
 	}

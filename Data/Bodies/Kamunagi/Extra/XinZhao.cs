@@ -10,6 +10,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	public class XinZhaoState : BaseTwinState
 	{
+		private float stopwatch;
+		private float bufferTime;
+		public (Vector3, HealthComponent)[]? enemyHurtBoxes;
 		// Collect hurtboxes under authority
 		// Init new state
 		// new state serializes that data, and then unserializes
@@ -17,7 +20,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			var hurtBoxes = new SphereSearch
+			bufferTime = twinBehaviour.runtimeNumber1;
+			enemyHurtBoxes = new SphereSearch
 				{
 					origin = characterBody.corePosition, radius = 30, mask = LayerIndex.entityPrecise.mask
 				}
@@ -28,11 +32,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				.GetHurtBoxes()
 				.Select(x => (x.transform.position, x.healthComponent))
 				.ToArray();
-			outer.SetNextState(new XinZhaoForceFieldState
+		}
+
+		public override void FixedUpdate()
+		{
+			stopwatch += Time.deltaTime;
+
+			if (stopwatch >= bufferTime)
 			{
-				hurtBoxes = hurtBoxes,
-				forceFieldPosition = transform.position
-			});
+				outer.SetNextState(new XinZhaoForceFieldState
+				{
+					hurtBoxes = enemyHurtBoxes,
+					forceFieldPosition = transform.position
+				});
+			}
 		}
 	}
 
@@ -115,7 +128,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA3_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:no-type");
+			skill.icon = LoadAsset<Sprite>("bundle2:172714677590348517"); //lol, lmao
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;

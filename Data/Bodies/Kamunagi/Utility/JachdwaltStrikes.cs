@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-    class JachdwaltTestForTarget : BaseTwinState
+    class JachdwaltTestForTarget : RaycastedSpellState
 	{
 		public bool hitSomething;
 		public Vector3 hitPos;

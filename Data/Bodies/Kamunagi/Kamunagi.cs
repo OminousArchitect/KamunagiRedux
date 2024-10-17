@@ -125,7 +125,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		GameObject IBody.BuildObject()
 		{
 			if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) throw new Exception("Model not loaded.");
-			var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/CommandoBody")!
+			var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/MageBody")!
 				.InstantiateClone("NinesKamunagiBody");
 
 			var bodyComponent = bodyPrefab.GetComponent<CharacterBody>();

@@ -97,7 +97,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			tatariMat.SetFloat("_FlowSpeed", 15f);
 			//mat.SetFloat("");
 			
-			var gupBody = LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab")!.InstantiateClone("LargeTatariBody", true);
+			var gupBody = LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab")!.InstantiateClone("TatariBody", true);
 			var legs = gupBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
 			legs.GetComponent<SkinnedMeshRenderer>().enabled = false; //attempt #1
 			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;

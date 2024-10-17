@@ -203,7 +203,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 					__instance.gameObject,
 					damageInfo.attacker,
 					DotController.DotIndex.StrongerBurn,
-					2f,
+					3.5f,
 					damageInfo.damage * 0.1f
 				);
 			}

@@ -65,7 +65,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			woshisEnergy.SetFloat("_RimPower", 0.48f);
 			woshisEnergy.SetFloat("_RimStrength", 0.12f);
 			woshisEnergy.SetFloat("_AlphaBoost", 6.55f);
-			woshisEnergy.SetFloat("_IntersectionStrength", 5.12f);
+			woshisEnergy.SetFloat("_IntersectionStrength", 3.2f);
 
 			Object.Destroy(woshisWard.GetComponent<NetworkedBodyAttachment>());
 			woshisWard.GetComponentInChildren<MeshRenderer>().material = woshisEnergy;

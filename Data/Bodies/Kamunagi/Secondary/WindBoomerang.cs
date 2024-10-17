@@ -17,17 +17,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	internal class WindBoomerangState : BaseTwinState
 	{
 		public override int meterGain => 5;
-		private float damageCoefficient = 2.8f;
+		private float damageCoefficient = 2f;
 		private float distanceMult;
 		private float maxChargeTime = 1.5f;
-		private float minDistance = 0.05f;
-		private float maxDistance = 0.6f;
+		private float minDistance;
+		private float maxDistance;
 		public EffectManagerHelper? chargeEffectInstance;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
+			minDistance = twinBehaviour.runtimeNumber1;
+			maxDistance = twinBehaviour.runtimeNumber2;
 			var effect = Asset.GetGameObject<WindBoomerang, IEffect>();
 			if (muzzleTransform)
 			{
@@ -99,8 +101,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY2_DESCRIPTION";
 			skill.icon = LoadAsset<Sprite>("bundle:windpng");
 			skill.activationStateMachineName = "Weapon";
-			skill.baseMaxStock = 1;
-			skill.baseRechargeInterval = 2f;
+			skill.baseMaxStock = 2;
+			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = false;
 			skill.canceledFromSprinting = false;
 			skill.interruptPriority = InterruptPriority.Any;

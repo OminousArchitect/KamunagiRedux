@@ -1,3 +1,4 @@
+using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using RoR2;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
@@ -7,7 +8,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public IEnumerable<Asset> GetSkillAssets() =>
 			new Asset[]
 			{
-				GetAsset<EnnakamuyEarth>(), GetAsset<WindBoomerang>(), GetAsset<DenebokshiriBrimstone>(), GetAsset<KujyuriFrost>()
+				GetAsset<EnnakamuyEarth>(), GetAsset<Mikazuchi>(), GetAsset<DenebokshiriBrimstone>(), GetAsset<KujyuriFrost>()
 			};
 
 		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaSecondary"

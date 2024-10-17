@@ -114,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillName = "Utility 9";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle2:Flashbang");
+			skill.icon = LoadAsset<Sprite>("bundle:Mikazuchi");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 1f;
 			skill.beginSkillCooldownOnSkillEnd = true;

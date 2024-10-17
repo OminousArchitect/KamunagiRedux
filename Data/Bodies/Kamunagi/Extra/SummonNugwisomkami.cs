@@ -28,10 +28,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" } //completely done
 			}, //Hubris
 
-			{
+			/*{
 				Asset.GetGameObject<VirusArchWisp, IMaster>(),
 				new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
-			}, //Pestilence
+			}, //Pestilence*/
 
 			{
 				Asset.GetGameObject<IceTank, IMaster>(),

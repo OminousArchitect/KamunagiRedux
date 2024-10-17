@@ -61,7 +61,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var muzzle = twinMuzzle;
 		}
 
-		public override void Fire(Vector3 targetPosition) {
+		public override void Fire(Vector3 targetPosition) { 
 			base.Fire(targetPosition);
 			new BlastAttack
 			{
@@ -111,7 +111,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = false;
-			skill.beginSkillCooldownOnSkillEnd = true;
+			skill.beginSkillCooldownOnSkillEnd = false;
 			return skill;
 		}
 

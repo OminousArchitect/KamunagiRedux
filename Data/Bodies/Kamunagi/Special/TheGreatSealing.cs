@@ -193,7 +193,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sealingImpact.blastRadius = 22f;
 			sealingImpact.fireChildren = false;
 			sealingImpact.impactEffect = GetGameObject<ExplodingObelisk, IEffect>();
-			sealingImpact.blastDamageCoefficient = 1f; //todo you dont set it here
+			sealingImpact.blastDamageCoefficient = 1f;  
 			sealingImpact.blastProcCoefficient = 1f;
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
 			projectile.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Uitsalnemetia);

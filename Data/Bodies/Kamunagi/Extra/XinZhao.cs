@@ -12,6 +12,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		private float stopwatch;
 		private float bufferTime = 0.85f;
+
 		public (Vector3, HealthComponent)[]? enemyHurtBoxes;
 		// Collect hurtboxes under authority
 		// Init new state
@@ -43,8 +44,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				outer.SetNextState(new XinZhaoForceFieldState
 				{
-					hurtBoxes = enemyHurtBoxes,
-					forceFieldPosition = transform.position
+					hurtBoxes = enemyHurtBoxes, forceFieldPosition = transform.position
 				});
 			}
 		}
@@ -85,7 +85,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.OnEnter();
 			if (!NetworkServer.active) return;
-			NetworkServer.Spawn(UnityEngine.Object.Instantiate(Asset.GetGameObject<XinZhao, INetworkedObject>(), forceFieldPosition,
+			NetworkServer.Spawn(UnityEngine.Object.Instantiate(Asset.GetGameObject<XinZhao, INetworkedObject>(),
+				forceFieldPosition,
 				Quaternion.identity));
 			foreach (var (position, healthComponent) in hurtBoxes)
 			{
@@ -104,7 +105,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				var damageInfo = new DamageInfo();
 				damageInfo.damage = 4;
 				// might need to network this too, if it feels inconsistent on multiplayer
-				damageInfo.force = (healthComponent.body.footPosition - characterBody.footPosition).normalized * mass * 55;
+				damageInfo.force = (healthComponent.body.footPosition - characterBody.footPosition).normalized * mass *
+				                   55;
 				damageInfo.canRejectForce = false;
 				damageInfo.position = position;
 				damageInfo.inflictor = gameObject;
@@ -143,12 +145,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		GameObject INetworkedObject.BuildObject()
 		{
-			Material coolStuff = new Material(LoadAsset<Material>("RoR2/Base/EliteHaunted/matHauntedEliteAreaIndicator.mat"));
-			coolStuff.SetTexture("_RemapTex",LoadAsset<Texture2D>("RoR2/DLC1/voidraid/texRaidPlanetPurple.png"));
+			Material coolStuff =
+				new Material(LoadAsset<Material>("RoR2/Base/EliteHaunted/matHauntedEliteAreaIndicator.mat"));
+			coolStuff.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/DLC1/voidraid/texRaidPlanetPurple.png"));
 			coolStuff.SetFloat("_DstBlendFloat", 1f);
 			coolStuff.SetTexture("_Cloud2Tex", LoadAsset<Texture2D>("RoR2/Base/Common/texCloudCaustic3.jpg"));
-			
-			var forceField = LoadAsset<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MajorConstructBubbleShield.prefab")!.InstantiateClone("ForceField", true);
+
+			var forceField =
+				LoadAsset<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MajorConstructBubbleShield.prefab")!
+					.InstantiateClone("ForceField", true);
+			forceField.GetComponent<TeamFilter>().teamIndex = TeamIndex.Player;
+			forceField.transform.Find("Collision").gameObject.AddComponent<RootMotionGoByeBye>();
+			/*
+			var ward = forceField.AddComponent<BuffWard>();
+			ward.buffDef = LoadAsset<BuffDef>("RoR2/Base/Common/bdSlow80.asset");
+			ward.teamFilter = forceField.GetComponent<TeamFilter>();
+			ward.radius = 20f;
+			*/
 			forceField.GetComponentInChildren<MeshCollider>().gameObject.layer = 3;
 			forceField.transform.localScale = Vector3.one * 0.45f;
 			UnityEngine.Object.Destroy(forceField.GetComponent<NetworkedBodyAttachment>());
@@ -159,10 +172,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			forceField.AddComponent<DestroyOnTimer>().duration = 15;
 			var forceMesh = forceField.GetComponentInChildren<MeshRenderer>();
 
-			forceMesh.sharedMaterials = new[]
-			{
-				coolStuff
-			};
+			forceMesh.sharedMaterials = new[] { coolStuff };
 
 			var forceP = forceField.GetComponentInChildren<ParticleSystemRenderer>();
 			forceP.material = new Material(forceP.material);
@@ -171,6 +181,38 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return forceField;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new []{typeof(XinZhaoState), typeof(XinZhaoForceFieldState)};
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(XinZhaoState), typeof(XinZhaoForceFieldState) };
+	}
+
+	public class RootMotionGoByeBye : MonoBehaviour
+	{
+		private RaycastHit[] results = new RaycastHit[25];
+		public float radius = 18f;
+		private Ray direction;
+		private TeamFilter teamFilter;
+		private float mult = 2f;
+
+		public void Awake()
+		{
+			direction = new Ray { direction = Vector3.up, origin = transform.position };
+			teamFilter = GetComponentInParent<TeamFilter>();
+		}
+
+		private void FixedUpdate()
+		{
+			var hits = Physics.SphereCastNonAlloc(direction, radius, results);
+			if (hits <= 0) return;
+			for (var i = 0; i < hits; i++)
+			{
+				var other = results[i];
+				if (!other.rigidbody) continue;
+				var characterBody = other.rigidbody.GetComponent<CharacterBody>();
+				if (characterBody && characterBody.teamComponent && characterBody.characterMotor && characterBody.teamComponent.teamIndex != teamFilter.teamIndex)
+				{
+					characterBody.characterMotor.rootMotion =
+						(other.transform.position - transform.position) * (Time.fixedDeltaTime * mult);
+				}
+			}
+		}
 	}
 }

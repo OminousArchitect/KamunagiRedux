@@ -13,9 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 {
 	internal class AltSoeiMusouState : BaseTwinState
 	{
-		public static GameObject megaBlaster = LoadAsset<GameObject>(
-			"addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallProjectile.prefab")!;
-
+		public static GameObject megaBlaster = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallProjectile.prefab")!;
 		public float maxChargeTime = 3f;
 		public Transform muzzleTransform = null!;
 		public EffectManagerHelper? chargeEffectInstance;

@@ -1,3 +1,4 @@
+using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using RoR2;
 

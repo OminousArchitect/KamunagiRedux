@@ -16,8 +16,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public int maxZeal = 80;
 		public bool alternateSkills;
 		public MasterTwinBehaviour masterBehaviour;
-		public float runtimeNumber1 = 0.1f;
-		public float runtimeNumber2 = 0.8f;
+		public float runtimeNumber1 = 0.3f;
+		public float runtimeNumber2 = 0.6f;
 
 		public int zealMeter
 		{

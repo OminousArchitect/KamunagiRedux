@@ -11,7 +11,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class XinZhaoState : BaseTwinState
 	{
 		private float stopwatch;
-		private float bufferTime;
+		private float bufferTime = 0.85f;
 		public (Vector3, HealthComponent)[]? enemyHurtBoxes;
 		// Collect hurtboxes under authority
 		// Init new state
@@ -20,7 +20,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			bufferTime = twinBehaviour.runtimeNumber1;
+			PlayAnimation("Saraana Override", "Saraana NSM");
+			PlayAnimation("Ururuu Override", "Ururuu NSM");
 			enemyHurtBoxes = new SphereSearch
 				{
 					origin = characterBody.corePosition, radius = 30, mask = LayerIndex.entityPrecise.mask

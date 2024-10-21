@@ -155,7 +155,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			var proj = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckProjectile.prefab")!.InstantiateClone("TwinsReaverProjectile", true);
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
-			impact.lifetime = 5f;
+			impact.lifetime = 12f;
 			//impact.impactEffect = GetGameObject<ReaverMusou, IEffect>();
 			//impact.blastRadius = 5f;
 			var controller = proj.GetComponent<ProjectileController>();
@@ -235,7 +235,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = GetGameObject<PrimedStickyBomb, IEffect>();
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
-			crabController.whiteToBlackTransformedProjectile = GetGameObject<PrimedStickyBomb, IProjectile>(); //you could swap this for different chain-reaction visuals if you wanted
+			crabController.whiteToBlackTransformedProjectile = GetGameObject<ChainReactionProjectile, IProjectile>(); //you could swap this for different chain-reaction visuals if you wanted
 			crabController.whiteToBlackTransformationRadius = 7.5f;
 			return proj;
 		}
@@ -272,7 +272,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	{
 		GameObject IProjectile.BuildObject()
 		{
-			var proj = GetGameObject<PrimedStickyBomb, IProjectile>()!.InstantiateClone("TwinsChainReactionProjectile", true);
+			var proj = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab")!.InstantiateClone("ChainReactionProjectile", true);
+			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<PrimedStickyBomb, IProjectileGhost>();
+			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
+			impact.impactEffect = GetGameObject<PrimedStickyBomb, IEffect>();
+			var crabController = proj.GetComponent<MegacrabProjectileController>();
+			crabController.whiteToBlackTransformedProjectile = proj; //you could swap this for different chain-reaction visuals if you wanted
+			crabController.whiteToBlackTransformationRadius = 7.5f;
 			return proj;
 		}
 	}

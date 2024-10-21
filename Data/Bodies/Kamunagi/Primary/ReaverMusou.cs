@@ -162,6 +162,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			controller.procCoefficient = 0.8f;
 			controller.ghostPrefab = GetGameObject<ReaverMusou, IProjectileGhost>();
 			//proj.transform.GetChild(0).gameObject.SetActive(false);
+			var crabController = proj.GetComponent<MegacrabProjectileController>();
+			crabController.whiteToBlackTransformedProjectile = GetGameObject<ChainReactionProjectile, IProjectile>();
 			return proj;
 		}
 
@@ -268,7 +270,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		}
 	}
 
-	internal class ChainReactionProjectile : Asset, IProjectile // you need this because you can't set the crabcontroller transformation projectile to itself, it crashes CodedAssets
+	internal class ChainReactionProjectile : Asset, IProjectile 
 	{
 		GameObject IProjectile.BuildObject()
 		{
@@ -277,8 +279,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = GetGameObject<PrimedStickyBomb, IEffect>();
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
-			crabController.whiteToBlackTransformedProjectile = proj; //you could swap this for different chain-reaction visuals if you wanted
-			crabController.whiteToBlackTransformationRadius = 7.5f;
+			crabController.whiteToBlackTransformedProjectile = GetGameObject<RecursionProjectile, IProjectile>();
+			crabController.whiteToBlackTransformationRadius = 12f;
+			return proj;
+		}
+	}
+
+	internal class RecursionProjectile : Asset, IProjectile //this handles up to 3 recursive explosions, thats enough I guess. Vanilla component infinitely recurses and I couldn't manage that without stackoverflow
+	{
+		GameObject IProjectile.BuildObject()
+		{
+			var proj = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab")!.InstantiateClone("RecursionProjectile", true);
+			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<PrimedStickyBomb, IProjectileGhost>();
+			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
+			impact.impactEffect = GetGameObject<PrimedStickyBomb, IEffect>();
+			var crabController = proj.GetComponent<MegacrabProjectileController>();
+			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
+			crabController.whiteToBlackTransformationRadius = 12f;
 			return proj;
 		}
 	}

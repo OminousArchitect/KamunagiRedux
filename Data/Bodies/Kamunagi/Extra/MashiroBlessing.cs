@@ -4,6 +4,7 @@ using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
 using RoR2.Skills;
+using RoR2.UI;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -17,7 +18,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		private EffectManagerHelper muzzleInstanceLeft;
 		private EffectManagerHelper muzzleInstanceRight;
 		private float stopwatch;
-		private float duration = 2f;
+		public float duration = 2f;
 
 		public override void OnEnter()
 		{
@@ -36,18 +37,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (muzzleInstanceLeft != null) muzzleInstanceLeft.ReturnToPool();
 			if (muzzleInstanceRight != null) muzzleInstanceRight.ReturnToPool();
 			var chargeFraction = fixedAge / duration;
-			var amountToDecrease = healthComponent.fullHealth * chargeFraction;
-			
+			var amountToDecrease = Mathf.Max(1f,healthComponent.fullHealth * chargeFraction * 0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
+
 			if (!NetworkServer.active || !healthComponent) return;
-			/*var damageInfo = new DamageInfo
-			{
-				damage = (healthComponent.combinedHealth * 0.25f) * chargeFraction,
-				position = characterBody.corePosition,
-				damageColorIndex = MashiroBlessing.damageColorIndex,
-				damageType = DamageType.BypassArmor,
-				procCoefficient = 0f
-			};*/
-			//healthComponent.TakeDamage(damageInfo);
+			healthComponent.Networkhealth -= amountToDecrease;
 		}
 
 		public override void FixedUpdate()
@@ -79,6 +72,42 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			stopwatch = 0;
 		}
 	}
+
+	public class MashiroBarSegment : BarData
+	{
+		public override HealthBarStyle.BarStyle GetStyle()
+		{
+			if (Bar == null) return default;
+			var style = Bar.style.curseBarStyle;
+			style.baseColor = Colors.twinsLightColor;
+			return style;
+		}
+
+		public override void UpdateInfo(ref HealthBar.BarInfo inf, HealthComponent.HealthBarValues healthBarValues, ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
+		{
+			base.UpdateInfo(ref inf, healthBarValues, extraHealthBarInfoTracker);
+			inf.enabled = false;
+			if (!spellStateMachine || spellStateMachine!.state is not MashiroBlessingState blessingState) return;
+			inf.enabled = true;
+			inf.normalizedXMin = Mathf.Max(0f,healthBarValues.healthFraction - blessingState.fixedAge / blessingState.duration * 0.25f);
+			inf.normalizedXMax = healthBarValues.healthFraction;
+		}
+		
+		private EntityStateMachine? _spellStateMachine;
+		public EntityStateMachine? spellStateMachine
+		{
+			get
+			{
+				if (_spellStateMachine == null || !_spellStateMachine)
+				{
+					_spellStateMachine = Bar!.source.body.skillLocator
+						.FindSkillByDef(Asset.GetAsset<MashiroBlessing, ISkill>())?.stateMachine;
+				}
+
+				return _spellStateMachine;
+			}
+		}
+	}
 	
 	public class MashiroBlessing : Asset, IEffect, ISkill, IBuff, IOverlay
 	{
@@ -104,7 +133,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		
 		SkillDef ISkill.BuildObject()
 		{
-			var skill = ScriptableObject.CreateInstance<SkillDef>();
+			var skill = ScriptableObject.CreateInstance<BlessingDef>();
 			skill.skillName = "Extra Skill 6";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA6_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix +  "EXTRA6_DESCRIPTION";
@@ -139,6 +168,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			return model.body && model.body.HasBuff(this);
 		}
+	}
+
+	public class BlessingDef : SkillDef
+	{
+		public override bool IsReady(GenericSkill skillSlot) => base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
 	}
 
 	public class MashiroBlessingRespawn : Asset, IEffect

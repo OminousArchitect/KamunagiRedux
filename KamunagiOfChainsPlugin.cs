@@ -1,5 +1,5 @@
 ﻿global using static KamunagiOfChains.KamunagiOfChainsPlugin;
-global using CodedAssets;
+global using ConcentricContent;
 using System.Collections;
 using System.Security;
 using System.Security.Permissions;
@@ -10,8 +10,11 @@ using HarmonyLib;
 using R2API;
 using R2API.Utils;
 using RoR2;
+using RoR2.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]

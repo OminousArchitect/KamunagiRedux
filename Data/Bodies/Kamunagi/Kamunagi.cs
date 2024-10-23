@@ -27,36 +27,39 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				typeof(KamunagiCharacterMainState)
 			};
 
-		SkinDef ISkin.BuildObject() =>
-			(SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
+		async Task<SkinDef> ISkin.BuildObject()
+		{
+			var icon = await LoadAsset<Sprite>("bundle:TwinsSkin");
+			var model = await LoadAsset<GameObject>("bundle:mdlKamunagi")!;
+			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
 			{
 				var skinDef = (SkinDef)obj;
 				ISkin.AddDefaults(ref skinDef);
 				skinDef.name = "KamunagiDefaultSkinDef";
 				skinDef.nameToken = tokenPrefix + "DEFAULT_SKIN_NAME";
-				skinDef.icon = LoadAsset<Sprite>("bundle:TwinsSkin");
-
-				if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) return;
+				skinDef.icon = icon;
+				
 				skinDef.rootObject = model;
 				var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
 				var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
 				modelRendererInfos.CopyTo(rendererInfos, 0);
 				skinDef.rendererInfos = rendererInfos;
 			});
+		}
 
-		GameObject IMaster.BuildObject()
+		async Task<GameObject> IMaster.BuildObject()
 		{
-			var master = LoadAsset<GameObject>("RoR2/Base/Merc/MercMonsterMaster.prefab")!.InstantiateClone(
+			var master = (await LoadAsset<GameObject>("RoR2/Base/Merc/MercMonsterMaster.prefab"))!.InstantiateClone(
 				"NinesKamunagiBodyMonsterMaster", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<KamunagiAsset, IBody>();
+			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
 			return master;
 		}
 
 		IEnumerable<Asset> IModel.GetSkins() => new Asset[] { this };
 
-		GameObject IModel.BuildObject()
+		async Task<GameObject> IModel.BuildObject()
 		{
-			var model = LoadAsset<GameObject>("bundle:mdlKamunagi")!;
+			var model = await LoadAsset<GameObject>("bundle:mdlKamunagi")!;
 			var characterModel = model.GetOrAddComponent<CharacterModel>();
 			var childLocator = model.GetComponent<ChildLocator>();
 
@@ -72,7 +75,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				};
 			}
 
-			var voidCrystalMat = LoadAsset<Material>("addressable:RoR2/DLC1/voidstage/matVoidCrystal.mat");
+			var voidCrystalMat = await LoadAsset<Material>("addressable:RoR2/DLC1/voidstage/matVoidCrystal.mat");
 			characterModel.baseRendererInfos = new[]
 			{
 				new CharacterModel.RendererInfo
@@ -113,19 +116,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			return model;
 		}
 
-		GameObject IBodyDisplay.BuildObject()
+		async Task<GameObject> IBodyDisplay.BuildObject()
 		{
-			if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) throw new Exception("Model not loaded.");
+			var model = await this.GetModel();
 			var displayModel = model.InstantiateClone("KamunagiDisplay", false);
 			displayModel.GetComponent<Animator>().runtimeAnimatorController =
-				LoadAsset<RuntimeAnimatorController>("bundle:animHenryMenu");
+				await LoadAsset<RuntimeAnimatorController>("bundle:animHenryMenu");
 			return displayModel;
 		}
 
 		async Task<GameObject> IBody.BuildObject()
 		{
-			if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) throw new Exception("Model not loaded.");
-			var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/MageBody")!
+			var model = await this.GetModel();
+			var bodyPrefab = (await LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/MageBody"))!
 				.InstantiateClone("NinesKamunagiBody");
 
 			var bodyComponent = bodyPrefab.GetComponent<CharacterBody>();
@@ -136,8 +139,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			bodyComponent.baseNameToken = tokenPrefix + "NAME";
 			bodyComponent.subtitleNameToken = tokenPrefix + "SUBTITLE";
 			bodyComponent.bodyColor = Colors.twinsLightColor;
-			bodyComponent.portraitIcon = LoadAsset<Texture>("bundle:Twins");
-			bodyComponent._defaultCrosshairPrefab = LoadAsset<GameObject>("RoR2/Base/Croco/CrocoCrosshair.prefab");
+			bodyComponent.portraitIcon = await LoadAsset<Texture>("bundle:Twins");
+			bodyComponent._defaultCrosshairPrefab = await LoadAsset<GameObject>("RoR2/Base/Croco/CrocoCrosshair.prefab");
 
 			bodyComponent.baseMaxHealth = 150f;
 			bodyComponent.baseRegen = 1.5f;
@@ -232,57 +235,48 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 			var skillLocator = bodyPrefab.GetComponent<SkillLocator>();
 			var extraSkillLocator = bodyPrefab.AddComponent<ExtraSkillLocator>();
-			if (TryGetAsset<KamunagiSkillFamilyPrimary>(out var skillFamilyPrimary))
-			{
-				var skill = bodyPrefab.AddComponent<GenericSkill>();
-				skill.skillName = "SaraanaPrimary";
-				skill._skillFamily = skillFamilyPrimary;
-				skillLocator.primary = skill;
-				var skill2 = bodyPrefab.AddComponent<GenericSkill>();
-				skill2.skillName = "UruruuPrimary";
-				skill2._skillFamily = GetAsset<KamunagiSkillFamilyPrimary2>();
-			}
 
-			if (TryGetAsset<KamunagiSkillFamilySecondary>(out var skillFamilySecondary))
-			{
-				var skill = bodyPrefab.AddComponent<GenericSkill>();
-				skill.skillName = "SaraanaSecondary";
-				skill._skillFamily = skillFamilySecondary;
-				skillLocator.secondary = skill;
-				var skill2 = bodyPrefab.AddComponent<GenericSkill>();
-				skill2.skillName = "UruruuSecondary";
-				skill2._skillFamily = GetAsset<KamunagiSkillFamilySecondary2>();
-			}
+			var primarySkill = bodyPrefab.AddComponent<GenericSkill>();
+			primarySkill.skillName = "SaraanaPrimary";
+			primarySkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilyPrimary>();
+			skillLocator.primary = primarySkill;
+			var primarySkill2 = bodyPrefab.AddComponent<GenericSkill>();
+			primarySkill2.skillName = "UruruuPrimary";
+			primarySkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilyPrimary2>();
 
-			if (TryGetAsset<KamunagiSkillFamilyUtility>(out var skillFamilyUtility))
-			{
-				var skill = bodyPrefab.AddComponent<GenericSkill>();
-				skill.skillName = "SaraanaUtility";
-				skill._skillFamily = skillFamilyUtility;
-				skillLocator.utility = skill;
-				var skill2 = bodyPrefab.AddComponent<GenericSkill>();
-				skill2.skillName = "UruruuUtility";
-				skill2._skillFamily = GetAsset<KamunagiSkillFamilyUtility2>();
-			}
 
-			if (TryGetAsset<KamunagiSkillFamilySpecial>(out var skillFamilySpecial))
-			{
-				var skill = bodyPrefab.AddComponent<GenericSkill>();
-				skill.skillName = "SaraanaSpecial";
-				skill._skillFamily = skillFamilySpecial;
-				skillLocator.special = skill;
-				var skill2 = bodyPrefab.AddComponent<GenericSkill>();
-				skill2.skillName = "UruruuSpecial";
-				skill2._skillFamily = GetAsset<KamunagiSkillFamilySpecial2>();
-			}
+			var secondarySkill = bodyPrefab.AddComponent<GenericSkill>();
+			secondarySkill.skillName = "SaraanaSecondary";
+			secondarySkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilySecondary>();
+			skillLocator.secondary = secondarySkill;
+			var secondarySkill2 = bodyPrefab.AddComponent<GenericSkill>();
+			secondarySkill2.skillName = "UruruuSecondary";
+			secondarySkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilySecondary2>();
 
-			if (TryGetAsset<KamunagiSkillFamilyExtra1>(out var skillFamilyExtra1))
-			{
-				var skill = bodyPrefab.AddComponent<GenericSkill>();
-				skill.skillName = "SaraanaExtra";
-				skill._skillFamily = skillFamilyExtra1;
-				extraSkillLocator.extraFourth = skill;
-			}
+
+			var utilitySkill = bodyPrefab.AddComponent<GenericSkill>();
+			utilitySkill.skillName = "SaraanaUtility";
+			utilitySkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilyUtility>();
+			skillLocator.utility = utilitySkill;
+			var utilitySkill2 = bodyPrefab.AddComponent<GenericSkill>();
+			utilitySkill2.skillName = "UruruuUtility";
+			utilitySkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilyUtility2>();
+
+
+			var specialSkill = bodyPrefab.AddComponent<GenericSkill>();
+			specialSkill.skillName = "SaraanaSpecial";
+			specialSkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilySpecial>();
+			skillLocator.special = specialSkill;
+			var specialSkill2 = bodyPrefab.AddComponent<GenericSkill>();
+			specialSkill2.skillName = "UruruuSpecial";
+			specialSkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilySpecial2>();
+
+
+			var skill = bodyPrefab.AddComponent<GenericSkill>();
+			skill.skillName = "SaraanaExtra";
+			skill._skillFamily = await GetSkillFamily<KamunagiSkillFamilyExtra1>();
+			extraSkillLocator.extraFourth = skill;
+
 
 			var passiveSkill = bodyPrefab.AddComponent<GenericSkill>();
 			var family = await GetSkillFamily<KamunagiSkillFamilyPassive>();

@@ -13,6 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	public class TheGreatSealingState : IndicatorSpellState
 	{
 		public EffectManagerHelper? chargeEffectInstance;
+		public static GameObject muzzleEffect;
 		public override float duration => 10f;
 		public override float failedCastCooldown => 1f;
 
@@ -34,7 +35,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
-			if (!muzzleTransform || !Asset.TryGetGameObject<TheGreatSealing, IEffect>(out var muzzleEffect)) return;
+			if (!muzzleTransform) return;
 			chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform,
 				true, new EffectData() { rootObject = muzzleTransform.gameObject, scale = 0.1f });
 		}
@@ -49,27 +50,28 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	public class TheGreatSealing : Asset, ISkill, IEffect
 	{
 		public static Material[] onKamiMats;
-
-		static TheGreatSealing()
+		public override async Task Initialize()
 		{
+			await base.Initialize();
+			TheGreatSealingState.muzzleEffect = await this.GetEffect();
 			var onkami1 =
-				new Material(LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalCenter.mat"));
+				new Material(await LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalCenter.mat"));
 			onkami1.SetFloat("_AlphaBoost", 1.3f);
 			onkami1.SetColor("_TintColor", new Color(0f, 0.1843f, 1f));
 			;
 			var onkami2 =
-				new Material(LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalEdge.mat"));
+				new Material(await LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalEdge.mat"));
 			onkami2.SetColor("_TintColor", new Color(0f, 0.1843f, 1f));
 			onkami2.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
 			onkami2.SetFloat("_BrightnessBoost", 4.67f);
 			onkami2.SetFloat("_AlphaBoost", 1.2f);
 			onKamiMats = new[] { onkami1, onkami2 };
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonGhost.prefab")!.InstantiateClone("AntimatterMuzzleEffect", false);
+			var effect= (await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonGhost.prefab"))!.InstantiateClone("AntimatterMuzzleEffect", false);
 			var comp = effect.GetOrAddComponent<EffectComponent>();
 			comp.applyScale = true;
 			comp.parentToReferencedTransform = true;
@@ -84,8 +86,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var scaler = effect.transform.GetChild(0).gameObject;
 			var blackSphere = scaler.transform.GetChild(1).gameObject;
 			var (emissionMat, (rampMat, _)) = blackSphere.GetComponent<MeshRenderer>().materials;
-			emissionMat.SetTexture("_Emission", LoadAsset<Texture2D>("addressable:RoR2/Base/ElectricWorm/ElectricWormBody.png"));
-			rampMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
+			emissionMat.SetTexture("_Emission", await LoadAsset<Texture2D>("addressable:RoR2/Base/ElectricWorm/ElectricWormBody.png"));
+			rampMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
 			Object.Destroy(scaler.transform.GetChild(3).gameObject);
 			Object.Destroy(scaler.transform.GetChild(2).gameObject);
 			Object.Destroy(scaler.transform.GetChild(0).gameObject);
@@ -95,10 +97,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			warp.transform.localScale = Vector3.one * 10f;
 			warp.transform.localPosition = Vector3.zero;
 			
-			Material distortion = new Material(LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierDeathDistortion.mat"));
-			Material outline = new Material(LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOverlay.mat"));
-			outline.SetTexture("_Emission", LoadAsset<Texture2D>("addressable:RoR2/Base/ElectricWorm/ElectricWormBody.png"));
-			outline.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
+			Material distortion = new Material(await LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierDeathDistortion.mat"));
+			Material outline = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOverlay.mat"));
+			outline.SetTexture("_Emission", await LoadAsset<Texture2D>("addressable:RoR2/Base/ElectricWorm/ElectricWormBody.png"));
+			outline.SetTexture("_RemapTex", await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
 
 			warp.GetComponent<MeshRenderer>().materials = new[] { distortion, outline}; 
 			return effect;
@@ -106,13 +108,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(TheGreatSealingState) };
 
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Special 1";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL1_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:Special1");
+			skill.icon = await LoadAsset<Sprite>("bundle:Special1");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 1;
 			skill.baseRechargeInterval = 8f;
@@ -130,29 +132,29 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	// first
 	public class PrimedObelisk : Asset, IProjectile, IProjectileGhost
 	{
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab")!
-					.InstantiateClone("OnkamiSealPhase1", true);
+				(await LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab")!
+					).InstantiateClone("OnkamiSealPhase1", true);
 			projectile.GetComponent<ProjectileController>().ghostPrefab =
-				GetGameObject<PrimedObelisk, IProjectileGhost>();
+				await GetProjectileGhost<PrimedObelisk>();
 			Object.Destroy(projectile.transform.GetChild(0).gameObject);
 			projectile.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 			var onkamiImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			onkamiImpact.blastRadius = 0.01f;
 			onkamiImpact.fireChildren = true;
 			onkamiImpact.blastDamageCoefficient = 1f;
-			onkamiImpact.childrenProjectilePrefab = GetGameObject<TickingFuseObelisk, IProjectile>();
+			onkamiImpact.childrenProjectilePrefab = await GetProjectile<TickingFuseObelisk>();
 			onkamiImpact.childrenDamageCoefficient = 6.5f;
 			onkamiImpact.impactEffect = null;
 			onkamiImpact.lifetimeExpiredSound = null;
 			return projectile;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = GetGameObject<ExplodingObelisk, IEffect>().InstantiateClone("OnkamiSealPhase1Ghost", false);
+			var ghost = (await GetEffect<ExplodingObelisk>()).InstantiateClone("OnkamiSealPhase1Ghost", false);
 			Object.Destroy(ghost.GetComponent<EffectComponent>());
 			Object.Destroy(ghost.GetComponent<VFXAttributes>());
 			ghost.transform.GetChild(0).gameObject.SetActive(false);
@@ -177,22 +179,24 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		public static DamageAPI.ModdedDamageType Uitsalnemetia;
 
-		public override void Initialize()
+		public override Task Initialize()
 		{
 			Uitsalnemetia = DamageAPI.ReserveDamageType();
+			return base.Initialize();
 		}
-		GameObject IProjectile.BuildObject()
+
+		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombProjectile.prefab")!
-					.InstantiateClone("OnkamiSealPhase2", true);
+				(await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombProjectile.prefab")!
+					).InstantiateClone("OnkamiSealPhase2", true);
 			projectile.GetComponent<ProjectileController>().ghostPrefab =
-				GetGameObject<TickingFuseObelisk, IProjectileGhost>();
+				await this.GetProjectileGhost();
 			var sealingImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			sealingImpact.lifetime = 1.5f;
 			sealingImpact.blastRadius = 22f;
 			sealingImpact.fireChildren = false;
-			sealingImpact.impactEffect = GetGameObject<ExplodingObelisk, IEffect>();
+			sealingImpact.impactEffect = await GetEffect<ExplodingObelisk>();
 			sealingImpact.blastDamageCoefficient = 1f;  
 			sealingImpact.blastProcCoefficient = 1f;
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
@@ -200,19 +204,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return projectile;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
 			var sealingProjectileMat =
 				new Material(
-					LoadAsset<Material>("addressable:RoR2/Base/Common/matVoidDeathBombAreaIndicatorFront.mat"));
+					await LoadAsset<Material>("addressable:RoR2/Base/Common/matVoidDeathBombAreaIndicatorFront.mat"));
 			sealingProjectileMat.SetTexture("_Cloud1Tex",
-				LoadAsset<Texture2D>("addressable:RoR2/DLC1/MajorAndMinorConstruct/texMajorConstructShield.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/DLC1/MajorAndMinorConstruct/texMajorConstructShield.png"));
 			sealingProjectileMat.SetTexture("_Cloud2Tex",
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/VFX/texArcaneCircleWispMask.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/VFX/texArcaneCircleWispMask.png"));
 			sealingProjectileMat.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonPreBoss.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonPreBoss.png"));
 			sealingProjectileMat.SetTexture("_MainTex",
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texLunarWispTracer 1.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texLunarWispTracer 1.png"));
 			sealingProjectileMat.SetFloat("_SrcBlendFloat", 5f);
 			sealingProjectileMat.SetFloat("_DstBlendFloat", 1f);
 			sealingProjectileMat.SetFloat("_IntersectionStrength", 0.4f);
@@ -221,8 +225,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sealingProjectileMat.SetFloat("_RimPower", 0.1f);
 			sealingProjectileMat.SetColor("_TintColor", Colors.sealingColor);
 
-			var ghost = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombGhost.prefab")!
-				.InstantiateClone("OnkamiSealPhase2Ghost", false);
+			var ghost = (await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombGhost.prefab")!
+				).InstantiateClone("OnkamiSealPhase2Ghost", false);
 			ghost.transform.localScale = Vector3.one * 2f;
 			var sealingScale = ghost.transform.GetChild(0).gameObject;
 			sealingScale.transform.localScale = Vector3.one * 8.2f; //scale child
@@ -243,7 +247,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				if (name == "Vacuum Stars")
 				{
 					r.material.SetTexture("_RemapTex",
-						LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
+						await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
 				}
 			}
 
@@ -283,8 +287,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var enableCulling = frontIndicator.GetComponent<ParticleSystemRenderer>();
 			enableCulling.materials[0].SetFloat("_Cull", 2);
 
-			var sealingMeshObject = GetGameObject<ExplodingObelisk, IEffect>().transform.GetChild(7).gameObject;
-			var onkamiObelisk = PrefabAPI.InstantiateClone(sealingMeshObject, "OnkamiObelisk", false);
+			var sealingMeshObject = (await GetEffect<ExplodingObelisk>()).transform.GetChild(7).gameObject;
+			var onkamiObelisk = sealingMeshObject.InstantiateClone("OnkamiObelisk", false);
 			Object.Destroy(onkamiObelisk.GetComponent<ObjectScaleCurve>());
 			onkamiObelisk.transform.localScale = Vector3.one;
 			onkamiObelisk.transform.SetParent(scaleChild);
@@ -319,9 +323,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 	public class CyanDamageNumbers : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("RoR2/DLC1/CritGlassesVoid/CritGlassesVoidExecuteEffect.prefab")!.InstantiateClone("SealExecuteEffect", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/DLC1/CritGlassesVoid/CritGlassesVoidExecuteEffect.prefab"))!.InstantiateClone("SealExecuteEffect", false);
 			var numbers = effect.transform.GetChild(9).gameObject;
 			var pRender = numbers.GetComponent<ParticleSystemRenderer>();
 			pRender.material.SetColor("_TintColor", new Color(0f, 1f, 0.98f));
@@ -333,11 +337,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	// third
 	public class ExplodingObelisk : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathExplosion.prefab")!
-					.InstantiateClone("OnkamiSealPhase3BlastEffect", false);
+				(await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathExplosion.prefab")!
+					).InstantiateClone("OnkamiSealPhase3BlastEffect", false);
 			foreach (var r in effect.GetComponentsInChildren<ParticleSystemRenderer>())
 			{
 				var name = r.name;
@@ -345,12 +349,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				if (name == "AreaIndicator")
 				{
 					r.material.SetTexture("_Cloud1Tex",
-						LoadAsset<Texture2D>(
+						await LoadAsset<Texture2D>(
 							"addressable:RoR2/DLC1/MajorAndMinorConstruct/texMajorConstructShield.png"));
 					r.material.SetTexture("_Cloud2Tex",
-						LoadAsset<Texture2D>("addressable:RoR2/DLC1/ancientloft/texAncientLoft_TempleDecal.tga"));
+						await LoadAsset<Texture2D>("addressable:RoR2/DLC1/ancientloft/texAncientLoft_TempleDecal.tga"));
 					r.material.SetTexture("_RemapTex",
-						LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
+						await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
 					r.material.SetColor("_TintColor", Colors.sealingColor); //new Color(0f, 0.9137255f, 1f));
 
 					r.material.SetFloat("_IntersectionStrength", 0.08f);
@@ -362,9 +366,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				if (name == "Vacuum Radial")
 				{
 					r.material.SetTexture("_MainTex",
-						LoadAsset<Texture2D>("addressable:RoR2/DLC1/ancientloft/texAncientLoft_TempleDecal.tga"));
+					await 	LoadAsset<Texture2D>("addressable:RoR2/DLC1/ancientloft/texAncientLoft_TempleDecal.tga"));
 					r.material.SetTexture("_RemapTex",
-						LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampBrotherPillar.png"));
+						await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampBrotherPillar.png"));
 					r.material.SetFloat("_AlphaBoost", 6.483454f);
 					r.material.SetColor("_TintColor", new Color(0f, 0.1843f, 1f));
 				}
@@ -394,7 +398,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var sealMeshR = effect.GetComponentInChildren<MeshRenderer>();
 			sealMeshR.materials = TheGreatSealing.onKamiMats;
 			//obtaining the perfect obelisk mesh
-			var loftPrefab = LoadAsset<GameObject>("addressable:RoR2/DLC1/ancientloft/AL_LightStatue_On.prefab")!;
+			var loftPrefab= (await LoadAsset<GameObject>("addressable:RoR2/DLC1/ancientloft/AL_LightStatue_On.prefab"))!;
 			var obelisk = loftPrefab.transform.GetChild(4).gameObject;
 			//
 			var theObelisk = PrefabAPI.InstantiateClone(obelisk, "TwinsObelisk", false);

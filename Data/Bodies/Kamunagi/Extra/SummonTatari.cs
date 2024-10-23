@@ -41,14 +41,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			deployableSlot = DeployableAPI.RegisterDeployableSlot((_,_) => 1);
 		}
 
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Weapon";
 			skill.skillName = "Extra Skill 6";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA7_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA7_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:Uitsalnemetia");
+			skill.icon= (await LoadAsset<Sprite>("bundle:Uitsalnemetia"));
 			// TODO i dont know what else to put here
 			return skill;
 		}
@@ -79,16 +79,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				if (_tatariIndex == (BodyIndex) 0)
 				{
-					var tatari = GetGameObject<TatariBody, IBody>();
+					var tatari = GetBody<TatariBody>().WaitForCompletion();
 					_tatariIndex = tatari.GetComponent<CharacterBody>().bodyIndex;
 				}
 				return _tatariIndex;
 			}
 		}
 
-		GameObject IBody.BuildObject()
+		async Task<GameObject> IBody.BuildObject()
 		{
-			Material tatariMat = new Material(LoadAsset<Material>("RoR2/DLC1/Gup/matGupBodySimple.mat"));
+			Material tatariMat = new Material(await LoadAsset<Material>("RoR2/DLC1/Gup/matGupBodySimple.mat"));
 			tatariMat.SetColor("_Color", new Color(0.33f, 0.22f, 0.78f));
 			tatariMat.SetColor("_EmColor", new Color(1f, 0f, 0.87f));
 			tatariMat.SetFloat("_EmPower", 0.67f);
@@ -97,7 +97,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			tatariMat.SetFloat("_FlowSpeed", 15f);
 			//mat.SetFloat("");
 			
-			var gupBody = LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab")!.InstantiateClone("TatariBody", true);
+			var gupBody= (await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab"))!.InstantiateClone("TatariBody", true);
 			var legs = gupBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
 			legs.GetComponent<SkinnedMeshRenderer>().enabled = false; //attempt #1
 			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;
@@ -108,7 +108,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var cb = gupBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "TATARI_BODY_NAME";
 			cb.baseDamage = 14f;
-			cb.portraitIcon = LoadAsset<Texture>("bundle2:TatariIcon");
+			cb.portraitIcon= (await LoadAsset<Texture>("bundle2:TatariIcon"));
 
 			var lr = model.AddComponent<LegRemover>();
 			foreach (SkinnedMeshRenderer m in model.GetComponentsInChildren<SkinnedMeshRenderer>())
@@ -123,20 +123,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return gupBody;
 		}
 
-		GameObject IMaster.BuildObject()
+		async Task<GameObject> IMaster.BuildObject()
 		{
-			var tatariMaster = LoadAsset<GameObject>("RoR2/DLC1/Gup/GupMaster.prefab")!.InstantiateClone("LargeTatariMaster", true);
+			var tatariMaster= (await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupMaster.prefab"))!.InstantiateClone("LargeTatariMaster", true);
 			tatariMaster.AddComponent<SetDontDestroyOnLoad>();
-			tatariMaster.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<TatariBody, IBody>();
+			tatariMaster.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();;
 			return tatariMaster;
 		}
 
-		public override void Initialize()
+		public override async Task Initialize()
 		{
+			await base.Initialize();
 			debuffBlacklist = KamunagiOfChains.KamunagiOfChainsPlugin.instance.Config.Bind("Tatari", "DebuffBlacklist",
 				$"bdBleeding bdBlight bdOnFire bdFracture bdDisableAllSkills bdSuperBleed bdLunarSecondaryRoot bdlunarruin bdNullifyStack bdNullified bdOverheat bdPoisoned bdPulverizeBuildup bdLunarDetonationCharge bdSoulCost bdStrongerBurn " +
-				$"{((BuffDef)GetAsset<NaturesAxiom, IBuff>()).name} {((BuffDef)GetAsset<AxiomBurn, IBuff>()).name} {((BuffDef)GetAsset<NaturesAxiom, IBuff>()).name} {((BuffDef)GetAsset<SobuGekishoha, IBuff>()).name} {((BuffDef)GetAsset<WoshisZone, IBuff>()).name}" +
-				$"{((BuffDef)GetAsset<MashiroBlessing, IBuff>()).name}",
+				$"{(await GetBuffDef<NaturesAxiom>()).name} {(await GetBuffDef<AxiomBurn>()).name} {(await GetBuffDef<NaturesAxiom>()).name} {(await GetBuffDef<SobuGekishoha>()).name} {(await GetBuffDef<WoshisZone>()).name}" +
+				$"{(await GetBuffDef<MashiroBlessing>()).name}",
 				"description");
 			
 			RoR2.GlobalEventManager.onServerDamageDealt += GlobalEventManagerOnonServerDamageDealt;

@@ -125,13 +125,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class XinZhao : Asset, ISkill, INetworkedObject
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Extra Skill 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA3_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle2:172714677590348517"); //lol, lmao
+			skill.icon= (await LoadAsset<Sprite>("bundle2:172714677590348517")); //lol, lmao
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -143,22 +143,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 
-		GameObject INetworkedObject.BuildObject()
+		async Task<GameObject> INetworkedObject.BuildObject()
 		{
 			Material coolStuff =
-				new Material(LoadAsset<Material>("RoR2/Base/EliteHaunted/matHauntedEliteAreaIndicator.mat"));
-			coolStuff.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/DLC1/voidraid/texRaidPlanetPurple.png"));
+				new Material(await LoadAsset<Material>("RoR2/Base/EliteHaunted/matHauntedEliteAreaIndicator.mat"));
+			coolStuff.SetTexture("_RemapTex",await  LoadAsset<Texture2D>("RoR2/DLC1/voidraid/texRaidPlanetPurple.png"));
 			coolStuff.SetFloat("_DstBlendFloat", 1f);
-			coolStuff.SetTexture("_Cloud2Tex", LoadAsset<Texture2D>("RoR2/Base/Common/texCloudCaustic3.jpg"));
+			coolStuff.SetTexture("_Cloud2Tex", await LoadAsset<Texture2D>("RoR2/Base/Common/texCloudCaustic3.jpg"));
 
 			var forceField =
-				LoadAsset<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MajorConstructBubbleShield.prefab")!
-					.InstantiateClone("ForceField", true);
+				(await LoadAsset<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MajorConstructBubbleShield.prefab")!
+					).InstantiateClone("ForceField", true);
 			forceField.GetComponent<TeamFilter>().teamIndex = TeamIndex.Player;
 			forceField.transform.Find("Collision").gameObject.AddComponent<RootMotionGoByeBye>();
 			/*
 			var ward = forceField.AddComponent<BuffWard>();
-			ward.buffDef = LoadAsset<BuffDef>("RoR2/Base/Common/bdSlow80.asset");
+			ward.buffDef= (await LoadAsset<BuffDef>("RoR2/Base/Common/bdSlow80.asset"));
 			ward.teamFilter = forceField.GetComponent<TeamFilter>();
 			ward.radius = 20f;
 			*/

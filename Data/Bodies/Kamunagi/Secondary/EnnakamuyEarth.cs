@@ -37,10 +37,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	public class EnnakamuyEarth : Asset, ISkill, IEffect, IProjectile, IProjectileGhost
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
-			skill.icon = LoadAsset<Sprite>("bundle:earthpng");
+			skill.icon= (await LoadAsset<Sprite>("bundle:earthpng"));
 			skill.skillName = "Secondary 1";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY1_DESCRIPTION";
@@ -56,9 +56,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(EnnakamuyEarthState) };
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = GetGameObject<EnnakamuyEarth, IProjectileGhost>()
+			var effect =(await this.GetProjectileGhost())
 				.InstantiateClone("BoulderChargeEffect", false);
 			UnityEngine.Object.Destroy(effect.GetComponent<ProjectileGhostController>());
 			var scale = effect.AddComponent<ObjectScaleCurve>();
@@ -68,18 +68,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return effect;
 		}
 
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulder.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulder.prefab"))!.InstantiateClone(
 					"BoulderProjectile", true);
 			projectile.transform.localScale = Vector3.one * 0.3f;
-			projectile.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<EnnakamuyEarth, IProjectileGhost>();
+			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
 			var boulderImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			boulderImpact.bonusBlastForce = new Vector3(20, 20, 20);
 			boulderImpact.blastRadius = 5f;
-			boulderImpact.childrenProjectilePrefab = GetGameObject<EnnakamuyEarthChild, IProjectile>();
+			boulderImpact.childrenProjectilePrefab = await GetProjectile<EnnakamuyEarthChild>();
 			boulderImpact.blastDamageCoefficient = 1f;
 			boulderImpact.childrenDamageCoefficient = 0.43f;
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
@@ -88,10 +88,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return projectile;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
 			var ghost =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab"))!.InstantiateClone(
 					"BoulderProjectileGhost", false);
 			ghost.transform.localScale = Vector3.one * 0.3f;
 
@@ -101,19 +101,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	public class EnnakamuyEarthChild : Asset, IProjectile, IProjectileGhost
 	{
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var projectile = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab")!.InstantiateClone("BoulderChild", true);
+			var projectile= (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab"))!.InstantiateClone("BoulderChild", true);
 			projectile.GetComponent<ProjectileImpactExplosion>().falloffModel = BlastAttack.FalloffModel.None;
-			projectile.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<EnnakamuyEarthChild, IProjectileGhost>();
+			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			return projectile;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab")!.InstantiateClone("BoulderChildGhost", false);
+			var ghost= (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulderGhost.prefab"))!.InstantiateClone("BoulderChildGhost", false);
 			var childMesh = ghost.GetComponentInChildren<MeshFilter>();
-			var theRock = LoadAsset<Mesh>("RoR2/Base/skymeadow/SMRockAngular.fbx");
+			var theRock= (await LoadAsset<Mesh>("RoR2/Base/skymeadow/SMRockAngular.fbx"));
 			childMesh.mesh = theRock;
 			ghost.transform.localScale = new Vector3(0.06f, -0.1f, 0.2f);
 			return ghost;

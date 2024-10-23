@@ -93,13 +93,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	{
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(WindBoomerangState) };
 
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Secondary 2";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY2_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:windpng");
+			skill.icon= (await LoadAsset<Sprite>("bundle:windpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 2;
 			skill.baseRechargeInterval = 3f;
@@ -112,9 +112,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return skill;
 		}
 
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = LoadAsset<GameObject>("RoR2/Base/Saw/Sawmerang.prefab")!.InstantiateClone("TwinsWindBoomerang",
+			var proj= (await LoadAsset<GameObject>("RoR2/Base/Saw/Sawmerang.prefab"))!.InstantiateClone("TwinsWindBoomerang",
 				true);
 			Object.Destroy(proj.GetComponent<BoomerangProjectile>());
 			Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
@@ -123,22 +123,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			windDamage.overlapProcCoefficient = 0.3f;
 			windDamage.fireFrequency = 25f;
 			windDamage.resetFrequency = 10f;
-			windDamage.impactEffect = GetGameObject<WindHitEffect, IEffect>();
+			windDamage.impactEffect = await GetEffect<WindHitEffect>();
 			var itjustworks = proj.AddComponent<WindBoomerangProjectileBehaviour>();
 			//haha hopefully
 			var windSounds = proj.GetComponent<ProjectileController>();
 			windSounds.startSound = "Play_merc_m2_uppercut";
 			windSounds.flightSoundLoop =
-				LoadAsset<LoopSoundDef>("RoR2/Base/LunarSkillReplacements/lsdLunarSecondaryProjectileFlight.asset");
-			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<WindBoomerang, IProjectileGhost>();
+				await LoadAsset<LoopSoundDef>("RoR2/Base/LunarSkillReplacements/lsdLunarSecondaryProjectileFlight.asset");
+			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			return proj;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
 			var windyGreen = new Color(0.175f, 0.63f, 0.086f);
 
-			var ghost = LoadAsset<GameObject>("RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab")!
+			var ghost= (await LoadAsset<GameObject>("RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab"))!
 				.InstantiateClone("TwinsWindBoomerangGhost", false);
 			var windPsr = ghost.GetComponentsInChildren<ParticleSystemRenderer>();
 			windPsr[0].material.SetColor("_TintColor", windyGreen);
@@ -146,13 +146,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			windPsr[3].enabled = false;
 			windPsr[3].material.SetColor("_TintColor", windyGreen);
 			windPsr[3].material.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
+				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
 			windPsr[4].enabled = false;
 			windPsr[5].enabled = false;
 			var boomerangTrail = ghost.GetComponentInChildren<TrailRenderer>();
 			boomerangTrail.material = new Material(boomerangTrail.material);
 			boomerangTrail.material.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
+				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
 			boomerangTrail.material.SetColor("_TintColor", windyGreen);
 			var windLight = ghost.GetComponentInChildren<Light>();
 			windLight.color = windyGreen;
@@ -160,14 +160,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var windMR = ghost.GetComponentsInChildren<MeshRenderer>();
 			windMR[0].material.SetColor("_TintColor", windyGreen);
 			windMR[1].material.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
+				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
 			return ghost;
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect =
-				GetGameObject<WindBoomerang, IProjectileGhost>()!.InstantiateClone("TwinsWindChargeEffect", false);
+				(await this.GetProjectileGhost())!.InstantiateClone("TwinsWindChargeEffect", false);
 			Object.Destroy(effect.GetComponent<ProjectileGhostController>());
 			var attributes = effect.AddComponent<VFXAttributes>();
 			attributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
@@ -178,10 +178,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	public class WindHitEffect : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Merc/MercExposeConsumeEffect.prefab"))!.InstantiateClone(
 					"TwinsWindHitEffect", false);
 			Object.Destroy(effect.GetComponent<OmniEffect>());
 			foreach (var r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
@@ -191,7 +191,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				if (r.name == "PulseEffect, Ring (1)")
 				{
 					var mat = r.material;
-					mat.mainTexture = LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
+					mat.mainTexture= (await LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png"));
 				}
 			}
 

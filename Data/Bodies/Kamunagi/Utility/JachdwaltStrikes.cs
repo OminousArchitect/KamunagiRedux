@@ -323,13 +323,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		public class JachdwaltStrikes : Asset, ISkill, IEffect
 		{
-			SkillDef ISkill.BuildObject()
+			async Task<SkillDef> ISkill.BuildObject()
 			{
 				var skill = ScriptableObject.CreateInstance<SkillDef>();
 				skill.skillName = "Utility 5";
 				skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY2_NAME";
 				skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY2_DESCRIPTION";
-				skill.icon = LoadAsset<Sprite>("bundle:Jachdwalt");
+				skill.icon = await LoadAsset<Sprite>("bundle:Jachdwalt");
 				skill.activationStateMachineName = "Spell";
 				skill.baseRechargeInterval = 4f;
 				skill.beginSkillCooldownOnSkillEnd = true;
@@ -342,17 +342,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 			IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(JachdwaltTestForTarget), typeof(JachdwaltInitEvis), typeof(JachdwaltDoEvis) };
 
-			GameObject IEffect.BuildObject()
+			async Task<GameObject> IEffect.BuildObject()
 			{
-				var effect = LoadAsset<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMercEvis.prefab")!.InstantiateClone("JachdwaltStrikeEffect", false);
-				Material soDifficult0 = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniHitspark3.mat"));
-				soDifficult0.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampEngi.png"));
-				Material soDifficult1 = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniHitspark4.mat"));
+				var effect = (await LoadAsset<GameObject>("RoR2/Base/Merc/OmniImpactVFXSlashMercEvis.prefab"))!.InstantiateClone("JachdwaltStrikeEffect", false);
+				Material soDifficult0 = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniHitspark3.mat"));
+				soDifficult0.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampEngi.png"));
+				Material soDifficult1 = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniHitspark4.mat"));
 				soDifficult1.SetColor("_TintColor", new Color(0.61f, 1f, 0.55f));
-				Material soDifficult2 = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniRing2.mat"));
+				Material soDifficult2 = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniRing2.mat"));
 				//soDifficult2.SetTexture("_RemapTex", Load<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAntler.png"));
-				Material soDifficult3 = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniHitspark2.mat"));
-				soDifficult3.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampCaptainAirstrike.png"));
+				Material soDifficult3 = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniHitspark2.mat"));
+				soDifficult3.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampCaptainAirstrike.png"));
 
 				var whatIsThis = effect.GetComponent<OmniEffect>();
 				var array = whatIsThis.omniEffectGroups;
@@ -379,7 +379,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						var mat = r.material;
 
 						mat.SetTexture("_RemapTex",
-							LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampEngi.png"));
+							await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampEngi.png"));
 					}
 
 					if (name == "Scaled Hitspark 4, Directional (Random Color) (1)")
@@ -400,7 +400,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						//this one is being stubborn 3
 						var mat = r.material;
 						mat.SetTexture("_RemapTex",
-							LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampCaptainAirstrike.png"));
+							await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampCaptainAirstrike.png"));
 					}
 				}
 				foreach (ParticleSystem p in effect.GetComponentsInChildren<ParticleSystem>(false))
@@ -435,9 +435,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		public class CherryBlossoms : Asset, IEffect
 		{
-			GameObject IEffect.BuildObject()
+			async Task<GameObject> IEffect.BuildObject()
 			{
-				var effect = LoadAsset<GameObject>("bundle:CherryBlossom");
+				var effect = await LoadAsset<GameObject>("bundle:CherryBlossom");
 				effect.GetOrAddComponent<DestroyOnParticleEnd>();
 				return effect;
 			}

@@ -13,6 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
 		public EffectManagerHelper? veilEffect;
+		public static GameObject muzzleEffect;
 		public override int meterGain => 0;
 
 		public override void OnEnter()
@@ -31,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			}
 			var effect = Asset.GetEffect<HonokasVeil>().WaitForCompletion();
 			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
-			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
+			EffectManager.SpawnEffect(muzzleEffect, new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
@@ -57,7 +58,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			if (veilEffect != null) veilEffect.ReturnToPool();
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			characterMotor.useGravity = true;
-			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
+			EffectManager.SpawnEffect(muzzleEffect, new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
@@ -72,13 +73,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class HonokasVeil : Asset, ISkill, IEffect
 	{
-		SkillDef ISkill.BuildObject()
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			HonokasVeilState.muzzleEffect = await LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab");
+		}
+
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Utility 9";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA1_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:HonokasVeil");
+			skill.icon = await LoadAsset<Sprite>("bundle:HonokasVeil");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 1.5f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -91,17 +98,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(HonokasVeilState) };
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var impBoss = LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab")!;
+			var impBoss = await LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab")!;
 			var dustCenter = impBoss.transform.Find("ModelBase/mdlImpBoss/DustCenter");
 
 			var effect = dustCenter.gameObject.InstantiateClone("VeilParticles", false);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
 			var distortion = effect.AddComponent<ParticleSystem>();
 			var coreR = effect.GetComponent<ParticleSystemRenderer>();
-			Material decalMaterial = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat"));
-			decalMaterial.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+			Material decalMaterial = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat"));
+			decalMaterial.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 			coreR.material = decalMaterial;
 			coreR.renderMode = ParticleSystemRenderMode.Billboard;
 			var coreM = distortion.main;
@@ -136,7 +143,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				pMain.startColor = Colors.twinsLightColor;
 				var renderer = spikyImpStuff.GetComponent<ParticleSystemRenderer>();
 				renderer.material = new Material(renderer.material);
-				renderer.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:purpleramp"));
+				renderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:purpleramp"));
 				renderer.material.SetFloat("_AlphaBias", 0.1f);
 				renderer.material.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
 			}

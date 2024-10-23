@@ -9,15 +9,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	#region BodyAndMaster
 	public class IceTank : Asset, IBody, IMaster //4
 	{
-		GameObject IBody.BuildObject()
+		async Task<GameObject> IBody.BuildObject()
 		{
-			Material fireMat = new Material(LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
+			Material fireMat = new Material(await LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
 			fireMat.SetFloat("_BrightnessBoost", 2.63f);
 			fireMat.SetFloat("_AlphaBoost", 1.2f);
-			fireMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
+			fireMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
 			fireMat.SetColor("_TintColor", new Color(0, 0.32f, 1f));
 			
-			var nugwisoBody = LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab")!.InstantiateClone("Nugwiso4", true);
+			var nugwisoBody= (await LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab"))!.InstantiateClone("Nugwiso4", true);
 			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
 			charModel.baseLightInfos[0].defaultColor = Colors.wispNeonGreen;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
@@ -29,12 +29,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var meshObject = mdl.transform.GetChild(0).gameObject;
 			UnityEngine.Object.Destroy(meshObject.GetComponent<SkinnedMeshRenderer>());
 			UnityEngine.Object.Destroy(mdl.GetComponentInChildren<SkinnedMeshRenderer>());
-			meshObject.AddComponent<MeshFilter>().mesh = LoadAsset<Mesh>("bundle2:IceMask");
+			meshObject.AddComponent<MeshFilter>().mesh= (await LoadAsset<Mesh>("bundle2:IceMask"));
 			nugwisoBody.GetComponent<Rigidbody>().mass = 300f;
 			var theRenderer = meshObject.AddComponent<MeshRenderer>();
-			theRenderer.material = LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat");
+			theRenderer.material= (await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat"));
 			charModel.baseRendererInfos[0].renderer = theRenderer;
-			charModel.baseRendererInfos[0].defaultMaterial = LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat"); //mesh
+			charModel.baseRendererInfos[0].defaultMaterial= (await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat")); //mesh
 			charModel.baseRendererInfos[1].renderer = thePSR;
 			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
 			meshObject.transform.localPosition = new Vector3(0, -2.4f, 0.4f);
@@ -48,19 +48,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
-			secondary._skillFamily = GetAsset<IceTankPrimaryFamily>();
-			secondary.baseSkill = GetAsset<IceTankSecondary, ISkill>();
+			secondary._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();
+			secondary.baseSkill = await GetSkillDef<IceTankSecondary>();
 			nugwisoBody.GetComponent<SkillLocator>().secondary = secondary;
 			
 			var array = nugwisoBody.GetComponents<GenericSkill>();
-			array[0]._skillFamily = GetAsset<IceTankPrimaryFamily>();
+			array[0]._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();
 			return nugwisoBody;
 		}
 
-		GameObject IMaster.BuildObject()
+		async Task<GameObject> IMaster.BuildObject()
 		{
-			var master = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab")!.InstantiateClone("Nugwiso4Master", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<IceTank, IBody>();
+			var master= (await LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab"))!.InstantiateClone("Nugwiso4Master", true);
+			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
 			return master;
 		}
 	}
@@ -73,7 +73,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	
 	public class IceTankPrimary : Asset, ISkill
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Weapon";
@@ -81,7 +81,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
 			skill.baseRechargeInterval = 6f;
-			skill.icon = LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
+			skill.icon= (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}
 		
@@ -97,7 +97,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	
 	public class IceTankSecondary : Asset, ISkill
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Weapon";
@@ -105,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
 			skill.baseRechargeInterval = 6f;
-			skill.icon = LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
+			skill.icon= (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}
 		

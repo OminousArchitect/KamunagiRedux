@@ -10,15 +10,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	#region BodyAndMaster
 	public class WarMachine : Asset, IBody, IMaster //2
 	{
-		GameObject IBody.BuildObject()
+		async Task<GameObject> IBody.BuildObject()
 		{
-			Material wispMat = new Material(LoadAsset<Material>("RoR2/Base/LunarWisp/matLunarWispFlames.mat"));
+			Material wispMat = new Material(await LoadAsset<Material>("RoR2/Base/LunarWisp/matLunarWispFlames.mat"));
 			//wispMat.SetFloat("_BrightnessBoost", 2.63f);
 			//wispMat.SetFloat("_AlphaBoost", 1.2f);
-			wispMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:purpleramp"));
+			wispMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:purpleramp"));
 			wispMat.SetColor("_TintColor", Color.white);
 
-			var nugwisoBody = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispBody.prefab")!.InstantiateClone("Nugwiso2", true);
+			var nugwisoBody= (await LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispBody.prefab"))!.InstantiateClone("Nugwiso2", true);
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
 			Vector3 particles = Vector3.one * 0.6f;
 			mdl.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -33,14 +33,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseMaxHealth = 230f;
 
 			var array = nugwisoBody.GetComponents<GenericSkill>();
-			array[0]._skillFamily = GetAsset<HKPrimaryFamily>();
+			array[0]._skillFamily = await GetSkillFamily<HKPrimaryFamily>();
 			return nugwisoBody;
 		}
-		
-		GameObject IMaster.BuildObject()
+
+		async Task<GameObject> IMaster.BuildObject()
 		{
-			var master = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab")!.InstantiateClone("Nugwiso2Master", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<WarMachine, IBody>();
+			var master= (await LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab"))!.InstantiateClone("Nugwiso2Master", true);
+			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
 			master.AddComponent<SetDontDestroyOnLoad>();
 			return master;
 		}
@@ -66,7 +66,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	
 	internal class ReplaceHKPrimary : Asset, ISkill
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Weapon";
@@ -74,7 +74,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
 			skill.baseRechargeInterval = 8f;
-			skill.icon = LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
+			skill.icon= (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}
 

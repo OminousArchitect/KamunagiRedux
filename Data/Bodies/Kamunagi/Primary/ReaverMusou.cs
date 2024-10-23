@@ -17,8 +17,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		void SowSeeds()
 		{
-			if (!Asset.TryGetGameObject<ReaverMusou, IEffect>(out var tracer))
-				throw new Exception("Effect failed to load.");
+			
 			var aimRay = GetAimRay();
 			var testForTarget = new BulletAttack()
 			{
@@ -33,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				procCoefficient = 0,
 				smartCollision = true,
 				muzzleName = "MuzzleRight",
-				tracerEffectPrefab = tracer,
+				tracerEffectPrefab = Asset.GetEffect<ReaverMusou>().WaitForCompletion(),
 				hitCallback = (BulletAttack bulletAttack, ref BulletAttack.BulletHit hitInfo) =>
 				{
 					ProjectileManager.instance.FireProjectile(new FireProjectileInfo
@@ -115,13 +114,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 	internal class ReaverMusou : Asset, ISkill, IEffect, IProjectile, IProjectileGhost
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Primary 2";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY2_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:darkpng");
+			skill.icon= (await LoadAsset<Sprite>("bundle:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -132,9 +131,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ReaverMusouState) };
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierExplosion.prefab")!.InstantiateClone("ReaverMusouMuzzleFlash", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierExplosion.prefab"))!.InstantiateClone("ReaverMusouMuzzleFlash", false);
 			UnityEngine.Object.Destroy(effect.GetComponent<ShakeEmitter>());
 			//UnityEngine.Object.Destroy(effect.GetComponent<Rigidbody>());
 			effect.transform.GetChild(1).gameObject.SetActive(false);
@@ -151,25 +150,25 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			return effect;
 		}
 
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckProjectile.prefab")!.InstantiateClone("TwinsReaverProjectile", true);
+			var proj= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckProjectile.prefab"))!.InstantiateClone("TwinsReaverProjectile", true);
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.lifetime = 12f;
 			//impact.impactEffect = GetGameObject<ReaverMusou, IEffect>();
 			//impact.blastRadius = 5f;
 			var controller = proj.GetComponent<ProjectileController>();
 			controller.procCoefficient = 0.8f;
-			controller.ghostPrefab = GetGameObject<ReaverMusou, IProjectileGhost>();
+			controller.ghostPrefab = await this.GetProjectileGhost();
 			//proj.transform.GetChild(0).gameObject.SetActive(false);
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
-			crabController.whiteToBlackTransformedProjectile = GetGameObject<ChainReactionProjectile, IProjectile>();
+			crabController.whiteToBlackTransformedProjectile = await GetProjectile<ChainReactionProjectile>();
 			return proj;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckGhost.prefab")!.InstantiateClone("TwinsReaverGhost", false);
+			var ghost= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckGhost.prefab"))!.InstantiateClone("TwinsReaverGhost", false);
 			/*ghost.transform.localScale = Vector3.one;
 			var reaveMesh = ghost.GetComponentInChildren<MeshRenderer>();
 			reaveMesh.material.SetTexture("_RemapTex",
@@ -185,10 +184,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	
 	internal class StickyBombDetonator : Asset, IProjectile, IProjectileGhost, IEffect
 	{
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonProjectile.prefab")!.InstantiateClone("TwinsDetonatorProjectile", true);
-			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<StickyBombDetonator, IProjectileGhost>();
+			var proj= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonProjectile.prefab"))!.InstantiateClone("TwinsDetonatorProjectile", true);
+			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			var simple = proj.GetComponent<ProjectileSimple>();
 			simple.desiredForwardSpeed = 0f;
 			simple.lifetime = 10f;
@@ -199,23 +198,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			impact.lifetime = 0.1f;
 			impact.destroyOnEnemy = false;
 			impact.destroyOnWorld = false;
-			impact.impactEffect = GetGameObject<StickyBombDetonator, IEffect>();
+			impact.impactEffect = await this.GetEffect();
 			var crabController = proj.GetComponent<MegacrabProjectileController>(); //this is where the transformation happens
-			crabController.whiteToBlackTransformedProjectile = GetGameObject<PrimedStickyBomb, IProjectile>();
+			crabController.whiteToBlackTransformedProjectile = await GetProjectile<PrimedStickyBomb>();
 			crabController.whiteToBlackTransformationRadius = 5f;
 			return proj;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonGhost.prefab")!.InstantiateClone("TwinsDetonatorGhost", false);
+			var ghost= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonGhost.prefab"))!.InstantiateClone("TwinsDetonatorGhost", false);
 			ghost.transform.localScale = Vector3.one * 0.1f;
 			return ghost;
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegacrabAntimatterExplosion.prefab")!.InstantiateClone("TwinsDetonatorExplosion", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegacrabAntimatterExplosion.prefab"))!.InstantiateClone("TwinsDetonatorExplosion", false);
 			effect.transform.localScale = Vector3.one * 5f;
 			effect.GetComponent<EffectComponent>().applyScale = false;
 			var discBillboard = effect.transform.GetChild(6).gameObject;
@@ -230,21 +229,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 	internal class PrimedStickyBomb : Asset, IProjectile, IProjectileGhost, IEffect
 	{
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab")!.InstantiateClone("TwinsPrimedReaverProjectile", true);
-			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<PrimedStickyBomb, IProjectileGhost>();
+			var proj= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("TwinsPrimedReaverProjectile", true);
+			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
-			impact.impactEffect = GetGameObject<PrimedStickyBomb, IEffect>();
+			impact.impactEffect = await this.GetEffect();
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
-			crabController.whiteToBlackTransformedProjectile = GetGameObject<ChainReactionProjectile, IProjectile>(); //you could swap this for different chain-reaction visuals if you wanted
+			crabController.whiteToBlackTransformedProjectile = await GetProjectile<ChainReactionProjectile>(); //you could swap this for different chain-reaction visuals if you wanted
 			crabController.whiteToBlackTransformationRadius = 7.5f;
 			return proj;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckGhost.prefab")!.InstantiateClone("TwinsPrimedReaverGhost", false);
+			var ghost= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckGhost.prefab"))!.InstantiateClone("TwinsPrimedReaverGhost", false);
 			ghost.transform.localScale = Vector3.one * 0.5f;
 			var scaler = ghost.transform.GetChild(0).gameObject;
 			var sphere = ghost.transform.Find("Scaler/VoidMegacrabBlackSphere").gameObject;
@@ -255,9 +254,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			return ghost;
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegacrabAntimatterExplosionSimple.prefab")!.InstantiateClone("TwinsPrimedReaverExplosion", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegacrabAntimatterExplosionSimple.prefab"))!.InstantiateClone("TwinsPrimedReaverExplosion", false);
 			effect.transform.localScale = Vector3.one * 5f;
 			effect.GetComponent<EffectComponent>().applyScale = false;
 			var discCircular = effect.transform.GetChild(5).gameObject;
@@ -272,14 +271,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 	internal class ChainReactionProjectile : Asset, IProjectile 
 	{
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab")!.InstantiateClone("ChainReactionProjectile", true);
-			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<PrimedStickyBomb, IProjectileGhost>();
+			var proj= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("ChainReactionProjectile", true);
+			proj.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<PrimedStickyBomb>();
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
-			impact.impactEffect = GetGameObject<PrimedStickyBomb, IEffect>();
+			impact.impactEffect = await GetEffect<PrimedStickyBomb>();
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
-			crabController.whiteToBlackTransformedProjectile = GetGameObject<RecursionProjectile, IProjectile>();
+			crabController.whiteToBlackTransformedProjectile = await GetProjectile<RecursionProjectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
 			return proj;
 		}
@@ -287,12 +286,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 	internal class RecursionProjectile : Asset, IProjectile //this handles up to 3 recursive explosions, thats enough I guess. Vanilla component infinitely recurses and I couldn't manage that without stackoverflow
 	{
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab")!.InstantiateClone("RecursionProjectile", true);
-			proj.GetComponent<ProjectileController>().ghostPrefab = GetGameObject<PrimedStickyBomb, IProjectileGhost>();
+			var proj= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("RecursionProjectile", true);
+			proj.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<PrimedStickyBomb>();
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
-			impact.impactEffect = GetGameObject<PrimedStickyBomb, IEffect>();
+			impact.impactEffect = await GetEffect<PrimedStickyBomb>();
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;

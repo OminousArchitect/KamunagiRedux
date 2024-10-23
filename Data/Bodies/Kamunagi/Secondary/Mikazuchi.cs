@@ -20,8 +20,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
-			if (!muzzleTransform || !Asset.TryGetGameObject<Mikazuchi, IEffect>(out var muzzleEffect)) return;
-			chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
+			if (!muzzleTransform) return;
+			chargeEffectInstance =
+				EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<Mikazuchi>().WaitForCompletion(),
+					muzzleTransform, true);
 		}
 
 		public override void Fire(Vector3 targetPosition)
@@ -42,9 +44,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				teamIndex = teamComponent.teamIndex
 			};
 			blastAttack.Fire();
-			if (Asset.TryGetGameObject<MikazuchiLightningStrike, IEffect>(out var effect))
-				EffectManager.SpawnEffect(effect,
-					new EffectData() { origin = targetPosition, scale = blastAttack.radius }, true);
+			EffectManager.SpawnEffect(Asset.GetEffect<MikazuchiLightningStrike>().WaitForCompletion(),
+				new EffectData() { origin = targetPosition, scale = blastAttack.radius }, true);
 
 			var xoro = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
 			var spacingDegrees = 360f / projectileCount;
@@ -52,7 +53,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var centerPoint = targetPosition + (Vector3.up * 2.5f);
 			for (var i = 0; i < projectileCount; i++)
 			{
-				ProjectileManager.instance.FireProjectile(Asset.GetProjectile<MikazuchiLightningOrb>().WaitForCompletion(),
+				ProjectileManager.instance.FireProjectile(
+					Asset.GetProjectile<MikazuchiLightningOrb>().WaitForCompletion(),
 					centerPoint,
 					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
 					gameObject,
@@ -76,9 +78,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class Mikazuchi : Asset, IEffect, ISkill
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("bundle:MikazuchiMuzzle.prefab")!;
+			var effect = (await LoadAsset<GameObject>("bundle:MikazuchiMuzzle.prefab"))!;
 
 			var comp = effect.GetOrAddComponent<EffectComponent>();
 			comp.applyScale = false;
@@ -89,19 +91,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var vfx = effect.GetOrAddComponent<VFXAttributes>();
 			vfx.DoNotPool = false;
 			vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
-			
+
 			return effect;
 		}
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(MikazuchiState) };
 
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Utility 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY0_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:Windpng");
+			skill.icon = (await LoadAsset<Sprite>("bundle:Windpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -115,10 +117,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class MikazuchiLightningStrike : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("addressable:RoR2/Base/Lightning/LightningStrikeImpact.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("addressable:RoR2/Base/Lightning/LightningStrikeImpact.prefab"))!
+				.InstantiateClone(
 					"MikazuchiLightningStrikeImpact", false);
 			effect.GetComponentInChildren<Light>().color = Color.yellow;
 			var comp = effect.GetOrAddComponent<EffectComponent>();
@@ -128,13 +131,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 			var postProcess = effect.transform.Find("PostProcess").gameObject;
 			var pp = postProcess.GetComponent<PostProcessVolume>();
-			pp.profile = LoadAsset<PostProcessProfile>("RoR2/Base/title/PostProcessing/ppLocalGrandparent.asset");
+			pp.profile =
+				(await LoadAsset<PostProcessProfile>("RoR2/Base/title/PostProcessing/ppLocalGrandparent.asset"));
 			pp.sharedProfile = pp.profile;
 			postProcess.GetComponent<PostProcessDuration>().destroyOnEnd = false;
 
 			var rampTeleport =
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png");
-			var sphereMat = LoadAsset<Material>("addressable:RoR2/Base/Loader/matLightningLongYellow.mat")!;
+				await LoadAsset<Texture2D>(
+					"addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png");
+			var sphereMat = (await LoadAsset<Material>("addressable:RoR2/Base/Loader/matLightningLongYellow.mat"))!;
 			foreach (var particleSystemRenderer in effect.GetComponentsInChildren<ParticleSystemRenderer>())
 			{
 				switch (particleSystemRenderer.name)
@@ -162,9 +167,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class MikazuchiLightningStrikeSilent : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = GetGameObject<MikazuchiLightningStrike, IEffect>().InstantiateClone("MikazuchiSilentImpact", false);
+			var effect = (await GetEffect<MikazuchiLightningStrike>()).InstantiateClone("MikazuchiSilentImpact", false);
 			effect.GetOrAddComponent<EffectComponent>().soundName = "";
 			return effect;
 		}
@@ -172,19 +177,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class MikazuchiLightningOrb : Asset, IProjectile, IProjectileGhost
 	{
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricOrbProjectile.prefab")!
-					.InstantiateClone("MikazuchiLightningOrbProjectile");
+				(await LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricOrbProjectile.prefab")!
+				).InstantiateClone("MikazuchiLightningOrbProjectile");
 			var controller = projectile.GetComponent<ProjectileController>();
-			controller.ghostPrefab = GetGameObject<MikazuchiLightningOrb, IProjectileGhost>();
+			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.procCoefficient = 0.8f;
-			
+
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Shock5s;
 			var lightningImpact = projectile.GetComponent<ProjectileImpactExplosion>();
-			lightningImpact.impactEffect = GetGameObject<MikazuchiLightningStrikeSilent, IEffect>();
-			lightningImpact.childrenProjectilePrefab = GetGameObject<MikazuchiLightningSeeker, IProjectile>();
+			lightningImpact.impactEffect = await GetEffect<MikazuchiLightningStrikeSilent>();
+			lightningImpact.childrenProjectilePrefab = await GetProjectile<MikazuchiLightningSeeker>();
 			lightningImpact.childrenDamageCoefficient = 0.5f;
 			var lightpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
@@ -192,11 +197,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			return projectile;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab")!
+			var ghost = (await LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab"))!
 				.InstantiateClone("MikazuchiLightningOrbGhost", false);
-			var warbannerRamp = LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampWarbanner2.png");
+			var warbannerRamp =
+				(await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampWarbanner2.png"));
 			foreach (var r in ghost.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{
 				var name = r.name;
@@ -206,7 +212,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			}
 
 			var teleporterRamp =
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png");
+				await LoadAsset<Texture2D>(
+					"addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png");
 			var (firstTrail, (secondTrail, _)) = ghost.GetComponentsInChildren<TrailRenderer>();
 			firstTrail.material.SetTexture("_RemapTex", teleporterRamp);
 			secondTrail.material.SetTexture("_RemapTex", teleporterRamp);
@@ -218,21 +225,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class MikazuchiLightningSeeker : Asset, IProjectile, IProjectileGhost
 	{
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricWormSeekerProjectile.prefab")!
-					.InstantiateClone("MikazuchiLightningSeekerProjectile", true);
-			projectile.GetComponent<ProjectileController>().ghostPrefab =
-				GetGameObject<MikazuchiLightningSeeker, IProjectileGhost>();
+				(await LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricWormSeekerProjectile.prefab")!
+				).InstantiateClone("MikazuchiLightningSeekerProjectile", true);
+			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+
 			projectile.GetComponent<ProjectileImpactExplosion>().impactEffect =
-				GetGameObject<MikazuchiStakeNova, IEffect>();
+				await GetEffect<MikazuchiStakeNova>();
+
 			return projectile;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricWormSeekerGhost.prefab")!
+			var ghost = (await LoadAsset<GameObject>(
+					"addressable:RoR2/Base/ElectricWorm/ElectricWormSeekerGhost.prefab"))!
 				.InstantiateClone("Mikazuch iLightningSeekerGhost", false);
 			ghost.GetComponentInChildren<TrailRenderer>().startColor = Color.yellow;
 			return ghost;
@@ -241,15 +250,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class MikazuchiStakeNova : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("addressable:RoR2/Base/EliteLightning/LightningStakeNova.prefab")!.InstantiateClone("MikazuchiStakeNova", false);
+			var effect =
+				(await LoadAsset<GameObject>("addressable:RoR2/Base/EliteLightning/LightningStakeNova.prefab"))!
+				.InstantiateClone("MikazuchiStakeNova", false);
 			effect.transform.localScale = Vector3.one * 2;
 			var (novaPr, _) = effect.GetComponentsInChildren<ParticleSystemRenderer>();
-			novaPr.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png"));
+			novaPr.material.SetTexture("_RemapTex",
+				await LoadAsset<Texture2D>(
+					"addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png"));
 			var indicator = effect.transform.GetChild(1).gameObject;
 			var yellow = indicator.GetComponent<ParticleSystemRenderer>().material;
-			yellow.SetTexture("_RemapTex", LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png"));
+			yellow.SetTexture("_RemapTex",
+				await LoadAsset<Texture2D>(
+					"addressable:RoR2/Base/Common/ColorRamps/texRampParentTeleportIndicator.png"));
 			foreach (ParticleSystem p in effect.GetComponentsInChildren<ParticleSystem>())
 			{
 				var name = p.name;
@@ -264,6 +279,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						break;
 				}
 			}
+
 			effect.GetComponentInChildren<Light>().color = Color.yellow;
 
 			var comp = effect.GetOrAddComponent<EffectComponent>();

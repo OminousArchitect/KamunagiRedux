@@ -15,7 +15,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
 		public EffectManagerHelper? veilEffect;
-		private GameObject childTpFx;
+		public static GameObject childTpFx;
 		private Vector3 teleportPosition;
 		public override int meterGain => 0;
 		private float duration = 0.45f;
@@ -25,7 +25,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			childTpFx = LoadAsset<GameObject>("RoR2/DLC2/Child/FrolicTeleportVFX.prefab")!;
 			var mdl = GetModelTransform();
 			if (mdl)
 			{
@@ -108,13 +107,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class KuonFlashbang : Asset, ISkill, IEffect
 	{
-		SkillDef ISkill.BuildObject()
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			KuonFlashbangState.childTpFx = await LoadAsset<GameObject>("RoR2/DLC2/Child/FrolicTeleportVFX.prefab");
+		}
+
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Utility 9";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:Mikazuchi");
+			skill.icon = await LoadAsset<Sprite>("bundle:Mikazuchi");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 1f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -127,17 +132,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(KuonFlashbangState) };
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var impBoss = LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab")!;
+			var impBoss = await LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab")!;
 			var dustCenter = impBoss.transform.Find("ModelBase/mdlImpBoss/DustCenter");
 
 			var effect = dustCenter.gameObject.InstantiateClone("VeilParticles", false);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
 			var distortion = effect.AddComponent<ParticleSystem>();
 			var coreR = effect.GetComponent<ParticleSystemRenderer>();
-			Material decalMaterial = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat"));
-			decalMaterial.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+			Material decalMaterial = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat"));
+			decalMaterial.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 			coreR.material = decalMaterial;
 			coreR.renderMode = ParticleSystemRenderMode.Billboard;
 			var coreM = distortion.main;
@@ -172,7 +177,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				pMain.startColor = Colors.twinsLightColor;
 				var renderer = spikyImpStuff.GetComponent<ParticleSystemRenderer>();
 				renderer.material = new Material(renderer.material);
-				renderer.material.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:purpleramp"));
+				renderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:purpleramp"));
 				renderer.material.SetFloat("_AlphaBias", 0.1f);
 				renderer.material.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
 			}

@@ -80,13 +80,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	
 	public class LightOfNaturesAxiom : Asset, ISkill, IEffect
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Special 2";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL2_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:RoU");
+			skill.icon= (await LoadAsset<Sprite>("bundle:RoU"));
 			skill.activationStateMachineName = "Body";
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -98,10 +98,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return skill;
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var chargeSunEffect =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/ChargeGrandParentSunHands.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/ChargeGrandParentSunHands.prefab")).InstantiateClone(
 					"TwinsUltHands", false);
 
 			var comp = chargeSunEffect.GetOrAddComponent<EffectComponent>();
@@ -122,12 +122,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				new Material(Sunmesh
 					.material);
 			Sunmesh.material.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
+				await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
 			var sunP = chargeSunEffect.GetComponentInChildren<ParticleSystemRenderer>(true);
 			//sunP[0].material = new Material(sunP[0].material);
 			sunP.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
 			sunP.material.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 			var lol = chargeSunEffect.GetComponentsInChildren<ParticleSystem>();
 			var mainMain = lol[1].main;
 			mainMain.startColor = new Color(0.45f, 0, 1);
@@ -140,10 +140,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	[HarmonyPatch]
 	public class NaturesAxiom : Asset, INetworkedObject, IEffect, IBuff
 	{
-		GameObject INetworkedObject.BuildObject()
+		async Task<GameObject> INetworkedObject.BuildObject()
 		{
 			var naturesAxiom =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSun.prefab")!.InstantiateClone("TwinsUltSun",
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSun.prefab"))!.InstantiateClone("TwinsUltSun",
 					true);
 			UnityEngine.Object.Destroy(naturesAxiom.GetComponent<EntityStateMachine>());
 			UnityEngine.Object.Destroy(naturesAxiom.GetComponent<NetworkStateMachine>());
@@ -159,18 +159,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var sunIndicator = sunMeshes[0];
 			sunIndicator.material = new Material(sunIndicator.material);
 			sunIndicator.material.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampPortalVoid.png"));
+				await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampPortalVoid.png"));
 			sunIndicator.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
 			sunIndicator.transform.localScale = Vector3.one * 85f; //visual indicator
 			var Sunmesh2 = sunMeshes[1];
-			Sunmesh2.material = GetGameObject<LightOfNaturesAxiom, IEffect>().GetComponentInChildren<MeshRenderer>(true)
+			Sunmesh2.material = (await GetEffect<LightOfNaturesAxiom>()).GetComponentInChildren<MeshRenderer>(true)
 				.material;
 			sunMeshes[2].enabled = false;
 			var sunPP = naturesAxiom.GetComponentInChildren<PostProcessVolume>();
-			sunPP.profile = LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset");
+			sunPP.profile= (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
 			sunPP.sharedProfile = sunPP.profile;
 			sunPP.gameObject.AddComponent<SphereCollider>().radius = 40;
-			var sunP = GetGameObject<NaturesAxiom, IEffect>().GetComponentInChildren<ParticleSystemRenderer>(true);
+			var sunP = (await this.GetEffect()).GetComponentInChildren<ParticleSystemRenderer>(true);
 			var destroyed = naturesAxiom.transform.Find("VfxRoot/Particles/GlowParticles, Fast").gameObject;
 			var indicator = naturesAxiom.transform.Find("VfxRoot/Mesh/AreaIndicator");
 			indicator.transform.localScale = Vector3.one * 100f;
@@ -189,7 +189,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 						break;
 					case "SoftGlow, Backdrop":
 						r.material =
-							new Material(LoadAsset<Material>("RoR2/Junk/Common/VFX/matTeleportOutBodyGlow.mat"));
+							new Material(await LoadAsset<Material>("RoR2/Junk/Common/VFX/matTeleportOutBodyGlow.mat"));
 						r.material.SetColor("_TintColor", new Color(0f, 0.4F, 1)); //todo example of new Material()
 						r.transform.localScale = Vector3.one * 0.5f;
 						break;
@@ -198,7 +198,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 						var material = new Material(r.material);
 						material.SetColor("_TintColor", new Color(0.45f, 0, 1));
 						material.SetTexture("_RemapTex",
-							LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+							await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 						r.trailMaterial = material;
 						r.material = material;
 						break;
@@ -212,12 +212,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return naturesAxiom;
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var sunExplosion =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSunSpawn.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSunSpawn.prefab"))!.InstantiateClone(
 					"TwinsSunExplosion", false);
-			var sunPP = LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset");
+			var sunPP= (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
 			var sunePP = sunExplosion.GetComponentInChildren<PostProcessVolume>();
 			sunePP.profile = sunPP;
 			sunePP.sharedProfile = sunPP;
@@ -225,7 +225,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			suneL.intensity = 100;
 			suneL.range = 40;
 			suneL.color = new Color(0.45f, 0, 1);
-			var remapTex = LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png");
+			var remapTex= (await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 			foreach (ParticleSystemRenderer r in sunExplosion.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{
 				if (r.material)
@@ -233,7 +233,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					r.material = new Material(r.material);
 					r.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
 					r.material.SetTexture("_RemapTex",
-						LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+						await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 					r.trailMaterial = r.material;
 				}
 			}
@@ -241,14 +241,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return sunExplosion;
 		}
 
-		BuffDef IBuff.BuildObject()
+		async Task<BuffDef> IBuff.BuildObject()
 		{
 			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
 			buffDef.name = "AxiomOverheat";
 			buffDef.buffColor = Colors.twinsDarkColor;
 			buffDef.canStack = true;
 			buffDef.isDebuff = true;
-			buffDef.iconSprite = LoadAsset<Sprite>("RoR2/Base/Grandparent/texBuffOverheat.tif");
+			buffDef.iconSprite= (await LoadAsset<Sprite>("RoR2/Base/Grandparent/texBuffOverheat.tif"));
 			buffDef.isHidden = false;
 			return buffDef;
 		}
@@ -257,12 +257,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		 HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.AddTimedBuff), typeof(BuffDef), typeof(float))]
 		private static void AddTimedBuffHook(CharacterBody __instance, BuffDef buffDef, float duration)
 		{
-			if (!TryGetAsset<NaturesAxiom, IBuff>(out var customOverheat)) return;
-			var overheatDef = (BuffDef)customOverheat;
-			if (buffDef != overheatDef) return;
+			var customOverheat = GetBuffDef<NaturesAxiom>().WaitForCompletion();
+			if (buffDef != customOverheat) return;
 			foreach (var timedBuff in __instance.timedBuffs)
 			{
-				if (timedBuff.buffIndex != overheatDef.buffIndex) continue;
+				if (timedBuff.buffIndex != customOverheat.buffIndex) continue;
 				if (!(timedBuff.timer < duration)) continue;
 				timedBuff.timer = duration;
 				//this is making sure all stacks of the
@@ -272,7 +271,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		public static DotController.DotIndex CurseIndex;
 
-		public override void Initialize()
+		public override async Task Initialize()
 		{
 			CurseIndex = DotAPI.RegisterDotDef(
 				new DotController.DotDef
@@ -280,7 +279,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					interval = 0.2f,
 					damageCoefficient = 0.1f,
 					damageColorIndex = DamageColorIndex.Void,
-					associatedBuff = (BuffDef)GetAsset<AxiomBurn, IBuff>()
+					associatedBuff = await GetBuffDef<AxiomBurn>()
 				}, (self, stack) =>
 				{
 					if (stack.dotIndex != CurseIndex) return;
@@ -302,9 +301,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 	public class CurseParticles : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var voidFog = LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab");
+			var voidFog= (await LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab"));
 			var effect = voidFog.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false); //revisit this
 			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
 			var ps = effect.GetComponentInChildren<ParticleSystem>();
@@ -341,7 +340,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			{
 				startSound = "",
 				stopSound = "",
-				overlayMaterial = Asset.GetAsset<AxiomBurn, IMaterial>()!,
+				overlayMaterial = Asset.GetMaterial<AxiomBurn>().WaitForCompletion(),
 				particleEffectPrefab = Asset.GetEffect<CurseParticles>().WaitForCompletion()
 			};
 		}
@@ -537,9 +536,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private BuffIndex overheatBuffDef;
 		private GameObject overheatApplyEffect;
 		[SerializeField] 
-		private LoopSoundDef activeLoopDef = LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunActive.asset")!;
+		private LoopSoundDef activeLoopDef= (await LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunActive.asset"))!;
 		[SerializeField] 
-		private LoopSoundDef damageLoopDef = LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunDamage.asset")!;
+		private LoopSoundDef damageLoopDef= (await LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunDamage.asset"))!;
 		[SerializeField] 
 		private string stopSoundName = "Play_grandParent_attack3_sun_destroy";
 
@@ -552,7 +551,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private void Start()
 		{
 			activeSoundLoop = AkSoundEngine.PostEvent(activeLoopDef.startSoundName, base.gameObject);
-			overheatBuffDef = Asset.GetAsset<NaturesAxiom, IBuff>();
+			overheatBuffDef = Asset.GetBuffIndex<NaturesAxiom>().WaitForCompletion();
 			overheatApplyEffect = Asset.GetEffect<AxiomBurn>().WaitForCompletion();
 		}
 
@@ -709,10 +708,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		
 	public class AxiomBurn : Asset, IEffect, IBuff, IMaterial
 	{
-		public GameObject BuildObject()
+		public async Task<GameObject> BuildObject()
 		{
 			var curseBurnFx =
-				LoadAsset<GameObject>("RoR2/Base/GreaterWisp/GreaterWispDeath.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/GreaterWisp/GreaterWispDeath.prefab"))!.InstantiateClone(
 					"TwinsCurseFx",
 					false);
 			curseBurnFx.transform.localScale = Vector3.one * 0.4f; //0.65
@@ -724,7 +723,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 						r.material = new Material(r.material);
 						r.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
 						r.material.SetTexture("_RemapTex",
-							LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+							await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 						break;
 					case "Chunks":
 					case "Mask":
@@ -749,11 +748,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return curseBurnFx;
 		}
 
-		BuffDef IBuff.BuildObject()
+		async Task<BuffDef> IBuff.BuildObject()
 		{
 			var buff = ScriptableObject.CreateInstance<BuffDef>();
 			buff.name = "KamunagiCurseDebuff";
-			buff.iconSprite = LoadAsset<Sprite>("bundle:CurseScroll");
+			buff.iconSprite= (await LoadAsset<Sprite>("bundle:CurseScroll"));
 			buff.buffColor = Color.white;
 			buff.canStack = true;
 			buff.isDebuff = true;
@@ -761,13 +760,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			return buff;
 		}
 
-		Material IMaterial.BuildObject()
+		async Task<Material> IMaterial.BuildObject()
 		{
 			//this probably should use IOverlay instead?
 			//nah it doesn't need to actually
-			var purpleFireOverlay = new Material(LoadAsset<Material>("RoR2/Base/BurnNearby/matOnHelfire.mat"));
+			var purpleFireOverlay = new Material(await LoadAsset<Material>("RoR2/Base/BurnNearby/matOnHelfire.mat"));
 			purpleFireOverlay.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 			purpleFireOverlay.SetFloat("_FresnelPower", -15.8f);
 			return purpleFireOverlay;
 		}

@@ -88,11 +88,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	public class IceHitEffect : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			Material iceImpact = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matGenericFlash.mat"));
+			Material iceImpact = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matGenericFlash.mat"));
 			
-			var effect = LoadAsset<GameObject>("RoR2/Base/Huntress/HuntressFireArrowRain.prefab")!.InstantiateClone("TwinsIceHitspark", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/Base/Huntress/HuntressFireArrowRain.prefab"))!.InstantiateClone("TwinsIceHitspark", false);
 			var sparksLarge = effect.transform.GetChild(0).gameObject;
 			Material sparksOne = sparksLarge.GetComponent<ParticleSystemRenderer>().material;
 			return effect;
@@ -100,13 +100,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	}
 	public class KujyuriFrost : Asset, ISkill, IEffect
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Secondary 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY3_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:waterpng");
+			skill.icon= (await LoadAsset<Sprite>("bundle:waterpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;
@@ -115,9 +115,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return skill;
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab")!.InstantiateClone("TwinsFrostMuzzleFlash", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab"))!.InstantiateClone("TwinsFrostMuzzleFlash", false);
 			var transform = effect.transform;
 			transform.localPosition = Vector3.zero;
 			transform.rotation = Quaternion.identity;
@@ -129,7 +129,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			curve.useOverallCurveOnly = true;
 			curve.timeMax = 0.8f;
 			curve.overallCurve = AnimationCurve.Linear(0.03f, 0.15f, 0.8f, 0.08f);
-			var remapTex = LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning2.png");
+			var remapTex= (await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning2.png"));
 			foreach (var r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{
 				var name = r.name;
@@ -153,9 +153,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	public class KujyuriFrostBlast : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("RoR2/Base/EliteIce/AffixWhiteExplosion.prefab")!.InstantiateClone("TwinsFrostNovaEffect", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/Base/EliteIce/AffixWhiteExplosion.prefab"))!.InstantiateClone("TwinsFrostNovaEffect", false);
 			effect.transform.localScale = Vector3.one * 10f;
 			effect.EffectWithSound("Play_item_proc_iceRingSpear");
 			return effect;
@@ -164,9 +164,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	public class IceMagicEffect : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab")!.InstantiateClone("TwinsIceHandEnergy", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab"))!.InstantiateClone("TwinsIceHandEnergy", false);
 			UnityEngine.Object.Destroy(effect.GetComponent<ProjectileGhostController>());
 			var iceChild = effect.transform.GetChild(0);
 			iceChild.transform.localScale = Vector3.one * 0.1f;

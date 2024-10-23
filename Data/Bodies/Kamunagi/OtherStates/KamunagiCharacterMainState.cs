@@ -4,6 +4,7 @@ using R2API;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {
@@ -18,6 +19,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public EffectManagerHelper? chainsRightInstance;
 		public bool chainsSpawned;
 		public SceneDef? currentStage;
+		public static SceneDef meridianDef = LoadAsset<SceneDef>("RoR2/DLC2/meridian/meridian.asset").WaitForCompletion();
+		public static SceneDef sulfurPoolsDef = LoadAsset<SceneDef>("RoR2/DLC1/sulfurpools/sulfurpools.asset").WaitForCompletion();
 
 		public override void OnEnter()
 		{
@@ -48,8 +51,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			var sulfurPoolsDef = LoadAsset<SceneDef>("RoR2/DLC1/sulfurpools/sulfurpools.asset");
-			var meridianDef = LoadAsset<SceneDef>("RoR2/DLC2/meridian/meridian.asset");
 			if (currentStage == meridianDef || currentStage == sulfurPoolsDef) return;
 			if (!chainsSpawned && passiveSkill.IsReady())
 			{
@@ -163,10 +164,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(KamunagiHoverState) };
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var mashiroEffect = GetGameObject<MashiroBlessing, IEffect>()!.InstantiateClone("mashiroEffect", false);
-			var electricOrbPink = LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab")!.InstantiateClone("TwinsPinkHandEnergy", false);
+			var mashiroEffect = (await GetEffect<MashiroBlessing>()!).InstantiateClone("mashiroEffect", false);
+			var electricOrbPink= (await LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab"))!.InstantiateClone("TwinsPinkHandEnergy", false);
 			mashiroEffect.transform.SetParent(electricOrbPink.transform);
 			electricOrbPink.AddComponent<ModelAttachedEffect>();
 			UnityEngine.Object.Destroy(electricOrbPink.GetComponent<ProjectileGhostController>());
@@ -182,7 +183,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 				var name = r.name;
 				if (name != "SpitCore") continue;
 				r.material.SetTexture("_RemapTex",
-					LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampVoidRing.png"));
+					await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampVoidRing.png"));
 				r.material.SetFloat("_AlphaBoost", 3.2f);
 				r.material.SetColor("_TintColor", pinkAdditive);
 			}

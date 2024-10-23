@@ -18,8 +18,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			duration = baseDuration / attackSpeedStat;
 			fireDelay = baseDelay / attackSpeedStat;
 			var muzzleTransform = FindModelChild(muzzle);
-			if (muzzleTransform && Asset.TryGetGameObject<T, IEffect>(out var muzzleEffect))
-				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform, true);
+			if (muzzleTransform)
+				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<T>().WaitForCompletion(), muzzleTransform, true);
 		}
 
 		public virtual void Fire()

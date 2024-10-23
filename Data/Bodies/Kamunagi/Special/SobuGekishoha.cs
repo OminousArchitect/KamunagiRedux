@@ -42,9 +42,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			voidSphereMuzzle.transform.localScale = Vector3.one;
 			
 			overlay = TemporaryOverlayManager.AddOverlay(gameObject);
-			overlay.originalMaterial = LoadAsset<Material>("RoR2/DLC1/voidstage/matVoidCrystal.mat");
+			overlay.originalMaterial = overlayMaterial;
 			overlay.AddToCharacterModel(charModel);
-			characterBody.AddBuff(Asset.GetAsset<SobuGekishoha>());
+			characterBody.AddBuff(Asset.GetBuffDef<SobuGekishoha>().WaitForCompletion());
 			var component = voidSphereMuzzle.GetComponent<ScaleParticleSystemDuration>();
 			if (component)
 			{
@@ -112,7 +112,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				force = 155,
 				tracerEffectPrefab = null,
 				muzzleName = twinMuzzle,
-				hitEffectPrefab = LoadAsset<GameObject>("RoR2/DLC1/MissileVoid/VoidImpactEffect.prefab"),
+				hitEffectPrefab= hitEffectPrefab,
 				isCrit = RollCrit(),
 				radius = 0.2f,
 				procCoefficient = 0.35f,
@@ -121,6 +121,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			}.Fire();
 		}
 
+		public static GameObject hitEffectPrefab;
+		public static Material overlayMaterial;
+
 		public override void OnExit()
 		{
 			if (request != null)
@@ -128,7 +131,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				request.Dispose();
 			}
 
-			characterBody.RemoveBuff(Asset.GetAsset<SobuGekishoha>());
+			characterBody.RemoveBuff(Asset.GetBuffDef<SobuGekishoha>().WaitForCompletion());
 			Util.PlaySound(EntityStates.VoidRaidCrab.SpinBeamWindDown.enterSoundString, gameObject);
 			characterMotor.useGravity = true;
 			if (tracerInstance)
@@ -156,11 +159,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	[HarmonyPatch]
 	public class SobuGekishoha : Asset, ISkill, IEffect, IBuff, IOverlay
 	{
-		SkillDef ISkill.BuildObject()
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			SobuGekishohaState.hitEffectPrefab =
+				await LoadAsset<GameObject>("RoR2/DLC1/MissileVoid/VoidImpactEffect.prefab");
+			SobuGekishohaState.overlayMaterial = await LoadAsset<Material>("RoR2/DLC1/voidstage/matVoidCrystal.mat");
+		}
+
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Special 0";
-			skill.icon = LoadAsset<Sprite>("bundle:SobuGekishoha");
+			skill.icon = (await LoadAsset<Sprite>("bundle:SobuGekishoha"));
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL0_DESCRIPTION";
 			skill.activationStateMachineName = "Weapon";
@@ -176,10 +187,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(SobuGekishohaState) };
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var tracer =
-				LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamVFX.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamVFX.prefab"))!.InstantiateClone(
 					"VoidTracer", false);
 			var particles = tracer.GetComponentsInChildren<ParticleSystemRenderer>();
 			particles[particles.Length - 1].transform.localScale = new Vector3(0, 0, 0.25f);
@@ -192,36 +203,36 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			rarted.GetComponent<PostProcessVolume>().blendDistance = 19f;
 			return tracer;
 		}
-		
-		BuffDef IBuff.BuildObject()
+
+		async Task<BuffDef> IBuff.BuildObject()
 		{
 			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
 			buffDef.name = "TwinsArmorBuff";
 			buffDef.buffColor = Colors.twinsDarkColor;
 			buffDef.canStack = false;
 			buffDef.isDebuff = false;
-			buffDef.iconSprite = LoadAsset<Sprite>("RoR2/Junk/Common/texBuffBodyArmorIcon.tif");
+			buffDef.iconSprite= (await LoadAsset<Sprite>("RoR2/Junk/Common/texBuffBodyArmorIcon.tif"));
 			buffDef.isHidden = false;
 			return buffDef;
 		}
 
-		Material IOverlay.BuildObject()
+		async Task<Material> IOverlay.BuildObject()
 		{
-			var material = new Material(LoadAsset<Material>("RoR2/Base/Brother/maBrotherGlassOverlay.mat"));
+			var material = new Material(await LoadAsset<Material>("RoR2/Base/Brother/maBrotherGlassOverlay.mat"));
 			
 			return material;
 		}
 
 		bool IOverlay.CheckEnabled(CharacterModel model)
 		{
-			return model.body && model.body.HasBuff(GetAsset<SobuGekishoha, IBuff>());
+			return model.body && model.body.HasBuff(this.GetBuffDef().WaitForCompletion());
 		} 
 		
 		[HarmonyPostfix, HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.RecalculateStats))]
 		private static void RecalcStats(CharacterBody __instance)
 		{
 			if (!__instance) return;
-			if (__instance.HasBuff(GetAsset<SobuGekishoha>()))
+			if (__instance.HasBuff(GetBuffDef<SobuGekishoha>().WaitForCompletion()))
 			{
 				__instance.armor += 80f;
 			}
@@ -230,9 +241,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 	public class DarkSigil : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("bundle:LaserMuzzle.prefab");
+			var effect= (await LoadAsset<GameObject>("bundle:LaserMuzzle.prefab"));
 			effect.transform.localScale = Vector3.one * 0.6f;
 			effect.GetOrAddComponent<EffectComponent>().applyScale = false;
 			effect.GetOrAddComponent<VFXAttributes>().DoNotPool = false;
@@ -243,11 +254,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 	public class VoidSphere : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamChargeUp.prefab")!
-					.InstantiateClone("VoidTracerSphere", false);
+				(await LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabSpinBeamChargeUp.prefab")!
+					).InstantiateClone("VoidTracerSphere", false);
 			effect.GetOrAddComponent<Light>().range = 30f;
 			return effect;
 		}

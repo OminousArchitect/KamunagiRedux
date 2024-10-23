@@ -8,12 +8,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	#region BodyAndMaster
 	public class VirusArchWisp : Asset, IBody, IMaster //3
 	{
-		GameObject IBody.BuildObject()
+		async Task<GameObject> IBody.BuildObject()
 		{
-			Material fireMat = new Material(LoadAsset<Material>("RoR2/Base/Gravekeeper/matArchWispFire.mat"));
+			Material fireMat = new Material(await LoadAsset<Material>("RoR2/Base/Gravekeeper/matArchWispFire.mat"));
 			fireMat.SetColor("_TintColor", new Color(0, 0.89f, 0.03f));
 			
-			var nugwisoBody = LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispBody.prefab")!.InstantiateClone("Nugwiso3", true);
+			var nugwisoBody= (await LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispBody.prefab"))!.InstantiateClone("Nugwiso3", true);
 			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
 			charModel.baseRendererInfos[1].ignoreOverlays = false;
 			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
@@ -28,14 +28,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseNameToken = "NUGWISOMKAMI3_BODY_NAME";
 			
 			var array = nugwisoBody.GetComponents<GenericSkill>();
-			array[0]._skillFamily = GetAsset<LargeArchWispPrimaryFamily>();
+			array[0]._skillFamily = await GetSkillFamily<LargeArchWispPrimaryFamily>();
 			return nugwisoBody;
 		}
 
-		GameObject IMaster.BuildObject()
+		async Task<GameObject> IMaster.BuildObject()
 		{
-			var master = LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab")!.InstantiateClone("Nugwiso3Master", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = GetGameObject<VirusArchWisp, IBody>();
+			var master= (await LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab"))!.InstantiateClone("Nugwiso3Master", true);
+			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
 			return master;
 		}
 	}
@@ -48,7 +48,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	internal class LargeArchWispPrimary : Asset, ISkill
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Weapon";
@@ -57,7 +57,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillDescriptionToken = "";
 			skill.baseRechargeInterval = 7f;
 			skill.beginSkillCooldownOnSkillEnd = true;
-			skill.icon = LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
+			skill.icon= (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}
 

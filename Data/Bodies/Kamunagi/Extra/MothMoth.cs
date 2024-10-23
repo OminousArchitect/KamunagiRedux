@@ -18,9 +18,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.OnEnter();
 			Util.PlaySound(EntityStates.BeetleQueenMonster.SpawnWards.attackSoundString, gameObject);
-			if (NetworkServer.active && Asset.TryGetGameObject<MothMoth, INetworkedObject>(out var wardPrefab))
+			if (NetworkServer.active)
 			{
-				var ward = Object.Instantiate(wardPrefab, characterBody.corePosition, Quaternion.identity);
+				var ward = Object.Instantiate(Asset.GetNetworkedObject<MothMoth>().WaitForCompletion(), characterBody.corePosition, Quaternion.identity);
 				ward.GetComponent<TeamComponent>().teamIndex = teamComponent.teamIndex;
 				ward.GetComponent<TeamFilter>().teamIndex = teamComponent.teamIndex;
 				NetworkServer.Spawn(ward);
@@ -49,23 +49,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		private static readonly int RemapTex = Shader.PropertyToID("_RemapTex");
 		private static readonly int TintColor = Shader.PropertyToID("_TintColor");
 
-		GameObject INetworkedObject.BuildObject()
+		async Task<GameObject> INetworkedObject.BuildObject()
 		{
 			var mothMoth =
-				LoadAsset<GameObject>("addressable:RoR2/Base/Beetle/BeetleWard.prefab")!.InstantiateClone("MothMoth");
+				(await LoadAsset<GameObject>("addressable:RoR2/Base/Beetle/BeetleWard.prefab"))!.InstantiateClone("MothMoth");
 			mothMoth.GetComponent<BuffWard>().buffDef =
-				LoadAsset<BuffDef>("RoR2/Base/LifestealOnHit/bdLifeSteal.asset");
+				await LoadAsset<BuffDef>("RoR2/Base/LifestealOnHit/bdLifeSteal.asset");
 
-			var impMat = new Material(LoadAsset<Material>("addressable:RoR2/Base/Imp/matImpBoss.mat"));
+			var impMat = new Material(await LoadAsset<Material>("addressable:RoR2/Base/Imp/matImpBoss.mat"));
 			impMat.SetFloat(Cull, 0);
 			impMat.SetColor(Color, new Color(0.2588235f, 0.2705882f, 0.6352941f));
 			impMat.SetColor(EmColor,
 				new Color(0.07058824f, 0.07058824f,
 					0.8823529f)); //you will probably need the shader stub for hgstandard here.
 			impMat.SetTexture(FresnelRamp,
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampLunarElectric.png"));
 			impMat.SetTexture(PrintRamp,
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampHuntressSoft.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampHuntressSoft.png"));
 			
 			mothMoth.GetComponentInChildren<SkinnedMeshRenderer>().material = impMat;
 
@@ -76,16 +76,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 			var (mothWParticles, (garbage, _)) = mothMoth.GetComponentsInChildren<ParticleSystemRenderer>();
 			Object.Destroy(garbage);
-			var particlesMat = new Material(LoadAsset<Material>("addressable:RoR2/DLC1/PortalVoid/matPortalVoid.mat"));
+			var particlesMat = new Material(await LoadAsset<Material>("addressable:RoR2/DLC1/PortalVoid/matPortalVoid.mat"));
 			particlesMat.SetTexture(RemapTex,
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Captain/texRampCrosshair2.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/Base/Captain/texRampCrosshair2.png"));
 			particlesMat.SetColor(TintColor, new Color(0f, 0.6784314f, 1f));
 			mothWParticles.material = particlesMat;
 			var particlesTransform = mothWParticles.transform;
 			particlesTransform.localPosition = new Vector3(0f, 0.3f, 0f);
 			particlesTransform.localScale = Vector3.one * 0.3f;
 
-			var outlineMaterial = new Material(LoadAsset<Material>("addressable:RoR2/Base/Nullifier/matNullifierZoneAreaIndicatorLookingIn.mat"));
+			var outlineMaterial = new Material(await LoadAsset<Material>("addressable:RoR2/Base/Nullifier/matNullifierZoneAreaIndicatorLookingIn.mat"));
 			outlineMaterial.SetColor(TintColor, new Color(0f, 0.274509804f, 1f));
 			outlineMaterial.SetFloat("_RimPower", 3.8f);
 			mothMoth.GetComponentInChildren<MeshRenderer>().material = outlineMaterial;
@@ -96,13 +96,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(SummonMothMoth) };
 
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Extra Skill 4";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA4_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA4_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle2:Mothmoth");
+			skill.icon= (await LoadAsset<Sprite>("bundle2:Mothmoth"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;

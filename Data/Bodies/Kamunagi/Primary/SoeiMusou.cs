@@ -12,7 +12,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	{
 		public override int meterGain => 0;
 
-		public static GameObject MuzzlePrefab = LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab")!;
+		public static GameObject MuzzlePrefab;
 
 		public float duration;
 
@@ -21,7 +21,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			base.OnEnter();
 			AkSoundEngine.PostEvent("Play_voidman_m2_shoot", gameObject);
 			EffectManager.SimpleMuzzleFlash(MuzzlePrefab, gameObject, twinMuzzle, false);
-			if (isAuthority && Asset.TryGetGameObject<SoeiMusou, IProjectile>(out var projectile))
+			if (isAuthority)
 			{
 				duration = 0.45f / attackSpeedStat;
 				var aimRay = GetAimRay();
@@ -33,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					owner = gameObject,
 					position = aimRay.origin,
 					rotation = Quaternion.LookRotation(aimRay.direction),
-					projectilePrefab = projectile,
+					projectilePrefab = Asset.GetProjectile<SoeiMusou>().WaitForCompletion(),
 					useSpeedOverride = true,
 					speedOverride = 105f
 				});
@@ -52,13 +52,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 	internal class SoeiMusou : Asset, ISkill, IProjectile, IProjectileGhost
 	{
-		SkillDef ISkill.BuildObject()
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			SoeiMusouState.MuzzlePrefab = await (LoadAsset<GameObject>(
+				"addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab"))!;
+		}
+
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Primary 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY0_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:darkpng");
+			skill.icon= (await LoadAsset<Sprite>("bundl2e:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 4;
 			skill.baseRechargeInterval = 2f;
@@ -70,14 +77,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(SoeiMusouState) };
 
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigProjectile.prefab")!
-					.InstantiateClone("VoidProjectileSimple");
-			if (!TryGetGameObject<SoeiMusou, IProjectileGhost>(out var ghost)) throw new Exception("Ghost not loaded");
+				(await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigProjectile.prefab")!
+					).InstantiateClone("VoidProjectileSimple");
 			var controller = projectile.GetComponent<ProjectileController>();
-			controller.ghostPrefab = ghost;
+			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.procCoefficient = 1;
 			var rb = projectile.GetComponent<Rigidbody>();
 			rb.useGravity = true;
@@ -87,14 +93,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			return projectile;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
 			var ghost =
-				LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigGhost.prefab")!
-					.InstantiateClone("VoidProjectileSimpleGhost", false);
+				(await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigGhost.prefab")!
+				)	.InstantiateClone("VoidProjectileSimpleGhost", false);
 			var (solidParallax, (cloudRemap, _)) = ghost.GetComponentInChildren<MeshRenderer>().materials;
 			solidParallax.SetTexture("_EmissionTex",
-				LoadAsset<Texture2D>("addressable:RoR2/DLC1/voidraid/texRampVoidRaidSky.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/DLC1/voidraid/texRampVoidRaidSky.png"));
 			solidParallax.SetFloat("_EmissionPower", 1.5f);
 			solidParallax.SetFloat("_HeightStrength", 4.1f);
 			solidParallax.SetFloat("_HeightBias", 0.35f);
@@ -102,7 +108,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			solidParallax.SetColor("_Color", Colors.twinsLightColor);
 
 			cloudRemap.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampIce.png"));
+				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampIce.png"));
 			cloudRemap.SetColor("_TintColor", Colors.twinsTintColor);
 			cloudRemap.SetFloat("_AlphaBoost", 3.88f);
 

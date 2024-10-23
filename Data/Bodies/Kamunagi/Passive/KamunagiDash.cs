@@ -63,7 +63,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			characterBody.isSprinting = true;
 			ascendSpeedMult = Util.Remap(fixedAge, 0, duration, 0.4f, 1.5f);
 
-			outer.SetNextState(new KamunagiDashState { flyRay = GetAimRay(), speedMult = ascendSpeedMult, effectPosition = thePosition });
+			outer.SetNextState(new KamunagiDashState
+			{
+				flyRay = GetAimRay(), speedMult = ascendSpeedMult, effectPosition = thePosition
+			});
 		}
 
 		public override void OnExit()
@@ -113,11 +116,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		private void CreateBlinkEffect(Vector3 origin)
 		{
-			var effectData = new EffectData
-			{
-				rotation = Util.QuaternionSafeLookRotation(flyVector), 
-				origin = origin
-			};
+			var effectData = new EffectData { rotation = Util.QuaternionSafeLookRotation(flyVector), origin = origin };
 			EffectManager.SpawnEffect(blinkPrefab, effectData, false);
 			Util.PlaySound("Play_voidJailer_m2_shoot", gameObject);
 		}
@@ -140,7 +139,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 				flyVector * (moveSpeedStat * flyCurve.Evaluate(fixedAge / duration) * Time.deltaTime);
 
 			//log.LogDebug("rootMotion: " + characterMotor.rootMotion);
-			
+
 			var motor = characterMotor as IPhysMotor;
 			var motorVelocityAuthority = motor.velocityAuthority;
 			motorVelocityAuthority.y = 0f;
@@ -157,7 +156,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			KamunagiDashState.blinkPrefab = await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab");
+			KamunagiDashState.blinkPrefab =
+				await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab");
 			KamunagiDashState.muzzlePrefab = await GetEffect<FlyEffect>();
 			KamunagiChannelDashState.projectilePrefab = await this.GetProjectile();
 		}
@@ -174,7 +174,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			return Task.FromResult(skill);
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new[] { typeof(KamunagiChannelDashState), typeof(KamunagiDashState) };
+		public IEnumerable<Type> GetEntityStates() =>
+			new[] { typeof(KamunagiChannelDashState), typeof(KamunagiDashState) };
 
 		async Task<GameObject> IProjectile.BuildObject()
 		{
@@ -192,9 +193,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var sparks = PrefabAPI.InstantiateClone(
-				(await LoadAsset<GameObject>("RoR2/Base/Blackhole/GravSphere.prefab"))!.transform.GetChild(1).gameObject,
-				"Sparks, Blue", false);
+			var sparks = (await LoadAsset<GameObject>("RoR2/Base/Blackhole/GravSphere.prefab"))!.transform.GetChild(1)
+				.gameObject.InstantiateClone("Sparks, Blue", false);
 			var altP = sparks.GetComponent<ParticleSystem>();
 			var altPMain = altP.main;
 			altPMain.simulationSpeed = 2f;
@@ -222,7 +222,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 	{
 		public async Task<GameObject> BuildObject()
 		{
-			var mandatory = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!.InstantiateClone("InvisibleTether", false);
+			var mandatory =
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!
+				.InstantiateClone("InvisibleTether", false);
 			mandatory.GetComponent<LineRenderer>().enabled = false;
 			return mandatory;
 		}
@@ -232,7 +234,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 	{
 		public async Task<GameObject> BuildObject()
 		{
-			var effect = (await LoadAsset<GameObject>("RoR2/Base/Mage/MuzzleflashMageLightningLargeWithTrail.prefab"))!.InstantiateClone(
+			var effect = (await LoadAsset<GameObject>("RoR2/Base/Mage/MuzzleflashMageLightningLargeWithTrail.prefab"))!
+				.InstantiateClone(
 					"TwinsFlyUpEffect", false);
 			foreach (ParticleSystemRenderer r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{

@@ -88,13 +88,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	[HarmonyPatch]
 	public class DenebokshiriBrimstone : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Secondary 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY0_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:firepng");
+			skill.icon = await LoadAsset<Sprite>("bundle:firepng");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 1;
 			skill.baseRechargeInterval = 2f;
@@ -111,17 +111,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(DenebokshiriBrimstoneState) };
 
-		GameObject IProjectile.BuildObject()
+		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var hitEffect = GetGameObject<FireHitEffect, IEffect>();
+			var hitEffect = await GetEffect<FireHitEffect>();
 
-			var proj = GetGameObject<WindBoomerang, IProjectile>()!.InstantiateClone("TwinsMiniSun", true);
+			var proj = (await GetProjectile<WindBoomerang>())!.InstantiateClone("TwinsMiniSun", true);
 			UnityEngine.Object.Destroy(proj.GetComponent<WindBoomerangProjectileBehaviour>());
 			UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>()); //bro what is this spaghetti
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDotZone>());
 			var minisunController = proj.GetComponent<ProjectileController>();
-			minisunController.ghostPrefab = GetGameObject<DenebokshiriBrimstone, IProjectileGhost>();
+			minisunController.ghostPrefab = await this.GetProjectileGhost();
 			minisunController.flightSoundLoop = null;
 			minisunController.startSound = "Play_fireballsOnHit_impact";
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Denebokshiri);
@@ -147,37 +147,35 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return proj;
 		}
 
-		GameObject IProjectileGhost.BuildObject()
+		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!
-				.InstantiateClone("TwinsChargeMiniSun", false);
+			var ghost = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!
+				).InstantiateClone("TwinsChargeMiniSun", false);
 			var minisunMesh = ghost.GetComponentInChildren<MeshRenderer>(true);
 			minisunMesh.gameObject.SetActive(true);
 			minisunMesh.material.SetTexture("_RemapTex",
-				LoadAsset<Texture2D>("RoR2/Base/FireballsOnHit/texFireballsOnHitIcon.png"));
+				await LoadAsset<Texture2D>("RoR2/Base/FireballsOnHit/texFireballsOnHitIcon.png"));
 			minisunMesh.material.SetFloat("_AlphaBoost", 6.351971f);
 			ghost.AddComponent<ProjectileGhostController>();
-			ghost.AddComponent<MeshFilter>().mesh = LoadAsset<Mesh>("RoR2/Base/Common/VFX/mdlVFXIcosphere.fbx");
-			var miniSunIndicator = PrefabAPI.InstantiateClone(
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphere.prefab").transform.GetChild(0)
-					.gameObject, "MiniSunIndicator", false);
+			ghost.AddComponent<MeshFilter>().mesh = await LoadAsset<Mesh>("RoR2/Base/Common/VFX/mdlVFXIcosphere.fbx");
+			var miniSunIndicator = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphere.prefab")).transform.GetChild(0)
+				.gameObject.InstantiateClone("MiniSunIndicator", false);
 			miniSunIndicator.transform.parent = ghost.transform; //this was the first time I figured this out
 			miniSunIndicator.transform.localPosition = Vector3.zero;
 			miniSunIndicator.transform.localScale = Vector3.one * 25f;
 
-			var gravSphere = PrefabAPI.InstantiateClone(
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereGhost.prefab").transform.GetChild(0)
-					.gameObject, "Indicator", false);
-			var gooDrops = PrefabAPI.InstantiateClone(gravSphere.transform.GetChild(3).gameObject, "MiniSunGoo", false);
+			var gravSphere = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereGhost.prefab")).transform.GetChild(0)
+				.gameObject.InstantiateClone("Indicator", false);
+			var gooDrops = gravSphere.transform.GetChild(3).gameObject.InstantiateClone("MiniSunGoo", false);
 			gooDrops.transform.parent = ghost.transform; // adding the indicator sphere to DenebokshiriBrimstone
 			gooDrops.transform.localPosition = Vector3.zero;
 			return ghost;
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/ChannelGrandParentSunHands.prefab"))!.InstantiateClone(
 					"TwinsChargeMiniSun", false);
 			var scale = effect.AddComponent<ObjectScaleCurve>();
 			effect.transform.localScale = Vector3.one * 0.35f;
@@ -190,9 +188,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		public static DamageAPI.ModdedDamageType Denebokshiri;
 
-		public override void Initialize()
+		public override Task Initialize()
 		{
 			Denebokshiri = DamageAPI.ReserveDamageType();
+			return base.Initialize();
 		}
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
 		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
@@ -212,10 +211,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 	public class FireHitEffect : Asset, IEffect
 	{
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("addressable:RoR2/Base/Merc/MercExposeConsumeEffect.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("addressable:RoR2/Base/Merc/MercExposeConsumeEffect.prefab"))!.InstantiateClone(
 					"TwinsFireHitEffect", false);
 			UnityEngine.Object.Destroy(effect.GetComponent<OmniEffect>());
 			foreach (var r in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
@@ -225,7 +224,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				if (r.name == "PulseEffect, Ring (1)")
 				{
 					var mat = r.material;
-					mat.mainTexture = LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
+					mat.mainTexture = await LoadAsset<Texture2D>("RoR2/Base/Common/VFX/texArcaneCircleProviMask.png");
 				}
 			}
 
@@ -264,24 +263,24 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return true;
 		}
 
-		public GameObject BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("legacy:Prefabs/Effects/OrbEffects/MageLightningOrbEffect")!.InstantiateClone(
+				(await LoadAsset<GameObject>("legacy:Prefabs/Effects/OrbEffects/MageLightningOrbEffect"))!.InstantiateClone(
 					"BrimstoneLightning", false);
-			effect.GetComponent<OrbEffect>().endEffect = GetGameObject<LightningEndEffect, IEffect>();
+			effect.GetComponent<OrbEffect>().endEffect = await GetEffect<LightningEndEffect>();
 			effect.GetComponentInChildren<LineRenderer>().material =
-				LoadAsset<Material>("RoR2/Base/Common/VFX/mageMageFireStarburst.mat");
+				await LoadAsset<Material>("RoR2/Base/Common/VFX/mageMageFireStarburst.mat");
 			return effect;
 		}
 	}
 
 	public class LightningEndEffect : Asset, IEffect
 	{
-		public GameObject BuildObject()
+		public async Task<GameObject> BuildObject()
 		{
 			var effect =
-				LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniExplosionVFXQuick.prefab")!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniExplosionVFXQuick.prefab"))!.InstantiateClone(
 					"LightningImpactEffect", false);
 			return effect;
 		}

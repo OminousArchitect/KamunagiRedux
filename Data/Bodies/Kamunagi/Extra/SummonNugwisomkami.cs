@@ -6,6 +6,7 @@ using RoR2;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Events;
+using static ConcentricContent.Asset;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
@@ -16,28 +17,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public GameObject[] possibleSpirits;
 		public CharacterMaster[] deadSpirits;
 
-		public static Dictionary<GameObject, List<string>> NugwisoEliteDefs = new Dictionary<GameObject, List<string>>()
-		{
-			{
-				Asset.GetGameObject<AssassinSpirit, IMaster>(),
-				new List<string>() { "EliteLightningEquipment", "EliteFireEquipment" } //needs recoloring, then done(?)
-			}, //Mischief
-			
-			{
-				Asset.GetGameObject<WarMachine, IMaster>(),
-				new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" } //completely done
-			}, //Hubris
-
-			/*{
-				Asset.GetGameObject<VirusArchWisp, IMaster>(),
-				new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
-			}, //Pestilence*/
-
-			{
-				Asset.GetGameObject<IceTank, IMaster>(),
-				new List<string>() { "EliteIceEquipment", "EliteHauntedEquipment" }
-			} //Solitude
-		};
+		public static Dictionary<GameObject, List<string>> NugwisoEliteDefs;
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -98,6 +78,33 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class SummonNugwisomkami : Asset, ISkill
 	{
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			SummonNugwisomkamiState.NugwisoEliteDefs  = new Dictionary<GameObject, List<string>>()
+			{
+				{
+					await GetMaster<AssassinSpirit>(),
+					new List<string>() { "EliteLightningEquipment", "EliteFireEquipment" } //needs recoloring, then done(?)
+				}, //Mischief
+			
+				{
+					await GetMaster<WarMachine>(),
+					new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" } //completely done
+				}, //Hubris
+
+				/*{
+				 await GetMaster<VirusArchWisp>(),
+					new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
+				}, //Pestilence*/
+
+				{
+					await GetMaster<IceTank>(),
+					new List<string>() { "EliteIceEquipment", "EliteHauntedEquipment" }
+				} //Solitude
+			};
+		}
+
 		public static DeployableSlot deployableSlot;
 
 		public SummonNugwisomkami()
@@ -105,14 +112,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			deployableSlot = DeployableAPI.RegisterDeployableSlot((_,_) => 1);
 		}
 
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Weapon";
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle2:Nugwisomkami");
+			skill.icon= (await LoadAsset<Sprite>("bundle2:Nugwisomkami"));
 			// TODO i dont know what else to put here
 			return skill;
 		}

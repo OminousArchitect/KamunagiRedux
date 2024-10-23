@@ -85,7 +85,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.OnEnter();
 			if (!NetworkServer.active) return;
-			NetworkServer.Spawn(UnityEngine.Object.Instantiate(Asset.GetGameObject<XinZhao, INetworkedObject>(),
+			NetworkServer.Spawn(UnityEngine.Object.Instantiate(Asset.GetNetworkedObject<XinZhao>().WaitForCompletion(),
 				forceFieldPosition,
 				Quaternion.identity));
 			foreach (var (position, healthComponent) in hurtBoxes)

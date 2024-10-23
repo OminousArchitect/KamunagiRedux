@@ -14,7 +14,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		public override int meterGain => 0;
 
-		public static GameObject muzzleEffect = Asset.GetGameObject<MashiroBlessing, IEffect>();
+		public static GameObject muzzleEffect;
 		private EffectManagerHelper muzzleInstanceLeft;
 		private EffectManagerHelper muzzleInstanceRight;
 		private float stopwatch;
@@ -51,7 +51,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				if (fixedAge > duration)
 				{
-					characterBody.AddTimedBuffAuthority(Asset.GetAsset<MashiroBlessing>(), 10f);
+					characterBody.AddTimedBuffAuthority(Asset.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
 				}
 				outer.SetNextStateToMain();
 				return;
@@ -101,7 +101,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				if (_spellStateMachine == null || !_spellStateMachine)
 				{
 					_spellStateMachine = Bar!.source.body.skillLocator
-						.FindSkillByDef(Asset.GetAsset<MashiroBlessing, ISkill>())?.stateMachine;
+						.FindSkillByDef(Asset.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;
 				}
 
 				return _spellStateMachine;
@@ -118,9 +118,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			damageColorIndex = ColorsAPI.RegisterDamageColor(new Color(0.98f, 1, 0.58f));
 		}
 
-		GameObject IEffect.BuildObject()
+		public override async Task Initialize()
 		{
-			var effect = LoadAsset<GameObject>("bundle:ShadowFlame.prefab")!;
+			await base.Initialize();
+			MashiroBlessingState.muzzleEffect = await this.GetEffect();
+		}
+
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			var effect = await LoadAsset<GameObject>("bundle:ShadowFlame.prefab")!;
 			var vfx = effect.AddComponent<VFXAttributes>();
 			vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
 			vfx.DoNotPool = false;
@@ -130,14 +136,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 
 		public IEnumerable<Type> GetEntityStates() => new []{typeof(MashiroBlessingState)};
-		
-		SkillDef ISkill.BuildObject()
+
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<BlessingDef>();
 			skill.skillName = "Extra Skill 6";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA6_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix +  "EXTRA6_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle2:Mashiro");
+			skill.icon = await LoadAsset<Sprite>("bundle2:Mashiro");
 			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -147,26 +153,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 
-		BuffDef IBuff.BuildObject()
+		async Task<BuffDef> IBuff.BuildObject()
 		{
 			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
 			buffDef.name = "LordMashiroBlessing";
 			buffDef.buffColor = Color.yellow;
 			buffDef.canStack = false;
 			buffDef.isDebuff = false;
-			buffDef.iconSprite = LoadAsset<Sprite>("RoR2/Base/LunarGolem/texBuffLunarShellIcon.tif");
+			buffDef.iconSprite = await LoadAsset<Sprite>("RoR2/Base/LunarGolem/texBuffLunarShellIcon.tif");
 			buffDef.isHidden = false;
 			return buffDef;
 		}
 
-		Material IOverlay.BuildObject()
+		Task<Material> IOverlay.BuildObject()
 		{
 			return LoadAsset<Material>("RoR2/DLC1/EliteVoid/matEliteVoidOverlay.mat")!;
 		}
 
 		bool IOverlay.CheckEnabled(CharacterModel model)
 		{
-			return model.body && model.body.HasBuff(this);
+			return model.body && model.body.HasBuff(this.GetBuffIndex().WaitForCompletion());
 		}
 	}
 
@@ -177,9 +183,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class MashiroBlessingRespawn : Asset, IEffect
 	{
-		public GameObject BuildObject()
+		public async Task<GameObject> BuildObject()
 		{
-			var effect = LoadAsset<GameObject>("legacy:Prefabs/Effects/HippoRezEffect")!
+			var effect = (await LoadAsset<GameObject>("legacy:Prefabs/Effects/HippoRezEffect"))!
 				.InstantiateClone("MashiroBlessingRespawnEffect", false);
 			return effect;
 		}

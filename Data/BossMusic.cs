@@ -10,7 +10,7 @@ namespace KamunagiOfChains.Data
 	[HarmonyPatch]
 	public class BossMusic : Asset, IMusicTrack //
 	{
-		MusicTrackDef IMusicTrack.BuildObject()
+		Task<MusicTrackDef> IMusicTrack.BuildObject()
 		{
 			var musicTrackDef = ScriptableObject.CreateInstance<MusicTrackDef>();
 			var group = ScriptableObject.CreateInstance<WwiseStateGroupReference>();
@@ -25,15 +25,15 @@ namespace KamunagiOfChains.Data
 				new State { WwiseObjectReference = state }
 			};
 			musicTrackDef.cachedName = "kamunagiCustomMusic";
-			return musicTrackDef;
+			return Task.FromResult(musicTrackDef);
 		}
 
-		public override void Initialize()
+		public override Task Initialize()
 		{
-			base.Initialize();
 			// golem plains,  sundered grove, sirens call
 
 			MusicController.pickTrackHook += PickTrack;
+			return base.Initialize();
 		}
 
 		private void PickTrack(MusicController musicController, ref MusicTrackDef newTrack)
@@ -44,7 +44,7 @@ namespace KamunagiOfChains.Data
 			var currentScene = SceneCatalog.mostRecentSceneDef.baseSceneName;
 			if (isBossMusic && (currentScene == "golemplains" || currentScene == "shipgraveyard" || currentScene == "rootjungle"))
 			{
-				newTrack = this;
+				newTrack = this.GetMusicTrackDef().WaitForCompletion();
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace KamunagiOfChains.Data
 		{
 			// bossStatus ID
 			if (__instance.id != 549431000 || __instance.expectedEngineValueId.Equals(__instance.valueId)) return;
-			AkSoundEngine.SetState(((MusicTrackDef)GetAsset<BossMusic, IMusicTrack>()).states[0].GroupId, 0); // could also be a seperate state for exiting the track
+			AkSoundEngine.SetState(GetMusicTrackDef<BossMusic>().WaitForCompletion().states[0].GroupId, 0); // could also be a seperate state for exiting the track
 		}
 	}
 }

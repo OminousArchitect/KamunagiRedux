@@ -18,7 +18,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			
 			var tatariSummon = new MasterSummon()
 			{
-				masterPrefab = Asset.GetGameObject<TatariBody, IMaster>(),
+				masterPrefab = Asset.GetMaster<TatariBody>().WaitForCompletion(),
 				position = position + Vector3.up * 4,
 				summonerBodyObject = gameObject,
 				ignoreTeamMemberLimit = true,

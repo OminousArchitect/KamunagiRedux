@@ -106,10 +106,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public CharacterMaster master;
 		public Dictionary<GameObject, CharacterMaster?> NugwisoSpiritDefs = new Dictionary<GameObject, CharacterMaster?>()
 		{
-			{ Asset.GetGameObject<AssassinSpirit, IMaster>(), null },
-			{ Asset.GetGameObject<WarMachine, IMaster>(), null },
-			{ Asset.GetGameObject<VirusArchWisp, IMaster>(), null },
-			{ Asset.GetGameObject<IceTank, IMaster>(), null }
+			{ Asset.GetMaster<AssassinSpirit>().WaitForCompletion(), null },
+			{ Asset.GetMaster<WarMachine>().WaitForCompletion(), null },
+			{ Asset.GetMaster<VirusArchWisp>().WaitForCompletion(), null },
+			{ Asset.GetMaster<IceTank>().WaitForCompletion(), null }
 		};
 		public void Awake()
 		{
@@ -119,7 +119,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 		public void OnDeath()
 		{
-			if (master.GetBody().HasBuff(Asset.GetAsset<MashiroBlessing>()))
+			if (master.GetBody().HasBuff(Asset.GetBuffIndex<MashiroBlessing>().WaitForCompletion()))
 			{
 				master.preventGameOver = true;
 				Invoke(nameof(MashiroRebirth), 1.5f);
@@ -139,7 +139,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 			var body = master.Respawn(positionAtDeath, Quaternion.identity);
 			body.AddTimedBuff(RoR2Content.Buffs.Immune, 3f);
-			var rezEffect = Asset.GetGameObject<MashiroBlessingRespawn, IEffect>();
+			var rezEffect = Asset.GetEffect<MashiroBlessingRespawn>().WaitForCompletion();
 			if (!master.bodyInstanceObject) return;
 			var array = master.bodyInstanceObject.GetComponents<EntityStateMachine>();
 			foreach (var esm in array)

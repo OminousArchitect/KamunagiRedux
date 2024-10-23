@@ -25,7 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				force = 500,
 				owner = gameObject,
 				position = aimRay.origin + (aimRay.direction * 2),
-				projectilePrefab = Asset.GetGameObject<EnnakamuyEarth, IProjectile>(),
+				projectilePrefab = Asset.GetProjectile<EnnakamuyEarth>().WaitForCompletion(),
 				rotation = Quaternion.LookRotation(aimRay.direction),
 				useSpeedOverride = true,
 				speedOverride = 115

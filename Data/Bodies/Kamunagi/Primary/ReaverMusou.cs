@@ -40,7 +40,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					{
 						position = hitInfo.point,
 						crit = RollCrit(),
-						projectilePrefab = Asset.GetGameObject<ReaverMusou, IProjectile>(),
+						projectilePrefab = Asset.GetProjectile<ReaverMusou>().WaitForCompletion(),
 						owner = gameObject,
 						damage = characterBody.damage * 2.8f,
 						force = 200
@@ -49,7 +49,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				}
 			};
 			testForTarget.Fire();
-			EffectManager.SimpleMuzzleFlash(Asset.GetGameObject<ReaverMusou, IEffect>(), gameObject, twinMuzzle, false);
+			EffectManager.SimpleMuzzleFlash(Asset.GetEffect<ReaverMusou>().WaitForCompletion(), gameObject, twinMuzzle, false);
 		}
 
 		void HarvestSeeds()
@@ -75,7 +75,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					{
 						position = hitInfo.point,
 						crit = RollCrit(),
-						projectilePrefab = Asset.GetGameObject<StickyBombDetonator, IProjectile>(),
+						projectilePrefab = Asset.GetProjectile<StickyBombDetonator>().WaitForCompletion(),
 						owner = gameObject,
 						damage = characterBody.damage * 2.8f,
 						force = 200

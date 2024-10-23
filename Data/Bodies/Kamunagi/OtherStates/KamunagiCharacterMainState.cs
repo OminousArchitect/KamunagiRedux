@@ -11,7 +11,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		public GenericSkill passiveSkill;
 		public EntityStateMachine hoverStateMachine;
-		public static GameObject chainsEffect = Asset.GetGameObject<KamunagiAsset, IEffect>();
+		public static GameObject chainsEffect = Asset.GetEffect<KamunagiAsset>().WaitForCompletion();
 		public Transform UBone;
 		public Transform SBone;
 		public EffectManagerHelper? chainsLeftInstance;
@@ -107,7 +107,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		public float hoverVelocity = -0.02f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
 		public float hoverAcceleration = 80;
-		public static GameObject muzzleEffect = Asset.GetGameObject<KamunagiHover, IEffect>();
+		public static GameObject muzzleEffect = Asset.GetEffect<KamunagiHover>().WaitForCompletion();
 		private EffectManagerHelper muzzleInstanceLeft;
 		private EffectManagerHelper muzzleInstanceRight;
 

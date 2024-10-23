@@ -19,9 +19,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		public override void OnEnter() {
 			base.OnEnter();
-			muzzleEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<KujyuriFrost, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true);
+			muzzleEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<KujyuriFrost>().WaitForCompletion(), GetModelChildLocator().FindChild(twinMuzzle), true);
 			var toggling = twinMuzzle;
-			iceMagicInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<IceMagicEffect, IEffect>(), GetModelChildLocator().FindChild(twinMuzzle), true); 
+			iceMagicInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<IceMagicEffect>().WaitForCompletion(), GetModelChildLocator().FindChild(twinMuzzle), true); 
 		}
 
 		public override void OnExit()
@@ -46,7 +46,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				origin = aimRay.origin,
 				aimVector = aimRay.direction,
 				maxSpread = 0.4f,
-				hitEffectPrefab = Asset.GetGameObject<IceHitEffect, IEffect>(),
+				hitEffectPrefab = Asset.GetEffect<IceHitEffect>().WaitForCompletion(),
 				damage = damageStat * 2.5f,
 				force = 155,
 				muzzleName = twinMuzzle,
@@ -77,7 +77,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				attackerFiltering = AttackerFiltering.NeverHitSelf,
 				teamIndex = teamComponent.teamIndex
 			}.Fire();
-			EffectManager.SpawnEffect(Asset.GetGameObject<KujyuriFrostBlast, IEffect>(), new EffectData
+			EffectManager.SpawnEffect(Asset.GetEffect<KujyuriFrostBlast>().WaitForCompletion(), new EffectData
 			{
 				origin = targetPosition,
 				rotation = Util.QuaternionSafeLookRotation(GetAimRay().direction),

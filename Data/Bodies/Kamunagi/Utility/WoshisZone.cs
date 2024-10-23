@@ -23,7 +23,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				NetworkServer.Destroy(twinBehaviour.activeBuffWard);
 			}
 
-			var ward = Object.Instantiate(Asset.GetGameObject<WoshisZone, INetworkedObject>(), targetPosition,
+			var ward = Object.Instantiate(Asset.GetNetworkedObject<WoshisZone>().WaitForCompletion(), targetPosition,
 				Quaternion.identity);
 			ward.GetComponent<TeamFilter>().teamIndex = TeamIndex.Monster;
 			twinBehaviour.activeBuffWard = ward;
@@ -35,13 +35,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	public class WoshisZone : Asset, ISkill, INetworkedObject, IBuff, IItem, IMaterialSwap
 	{
-		SkillDef ISkill.BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Utility 5";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY3_DESCRIPTION";
-			skill.icon = LoadAsset<Sprite>("bundle:Woshis");
+			skill.icon = await LoadAsset<Sprite>("bundle:Woshis");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 4f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -51,16 +51,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(WoshisZoneState) };
 
-		GameObject INetworkedObject.BuildObject()
+		async Task<GameObject> INetworkedObject.BuildObject()
 		{
 			var woshisWard =
-				LoadAsset<GameObject>("RoR2/Base/EliteHaunted/AffixHauntedWard.prefab")!.InstantiateClone("WoshisWard",
+				(await LoadAsset<GameObject>("RoR2/Base/EliteHaunted/AffixHauntedWard.prefab"))!.InstantiateClone("WoshisWard",
 					true);
 			var woshisEnergy =
 				new Material(
-					LoadAsset<Material>("RoR2/Base/BleedOnHitAndExplode/matBleedOnHitAndExplodeAreaIndicator.mat"));
+					await LoadAsset<Material>("RoR2/Base/BleedOnHitAndExplode/matBleedOnHitAndExplodeAreaIndicator.mat"));
 			woshisEnergy.SetFloat("_DstBlendFloat", 3f);
-			woshisEnergy.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampImp2.png"));
+			woshisEnergy.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampImp2.png"));
 			woshisEnergy.SetFloat("_Boost", 0.1f);
 			woshisEnergy.SetFloat("_RimPower", 0.48f);
 			woshisEnergy.SetFloat("_RimStrength", 0.12f);
@@ -71,26 +71,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			woshisWard.GetComponentInChildren<MeshRenderer>().material = woshisEnergy;
 			var ward = woshisWard.GetComponent<BuffWard>();
 			ward.radius = 10f;
-			ward.buffDef = (BuffDef)this;
+			ward.buffDef = await this.GetBuffDef();
 			woshisWard.AddComponent<DestroyOnTimer>().duration = 8f;
 
 			return woshisWard;
 		}
 
-		BuffDef IBuff.BuildObject()
+		async Task<BuffDef> IBuff.BuildObject()
 		{
 			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
 			buffDef.name = "WoshisCurseDebuff";
 			buffDef.buffColor = Color.red;
 			buffDef.canStack = false;
 			buffDef.isDebuff = true;
-			buffDef.iconSprite = LoadAsset<Sprite>("bundle:CurseScroll");
+			buffDef.iconSprite = await LoadAsset<Sprite>("bundle:CurseScroll");
 			buffDef.isHidden = true;
 
 			return buffDef;
 		}
 
-		ItemDef IItem.BuildObject()
+		async Task<ItemDef> IItem.BuildObject()
 		{
 			var customGhostItem = ScriptableObject.CreateInstance<ItemDef>();
 			customGhostItem.name = "NINES_WOSHISGHOST_NAME";
@@ -99,46 +99,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			customGhostItem.descriptionToken = "NINES_WOSHISGHOST_DESC";
 			customGhostItem.loreToken = "NINES_WOSHISGHOST_LORE";
 			customGhostItem.tier = ItemTier.NoTier;
-			customGhostItem.pickupIconSprite = LoadAsset<Sprite>("RoR2/Base/Beetle/texBuffBeetleJuiceIcon.tif");
-			customGhostItem.pickupModelPrefab = LoadAsset<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab");
+			customGhostItem.pickupIconSprite = await LoadAsset<Sprite>("RoR2/Base/Beetle/texBuffBeetleJuiceIcon.tif");
+			customGhostItem.pickupModelPrefab = await LoadAsset<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab");
 			customGhostItem.canRemove = false;
 			customGhostItem.hidden = true;
 			return customGhostItem;
 		}
-
-
-		//[HarmonyPrefix, HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.UpdateRendererMaterials))]
-		private static void CharacterModelUpdateRenderers(CharacterModel __instance)
-		{
-			if (!__instance.body || !__instance.body.inventory) return;
-			// ReSharper disable once InconsistentNaming
-			var _this = GetAsset<WoshisZone>();
-			if (__instance.body.inventory.GetItemCount(_this) <= 0) return;
-			for (var i = 0; i < __instance.baseRendererInfos.Length; i++)
-			{
-				var renderInfo = __instance.baseRendererInfos[i];
-				if (!renderInfo.renderer.GetComponent<ParticleSystemRenderer>())
-				{
-					renderInfo.defaultMaterial = _this; //jesus fucking christ, this was the solution
-				}
-				else
-				{
-					renderInfo.defaultMaterial = GetAsset<WoshisZoneWispGhost>();
-				}
-
-				__instance.baseRendererInfos[i] = renderInfo;
-			}
-		}
-
-
+		
 		public WoshisZone() => GlobalEventManager.onCharacterDeathGlobal += CharacterDeath;
 
 		~WoshisZone() => GlobalEventManager.onCharacterDeathGlobal -= CharacterDeath;
 
 		public void CharacterDeath(DamageReport report)
 		{
-			if (!NetworkServer.active || !report.victimBody || !report.victimBody.HasBuff(this) ||
-			    report.victimBody.inventory.GetItemCount(this) > 0) return;
+			if (!NetworkServer.active || !report.victimBody || !report.victimBody.HasBuff(this.GetBuffDef().WaitForCompletion()) ||
+			    report.victimBody.inventory.GetItemCount(this.GetItemDef().WaitForCompletion()) > 0) return;
 
 			var prefab = BodyCatalog.FindBodyPrefab(report.victimBody);
 			if (prefab == null || !prefab) return;
@@ -166,7 +141,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 			summon.preSpawnSetupCallback += master =>
 			{
-				master.inventory.GiveItem(this);
+				master.inventory.GiveItem(this.GetItemDef().WaitForCompletion());
 				master.inventory.GiveItem(RoR2Content.Items.HealthDecay, 15);
 				master.inventory.GiveItem(RoR2Content.Items.BoostDamage, 10);
 			};
@@ -180,32 +155,32 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			}
 		}
 
-		Material IMaterialSwap.BuildObject()
+		async Task<Material> IMaterialSwap.BuildObject()
 		{
-			var woshisGhostOverlay = new Material(LoadAsset<Material>("RoR2/Base/Common/VFX/matGhostEffect.mat"));
-			woshisGhostOverlay.SetTexture("_RemapTex", LoadAsset<Texture2D>("bundle:texRampWoshis"));
+			var woshisGhostOverlay = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matGhostEffect.mat"));
+			woshisGhostOverlay.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:texRampWoshis"));
 			return woshisGhostOverlay;
 		}
 		
-		public bool CheckEnabled(CharacterModel model, CharacterModel.RendererInfo targetRendererInfo) => !targetRendererInfo.ignoreOverlays && model.body && model.body.inventory && model.body.inventory.GetItemCount(this) > 0;
+		public bool CheckEnabled(CharacterModel model, CharacterModel.RendererInfo targetRendererInfo) => !targetRendererInfo.ignoreOverlays && model.body && model.body.inventory && model.body.inventory.GetItemCount(this.GetItemDef().WaitForCompletion()) > 0;
 
 		public int Priority => 1;
 	}
 
 	public class WoshisZoneWispGhost : Asset, IMaterialSwap
 	{
-		Material IMaterialSwap.BuildObject()
+		async Task<Material> IMaterialSwap.BuildObject()
 		{
-			var redWispMat = new Material(LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
+			var redWispMat = new Material(await LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
 			redWispMat.SetFloat("_BrightnessBoost", 2.63f);
 			redWispMat.SetFloat("_AlphaBoost", 1.2f);
-			redWispMat.SetTexture("_RemapTex", LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
+			redWispMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
 			redWispMat.SetColor("_TintColor", Color.red);
 			return redWispMat;
 		}
 
 		public bool CheckEnabled(CharacterModel model, CharacterModel.RendererInfo targetRendererInfo) => targetRendererInfo.ignoreOverlays && model.body && model.body.inventory &&
-		                                                                            model.body.inventory.GetItemCount(GetAsset<WoshisZone>()) > 0;
+		                                                                            model.body.inventory.GetItemCount(GetItemIndex<WoshisZone>().WaitForCompletion()) > 0;
 
 		public int Priority => 1;
 	}

@@ -12,9 +12,9 @@ namespace KamunagiOfChains
 	[HarmonyPatch]
 	public class KamunagiHUD : Asset, IGenericObject
 	{
-		GameObject IGenericObject.BuildObject()
+		async Task<GameObject> IGenericObject.BuildObject()
 		{
-			var healthBarObject = LoadAsset<GameObject>("RoR2/Base/UI/HUDSimple.prefab")!.GetComponent<HUD>().healthBar
+			var healthBarObject = (await LoadAsset<GameObject>("RoR2/Base/UI/HUDSimple.prefab"))!.GetComponent<HUD>().healthBar
 				.gameObject.InstantiateClone("ZealBar", false);
 			var hud = new GameObject("ZealBarParent");
 			var transform = hud.AddComponent<RectTransform>();
@@ -32,7 +32,7 @@ namespace KamunagiOfChains
 		public static void AddZealBar(HUD __instance)
 		{
 			var healthBarTransform = __instance.healthBar.gameObject.transform;
-			var zealBar = Object.Instantiate(GetGameObject<KamunagiHUD, IGenericObject>(), healthBarTransform.parent.parent);
+			var zealBar = Object.Instantiate(GetGenericObject<KamunagiHUD>().WaitForCompletion(), healthBarTransform.parent.parent);
 			zealBar.transform.rotation = healthBarTransform.rotation;
 			zealBar.transform.localScale = healthBarTransform.localScale;
 			zealBar.transform.localPosition = healthBarTransform.localPosition;
@@ -49,7 +49,7 @@ namespace KamunagiOfChains
 		public void Start()
 		{
 			hud = GetComponentInParent<HUD>();
-			kamunagiIndex = Asset.GetAsset<KamunagiAsset>();
+			kamunagiIndex = Asset.GetObjectOrThrow<KamunagiAsset, IBody, GameObject>().WaitForCompletion().GetComponent<CharacterBody>().bodyIndex;
 			zealBar.transform.SetParent(hud.healthBar.transform.parent);
 		}
 
@@ -97,7 +97,7 @@ namespace KamunagiOfChains
 			zealStyle = healthBar.style.instantHealthBarStyle;
 			zealStyle.baseColor = Colors.zealColor * new Color(1.1f, 1.1f, 1.1f);
 			
-			zealMat = LoadAsset<Material>("bundle2:ZealMat")!;
+			zealMat = LoadAsset<Material>("bundle2:ZealMat").WaitForCompletion();
 			defaultMaterial = barPrefab.GetComponentInChildren<Image>().material;
 		}
 

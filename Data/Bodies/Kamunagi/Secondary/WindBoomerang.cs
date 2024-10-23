@@ -30,7 +30,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var muzzleTransform = FindModelChild("MuzzleCenter");
 			minDistance = twinBehaviour.runtimeNumber1;
 			maxDistance = twinBehaviour.runtimeNumber2;
-			var effect = Asset.GetGameObject<WindBoomerang, IEffect>();
+			var effect = Asset.GetEffect<WindBoomerang>().WaitForCompletion();
 			if (muzzleTransform)
 			{
 				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
@@ -50,7 +50,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		private void Fire()
 		{
-			var boomerang = Asset.GetGameObject<WindBoomerang, IProjectile>();
+			var boomerang = Asset.GetProjectile<WindBoomerang>().WaitForCompletion();
 			var aimRay = GetAimRay();
 			boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
 

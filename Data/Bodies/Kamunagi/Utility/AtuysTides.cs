@@ -14,8 +14,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public int totalProjectileCount;
 		public int projectilesFired;
 
-		public GameObject projectilePrefab = Asset.GetGameObject<AtuysTides, IProjectile>();
-		public GameObject luckyProjectilePrefab = Asset.GetGameObject<AtuysTidesLucky, IProjectile>();
+		public GameObject projectilePrefab = Asset.GetProjectile<AtuysTides>().WaitForCompletion();
+		public GameObject luckyProjectilePrefab = Asset.GetProjectile<AtuysTidesLucky>().WaitForCompletion();
 		private float chanceToSweep;
 
 		public override void OnEnter()
@@ -51,7 +51,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				force = 20,
 				owner = gameObject,
 				position = aimRay.origin,
-				projectilePrefab = Asset.GetGameObject<AtuysTides, IProjectile>(),
+				projectilePrefab = Asset.GetProjectile<AtuysTides>().WaitForCompletion(),
 				rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
 				speedOverride = 80f
 			};
@@ -62,7 +62,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				force = 20,
 				owner = gameObject,
 				position = aimRay.origin,
-				projectilePrefab = Asset.GetGameObject<AtuysTidesLucky, IProjectile>(),
+				projectilePrefab = Asset.GetProjectile<AtuysTidesLucky>().WaitForCompletion(),
 				rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
 				speedOverride = 80f
 			};

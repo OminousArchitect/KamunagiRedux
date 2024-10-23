@@ -122,7 +122,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			return displayModel;
 		}
 
-		GameObject IBody.BuildObject()
+		async Task<GameObject> IBody.BuildObject()
 		{
 			if (!TryGetGameObject<KamunagiAsset, IModel>(out var model)) throw new Exception("Model not loaded.");
 			var bodyPrefab = LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/MageBody")!
@@ -212,8 +212,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			spellStateMachine.customName = "Spell";
 			spellStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
 			spellStateMachine.mainStateType = spellStateMachine.initialStateType;
-			
-			networkStateMachine.stateMachines = new[] { bodyStateMachine, weaponStateMachine, hoverStateMachine, spellStateMachine };
+
+			networkStateMachine.stateMachines =
+				new[] { bodyStateMachine, weaponStateMachine, hoverStateMachine, spellStateMachine };
 
 			var deathBehaviour = bodyPrefab.GetOrAddComponent<CharacterDeathBehavior>();
 			deathBehaviour.deathStateMachine = bodyStateMachine;
@@ -283,19 +284,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				extraSkillLocator.extraFourth = skill;
 			}
 
-			if (TryGetAsset<KamunagiSkillFamilyPassive>(out var skillFamilyPassive))
-			{
-				var skill = bodyPrefab.AddComponent<GenericSkill>();
-				var family = (SkillFamily)skillFamilyPassive;
-				skill.skillName = "AscensionPassive";
-				skill._skillFamily = family;
-				skill.hideInCharacterSelect = family.variants.Length == 1;
-			}
+			var passiveSkill = bodyPrefab.AddComponent<GenericSkill>();
+			var family = await GetSkillFamily<KamunagiSkillFamilyPassive>();
+			passiveSkill.skillName = "AscensionPassive";
+			passiveSkill._skillFamily = family;
+			passiveSkill.hideInCharacterSelect = family.variants.Length == 1;
 
 			skillLocator.passiveSkill = new SkillLocator.PassiveSkill
 			{
 				enabled = true,
-				icon = LoadAsset<Sprite>("bundle:TwinsPassive"),
+				icon = await LoadAsset<Sprite>("bundle:TwinsPassive"),
 				skillDescriptionToken = tokenPrefix + "PASSIVE_DESCRIPTION",
 				skillNameToken = tokenPrefix + "PASSIVE_NAME"
 			};
@@ -305,7 +303,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			return bodyPrefab;
 		}
 
-		SurvivorDef ISurvivor.BuildObject()
+		async Task<SurvivorDef> ISurvivor.BuildObject()
 		{
 			var survivor = ScriptableObject.CreateInstance<SurvivorDef>();
 			survivor.primaryColor = Colors.twinsLightColor;
@@ -315,18 +313,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			survivor.mainEndingEscapeFailureFlavorToken = tokenPrefix + "OUTRO_FAILURE";
 			survivor.desiredSortPosition = 100f;
 
-			if (TryGetGameObject<KamunagiAsset, IBody>(out var body))
-				survivor.bodyPrefab = body;
-
-			if (TryGetGameObject<KamunagiAsset, IBodyDisplay>(out var display))
-				survivor.displayPrefab = display;
+			survivor.bodyPrefab = await this.GetBody();
+			survivor.displayPrefab = await this.GetBodyDisplay();
 
 			return survivor;
 		}
 
-		GameObject IEffect.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
-			var kamunagiChains = LoadAsset<GameObject>("bundle:KamunagiChains")!;
+			var kamunagiChains = await LoadAsset<GameObject>("bundle:KamunagiChains")!;
 			kamunagiChains.AddComponent<ModelAttachedEffect>();
 			kamunagiChains.transform.position = Vector3.zero;
 			kamunagiChains.transform.rotation = Quaternion.identity;

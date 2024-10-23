@@ -27,7 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
-			var effect = Asset.GetGameObject<DenebokshiriBrimstone, IEffect>();
+			var effect = Asset.GetEffect<DenebokshiriBrimstone>().WaitForCompletion();
 			if (muzzleTransform)
 			{
 				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
@@ -39,7 +39,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		private void FireProjectile()
 		{
-			var prefab = Asset.GetGameObject<DenebokshiriBrimstone, IProjectile>();
+			var prefab = Asset.GetProjectile<DenebokshiriBrimstone>().WaitForCompletion();
 			var zapDamage = prefab.GetComponent<ProjectileProximityBeamController>();
 			zapDamage.damageCoefficient = damageCoefficient;
 			if (isAuthority)
@@ -257,7 +257,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			if (path == "NINES_LIGHTNING_ORB")
 			{
-				__result = GetGameObject<LightningEffect, IEffect>();
+				__result = GetEffect<LightningEffect>().WaitForCompletion();
 				return false;
 			}
 

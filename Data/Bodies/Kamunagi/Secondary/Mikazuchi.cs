@@ -52,7 +52,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var centerPoint = targetPosition + (Vector3.up * 2.5f);
 			for (var i = 0; i < projectileCount; i++)
 			{
-				ProjectileManager.instance.FireProjectile(Asset.GetGameObject<MikazuchiLightningOrb, IProjectile>(),
+				ProjectileManager.instance.FireProjectile(Asset.GetProjectile<MikazuchiLightningOrb>().WaitForCompletion(),
 					centerPoint,
 					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
 					gameObject,

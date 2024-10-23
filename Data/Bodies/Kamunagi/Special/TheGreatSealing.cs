@@ -20,7 +20,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			base.Fire(targetPosition);
 
-			ProjectileManager.instance.FireProjectile(Asset.GetGameObject<PrimedObelisk, IProjectile>(),
+			ProjectileManager.instance.FireProjectile(Asset.GetProjectile<PrimedObelisk>().WaitForCompletion(),
 				targetPosition,
 				Quaternion.identity,
 				gameObject,
@@ -306,7 +306,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				{
 					damageInfo.damageType = DamageType.VoidDeath;
 					EffectManager.SpawnEffect(
-						GetGameObject<CyanDamageNumbers, IEffect>(),
+						GetEffect<CyanDamageNumbers>().WaitForCompletion(),
 						new EffectData
 						{
 							origin = __instance.body.corePosition,

@@ -33,11 +33,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			charModel = GetModelTransform().GetComponent<CharacterModel>();
 
 			Vector3 additive = characterDirection.forward * 0.5f;
-			darkSigilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<DarkSigil, IEffect>(), centerFarMuzzle, true);
+			darkSigilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<DarkSigil>().WaitForCompletion(), centerFarMuzzle, true);
 			darkSigilEffect.transform.localScale = Vector3.one * 0.7f;
-			tracerInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<SobuGekishoha, IEffect>(), centerFarMuzzle, true);
+			tracerInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<SobuGekishoha>().WaitForCompletion(), centerFarMuzzle, true);
 			tracerInstance.transform.localScale = new Vector3(1, 1, 0.03f * 180);
-			voidSphereMuzzle = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetGameObject<VoidSphere, IEffect>(), centerFarMuzzle, true);
+			voidSphereMuzzle = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<VoidSphere>().WaitForCompletion(), centerFarMuzzle, true);
 			voidSphereMuzzle.transform.localRotation = Quaternion.identity;
 			voidSphereMuzzle.transform.localScale = Vector3.one;
 			

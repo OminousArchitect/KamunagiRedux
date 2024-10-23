@@ -29,7 +29,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
-			var effect = Asset.GetGameObject<HonokasVeil, IEffect>();
+			var effect = Asset.GetEffect<HonokasVeil>().WaitForCompletion();
 			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
 			EffectManager.SpawnEffect(LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab"), new EffectData
 			{

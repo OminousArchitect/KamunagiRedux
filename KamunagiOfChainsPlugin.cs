@@ -10,6 +10,7 @@ using HarmonyLib;
 using R2API;
 using R2API.Utils;
 using RoR2;
+using RoR2.ContentManagement;
 using RoR2.UI;
 using TMPro;
 using UnityEngine;
@@ -83,32 +84,32 @@ namespace KamunagiOfChains
 			log.LogDebug("Finished Awake");
 		}
 
-		public static T? LoadAsset<T>(string assetPath) where T : UnityEngine.Object
+		public static Task<T> LoadAsset<T>(string assetPath) where T : UnityEngine.Object
 		{
 			if (assetPath.StartsWith("addressable:"))
 			{
-				return Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..]).WaitForCompletion();
+				return Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..]).Task;
 			}
 
 			if (assetPath.StartsWith("bundle:"))
 			{
 				return !bundle
-					? null
-					: bundle!.LoadAsset<T>(assetPath["bundle:".Length..]);
+					? Task.FromResult<T>(default!)
+					: bundle!.LoadAssetAsyncTask<T>(assetPath["bundle:".Length..]);
 			}
 			if (assetPath.StartsWith("bundle2:"))
 			{
 				return !bundle2
-					? null
-					: bundle2!.LoadAsset<T>(assetPath["bundle2:".Length..]);
+					? Task.FromResult<T>(default!)
+					: bundle2!.LoadAssetAsyncTask<T>(assetPath["bundle2:".Length..]);
 			}
 
 			if (assetPath.StartsWith("legacy:"))
 			{
-				return LegacyResourcesAPI.Load<T>(assetPath["legacy:".Length..]);
+				return LegacyResourcesAPI.LoadAsync<T>(assetPath["legacy:".Length..]).Task;
 			}
 
-			return Addressables.LoadAssetAsync<T>(assetPath).WaitForCompletion();
+			return Addressables.LoadAssetAsync<T>(assetPath).Task;
 		}
 
 		[HarmonyPrefix]
@@ -127,7 +128,7 @@ namespace KamunagiOfChains
 
 		private class ContentPackProvider : RoR2.ContentManagement.IContentPackProvider
 		{
-			private static RoR2.ContentManagement.ContentPack _contentPack = null!;
+			private static Task<ContentPack> _contentPack = null!;
 			private static string _identifier = null!;
 			public string identifier => _identifier;
 
@@ -140,10 +141,14 @@ namespace KamunagiOfChains
 
 			public IEnumerator GenerateContentPackAsync(RoR2.ContentManagement.GetContentPackAsyncArgs args)
 			{
-				RoR2.ContentManagement.ContentPack.Copy(_contentPack, args.output);
+				while (!_contentPack.IsCompleted)
+					yield return null;
+				if (_contentPack.IsFaulted)
+					throw _contentPack.Exception!;
+				
+				ContentPack.Copy(_contentPack.Result, args.output);
 				//Log.LogError(ContentPack.identifier);
 				args.ReportProgress(1f);
-				yield break;
 			}
 
 			public IEnumerator FinalizeAsync(RoR2.ContentManagement.FinalizeAsyncArgs args)
@@ -153,11 +158,11 @@ namespace KamunagiOfChains
 				yield break;
 			}
 
-			internal static void Initialize(string identifier, RoR2.ContentManagement.ContentPack pack)
+			internal static void Initialize(string identifier, Task<ContentPack> pack)
 			{
 				_identifier = identifier;
 				_contentPack = pack;
-				RoR2.ContentManagement.ContentManager.collectContentPackProviders +=
+				ContentManager.collectContentPackProviders +=
 					provider => provider(new ContentPackProvider());
 			}
 		}

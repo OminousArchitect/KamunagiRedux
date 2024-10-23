@@ -70,6 +70,23 @@ namespace KamunagiOfChains
 			rest = array[1..];
 		}
 
+		public static Task<T> LoadAssetAsyncTask<T>(this AssetBundle bundle, string path) where T : UnityEngine.Object
+		{
+			var source = new TaskCompletionSource<T>();
+			var handle = bundle.LoadAssetAsync<T>(path);
+			handle.completed += _ =>
+			{
+				source.SetResult((T)handle.asset);
+			};
+			return source.Task;
+		}
+
+		public static T WaitForCompletion<T>(this Task<T> task)
+		{
+			task.Wait();
+			return task.Result;
+		}
+
 		public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
 		{
 			var result = gameObject.GetComponent<T>();

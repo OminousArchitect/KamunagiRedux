@@ -33,11 +33,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			}
 		}
 	}
+	
+	public class VoidPortalStates : Asset, IEntityStates
+	{
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal) };
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			BufferPortal.spawnEffectPrefab =
+				await LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierSpawnEffect.prefab");
+		}
+	}
 
 	public class BufferPortal : BaseState
 	{
-		private static GameObject _spawnEffectPrefab =
-			LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierSpawnEffect.prefab")!.WaitForCompletion(); // TODO this is gross
+		public static GameObject spawnEffectPrefab;
 
 		public static float duration = 2f;
 
@@ -45,11 +55,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		{
 			base.OnEnter();
 
-			if (_spawnEffectPrefab)
+			if (spawnEffectPrefab)
 			{
 				//Util.PlaySound(EntityStates.NullifierMonster.SpawnState.spawnSoundString, gameObject);
 				Util.PlaySound("Play_nullifier_spawn", gameObject);
-				EffectManager.SimpleMuzzleFlash(_spawnEffectPrefab, gameObject, "MuzzleRear", false);
+				EffectManager.SimpleMuzzleFlash(spawnEffectPrefab, gameObject, "MuzzleRear", false);
 			}
 
 			if (NetworkServer.active)

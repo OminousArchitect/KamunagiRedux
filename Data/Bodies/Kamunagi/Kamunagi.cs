@@ -23,7 +23,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		IEnumerable<Type> IEntityStates.GetEntityStates() =>
 			new[]
 			{
-				typeof(VoidPortalSpawnState), typeof(BufferPortal), typeof(VoidDeathState),
+				typeof(VoidDeathState),
 				typeof(KamunagiCharacterMainState)
 			};
 

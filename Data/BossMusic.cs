@@ -61,7 +61,9 @@ namespace KamunagiOfChains.Data
 		{
 			// bossStatus ID
 			if (__instance.id != 549431000 || __instance.expectedEngineValueId.Equals(__instance.valueId)) return;
-			AkSoundEngine.SetState(GetMusicTrackDef<BossMusic>().WaitForCompletion().states[0].GroupId, 0); // could also be a seperate state for exiting the track
+			var track = GetObjectOrNull<BossMusic, IMusicTrack, MusicTrackDef>().WaitForCompletion();
+			if (track != null)
+				AkSoundEngine.SetState(track.states[0].GroupId, 0); // could also be a seperate state for exiting the track
 		}
 	}
 }

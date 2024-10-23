@@ -55,7 +55,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sun.GetComponent<UmbralSunController>().bullseyeSearch.teamMaskFilter =
 				TeamMask.GetEnemyTeams(teamComponent.teamIndex);
 			NetworkServer.Spawn(sun);
-			EffectManager.SimpleEffect(Asset.GetEffect<NaturesAxiom>().WaitForCompletion(), spawnPos, Quaternion.identity, true);
+			EffectManager.SimpleEffect(Asset.GetEffect<NaturesAxiom>().WaitForCompletion(), spawnPos,
+				Quaternion.identity, true);
 		}
 
 		public override void OnExit()
@@ -64,9 +65,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (sun)
 			{
 				Destroy(sun);
-				EffectManager.SimpleEffect(Asset.GetEffect<NaturesAxiom>().WaitForCompletion(), spawnPos, Quaternion.identity,
+				EffectManager.SimpleEffect(Asset.GetEffect<NaturesAxiom>().WaitForCompletion(), spawnPos,
+					Quaternion.identity,
 					true);
 			}
+
 			animator.SetBool("inAxiom", false);
 			if (leftMuzzleInstance != null) leftMuzzleInstance.ReturnToPool();
 			if (rightMuzzleInstance != null) rightMuzzleInstance.ReturnToPool();
@@ -77,7 +80,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Death;
 	}
-	
+
 	public class LightOfNaturesAxiom : Asset, ISkill, IEffect
 	{
 		async Task<SkillDef> ISkill.BuildObject()
@@ -86,7 +89,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.skillName = "Special 2";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL2_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("bundle:RoU"));
+			skill.icon = (await LoadAsset<Sprite>("bundle:RoU"));
 			skill.activationStateMachineName = "Body";
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -101,7 +104,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		async Task<GameObject> IEffect.BuildObject()
 		{
 			var chargeSunEffect =
-				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/ChargeGrandParentSunHands.prefab")).InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/ChargeGrandParentSunHands.prefab"))
+				.InstantiateClone(
 					"TwinsUltHands", false);
 
 			var comp = chargeSunEffect.GetOrAddComponent<EffectComponent>();
@@ -143,7 +147,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		async Task<GameObject> INetworkedObject.BuildObject()
 		{
 			var naturesAxiom =
-				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSun.prefab"))!.InstantiateClone("TwinsUltSun",
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSun.prefab"))!.InstantiateClone(
+					"TwinsUltSun",
 					true);
 			UnityEngine.Object.Destroy(naturesAxiom.GetComponent<EntityStateMachine>());
 			UnityEngine.Object.Destroy(naturesAxiom.GetComponent<NetworkStateMachine>());
@@ -167,7 +172,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				.material;
 			sunMeshes[2].enabled = false;
 			var sunPP = naturesAxiom.GetComponentInChildren<PostProcessVolume>();
-			sunPP.profile= (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
+			sunPP.profile = (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
 			sunPP.sharedProfile = sunPP.profile;
 			sunPP.gameObject.AddComponent<SphereCollider>().radius = 40;
 			var sunP = (await this.GetEffect()).GetComponentInChildren<ParticleSystemRenderer>(true);
@@ -217,7 +222,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var sunExplosion =
 				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSunSpawn.prefab"))!.InstantiateClone(
 					"TwinsSunExplosion", false);
-			var sunPP= (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
+			var sunPP = (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
 			var sunePP = sunExplosion.GetComponentInChildren<PostProcessVolume>();
 			sunePP.profile = sunPP;
 			sunePP.sharedProfile = sunPP;
@@ -225,7 +230,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			suneL.intensity = 100;
 			suneL.range = 40;
 			suneL.color = new Color(0.45f, 0, 1);
-			var remapTex= (await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+			var remapTex = (await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 			foreach (ParticleSystemRenderer r in sunExplosion.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{
 				if (r.material)
@@ -248,7 +253,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			buffDef.buffColor = Colors.twinsDarkColor;
 			buffDef.canStack = true;
 			buffDef.isDebuff = true;
-			buffDef.iconSprite= (await LoadAsset<Sprite>("RoR2/Base/Grandparent/texBuffOverheat.tif"));
+			buffDef.iconSprite = (await LoadAsset<Sprite>("RoR2/Base/Grandparent/texBuffOverheat.tif"));
 			buffDef.isHidden = false;
 			return buffDef;
 		}
@@ -296,6 +301,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					kamunagiEffectController.target = modelLocator.modelTransform.gameObject;
 					log.LogDebug("added Kamunagi Controller");
 				});
+
+			UmbralSunController.activeLoopDef =
+				(await LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunActive.asset"))!;
+			UmbralSunController.damageLoopDef =
+				(await LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunDamage.asset"))!;
+			KamunagiBurnEffectController.defaultEffect = new KamunagiBurnEffectController.KamunagiEffectParams
+			{
+				startSound = "",
+				stopSound = "",
+				overlayMaterial = await GetMaterial<AxiomBurn>(),
+				particleEffectPrefab = await GetEffect<CurseParticles>()
+			};
 		}
 	}
 
@@ -303,8 +320,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var voidFog= (await LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab"));
-			var effect = voidFog.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false); //revisit this
+			var voidFog = (await LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab"));
+			var effect =
+				voidFog.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false); //revisit this
 			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
 			var ps = effect.GetComponentInChildren<ParticleSystem>();
 			var main = ps.main;
@@ -326,24 +344,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			public Material overlayMaterial;
 			public GameObject particleEffectPrefab;
 		}
-		
+
 		private List<KamunagiBurnEffectControllerHelper> burnEffectInstances;
 		public GameObject target;
 		private TemporaryOverlayInstance temporaryOverlay;
 		private int soundID;
 		public KamunagiEffectParams effectParams = defaultEffect;
 		public static KamunagiEffectParams defaultEffect;
-
-		private void Awake()
-		{
-			defaultEffect = new KamunagiEffectParams
-			{
-				startSound = "",
-				stopSound = "",
-				overlayMaterial = Asset.GetMaterial<AxiomBurn>().WaitForCompletion(),
-				particleEffectPrefab = Asset.GetEffect<CurseParticles>().WaitForCompletion()
-			};
-		}
 
 		private void Start()
 		{
@@ -371,7 +378,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			{
 				return;
 			}
-			
+
 			temporaryOverlay.AddToCharacterModel(charModel);
 			var body = charModel.body;
 			var baseRendererInfos = charModel.baseRendererInfos;
@@ -406,11 +413,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			}
 		}
 
-		private KamunagiBurnEffectControllerHelper AddFireParticles(Renderer modelRenderer, Transform targetParentTransform)
+		private KamunagiBurnEffectControllerHelper AddFireParticles(Renderer modelRenderer,
+			Transform targetParentTransform)
 		{
 			if (modelRenderer is not MeshRenderer && modelRenderer is not SkinnedMeshRenderer) return null;
 			var particles = effectParams.particleEffectPrefab;
-			EffectManagerHelper getandactivate = EffectManagerKamunagi.GetAndActivatePooledEffect(particles, targetParentTransform, false, new EffectData { scale = 3f } );
+			EffectManagerHelper getandactivate = EffectManagerKamunagi.GetAndActivatePooledEffect(particles,
+				targetParentTransform, false, new EffectData { scale = 3f });
 			if (!getandactivate)
 			{
 				Debug.LogWarning("Could not spawn the ParticleEffect prefab: " + particles + ".");
@@ -420,43 +429,47 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var kamunagiHelper = getandactivate.GetComponent<KamunagiBurnEffectControllerHelper>();
 			if (!kamunagiHelper)
 			{
-				Debug.LogWarning("Burn effect " + particles + " doesn't have a BurnEffectControllerHelper applied.  It can't be applied.");
+				Debug.LogWarning("Burn effect " + particles +
+				                 " doesn't have a BurnEffectControllerHelper applied.  It can't be applied.");
 				getandactivate.ReturnToPool();
 				return null;
 			}
 
 			kamunagiHelper.InitializeBurnEffect(modelRenderer);
 			return kamunagiHelper;
-
 		}
 	}
 
 	public class KamunagiBurnEffectControllerHelper : MonoBehaviour
 	{
 		public ParticleSystem burnParticleSystem;
-		public DestroyOnTimer destroyOnTimer; 
-		public LightIntensityCurve lightIntensityCurve; 
-		public NormalizeParticleScale normalizeParticleScale; 
+		public DestroyOnTimer destroyOnTimer;
+		public LightIntensityCurve lightIntensityCurve;
+		public NormalizeParticleScale normalizeParticleScale;
 		public BoneParticleController boneParticleController;
-			
-		private void Awake() 
+
+		private void Awake()
 		{
 			if (!burnParticleSystem)
 			{
 				burnParticleSystem = GetComponent<ParticleSystem>();
 			}
+
 			if (!destroyOnTimer)
 			{
 				destroyOnTimer = GetComponent<DestroyOnTimer>();
 			}
+
 			if (!lightIntensityCurve)
 			{
 				lightIntensityCurve = GetComponentInChildren<LightIntensityCurve>();
 			}
+
 			if (!normalizeParticleScale)
 			{
 				normalizeParticleScale = GetComponentInChildren<NormalizeParticleScale>();
 			}
+
 			if (!boneParticleController)
 			{
 				boneParticleController = GetComponentInChildren<BoneParticleController>();
@@ -471,12 +484,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			}
 		}
 
-		public void InitializeBurnEffect(Renderer modelRenderer) 
+		public void InitializeBurnEffect(Renderer modelRenderer)
 		{
 			if (!burnParticleSystem || !modelRenderer)
 			{
 				return;
 			}
+
 			ParticleSystem.ShapeModule shape = burnParticleSystem.shape;
 			if (modelRenderer is MeshRenderer meshRenderer)
 			{
@@ -492,21 +506,23 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					boneParticleController.skinnedMeshRenderer = skinnedMeshRenderer;
 				}
 			}
+
 			if (normalizeParticleScale)
 			{
 				normalizeParticleScale.UpdateParticleSystem();
 			}
+
 			burnParticleSystem.gameObject.SetActive(true);
 		}
-			
-		public void EndEffect() 
+
+		public void EndEffect()
 		{
 			if (burnParticleSystem)
 			{
 				ParticleSystem.EmissionModule emission = burnParticleSystem.emission;
 				emission.enabled = false;
 			}
-			
+
 			if (lightIntensityCurve)
 			{
 				lightIntensityCurve.enabled = true;
@@ -535,12 +551,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private uint damageSoundLoop;
 		private BuffIndex overheatBuffDef;
 		private GameObject overheatApplyEffect;
-		[SerializeField] 
-		private LoopSoundDef activeLoopDef= (await LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunActive.asset"))!;
-		[SerializeField] 
-		private LoopSoundDef damageLoopDef= (await LoadAsset<LoopSoundDef>("RoR2/Base/Grandparent/lsdGrandparentSunDamage.asset"))!;
-		[SerializeField] 
-		private string stopSoundName = "Play_grandParent_attack3_sun_destroy";
+		public static LoopSoundDef activeLoopDef;
+		public static LoopSoundDef damageLoopDef;
+		[SerializeField] private string stopSoundName = "Play_grandParent_attack3_sun_destroy";
 
 		private void Awake()
 		{
@@ -611,85 +624,86 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			}
 		}
 
-		private void ServerFixedUpdate() 
+		private void ServerFixedUpdate()
 		{
 			float num = Mathf.Clamp01(previousCycle.timeSince / cycleInterval);
 			int num2 = (num == 1f) ? cycleTargets.Count : Mathf.FloorToInt((float)cycleTargets.Count * num);
 			Vector3 position = base.transform.position;
 			while (cycleIndex < num2)
+			{
+				HurtBox hurtBox = cycleTargets[cycleIndex];
+				if (hurtBox)
 				{
-					HurtBox hurtBox = cycleTargets[cycleIndex];
-						if (hurtBox)
+					CharacterBody body = hurtBox.healthComponent.body;
+					if ((body.bodyFlags & CharacterBody.BodyFlags.OverheatImmune) ==
+					    CharacterBody.BodyFlags.None)
+					{
+						Vector3 corePosition = body.corePosition;
+						Ray ray = new Ray(position, corePosition - position);
+						RaycastHit raycastHit;
+						if (!Physics.Linecast(position, corePosition, out raycastHit, LayerIndex.world.mask,
+							    QueryTriggerInteraction.Ignore))
 						{
-							CharacterBody body = hurtBox.healthComponent.body;
-							if ((body.bodyFlags & CharacterBody.BodyFlags.OverheatImmune) ==
-							    CharacterBody.BodyFlags.None)
+							float num3 = Mathf.Max(1f, raycastHit.distance);
+							body.AddTimedBuff(overheatBuffDef,
+								overheatBuffDuration / num3); //the interesting stuff starts here
+							if (overheatApplyEffect)
 							{
-								Vector3 corePosition = body.corePosition;
-								Ray ray = new Ray(position, corePosition - position);
-								RaycastHit raycastHit;
-								if (!Physics.Linecast(position, corePosition, out raycastHit, LayerIndex.world.mask,
-									    QueryTriggerInteraction.Ignore))
+								EffectData effectData = new EffectData
 								{
-									float num3 = Mathf.Max(1f, raycastHit.distance);
-									body.AddTimedBuff(overheatBuffDef,
-										overheatBuffDuration / num3); //the interesting stuff starts here
-									if (overheatApplyEffect)
-									{
-										EffectData effectData = new EffectData
-										{
-											origin = corePosition,
-											rotation = Util.QuaternionSafeLookRotation(-ray.direction),
-											scale = body.bestFitRadius
-										};
-										effectData.SetHurtBoxReference(hurtBox);
-										EffectManager.SpawnEffect(overheatApplyEffect, effectData, true);
-									}
+									origin = corePosition,
+									rotation = Util.QuaternionSafeLookRotation(-ray.direction),
+									scale = body.bestFitRadius
+								};
+								effectData.SetHurtBoxReference(hurtBox);
+								EffectManager.SpawnEffect(overheatApplyEffect, effectData, true);
+							}
 
-									int theNumber = body.GetBuffCount(overheatBuffDef) - minimumStacksBeforeBurning;
-									if (theNumber > 0)
-									{
-										var inflictDotInfo = new InflictDotInfo();
-										inflictDotInfo.dotIndex = NaturesAxiom.CurseIndex;
-										inflictDotInfo.attackerObject = ownership.ownerObject;
-										inflictDotInfo.victimObject = body.gameObject;
-										inflictDotInfo.damageMultiplier = 1f;
+							int theNumber = body.GetBuffCount(overheatBuffDef) - minimumStacksBeforeBurning;
+							if (theNumber > 0)
+							{
+								var inflictDotInfo = new InflictDotInfo();
+								inflictDotInfo.dotIndex = NaturesAxiom.CurseIndex;
+								inflictDotInfo.attackerObject = ownership.ownerObject;
+								inflictDotInfo.victimObject = body.gameObject;
+								inflictDotInfo.damageMultiplier = 1f;
 
-										GenericOwnership genericOwnership = ownership;
-										CharacterBody characterBody;
-										if (genericOwnership == null)
-										{
-											characterBody = null;
-										}
-										else
-										{
-											GameObject ownerObject = genericOwnership.ownerObject;
-											characterBody = ((ownerObject != null)
-												? ownerObject.GetComponent<CharacterBody>()
-												: null);
-										}
-
-										CharacterBody characterBody2 = characterBody;
-										if (characterBody2 && characterBody2.inventory)
-										{
-											inflictDotInfo.totalDamage = 2f * characterBody2.damage * burnDuration * theNumber;
-										}
-
-										DotController.InflictDot(ref inflictDotInfo);
-									}
+								GenericOwnership genericOwnership = ownership;
+								CharacterBody characterBody;
+								if (genericOwnership == null)
+								{
+									characterBody = null;
 								}
+								else
+								{
+									GameObject ownerObject = genericOwnership.ownerObject;
+									characterBody = ((ownerObject != null)
+										? ownerObject.GetComponent<CharacterBody>()
+										: null);
+								}
+
+								CharacterBody characterBody2 = characterBody;
+								if (characterBody2 && characterBody2.inventory)
+								{
+									inflictDotInfo.totalDamage = 2f * characterBody2.damage * burnDuration * theNumber;
+								}
+
+								DotController.InflictDot(ref inflictDotInfo);
 							}
 						}
-						cycleIndex++;
+					}
 				}
 
-				if (previousCycle.timeSince >= cycleInterval)
-				{
-					previousCycle = Run.FixedTimeStamp.now;
-					cycleIndex = 0;
-					cycleTargets.Clear();
-					SearchForTargets(cycleTargets);
-				}
+				cycleIndex++;
+			}
+
+			if (previousCycle.timeSince >= cycleInterval)
+			{
+				previousCycle = Run.FixedTimeStamp.now;
+				cycleIndex = 0;
+				cycleTargets.Clear();
+				SearchForTargets(cycleTargets);
+			}
 		}
 
 		private void SearchForTargets(List<HurtBox> dest)
@@ -705,7 +719,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			dest.AddRange(bullseyeSearch.GetResults());
 		}
 	}
-		
+
 	public class AxiomBurn : Asset, IEffect, IBuff, IMaterial
 	{
 		public async Task<GameObject> BuildObject()
@@ -752,7 +766,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			var buff = ScriptableObject.CreateInstance<BuffDef>();
 			buff.name = "KamunagiCurseDebuff";
-			buff.iconSprite= (await LoadAsset<Sprite>("bundle:CurseScroll"));
+			buff.iconSprite = (await LoadAsset<Sprite>("bundle:CurseScroll"));
 			buff.buffColor = Color.white;
 			buff.canStack = true;
 			buff.isDebuff = true;

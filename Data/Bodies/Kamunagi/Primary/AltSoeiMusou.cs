@@ -13,7 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 {
 	internal class AltSoeiMusouState : BaseTwinState
 	{
-		public static GameObject megaBlaster= (await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallProjectile.prefab"))!;
+		public static GameObject megaBlaster;
 		public float maxChargeTime = 3f;
 		public Transform muzzleTransform = null!;
 		public EffectManagerHelper? chargeEffectInstance;
@@ -30,7 +30,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			muzzleTransform = FindModelChild("MuzzleCenter");
 			if (muzzleTransform)
 			{
-				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<AltSoeiMusou>().WaitForCompletion(), muzzleTransform, true);
+				chargeEffectInstance =
+					EffectManagerKamunagi.GetAndActivatePooledEffect(
+						Asset.GetEffect<AltSoeiMusou>().WaitForCompletion(), muzzleTransform, true);
 				var scale = chargeEffectInstance.effectComponent.GetComponent<ObjectScaleCurve>();
 				scale.baseScale = Vector3.one * 0.7f;
 				scale.timeMax = projectileFireFrequency;
@@ -67,7 +69,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				force = 100 * ballDamageCoefficient,
 				owner = gameObject,
 				position = muzzleTransform.position,
-				projectilePrefab = fixedAge < maxChargeTime ? megaBlaster : Asset.GetProjectile<AltMusouChargeBall>().WaitForCompletion(),
+				projectilePrefab =
+					fixedAge < maxChargeTime
+						? megaBlaster
+						: Asset.GetProjectile<AltMusouChargeBall>().WaitForCompletion(),
 				rotation = Quaternion.LookRotation(GetAimRay().direction)
 			});
 		}
@@ -110,13 +115,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 	public class AltSoeiMusou : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
 	{
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			AltSoeiMusouState.megaBlaster =
+				await LoadAsset<GameObject>(
+					"addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallProjectile.prefab");
+		}
+
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Primary 1";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY1_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("bundle:darkpng"));
+			skill.icon = (await LoadAsset<Sprite>("bundle:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -132,9 +145,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			var projectile =
 				(await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidRaidCrab/VoidRaidCrabMissileProjectile.prefab")!
-					).InstantiateClone("TwinsTrackingProjectile");
-			
-				projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+				).InstantiateClone("TwinsTrackingProjectile");
+
+			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 0.6f;
 			//projectile.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 15f;
 			projectile.GetComponent<ProjectileDamage>().damage = 1f;
@@ -143,7 +156,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = (await  LoadAsset<GameObject>(
+			var ghost = (await LoadAsset<GameObject>(
 					"addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallGhost.prefab")!
 				).InstantiateClone("TwinsTrackingGhost", false);
 			ghost.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
@@ -154,7 +167,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			var effect =
 				(await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidMegaCrab/VoidMegacrabBlackSphere.prefab")!
-					).InstantiateClone("ChargedMusouEffect", false);
+				).InstantiateClone("ChargedMusouEffect", false);
 			effect.transform.localScale = Vector3.one * 0.5f;
 
 			var comp = effect.GetOrAddComponent<EffectComponent>();
@@ -174,7 +187,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 			var altPP = effect.AddComponent<PostProcessVolume>();
 			altPP.profile =
-				await LoadAsset<PostProcessProfile>("addressable:RoR2/Base/title/PostProcessing/ppLocalBrotherImpact.asset");
+				await LoadAsset<PostProcessProfile>(
+					"addressable:RoR2/Base/title/PostProcessing/ppLocalBrotherImpact.asset");
 			altPP.sharedProfile = altPP.profile;
 
 			var musouInstance =
@@ -186,20 +200,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			coolSphere.materials = new[] { musouInstance };
 			coolSphere.shadowCastingMode = ShadowCastingMode.On;
 
-			var pointLight= (await LoadAsset<GameObject>("addressable:RoR2/Base/bazaar/Bazaar_Light.prefab"))!.transform
+			var pointLight = (await LoadAsset<GameObject>("addressable:RoR2/Base/bazaar/Bazaar_Light.prefab"))!
+				.transform
 				.GetChild(1).gameObject.InstantiateClone("Point Light", false);
 			pointLight.transform.parent = effect.transform;
 			pointLight.transform.localPosition = Vector3.zero;
 			pointLight.transform.localScale = Vector3.one * 0.5f;
 			pointLight.GetComponent<Light>().range = 0.5f;
-			var altSparks= (await LoadAsset<GameObject>("addressable:RoR2/Base/Blackhole/GravSphere.prefab"))!.transform
+			var altSparks = (await LoadAsset<GameObject>("addressable:RoR2/Base/Blackhole/GravSphere.prefab"))!
+				.transform
 				.GetChild(1).gameObject.InstantiateClone("Sparks, Blue", false);
 			var altP = altSparks.GetComponent<ParticleSystem>();
 			var altPMain = altP.main;
 			altPMain.simulationSpeed = 2f;
 			altPMain.startColor = Colors.twinsLightColor;
 			altSparks.GetComponent<ParticleSystemRenderer>().material =
-				 await LoadAsset<Material>("addressable:RoR2/Base/Common/VFX/matTracerBrightTransparent.mat");
+				await LoadAsset<Material>("addressable:RoR2/Base/Common/VFX/matTracerBrightTransparent.mat");
 			altSparks.transform.parent = effect.transform;
 			altSparks.transform.localPosition = Vector3.zero;
 			altSparks.transform.localScale = Vector3.one * 0.05f;
@@ -265,16 +281,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				(await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigProjectile.prefab")!
-					).InstantiateClone("TwinsAltChargeBallProjectile");
-				projectile.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<AltMusouChargeBall>();
+				(await LoadAsset<GameObject>(
+					"addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigProjectile.prefab")!
+				).InstantiateClone("TwinsAltChargeBallProjectile");
+			projectile.GetComponent<ProjectileController>().ghostPrefab =
+				await GetProjectileGhost<AltMusouChargeBall>();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
 			return projectile;
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = (await GetEffect<AltSoeiMusou>() ).InstantiateClone("TwinsAltChargeBallGhost", false);
+			var ghost = (await GetEffect<AltSoeiMusou>()).InstantiateClone("TwinsAltChargeBallGhost", false);
 			Object.Destroy(ghost.GetComponent<ObjectScaleCurve>());
 			Object.Destroy(ghost.GetComponent<EffectComponent>());
 			ghost.AddComponent<ProjectileGhostController>();

@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using EntityStates.Mage;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -87,7 +88,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public Vector3 effectPosition;
 		public Vector3 rayDir;
 		private float duration = 1.4f;
-		public static AnimationCurve flyCurve = EntityStates.Mage.FlyUpState.speedCoefficientCurve;
+		public static AnimationCurve flyCurve;
 
 		public static GameObject blinkPrefab;
 		public static GameObject muzzlePrefab;
@@ -156,6 +157,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override async Task Initialize()
 		{
 			await base.Initialize();
+			var curve = await LoadAsset<EntityStateConfiguration>(
+				"RoR2/Base/Mage/EntityStates.Mage.FlyUpState.asset");
+			var field = typeof(KamunagiDashState).GetField(nameof(KamunagiDashState.flyCurve)); 
+			KamunagiDashState.flyCurve =
+				// ReSharper disable once SuspiciousTypeConversion.Global
+				(AnimationCurve) curve 
+					.serializedFieldsCollection.GetOrCreateField(nameof(FlyUpState.speedCoefficientCurve)).fieldValue.GetValue(field);
 			KamunagiDashState.blinkPrefab =
 				await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab");
 			KamunagiDashState.muzzlePrefab = await GetEffect<FlyEffect>();

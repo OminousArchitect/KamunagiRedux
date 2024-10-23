@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Passive;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -12,15 +13,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		public GenericSkill passiveSkill;
 		public EntityStateMachine hoverStateMachine;
-		public static GameObject chainsEffect = Asset.GetEffect<KamunagiAsset>().WaitForCompletion();
+		public static GameObject chainsEffect;
 		public Transform UBone;
 		public Transform SBone;
 		public EffectManagerHelper? chainsLeftInstance;
 		public EffectManagerHelper? chainsRightInstance;
 		public bool chainsSpawned;
 		public SceneDef? currentStage;
-		public static SceneDef meridianDef = LoadAsset<SceneDef>("RoR2/DLC2/meridian/meridian.asset").WaitForCompletion();
-		public static SceneDef sulfurPoolsDef = LoadAsset<SceneDef>("RoR2/DLC1/sulfurpools/sulfurpools.asset").WaitForCompletion();
+		public static SceneDef meridianDef;
+		public static SceneDef sulfurPoolsDef;
 
 		public override void OnEnter()
 		{
@@ -108,7 +109,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		public float hoverVelocity = -0.02f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
 		public float hoverAcceleration = 80;
-		public static GameObject muzzleEffect = Asset.GetEffect<KamunagiHover>().WaitForCompletion();
+		public static GameObject muzzleEffect;
 		private EffectManagerHelper muzzleInstanceLeft;
 		private EffectManagerHelper muzzleInstanceRight;
 
@@ -162,6 +163,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 	public class KamunagiHover : Asset, IEntityStates, IEffect
 	{
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			KamunagiHoverState.muzzleEffect = await this.GetEffect();
+			KamunagiCharacterMainState.chainsEffect = await GetEffect<KamunagiAsset>();
+			KamunagiCharacterMainState.meridianDef = await LoadAsset<SceneDef>("RoR2/DLC2/meridian/meridian.asset");
+			KamunagiCharacterMainState.sulfurPoolsDef = await LoadAsset<SceneDef>("RoR2/DLC1/sulfurpools/sulfurpools.asset");
+		}
+
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(KamunagiHoverState) };
 
 		async Task<GameObject> IEffect.BuildObject()

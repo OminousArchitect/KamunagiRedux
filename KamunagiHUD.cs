@@ -12,6 +12,14 @@ namespace KamunagiOfChains
 	[HarmonyPatch]
 	public class KamunagiHUD : Asset, IGenericObject
 	{
+		private static GameObject hud;
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			hud = await GetGenericObject<KamunagiHUD>();
+			ZealBar.zealMat = await LoadAsset<Material>("bundle2:ZealMat");
+		}
+
 		async Task<GameObject> IGenericObject.BuildObject()
 		{
 			var healthBarObject = (await LoadAsset<GameObject>("RoR2/Base/UI/HUDSimple.prefab"))!.GetComponent<HUD>().healthBar
@@ -32,12 +40,13 @@ namespace KamunagiOfChains
 		public static void AddZealBar(HUD __instance)
 		{
 			var healthBarTransform = __instance.healthBar.gameObject.transform;
-			var zealBar = Object.Instantiate(GetGenericObject<KamunagiHUD>().WaitForCompletion(), healthBarTransform.parent.parent);
+			var zealBar = Object.Instantiate(hud, healthBarTransform.parent.parent);
 			zealBar.transform.rotation = healthBarTransform.rotation;
 			zealBar.transform.localScale = healthBarTransform.localScale;
 			zealBar.transform.localPosition = healthBarTransform.localPosition;
 		}
 	}
+	
 
 	public class ZealBarHider : MonoBehaviour
 	{
@@ -82,7 +91,7 @@ namespace KamunagiOfChains
 		public float cachedZealForLerp;
 		public float zealVelocity;
 		public HealthBarStyle.BarStyle trailingOverZealStyle;
-		public Material zealMat;
+		public static Material zealMat;
 		public Material defaultMaterial;
 
 		public void InitFromHealthBar(HealthBar healthBar)
@@ -97,7 +106,6 @@ namespace KamunagiOfChains
 			zealStyle = healthBar.style.instantHealthBarStyle;
 			zealStyle.baseColor = Colors.zealColor * new Color(1.1f, 1.1f, 1.1f);
 			
-			zealMat= LoadAsset<Material>("bundle2:ZealMat").WaitForCompletion();
 			defaultMaterial = barPrefab.GetComponentInChildren<Image>().material;
 		}
 

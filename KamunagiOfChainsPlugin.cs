@@ -12,6 +12,7 @@ using R2API.Utils;
 using RoR2;
 using RoR2.ContentManagement;
 using RoR2.UI;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -70,7 +71,7 @@ namespace KamunagiOfChains
 				bundle = (operation as AssetBundleCreateRequest)?.assetBundle;
 
 				log.LogDebug("Loading ContentPack");
-				ContentPackProvider.Initialize(Info.Metadata.GUID, Asset.BuildContentPack());
+				ContentPackProvider.Initialize(Info.Metadata.GUID, Asset.BuildContentPack(Assembly.GetExecutingAssembly()));
 			};
 			AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(pluginPath, AssetBundleName+"2")).completed += operation =>
 			{
@@ -149,6 +150,7 @@ namespace KamunagiOfChains
 				ContentPack.Copy(_contentPack.Result, args.output);
 				//Log.LogError(ContentPack.identifier);
 				args.ReportProgress(1f);
+				yield break;
 			}
 
 			public IEnumerator FinalizeAsync(RoR2.ContentManagement.FinalizeAsyncArgs args)

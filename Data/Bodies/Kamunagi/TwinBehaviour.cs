@@ -104,15 +104,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 	public class MasterTwinBehaviour : MonoBehaviour
 	{
 		public CharacterMaster master;
-		public Dictionary<GameObject, CharacterMaster?> NugwisoSpiritDefs = new Dictionary<GameObject, CharacterMaster?>()
-		{
-			{ Asset.GetMaster<AssassinSpirit>().WaitForCompletion(), null },
-			{ Asset.GetMaster<WarMachine>().WaitForCompletion(), null },
-			{ Asset.GetMaster<VirusArchWisp>().WaitForCompletion(), null },
-			{ Asset.GetMaster<IceTank>().WaitForCompletion(), null }
-		};
+		public Dictionary<GameObject, CharacterMaster?> NugwisoSpiritDefs = null!;
 		public void Awake()
 		{
+			NugwisoSpiritDefs = SummonNugwisomkamiState.NugwisoEliteDefs.Keys.ToDictionary(x => x, x => null as CharacterMaster);
+			
 			master = GetComponent<CharacterMaster>();
 			master.onBodyDeath.AddListener(OnDeath);
 		}

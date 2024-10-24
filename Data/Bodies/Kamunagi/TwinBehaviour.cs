@@ -18,6 +18,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public MasterTwinBehaviour masterBehaviour;
 		public float runtimeNumber1 = 0.3f;
 		public float runtimeNumber2 = 0.5f;
+		public int mashiroCost;
 
 		public int zealMeter
 		{

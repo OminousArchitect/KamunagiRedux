@@ -22,7 +22,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			{
 				crit = RollCrit(),
 				damage = damageStat * 6,
-				force = 500,
 				owner = gameObject,
 				position = aimRay.origin + (aimRay.direction * 2),
 				projectilePrefab = Asset.GetProjectile<EnnakamuyEarth>().WaitForCompletion(),

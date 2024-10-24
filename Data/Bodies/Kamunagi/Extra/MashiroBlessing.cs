@@ -52,6 +52,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				if (fixedAge > duration)
 				{
 					characterBody.AddTimedBuffAuthority(Asset.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
+					twinBehaviour.mashiroCost += 12;
+					characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, twinBehaviour.mashiroCost);
 				}
 				outer.SetNextStateToMain();
 				return;

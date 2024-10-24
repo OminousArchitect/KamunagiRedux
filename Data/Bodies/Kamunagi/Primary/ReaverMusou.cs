@@ -186,6 +186,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			flicker.transform.parent = ghost.transform;
 			UnityEngine.Object.Destroy(flicker.GetComponent<FlickerLight>());
 			flicker.transform.localPosition = Vector3.zero;
+			/*LightIntensityCurve curve = flicker.GetOrAddComponent<LightIntensityCurve>();
+			curve.maxIntensity = 71f;
+			curve.timeMax = 2f;*/
 			var child = ghost.transform.Find("Scaler,Animated/Scaler, Random").gameObject;
 			UnityEngine.Object.Destroy(child.transform.GetChild(0).gameObject);
 			var sphere = child.transform.GetChild(1).gameObject;
@@ -199,7 +202,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegacrabAntimatterExplosion.prefab"))!.InstantiateClone("TwinsDetonatorExplosion", false);
+			var effect= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegacrabAntimatterExplosion.prefab"))!.InstantiateClone("TwinsReaverExplosion", false);
 			effect.transform.localScale = Vector3.one * 5f;
 			effect.GetComponent<EffectComponent>().applyScale = false;
 			var discBillboard = effect.transform.GetChild(6).gameObject;
@@ -239,6 +242,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			light.range = 10f;
 			light.intensity = 60f;
 			light.color = Colors.twinsDarkColor;
+			LightIntensityCurve curve = effect.GetOrAddComponent<LightIntensityCurve>();
+			curve.maxIntensity = 71f;
+			curve.timeMax = 0.85f;
 			return effect;
 		}
 	}
@@ -299,7 +305,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			l.range = 10f;
 			l.intensity = 60f;
 			l.color = Colors.twinsDarkColor;
-			LightIntensityCurve curve = light.GetComponent<LightIntensityCurve>();
+			LightIntensityCurve curve = light.GetOrAddComponent<LightIntensityCurve>();
 			curve.maxIntensity = 71f;
 			curve.timeMax = 0.6f;
 			return ghost;

@@ -17,7 +17,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public bool alternateSkills;
 		public MasterTwinBehaviour masterBehaviour;
 		public float runtimeNumber1 = 0.3f;
-		public float runtimeNumber2 = 0.6f;
+		public float runtimeNumber2 = 0.5f;
 
 		public int zealMeter
 		{

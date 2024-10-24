@@ -217,10 +217,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				switch (particleSystemRenderer.name)
 				{  //particleSystemRenderer.material.SetTexture("_RemapText",LoadAsset<Texture2D>(""));
 					case "Billboard, Long":
-						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
+						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/VoidRaidCrab/texRampVoidRaidCrabTripleBeam.png"));
 						break;
 					case "Billboard, Short":
-						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
+						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/VoidRaidCrab/texRampVoidRaidCrabTripleBeam.png"));
+						particleSystemRenderer.material.SetFloat("_Boost", 2f);
 						break;
 					case "Mesh, Donut":
 						particleSystemRenderer.material.SetTexture("_RemapTex",await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
@@ -244,7 +245,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			light.color = Colors.twinsDarkColor;
 			LightIntensityCurve curve = effect.GetOrAddComponent<LightIntensityCurve>();
 			curve.maxIntensity = 71f;
-			curve.timeMax = 0.85f;
+			curve.timeMax = 0.6f;
 			return effect;
 		}
 	}
@@ -298,16 +299,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			sphere.GetComponent<MeshRenderer>().materials = new[] { primed, primedOutline };
 			var indicator = scaler.transform.GetChild(4).gameObject;
 			indicator.transform.localScale = Vector3.one * 15f;
-			var yikes = ghost.transform.Find("Scaler/Point Light").gameObject;
-			yikes.SetActive(true);
 			var light = scaler.transform.GetChild(0).gameObject;
+			light.SetActive(true);
+			UnityEngine.Object.Destroy(light.GetComponent<LightIntensityCurve>());
 			Light l = light.GetComponent<Light>();
-			l.range = 10f;
-			l.intensity = 60f;
-			l.color = Colors.twinsDarkColor;
-			LightIntensityCurve curve = light.GetOrAddComponent<LightIntensityCurve>();
-			curve.maxIntensity = 71f;
-			curve.timeMax = 0.6f;
+			l.range = 15f;
+			l.intensity = 65f;
+			l.color = Colors.twinsLightColor;
 			return ghost;
 		}
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]

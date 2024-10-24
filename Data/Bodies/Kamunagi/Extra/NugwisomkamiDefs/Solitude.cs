@@ -44,14 +44,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseMaxHealth = 200f;
 			cb.baseDamage = 12f;
 			cb.baseMoveSpeed = 13f;
-			
-			
+
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
 			secondary._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();
 			secondary.baseSkill = await GetSkillDef<IceTankSecondary>();
 			nugwisoBody.GetComponent<SkillLocator>().secondary = secondary;
-			
 			var array = nugwisoBody.GetComponents<GenericSkill>();
 			array[0]._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();
 			return nugwisoBody;

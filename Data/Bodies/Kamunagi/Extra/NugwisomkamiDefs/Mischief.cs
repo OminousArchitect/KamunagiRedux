@@ -83,7 +83,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			lightningDisplay.rules[0].childName = "Head";
 
 			charModel.itemDisplayRuleSet = idrs;
-
 			#endregion
 
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();

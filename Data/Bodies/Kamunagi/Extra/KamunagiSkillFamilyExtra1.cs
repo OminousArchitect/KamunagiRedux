@@ -7,7 +7,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		public IEnumerable<Asset> GetSkillAssets() => new Asset[]
 		{
-			GetAsset<XinZhao>(), GetAsset<SummonNugwisomkami>(), GetAsset<SummonTatari>(), 
+			GetAsset<XinZhao>(), GetAsset<MothMoth>(), GetAsset<SummonNugwisomkami>(), GetAsset<SummonTatari>(), 
 			GetAsset<KuonFlashbang>(), GetAsset<HonokasVeil>(), GetAsset<MashiroBlessing>()
 		};
 

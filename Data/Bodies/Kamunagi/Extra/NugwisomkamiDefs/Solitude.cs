@@ -44,40 +44,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseMaxHealth = 200f;
 			cb.baseDamage = 12f;
 			cb.baseMoveSpeed = 13f;
-
-			#region itemdisplays
-			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
-
-			var haunted = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
-			var hauntedRules = new ItemDisplayRule[haunted.rules.Length];
-			Array.Copy(haunted.rules, hauntedRules, haunted.rules.Length);
-			haunted.rules = hauntedRules;
-			haunted.rules[0].localPos = new Vector3(-0.38F, 0.52741F, 0.16226F);
-			haunted.rules[0].localAngles = new Vector3(36.87725F, 211.2191F, 2.35356F);
-			haunted.rules[0].localScale = Vector3.one * 0.3f;
-			haunted.rules[0].childName = "Head";
-
-			var icy = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteIceEquipment.asset"));
-			var icyRules = new ItemDisplayRule[icy.rules.Length];
-			Array.Copy(icy.rules, icyRules, icy.rules.Length);
-			icy.rules = icyRules;
-			icy.rules[0].localPos = new Vector3(0.02568F, 0.77985F, 0.25021F);
-			icy.rules[0].localAngles = new Vector3(339.2211F, 359.8235F, 182.5763F);
-			icy.rules[0].localScale = Vector3.one * 0.7f;
-			icy.rules[0].childName = "Head";
-			/*icy.rules[1].localPos = new Vector3(0.04052F, -0.26059F, 0.40294F);
-			icy.rules[1].localAngles = new Vector3(0f, 0f, 0f);
-			icy.rules[1].localScale = Vector3.one * 0.5f;
-			icy.rules[1].childName = "Child";*/
-			charModel.itemDisplayRuleSet = idrs;
-			#endregion
+			
 			
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
 			secondary._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();
 			secondary.baseSkill = await GetSkillDef<IceTankSecondary>();
 			nugwisoBody.GetComponent<SkillLocator>().secondary = secondary;
+			
 			var array = nugwisoBody.GetComponents<GenericSkill>();
 			array[0]._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();
 			return nugwisoBody;

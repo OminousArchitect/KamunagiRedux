@@ -8,7 +8,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		public IEnumerable<Asset> GetSkillAssets() => new Asset[] 
 			{ 
-				GetAsset<KuonFlashbang>(), GetAsset<WoshisZone>(), GetAsset<AtuysTides>(), GetAsset<JachdwaltStrikes>(), GetAsset<HonokasVeil>() 
+				GetAsset<KuonFlashbang>(), GetAsset<JachdwaltStrikes>(),
+				GetAsset<WoshisZone>(), GetAsset<AtuysTides>(), 
+				GetAsset<HonokasVeil>() 
 			};
 
 		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaUtility" ? "NINES_SARAANA_UTILITY" : "NINES_URURUU_UTILITY";

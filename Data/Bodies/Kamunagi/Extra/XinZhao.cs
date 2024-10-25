@@ -131,7 +131,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA3_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("bundle2:172714677590348517")); //lol, lmao
+			skill.icon= (await LoadAsset<Sprite>("bundle:darkpng")); //lol, lmao
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;

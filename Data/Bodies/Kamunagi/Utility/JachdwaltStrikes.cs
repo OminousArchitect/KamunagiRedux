@@ -77,7 +77,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 	class JachdwaltInitEvis : BaseTwinState
 	{
-		public override int meterGain => 0;
 		private float stopwatch;
 		private Vector3 aimDirectionVector = Vector3.zero;
 		public float smallHopVelocity = 8;

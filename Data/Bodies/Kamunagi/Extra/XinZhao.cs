@@ -53,7 +53,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class XinZhaoForceFieldState : BaseTwinState
 	{
 		public (Vector3, HealthComponent)[] hurtBoxes;
-		public override int meterGain => 0;
 		public Vector3 forceFieldPosition;
 
 		public override void OnSerialize(NetworkWriter writer)

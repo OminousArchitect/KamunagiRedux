@@ -14,7 +14,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public HurtBoxGroup? hurtBoxGroup;
 		public EffectManagerHelper? veilEffect;
 		public static GameObject muzzleEffect;
-		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{

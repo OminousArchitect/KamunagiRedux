@@ -3,7 +3,7 @@ using RoR2;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
-	public class KamunagiSkillFamilyExtra1 : Asset, ISkillFamily
+	public class KamunagiSkillFamilyExtra : Asset, ISkillFamily
 	{
 		public IEnumerable<Asset> GetSkillAssets() => new Asset[]
 		{
@@ -15,7 +15,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			GetAsset<KuonFlashbang>(), GetAsset<HonokasVeil>()
 		};
 
-		public string GetNameToken(GenericSkill skill) =>
-			skill.skillName == "SaraanaExtra" ? "NINES_SARAANA_EXTRA" : "NINES_URURUU_EXTRA";
+		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaExtra" ? "NINES_SARAANA_EXTRA" : "NINES_URURUU_EXTRA";
 	}
+
+	public class KamunagiSkillFamilyExtra2 : KamunagiSkillFamilyExtra {}
 }

@@ -12,8 +12,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	public class MashiroBlessingState : BaseTwinState
 	{
-		public override int meterGain => 0;
-
 		public static GameObject muzzleEffect;
 		private EffectManagerHelper muzzleInstanceLeft;
 		private EffectManagerHelper muzzleInstanceRight;

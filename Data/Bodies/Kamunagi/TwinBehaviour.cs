@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using ExtraSkillSlots;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using RoR2;
@@ -12,6 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public GameObject activeBuffWard;
 		public bool componentAddedToMaster;
 		public CharacterBody body;
+		public ExtraSkillLocator extraLocator;
 		private int _zealMeter;
 		public int maxZeal = 80;
 		public bool alternateSkills;
@@ -45,6 +47,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 					skill.SetSkillOverride(this, body.skillLocator.allSkills[index + 1].skillDef,
 						GenericSkill.SkillOverridePriority.Contextual);
 			}
+			var extra = extraLocator.extraFourth;
+			extra.SetSkillOverride(this, body.skillLocator.allSkills[9].skillDef, GenericSkill.SkillOverridePriority.Contextual);
 		}
 
 		private void UnsetOverrides()
@@ -57,6 +61,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 					skill.UnsetSkillOverride(this, body.skillLocator.allSkills[index + 1].skillDef,
 						GenericSkill.SkillOverridePriority.Contextual);
 			}
+			var extra = extraLocator.extraFourth;
+			extra.UnsetSkillOverride(this, body.skillLocator.allSkills[9].skillDef, GenericSkill.SkillOverridePriority.Contextual);
 		}
 
 		public string twinMuzzle
@@ -73,6 +79,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public void Awake()
 		{
 			body = GetComponent<CharacterBody>();
+			extraLocator = GetComponent<ExtraSkillLocator>();
 			foreach (var esm in body.GetComponents<EntityStateMachine>())
 			{
 				esm.nextStateModifier += ModifyNextState;

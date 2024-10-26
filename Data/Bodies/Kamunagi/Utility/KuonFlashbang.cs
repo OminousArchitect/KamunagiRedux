@@ -17,7 +17,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public EffectManagerHelper? veilEffect;
 		public static GameObject childTpFx;
 		private Vector3 teleportPosition;
-		public override int meterGain => 0;
 		private float duration = 0.45f;
 		private bool teleported;
 		private NodeGraph? availableNodes;

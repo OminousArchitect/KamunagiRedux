@@ -45,6 +45,37 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseDamage = 12f;
 			cb.baseMoveSpeed = 13f;
 
+			var cPairs = mdl.GetComponent<ChildLocator>().transformPairs;
+			cPairs[0].transform = mdl.transform;
+			cPairs[0].name = "Muzzle";
+			
+			#region itemdisplays
+			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
+			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
+			
+			var hauntedDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
+			hauntedDisplay.rules[0].childName = "Muzzle";
+			hauntedDisplay.rules[0].localPos = new Vector3(-0.02014F, 0.18649F, -0.16408F);
+			hauntedDisplay.rules[0].localAngles = new Vector3(270F, 0F, 0F);
+			hauntedDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			/*hauntedDisplay.rules[1].childName = "Muzzle";
+			hauntedDisplay.rules[1].localPos = new Vector3(-0.34832F, 0.26794F, 0.14957F);
+			hauntedDisplay.rules[1].localAngles = new Vector3(52.33278F, 60.16898F, 218.7332F);
+			hauntedDisplay.rules[1].localScale = new Vector3(-0.40586F, 0.40586F, 0.40586F);*/
+			
+			var iceDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteIce/EliteIceEquipment.asset"));
+			iceDisplay.rules[0].childName = "Muzzle";
+			iceDisplay.rules[0].localPos = new Vector3(0.0189F, 1.05928F, 0.03792F);
+			iceDisplay.rules[0].localAngles = new Vector3(270F, 0F, 0F);
+			iceDisplay.rules[0].localScale = new Vector3(0.08F, 0.08F, 0.08F);
+			/*iceDisplay.rules[1].childName = "Muzzle";
+			iceDisplay.rules[1].localPos = new Vector3(0.04168F, 0.95129F, 0.15072F);
+			iceDisplay.rules[1].localAngles = new Vector3(335.6771F, 357.8F, 180F);
+			iceDisplay.rules[1].localScale = new Vector3(-0.40586F, 0.40586F, 0.40586F);*/
+			
+			charModel.itemDisplayRuleSet = idrs;
+			#endregion
+			
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
 			secondary._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();

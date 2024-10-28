@@ -44,7 +44,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 						projectilePrefab = Asset.GetProjectile<ReaverMusou>().WaitForCompletion(),
 						owner = gameObject,
 						damage = characterBody.damage * 2.8f,
-						force = 200
+						force = 1
 					});
 					return false;
 				}
@@ -78,7 +78,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 						crit = RollCrit(),
 						projectilePrefab = Asset.GetProjectile<StickyBombDetonator>().WaitForCompletion(),
 						owner = gameObject,
-						damage = characterBody.damage * 2.8f,
+						damage = characterBody.damage,
 						force = 200
 					});
 					return false;
@@ -144,8 +144,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			effect.transform.GetChild(6).gameObject.SetActive(false);
 			effect.transform.localScale = Vector3.one * 0.4f;
 			var dist = effect.transform.GetChild(3).gameObject;
-			var distP = dist.GetComponentInChildren<ParticleSystem>().shape;
-			distP.scale = Vector3.one * 0.25f;
+			ParticleSystem p = dist.GetComponent<ParticleSystem>();
+			var main = p.main;
+			main.startSize = 1f;
 			var comp = effect.GetComponent<EffectComponent>();
 			//comp.parentToReferencedTransform = true;
 			//comp.positionAtReferencedTransform = true;
@@ -266,9 +267,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = await GetEffect<ReaverExplosion>();
-			impact.bonusBlastForce = Vector3.zero;
+			impact.bonusBlastForce = new Vector3(0f, 0f, 0f);
+			impact.falloffModel = BlastAttack.FalloffModel.None;
+			impact.blastDamageCoefficient = 1.66f;
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
-			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from detonator
+			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
@@ -335,14 +338,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			simple.velocityOverLifetime = null;
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.falloffModel = BlastAttack.FalloffModel.None;
-			impact.blastRadius = 
+			impact.bonusBlastForce = new Vector3(0f, 75f, 0f);
+			impact.blastDamageCoefficient = 2.15f;
 			impact.lifetime = 0.1f;
+			impact.blastRadius = 5f;
 			impact.destroyOnEnemy = false;
 			impact.destroyOnWorld = false;
 			impact.impactEffect = await GetEffect<ReaverExplosion>(); 
 			var crabController = proj.GetComponent<MegacrabProjectileController>(); //this is where the transformation happens
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<PrimedStickyBomb>();
-			crabController.whiteToBlackTransformationRadius = 5f;
+			crabController.whiteToBlackTransformationRadius = 13f;
 			//proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver); //todo ask Bubbet
 			return proj;
 		}

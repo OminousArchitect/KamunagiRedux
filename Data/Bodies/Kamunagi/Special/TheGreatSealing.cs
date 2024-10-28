@@ -44,6 +44,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			base.OnExit();
 			if (chargeEffectInstance != null) chargeEffectInstance.ReturnToPool();
+			EffectManager.SimpleMuzzleFlash(Asset.GetEffect<SealingMuzzleFlash>().WaitForCompletion(), gameObject, "MuzzleCenter", false);
 		}
 	}
 	
@@ -54,16 +55,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			await base.Initialize();
 			TheGreatSealingState.muzzleEffect = await this.GetEffect();
-			var onkami1 =
-				new Material(await LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalCenter.mat"));
+			var onkami1 = new Material(await LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalCenter.mat"));
 			onkami1.SetFloat("_AlphaBoost", 1.3f);
 			onkami1.SetColor("_TintColor", new Color(0f, 0.1843f, 1f));
-			;
-			var onkami2 =
-				new Material(await LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalEdge.mat"));
+			var onkami2 = new Material(await LoadAsset<Material>("addressable:RoR2/Base/artifactworld/matArtifactPortalEdge.mat"));
 			onkami2.SetColor("_TintColor", new Color(0f, 0.1843f, 1f));
-			onkami2.SetTexture("_RemapTex",
-				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
+			onkami2.SetTexture("_RemapTex", await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonArenaWall.png"));
 			onkami2.SetFloat("_BrightnessBoost", 4.67f);
 			onkami2.SetFloat("_AlphaBoost", 1.2f);
 			onKamiMats = new[] { onkami1, onkami2 };
@@ -135,8 +132,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				(await LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab")!
-					).InstantiateClone("OnkamiSealPhase1", true);
+				(await LoadAsset<GameObject>("addressable:RoR2/Base/Nullifier/NullifierPreBombProjectile.prefab"))!.InstantiateClone("OnkamiSealPhase1", true);
 			projectile.GetComponent<ProjectileController>().ghostPrefab =
 				await GetProjectileGhost<PrimedObelisk>();
 			Object.Destroy(projectile.transform.GetChild(0).gameObject);
@@ -330,6 +326,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var pRender = numbers.GetComponent<ParticleSystemRenderer>();
 			pRender.material.SetColor("_TintColor", new Color(0f, 1f, 0.98f));
 			effect.EffectWithSound("Play_nullifier_death_vortex_explode");
+			return effect;
+		}
+	}
+	
+	public class SealingMuzzleFlash : Asset, IEffect
+	{
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			var effect = (await LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierExplosion.prefab"))!.transform.GetChild(3).gameObject.InstantiateClone("SealMuzzleFlash", false);
+			ParticleSystem p = effect.GetComponent<ParticleSystem>();
+			var main = p.main;
+			main.startSize = 1f;
 			return effect;
 		}
 	}

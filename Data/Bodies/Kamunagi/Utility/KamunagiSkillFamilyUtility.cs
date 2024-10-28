@@ -9,7 +9,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public IEnumerable<Asset> GetSkillAssets() => new Asset[] 
 			{ 
 				GetAsset<KuonFlashbang>(), GetAsset<JachdwaltStrikes>(),
-				GetAsset<WoshisZone>(), GetAsset<AtuysTides>(), 
+				GetAsset<WoshisZone>(), GetAsset<AtuysTides>(), GetAsset<Mikazuchi>(), 
 				GetAsset<HonokasVeil>() 
 			};
 

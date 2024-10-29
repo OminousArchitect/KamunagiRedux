@@ -9,50 +9,56 @@ using UnityEngine.Networking;
 using System.Runtime.InteropServices;
 using RoR2.Skills;
 using UnityEngine.Events;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
-	internal class WindBoomerangState : BaseTwinState
+	internal class AccelerateWindState : BaseTwinState
 	{
 		public override int meterGain => 5;
 		private float damageCoefficient = 2f;
-		private float distanceMult;
-		private float maxChargeTime = 1.5f;
-		private float minDistance;
-		private float maxDistance;
-		public EffectManagerHelper? chargeEffectInstance;
+		private EffectManagerHelper? chargeEffectInstance;
+		private CameraTargetParams.AimRequest? aimRequest;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
-			minDistance = twinBehaviour.runtimeNumber1;
-			maxDistance = twinBehaviour.runtimeNumber2;
-			var effect = Asset.GetEffect<WindBoomerang>().WaitForCompletion();
+			
+			var effect = Asset.GetEffect<AccelerateWinds>().WaitForCompletion();
 			if (muzzleTransform)
 			{
 				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
 					new EffectData() { rootObject = muzzleTransform.gameObject });
 			}
+			
+			aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
 		}
 
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
-
-			if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
-			Fire();
-			outer.SetNextStateToMain();
+			if (!isAuthority) return;
+			if (!IsKeyDownAuthority())
+			{
+				outer.SetNextStateToMain();
+			}
+			
+			if (fixedAge > 1.2f)
+			{
+				skillLocator.DeductCooldownFromAllSkillsAuthority(2f);
+				characterBody.AddTimedBuffAuthority(RoR2.DLC1Content.Buffs.KillMoveSpeed.buffIndex, 2f);
+				outer.SetNextStateToMain();
+			}
 		}
 
 		private void Fire()
 		{
-			var boomerang = Asset.GetProjectile<WindBoomerang>().WaitForCompletion();
+			var boomerang = Asset.GetProjectile<AccelerateWinds>().WaitForCompletion();
 			var aimRay = GetAimRay();
-			boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
+			//boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
 
 			if (isAuthority)
 			{
@@ -80,6 +86,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override void OnExit()
 		{
 			base.OnExit();
+			aimRequest?.Dispose();
 			if (chargeEffectInstance != null)
 			{
 				chargeEffectInstance.ReturnToPool();
@@ -89,9 +96,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class WindBoomerang : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
+	public class AccelerateWinds : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
 	{
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(WindBoomerangState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(AccelerateWindState) };
 
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -102,13 +109,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.icon= (await LoadAsset<Sprite>("bundle:windpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 2;
-			skill.baseRechargeInterval = 3f;
+			skill.baseRechargeInterval = 8f;
+			skill.stockToConsume = 1;
 			skill.beginSkillCooldownOnSkillEnd = false;
 			skill.canceledFromSprinting = false;
 			skill.interruptPriority = InterruptPriority.Any;
-			skill.isCombatSkill = true;
-			skill.mustKeyPress = true;
-			skill.cancelSprintingOnActivation = false;
+			skill.isCombatSkill = false;
+			skill.mustKeyPress = false;
+			skill.cancelSprintingOnActivation = true;
 			return skill;
 		}
 

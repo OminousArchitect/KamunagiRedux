@@ -1,21 +1,23 @@
 ﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
 using RoR2.Skills;
+using ThreeEyedGames;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
-	public class KujyuriFrostState : RaycastedSpellState
+	public class KujyuriFrostState : IndicatorSpellState
 	{
 		public EffectManagerHelper muzzleEffectInstance;
 
 		public EffectManagerHelper iceMagicInstance;
-		public override float failedCastCooldown => 2f;
-		public override float duration => 0.8f;
-		public override bool requireFullCharge => true;
+		public override float duration => 2f;
+		public override bool requireFullCharge => false;
 
 		public override void OnEnter() {
 			base.OnEnter();
@@ -31,58 +33,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			if (iceMagicInstance != null) iceMagicInstance.ReturnToPool();
 		}
 
-		public override void FixedUpdate()
-		{
-			base.FixedUpdate();
-			if (!isAuthority) return;
-			if (fixedAge >= duration || IsKeyDownAuthority()) return;
-			var aimRay = GetAimRay();
-			
-			new BulletAttack
-			{
-				maxDistance = 1000,
-				owner = gameObject,
-				weapon = gameObject,
-				origin = aimRay.origin,
-				aimVector = aimRay.direction,
-				maxSpread = 0.4f,
-				hitEffectPrefab = Asset.GetEffect<IceHitEffect>().WaitForCompletion(),
-				damage = damageStat * 2.5f,
-				force = 155,
-				muzzleName = twinMuzzle,
-				isCrit = RollCrit(),
-				radius = 0.8f,
-				procCoefficient = 1f,
-				smartCollision = true,
-				falloffModel = BulletAttack.FalloffModel.None,
-				damageType = DamageType.Freeze2s
-			}.Fire();
-
-			var muzzle = twinMuzzle;
-		}
-
 		public override void Fire(Vector3 targetPosition) { 
 			base.Fire(targetPosition);
-			new BlastAttack
-			{
-				attacker = gameObject,
-				baseDamage = damageStat * 1.75f,
-				baseForce = 200f,
-				crit = RollCrit(),
-				damageType = DamageType.SlowOnHit | DamageType.Stun1s | DamageType.Freeze2s,
-				falloffModel = BlastAttack.FalloffModel.None,
-				procCoefficient = 1f,
-				radius = 10f,
-				position = targetPosition,
-				attackerFiltering = AttackerFiltering.NeverHitSelf,
-				teamIndex = teamComponent.teamIndex
-			}.Fire();
-			EffectManager.SpawnEffect(Asset.GetEffect<KujyuriFrostBlast>().WaitForCompletion(), new EffectData
-			{
-				origin = targetPosition,
-				rotation = Util.QuaternionSafeLookRotation(GetAimRay().direction),
-				scale = 10f
-			}, true);
+			ProjectileManager.instance.FireProjectile(
+				Asset.GetProjectile<KujyuriFrost>().WaitForCompletion(),
+				indicator.transform.position,
+				indicator.transform.rotation,
+				gameObject,
+				damageStat,
+				10f,
+				false
+			);
 		}
 	}
 
@@ -98,7 +59,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return effect;
 		}
 	}
-	public class KujyuriFrost : Asset, ISkill, IEffect
+	public class KujyuriFrost : Asset, ISkill, IEffect, IProjectile
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -113,6 +74,46 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.cancelSprintingOnActivation = false;
 			skill.beginSkillCooldownOnSkillEnd = false;
 			return skill;
+		}
+
+		async Task<GameObject> IProjectile.BuildObject()
+		{
+			var proj = (await LoadAsset<GameObject>("RoR2/Base/LunarExploder/LunarExploderProjectileDotZone.prefab"))!.InstantiateClone("TwinsIceDotZone", true);
+			proj.transform.localScale = Vector3.one * 0.75f;
+			var parent = proj.transform.GetChild(0).gameObject.transform;
+			parent.transform.localScale = new Vector3(13f, 6f, 13f);
+			//parent.transform.localScale = Vector3.one * 10f;
+			var dotZone = proj.GetComponent<ProjectileDotZone>();
+			dotZone.onEnd.m_PersistentCalls = new UnityEngine.Events.PersistentCallGroup();
+			dotZone.fireFrequency = 0.7f;
+			dotZone.lifetime = 5.7f;
+			var stockParticles = proj.transform.Find("FX/ScaledOnImpact").gameObject;
+			stockParticles.transform.GetChild(0).gameObject.SetActive(false);
+			stockParticles.transform.GetChild(2).gameObject.SetActive(false);
+			stockParticles.transform.GetChild(3).gameObject.SetActive(false);
+			stockParticles.transform.GetChild(4).gameObject.SetActive(false);
+			var icePillar = (await LoadAsset<GameObject>("RoR2/Base/bazaar/Bazaar_GenericIce.prefab"))!.InstantiateClone("IcePillar", false);
+			icePillar.transform.localScale = Vector3.one; //new Vector3(0.2f, 0.1f, 0.2f);
+			icePillar.transform.localPosition = Vector3.zero;
+			icePillar.transform.SetParent(parent);
+			
+			var icyFx = (await LoadAsset<GameObject>("RoR2/Base/Icicle/IcicleAura.prefab")).transform.GetChild(0).gameObject!.InstantiateClone("IceFX", false);
+			icyFx.transform.localScale = Vector3.one;
+			UnityEngine.Object.Destroy(icyFx.transform.Find("Area").gameObject);
+			UnityEngine.Object.Destroy(icyFx.transform.GetChild(0).gameObject);
+			UnityEngine.Object.Destroy(icyFx.transform.GetChild(1).gameObject);
+			foreach (ParticleSystem p in icyFx.GetComponentsInChildren<ParticleSystem>())
+			{
+				p.transform.localScale = Vector3.one * 10;
+				var main = p.main;
+				main.loop = true;
+				main.playOnAwake = true;
+				var r = p.GetComponent<ParticleSystemRenderer>();
+				r.materials = new Material[] { r.material, r.material, r.material, r.material, r.material, r.material, r.material, r.material }; //whatisthis
+			}
+			var changeRate = icyFx.transform.Find("Ring, Procced").gameObject;
+			icyFx.transform.SetParent(parent);
+			return proj;
 		}
 
 		async Task<GameObject> IEffect.BuildObject()

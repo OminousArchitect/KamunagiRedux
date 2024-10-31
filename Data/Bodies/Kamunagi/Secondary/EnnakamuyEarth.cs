@@ -73,7 +73,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			projectile.transform.localScale = Vector3.one * 0.3f;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
-			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 75f;
+			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 83f;
 			var boulderImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			boulderImpact.bonusBlastForce = new Vector3(20, 20, 20);
 			boulderImpact.blastRadius = 5f;

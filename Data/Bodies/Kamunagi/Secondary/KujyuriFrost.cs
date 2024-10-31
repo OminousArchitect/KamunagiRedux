@@ -14,7 +14,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	public class ExperimentalWallState : BaseTwinState
 	{
 		public float maxDistance = 600f;
-        public float maxSlopeAngle = 360f;
+        public float maxSlopeAngle = 90f;
         public float baseDuration = 0.5f;
         public float duration;
         public string prepWallSoundString = "Play_mage_shift_start";
@@ -26,6 +26,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         public GameObject badCrosshairPrefab =  EntityStates.Mage.Weapon.PrepWall.badCrosshairPrefab;
         public GameObject indicatorPrefabInstance; //declared in the entitystate, intialized in the asset class
         private float damageCoefficient = 1f;
+        private Vector3 normal;
+        private bool shouldInvert;
 
         public override void OnEnter()
         {
@@ -47,10 +49,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 var aimRay = GetAimRay();
                 if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, gameObject, out var extraRayDistance), out var raycastHit, maxDistance + extraRayDistance, LayerIndex.world.mask))
                 {
+	                shouldInvert = Vector3.Angle(Vector3.up, raycastHit.normal) > maxSlopeAngle;
                     indicatorPrefabInstance.transform.position = raycastHit.point;
                     indicatorPrefabInstance.transform.up = raycastHit.normal;
-                    indicatorPrefabInstance.transform.forward = -aimRay.direction;
-                    goodPlacement = Vector3.Angle(Vector3.up, raycastHit.normal) < maxSlopeAngle;
+                    if (shouldInvert)
+                    {
+	                    indicatorPrefabInstance.transform.forward = aimRay.direction;
+                    }
+                    else
+                    {
+	                    indicatorPrefabInstance.transform.forward = -aimRay.direction;
+                    }
+                    //goodPlacement = Vector3.Angle(Vector3.up, raycastHit.normal) " maxSlopeAngle;
+                    goodPlacement = true;
                 }
                 if (wasGoodPlacement != goodPlacement || crosshairOverrideRequest == null)
                 {
@@ -86,10 +97,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                     Util.PlaySound(fireSoundString, gameObject);
                     if (indicatorPrefabInstance && base.isAuthority)
                     {
-                        //EffectManager.SimpleMuzzleFlash(muzzleflashEffect, gameObject, "MuzzleLeft", true);
-                        //EffectManager.SimpleMuzzleFlash(muzzleflashEffect, gameObject, "MuzzleRight", true);
-                        
-                        var forward = indicatorPrefabInstance.transform.forward;
+	                    var forward = indicatorPrefabInstance.transform.forward;
                         forward.y = 0f;
                         forward.Normalize();
                         var crossproduct = Vector3.Cross(Vector3.up, forward);
@@ -100,18 +108,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	                        Asset.GetProjectile<KujyuriFrost>().WaitForCompletion(),
                             position, // position:
                             Util.QuaternionSafeLookRotation(crossproduct), // rotation:
-                            base.gameObject, 
-                            damageStat * damageCoefficient,
-                            0f,
-                            false,
-                            DamageColorIndex.Default
-                        );
-                        
-                        ProjectileManager.instance.FireProjectile
-                        (
-                            Asset.GetProjectile<KujyuriFrost>().WaitForCompletion(),
-                            position, // position:
-                            Util.QuaternionSafeLookRotation(-crossproduct), // rotation:
                             base.gameObject, 
                             damageStat * damageCoefficient,
                             0f,
@@ -145,7 +141,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		async Task<GameObject> IGenericObject.BuildObject()
 		{
 			var indicator = (await LoadAsset<GameObject>("RoR2/Base/Mage/FirewallAreaIndicator.prefab"))!.InstantiateClone("TwinsIceWallIndicator", false);
-			indicator.transform.localScale = new Vector3(3f, 10f, 3f);
+			indicator.transform.localScale = new Vector3(3f, 3f, 3f);
 			return indicator;
 		}
 	}

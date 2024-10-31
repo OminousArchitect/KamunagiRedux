@@ -389,6 +389,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			return proj;
 		}
 	}
@@ -404,6 +405,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			return proj;
 		}
 	}

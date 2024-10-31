@@ -107,7 +107,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 	public class KamunagiHoverState : BaseState, IZealState
 	{
-		public float hoverVelocity = -0.02f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
+		public float hoverVelocity = -0.01f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
 		public float hoverAcceleration = 80;
 		public static GameObject muzzleEffect;
 		private EffectManagerHelper muzzleInstanceLeft;
@@ -203,6 +203,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			pinkTrails[1].material.SetColor("_TintColor", pink);
 			electricOrbPink.GetComponentInChildren<Light>().color = Colors.twinsDarkColor;
 			electricOrbPink.SetActive(false);
+			electricOrbPink.EffectWithSound("");
 			return electricOrbPink;
 		}
 	}

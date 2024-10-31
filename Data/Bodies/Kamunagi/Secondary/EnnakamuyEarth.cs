@@ -83,7 +83,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			boulderImpact.blastDamageCoefficient = 1f;
 			boulderImpact.childrenDamageCoefficient = 0.43f;
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
-			projectile.GetComponent<Rigidbody>().useGravity = false;
+			projectile.GetComponent<Rigidbody>().useGravity = true;
 			projectile.GetComponent<SphereCollider>().radius = 3.5f;
 			return projectile;
 		}

@@ -11,26 +11,145 @@ using UnityEngine.Events;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
+	public class ExperimentalWallState : BaseTwinState
+	{
+		public float maxDistance = 600f;
+        public float maxSlopeAngle = 70f;
+        public float baseDuration = 0.5f;
+        public float duration;
+        public string prepWallSoundString = "Play_mage_shift_start";
+        public string fireSoundString = "Play_mage_shift_stop";
+        public bool goodPlacement;
+        public RoR2.UI.CrosshairUtils.OverrideRequest crosshairOverrideRequest;
+        public static GameObject indicatorPrefab;
+        public GameObject goodCrosshairPrefab = EntityStates.Mage.Weapon.PrepWall.goodCrosshairPrefab;
+        public GameObject badCrosshairPrefab =  EntityStates.Mage.Weapon.PrepWall.badCrosshairPrefab;
+        public GameObject indicatorPrefabInstance; //declared in the entitystate, intialized in the asset class
+        private float damageCoefficient = 1f;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            duration = baseDuration / attackSpeedStat;
+            characterBody.SetAimTimer(duration + 2f);
+            Util.PlaySound(prepWallSoundString, gameObject);
+            indicatorPrefabInstance = UnityEngine.Object.Instantiate(indicatorPrefab);
+            UpdateAreaIndicator();
+        }
+
+        private void UpdateAreaIndicator()
+        {
+            var wasGoodPlacement = goodPlacement;
+            goodPlacement = false;
+            indicatorPrefabInstance.SetActive(true);
+            if (indicatorPrefabInstance)
+            {
+                var aimRay = GetAimRay();
+                if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, gameObject, out var extraRayDistance), out var raycastHit, maxDistance + extraRayDistance, LayerIndex.world.mask))
+                {
+                    indicatorPrefabInstance.transform.position = raycastHit.point;
+                    indicatorPrefabInstance.transform.up = raycastHit.normal;
+                    indicatorPrefabInstance.transform.forward = -aimRay.direction;
+                    goodPlacement = Vector3.Angle(Vector3.up, raycastHit.normal) < maxSlopeAngle;
+                }
+                if (wasGoodPlacement != goodPlacement || crosshairOverrideRequest == null)
+                {
+                    if (crosshairOverrideRequest != null) crosshairOverrideRequest.Dispose();
+                    var newCrosshairPrefab = goodPlacement ? goodCrosshairPrefab : badCrosshairPrefab;
+                    crosshairOverrideRequest = RoR2.UI.CrosshairUtils.RequestOverrideForBody(characterBody, newCrosshairPrefab, RoR2.UI.CrosshairUtils.OverridePriority.Skill);
+                }
+            }
+            indicatorPrefabInstance.SetActive(goodPlacement);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            UpdateAreaIndicator();
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            if (isAuthority && fixedAge >= duration && !inputBank.skill2.down)
+            {
+                outer.SetNextStateToMain();
+            }
+        }
+        
+        public override void OnExit()
+        {
+            if (!outer.destroying)
+            {
+                if (goodPlacement)
+                {
+                    Util.PlaySound(fireSoundString, gameObject);
+                    if (indicatorPrefabInstance && base.isAuthority)
+                    {
+                        //EffectManager.SimpleMuzzleFlash(muzzleflashEffect, gameObject, "MuzzleLeft", true);
+                        //EffectManager.SimpleMuzzleFlash(muzzleflashEffect, gameObject, "MuzzleRight", true);
+                        
+                        var forward = indicatorPrefabInstance.transform.forward;
+                        forward.y = 0f;
+                        forward.Normalize();
+                        var crossproduct = Vector3.Cross(Vector3.up, forward);
+                        var position = indicatorPrefabInstance.transform.position + Vector3.up;
+                        
+                        ProjectileManager.instance.FireProjectile
+                        (
+	                        Asset.GetProjectile<KujyuriFrost>().WaitForCompletion(),
+                            position, // position:
+                            Util.QuaternionSafeLookRotation(crossproduct), // rotation:
+                            base.gameObject, 
+                            damageStat * damageCoefficient,
+                            0f,
+                            false,
+                            DamageColorIndex.Default
+                        );
+                        
+                        ProjectileManager.instance.FireProjectile
+                        (
+                            Asset.GetProjectile<KujyuriFrost>().WaitForCompletion(),
+                            position, // position:
+                            Util.QuaternionSafeLookRotation(-crossproduct), // rotation:
+                            base.gameObject, 
+                            damageStat * damageCoefficient,
+                            0f,
+                            false,
+                            DamageColorIndex.Default
+                        );
+                    }
+                }
+                else
+                {
+                    skillLocator.utility.AddOneStock();
+                }
+            }
+            EntityState.Destroy(indicatorPrefabInstance.gameObject);
+            if (crosshairOverrideRequest != null)
+            {
+                crosshairOverrideRequest.Dispose();
+            }
+            base.OnExit();
+        }
+	}
+	
 	public class KujyuriFrostState : IndicatorSpellState
 	{
-		public EffectManagerHelper muzzleEffectInstance;
-
 		public EffectManagerHelper iceMagicInstance;
 		public override float duration => 2f;
 		public override bool requireFullCharge => false;
 
 		public override void OnEnter() {
 			base.OnEnter();
-			muzzleEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<KujyuriFrost>().WaitForCompletion(), GetModelChildLocator().FindChild(twinMuzzle), true);
-			var toggling = twinMuzzle;
 			iceMagicInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<IceMagicEffect>().WaitForCompletion(), GetModelChildLocator().FindChild(twinMuzzle), true); 
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
-			if (muzzleEffectInstance != null) muzzleEffectInstance.ReturnToPool();
 			if (iceMagicInstance != null) iceMagicInstance.ReturnToPool();
+			EffectManager.SimpleMuzzleFlash(Asset.GetEffect<KujyuriFrost>().WaitForCompletion(), gameObject, twinMuzzle, transmit: false);
 		}
 
 		public override void Fire(Vector3 targetPosition) { 
@@ -44,21 +163,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				10f,
 				false
 			);
+			EffectManager.SpawnEffect(Asset.GetEffect<PillarSpawn>().WaitForCompletion(), new EffectData { origin = targetPosition, scale = 1f }, transmit: true);
 		}
 	}
 
-	public class IceHitEffect : Asset, IEffect
+	public class PrepIceWallIndicator : Asset, IGenericObject
 	{
-		async Task<GameObject> IEffect.BuildObject()
+		public override async Task Initialize()
 		{
-			Material iceImpact = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matGenericFlash.mat"));
-			
-			var effect= (await LoadAsset<GameObject>("RoR2/Base/Huntress/HuntressFireArrowRain.prefab"))!.InstantiateClone("TwinsIceHitspark", false);
-			var sparksLarge = effect.transform.GetChild(0).gameObject;
-			Material sparksOne = sparksLarge.GetComponent<ParticleSystemRenderer>().material;
-			return effect;
+			await base.Initialize();
+			ExperimentalWallState.indicatorPrefab = await this.GetGenericObject();
+		}
+		
+		async Task<GameObject> IGenericObject.BuildObject()
+		{
+			var indicator = (await LoadAsset<GameObject>("RoR2/Base/Mage/FirewallAreaIndicator.prefab"))!.InstantiateClone("TwinsIceWallIndicator", false);
+			indicator.transform.localScale = new Vector3(3f, 10f, 3f);
+			return indicator;
 		}
 	}
+	
 	public class KujyuriFrost : Asset, ISkill, IEffect, IProjectile
 	{
 		async Task<SkillDef> ISkill.BuildObject()
@@ -81,8 +205,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/LunarExploder/LunarExploderProjectileDotZone.prefab"))!.InstantiateClone("TwinsIceDotZone", true);
 			proj.transform.localScale = Vector3.one * 0.75f;
 			var parent = proj.transform.GetChild(0).gameObject.transform;
-			parent.transform.localScale = new Vector3(13f, 6f, 13f);
-			//parent.transform.localScale = Vector3.one * 10f;
+			parent.transform.localScale = new Vector3(10f, 4f, 10f);
 			var dotZone = proj.GetComponent<ProjectileDotZone>();
 			dotZone.onEnd.m_PersistentCalls = new UnityEngine.Events.PersistentCallGroup();
 			dotZone.fireFrequency = 0.7f;
@@ -93,25 +216,31 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			stockParticles.transform.GetChild(3).gameObject.SetActive(false);
 			stockParticles.transform.GetChild(4).gameObject.SetActive(false);
 			var icePillar = (await LoadAsset<GameObject>("RoR2/Base/bazaar/Bazaar_GenericIce.prefab"))!.InstantiateClone("IcePillar", false);
-			icePillar.transform.localScale = Vector3.one; //new Vector3(0.2f, 0.1f, 0.2f);
+			icePillar.transform.localScale = Vector3.one; //touching this appears to break normalizing to floor, so I'll leave it alone
 			icePillar.transform.localPosition = Vector3.zero;
 			icePillar.transform.SetParent(parent);
 			
 			var icyFx = (await LoadAsset<GameObject>("RoR2/Base/Icicle/IcicleAura.prefab")).transform.GetChild(0).gameObject!.InstantiateClone("IceFX", false);
-			icyFx.transform.localScale = Vector3.one;
+			icyFx.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 			UnityEngine.Object.Destroy(icyFx.transform.Find("Area").gameObject);
+			UnityEngine.Object.Destroy(icyFx.transform.Find("Ring, Outer").gameObject);
 			UnityEngine.Object.Destroy(icyFx.transform.GetChild(0).gameObject);
 			UnityEngine.Object.Destroy(icyFx.transform.GetChild(1).gameObject);
 			foreach (ParticleSystem p in icyFx.GetComponentsInChildren<ParticleSystem>())
 			{
-				p.transform.localScale = Vector3.one * 10;
+				p.transform.localScale = Vector3.one * 18f;
 				var main = p.main;
+				var name = p.name;
+				if (name == "Ring, Procced")
+				{
+					main.simulationSpeed = 0.7f;
+				}
+				
 				main.loop = true;
 				main.playOnAwake = true;
 				var r = p.GetComponent<ParticleSystemRenderer>();
-				r.materials = new Material[] { r.material, r.material, r.material, r.material, r.material, r.material, r.material, r.material }; //whatisthis
+				//r.materials = new Material[] { r.material, r.material, r.material, r.material, r.material, r.material, r.material, r.material }; //whatisthis
 			}
-			var changeRate = icyFx.transform.Find("Ring, Procced").gameObject;
 			icyFx.transform.SetParent(parent);
 			return proj;
 		}
@@ -149,7 +278,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return effect;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new []{typeof(KujyuriFrostState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(ExperimentalWallState)};
 	}
 
 	public class KujyuriFrostBlast : Asset, IEffect
@@ -159,6 +288,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var effect= (await LoadAsset<GameObject>("RoR2/Base/EliteIce/AffixWhiteExplosion.prefab"))!.InstantiateClone("TwinsFrostNovaEffect", false);
 			effect.transform.localScale = Vector3.one * 10f;
 			effect.EffectWithSound("Play_item_proc_iceRingSpear");
+			return effect;
+		}
+	}
+	
+	public class PillarSpawn : Asset, IEffect
+	{
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			var effect= (await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab"))!.InstantiateClone("TwinsIceHitspark", false);
 			return effect;
 		}
 	}

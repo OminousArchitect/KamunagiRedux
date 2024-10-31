@@ -348,7 +348,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>(); //this is where the transformation happens
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<PrimedStickyBomb>();
 			crabController.whiteToBlackTransformationRadius = 13f;
-			//proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver); //todo ask Bubbet
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(PrimedStickyBomb.TwinsReaver);
 			return proj;
 		}
 

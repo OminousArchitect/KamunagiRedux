@@ -119,7 +119,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
 			skill.icon = await LoadAsset<Sprite>("bundle2:Flashbang");
-			skill.activationStateMachineName = "Weapon";
+			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 1f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = false;

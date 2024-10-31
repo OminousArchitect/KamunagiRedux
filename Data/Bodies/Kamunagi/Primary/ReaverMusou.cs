@@ -146,7 +146,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var dist = effect.transform.GetChild(3).gameObject;
 			ParticleSystem p = dist.GetComponent<ParticleSystem>();
 			var main = p.main;
-			main.startSize = 1f;
+			main.startSize = 1.4f;
 			var comp = effect.GetComponent<EffectComponent>();
 			//comp.parentToReferencedTransform = true;
 			//comp.positionAtReferencedTransform = true;
@@ -273,6 +273,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
@@ -316,8 +317,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			if (damageInfo.HasModdedDamageType(TwinsReaver))
 			{
-				var fractionOfHealth = __instance.fullCombinedHealth * 0.35f;
-				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
 				if (damageInfo.damage >= __instance.health)
 				{
 					damageInfo.damageType = DamageType.VoidDeath;
@@ -348,7 +347,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>(); //this is where the transformation happens
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<PrimedStickyBomb>();
 			crabController.whiteToBlackTransformationRadius = 13f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(PrimedStickyBomb.TwinsReaver);
 			return proj;
 		}

@@ -149,7 +149,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 145f;
 			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 60f;
 			var target = projectile.GetComponent<ProjectileDirectionalTargetFinder>();
-			target.lookRange = 25f;
+			target.lookRange = 20f;
+			target.lookCone = 125f;
 			target.targetSearchInterval = 0.35f;
 			target.allowTargetLoss = true;
 			return projectile;

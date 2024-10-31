@@ -26,9 +26,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				owner = gameObject,
 				position = aimRay.origin + (aimRay.direction * 2),
 				projectilePrefab = Asset.GetProjectile<EnnakamuyEarth>().WaitForCompletion(),
-				rotation = Quaternion.LookRotation(aimRay.direction),
-				useSpeedOverride = true,
-				speedOverride = 115
+				rotation = Quaternion.LookRotation(aimRay.direction)
 			});
 		}
 
@@ -71,11 +69,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulder.prefab"))!.InstantiateClone(
-					"BoulderProjectile", true);
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulder.prefab"))!.InstantiateClone("BoulderProjectile", true);
 			projectile.transform.localScale = Vector3.one * 0.3f;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
+			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 75f;
 			var boulderImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			boulderImpact.bonusBlastForce = new Vector3(20, 20, 20);
 			boulderImpact.blastRadius = 5f;

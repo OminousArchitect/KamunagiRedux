@@ -155,12 +155,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 					).InstantiateClone("ForceField", true);
 			forceField.GetComponent<TeamFilter>().teamIndex = TeamIndex.Player;
 			forceField.transform.Find("Collision").gameObject.AddComponent<RootMotionGoByeBye>();
-			/*
-			var ward = forceField.AddComponent<BuffWard>();
-			ward.buffDef= (await LoadAsset<BuffDef>("RoR2/Base/Common/bdSlow80.asset"));
-			ward.teamFilter = forceField.GetComponent<TeamFilter>();
-			ward.radius = 20f;
-			*/
+			forceField.transform.GetChild(0).gameObject.transform.localScale = Vector3.one * 0.5f;
 			forceField.GetComponentInChildren<MeshCollider>().gameObject.layer = 3;
 			forceField.transform.localScale = Vector3.one * 0.45f;
 			UnityEngine.Object.Destroy(forceField.GetComponent<NetworkedBodyAttachment>());

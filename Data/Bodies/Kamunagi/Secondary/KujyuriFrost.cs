@@ -14,7 +14,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	public class ExperimentalWallState : BaseTwinState
 	{
 		public float maxDistance = 600f;
-        public float maxSlopeAngle = 70f;
+        public float maxSlopeAngle = 360f;
         public float baseDuration = 0.5f;
         public float duration;
         public string prepWallSoundString = "Play_mage_shift_start";
@@ -132,39 +132,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             }
             base.OnExit();
         }
-	}
-	
-	public class KujyuriFrostState : IndicatorSpellState
-	{
-		public EffectManagerHelper iceMagicInstance;
-		public override float duration => 2f;
-		public override bool requireFullCharge => false;
-
-		public override void OnEnter() {
-			base.OnEnter();
-			iceMagicInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<IceMagicEffect>().WaitForCompletion(), GetModelChildLocator().FindChild(twinMuzzle), true); 
-		}
-
-		public override void OnExit()
-		{
-			base.OnExit();
-			if (iceMagicInstance != null) iceMagicInstance.ReturnToPool();
-			EffectManager.SimpleMuzzleFlash(Asset.GetEffect<KujyuriFrost>().WaitForCompletion(), gameObject, twinMuzzle, transmit: false);
-		}
-
-		public override void Fire(Vector3 targetPosition) { 
-			base.Fire(targetPosition);
-			ProjectileManager.instance.FireProjectile(
-				Asset.GetProjectile<KujyuriFrost>().WaitForCompletion(),
-				indicator.transform.position,
-				indicator.transform.rotation,
-				gameObject,
-				damageStat,
-				10f,
-				false
-			);
-			EffectManager.SpawnEffect(Asset.GetEffect<PillarSpawn>().WaitForCompletion(), new EffectData { origin = targetPosition, scale = 1f }, transmit: true);
-		}
 	}
 
 	public class PrepIceWallIndicator : Asset, IGenericObject

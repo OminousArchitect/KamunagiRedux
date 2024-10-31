@@ -20,6 +20,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		private float duration = 0.45f;
 		private bool teleported;
 		private NodeGraph? availableNodes;
+		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{

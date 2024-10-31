@@ -170,7 +170,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		}
 
 		async Task<GameObject> IEffect.BuildObject()
-		{ //await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab");
+		{	//await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab");
 			var variable = (await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab"))!.InstantiateClone("TwinsVortex", false);
 			var vtex = variable.transform.Find("GrowingSphere").gameObject;
 			ParticleSystemRenderer r = vtex.GetComponent<ParticleSystemRenderer>();

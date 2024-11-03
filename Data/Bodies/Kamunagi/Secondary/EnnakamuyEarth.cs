@@ -26,9 +26,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				owner = gameObject,
 				position = aimRay.origin + (aimRay.direction * 2),
 				projectilePrefab = Asset.GetProjectile<EnnakamuyEarth>().WaitForCompletion(),
-				rotation = Quaternion.LookRotation(aimRay.direction),
-				useSpeedOverride = true,
-				speedOverride = 115
+				rotation = Quaternion.LookRotation(aimRay.direction)
 			});
 		}
 
@@ -71,11 +69,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile =
-				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulder.prefab"))!.InstantiateClone(
-					"BoulderProjectile", true);
+				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentBoulder.prefab"))!.InstantiateClone("BoulderProjectile", true);
 			projectile.transform.localScale = Vector3.one * 0.3f;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
+			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 83f;
 			var boulderImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			boulderImpact.bonusBlastForce = new Vector3(20, 20, 20);
 			boulderImpact.blastRadius = 5f;
@@ -83,7 +81,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			boulderImpact.blastDamageCoefficient = 1f;
 			boulderImpact.childrenDamageCoefficient = 0.43f;
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
-			projectile.GetComponent<Rigidbody>().useGravity = false;
+			projectile.GetComponent<Rigidbody>().useGravity = true;
 			projectile.GetComponent<SphereCollider>().radius = 3.5f;
 			return projectile;
 		}

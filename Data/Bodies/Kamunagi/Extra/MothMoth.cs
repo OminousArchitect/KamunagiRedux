@@ -12,7 +12,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class SummonMothMoth : BaseTwinState
 	{
 		private float duration = 0.55f;
-		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{
@@ -102,7 +101,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 4";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA4_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA4_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("bundle2:Mothmoth"));
+			skill.icon= (await LoadAsset<Sprite>("bundle:no-type"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;

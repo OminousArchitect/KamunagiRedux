@@ -8,8 +8,8 @@
 	  "NINES_URURUU_UTILITY": "<color=#D0A1F8>Ururuu Utility</color>",
 	  "NINES_SARAANA_SPECIAL": "Saraana Final Strike",
 	  "NINES_URURUU_SPECIAL": "<color=#D0A1F8>Ururuu Final Strike</color>",
-	  "NINES_SARAANA_EXTRA": "Divine Skill",
-	  "NINES_URURUU_EXTRA": "<color=#D0A1F8>Ururuu Extra</color>",
+	  "NINES_SARAANA_EXTRA": "Saraana Divine Skill",
+	  "NINES_URURUU_EXTRA": "<color=#D0A1F8>Ururuu Divine Skill</color>",
 
 	  "NINES_KAMUNAGI_BODY_NAME": "Kamunagi Of Chains",
 	  "NINES_KAMUNAGI_BODY_DESCRIPTION": "Description<color=#CCD3E0>\n\n< ! > \n\n< ! > \n\n< ! > \n\n< ! > \n\n</color>",
@@ -50,7 +50,7 @@
 	  "NINES_KAMUNAGI_BODY_SECONDARY0_NAME": "Brimstone of Denebokshiri",
 	  "NINES_KAMUNAGI_BODY_SECONDARY0_DESCRIPTION": "<style=cIsDamage>Ignite.</style> Conjure a slow-moving molten ball that burns nearby enemies for <style=cIsDamage>100%-200% damage</style> and sets them <style=cIsHealth>alight</style>.",
 	  "NINES_KAMUNAGI_BODY_SECONDARY2_NAME": "Winds of Yamato",
-	  "NINES_KAMUNAGI_BODY_SECONDARY2_DESCRIPTION": "Fire a returning wind blade that repeatedly strikes enemies for <style=cIsDamage>140% damage</style>. Charge to increase distance.",
+	  "NINES_KAMUNAGI_BODY_SECONDARY2_DESCRIPTION": "Accelerate cooldowns and gain a movespeed buff",
 	  "NINES_KAMUNAGI_BODY_SECONDARY3_NAME": "Frost of Kujyuri",
 	  "NINES_KAMUNAGI_BODY_SECONDARY3_DESCRIPTION": "Instantly <style=cIsUtility>freeze</style> a single enemy for <style=cIsDamage>100% damage</style> or charge to freeze multiple enemies for <style=cIsDamage>165% damage</style>.",
 

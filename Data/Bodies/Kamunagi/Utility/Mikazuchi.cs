@@ -50,7 +50,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var xoro = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
 			var spacingDegrees = 360f / projectileCount;
 			var forward = Vector3.ProjectOnPlane(inputBank.aimDirection, Vector3.up);
-			var centerPoint = targetPosition + (Vector3.up * 2.5f);
+			float multiplier = UnityEngine.Random.Range(3f, 5f);
+			var centerPoint = targetPosition + (Vector3.up * multiplier);
 			for (var i = 0; i < projectileCount; i++)
 			{
 				ProjectileManager.instance.FireProjectile(
@@ -64,6 +65,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					speedOverride: xoro.RangeInt(13, 28)
 				);
 			}
+		}
+
+		public override void FixedUpdate()
+		{
+			if (fixedAge < 0.2f && !IsKeyDownAuthority())
+			{
+				outer.SetNextStateToMain();
+			}
+			base.FixedUpdate();
 		}
 
 		public override void OnExit()
@@ -103,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillName = "Utility 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY0_DESCRIPTION";
-			skill.icon = (await LoadAsset<Sprite>("bundle:Windpng"));
+			skill.icon = (await LoadAsset<Sprite>("bundle:Mikazuchi"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;

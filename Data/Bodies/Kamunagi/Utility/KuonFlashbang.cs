@@ -17,10 +17,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public EffectManagerHelper? veilEffect;
 		public static GameObject childTpFx;
 		private Vector3 teleportPosition;
-		public override int meterGain => 0;
 		private float duration = 0.45f;
 		private bool teleported;
 		private NodeGraph? availableNodes;
+		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{
@@ -119,8 +119,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillName = "Utility 9";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
-			skill.icon = await LoadAsset<Sprite>("bundle:Mikazuchi");
-			skill.activationStateMachineName = "Weapon";
+			skill.icon = await LoadAsset<Sprite>("bundle2:Flashbang");
+			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 1f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = false;

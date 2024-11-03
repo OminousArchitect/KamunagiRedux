@@ -52,38 +52,36 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseMaxHealth = 200f;
 			cb.baseDamage = 12f;
 			cb.baseMoveSpeed = 13f;
+			
 			var array = mdl.GetComponent<ChildLocator>().transformPairs;
 			array[0].transform = mdl.transform;
-			array[0].name = "Head";
+			array[0].name = "Muzzle";
 
 			#region itemdisplays
-
 			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
 			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
-
-			var fireDisplay =
-				idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset"));
-			var fireRules = new ItemDisplayRule[fireDisplay.rules.Length];
-			Array.Copy(fireDisplay.rules, fireRules, fireDisplay.rules.Length);
-			fireDisplay.rules = fireRules;
-			fireDisplay.rules[0].localPos = Vector3.zero;
-			fireDisplay.rules[0].childName = "Null";
-			fireDisplay.rules[1].localPos = Vector3.zero; //new Vector3(0.2f, 0f, 0f);
-			fireDisplay.rules[1].childName = "Null";
-
-			var lightningDisplay =
-				idrs.FindDisplayRuleGroup(
-					await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset"));
-			var lightningRules = new ItemDisplayRule[lightningDisplay.rules.Length];
-			Array.Copy(lightningDisplay.rules, lightningRules, lightningDisplay.rules.Length);
-			lightningDisplay.rules = lightningRules;
-			lightningDisplay.rules[0].localPos = new Vector3(-0.00309F, 0.63247F, 0.14859F);
-			lightningDisplay.rules[0].localAngles = Vector3.zero;
-			lightningDisplay.rules[0].localScale = Vector3.one * 0.7f;
-			lightningDisplay.rules[0].childName = "Head";
-
+			
+			var fireDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset"));
+			fireDisplay.rules[0].childName = "Muzzle";
+			fireDisplay.rules[0].localPos = new Vector3(0.37824F, 0.18649F, 0.31578F);
+			fireDisplay.rules[0].localAngles = new Vector3(290.8627F, 338.1044F, 46.19113F);
+			fireDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			fireDisplay.rules[1].childName = "Muzzle";
+			fireDisplay.rules[1].localPos = new Vector3(-0.34832F, 0.26794F, 0.14957F);
+			fireDisplay.rules[1].localAngles = new Vector3(52.33278F, 60.16898F, 218.7332F);
+			fireDisplay.rules[1].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			
+			var lightningDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset"));
+			lightningDisplay.rules[0].childName = "Muzzle";
+			lightningDisplay.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			lightningDisplay.rules[0].localAngles = new Vector3(0F, 0F, 0F);
+			lightningDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			lightningDisplay.rules[1].childName = "Muzzle";
+			lightningDisplay.rules[1].localPos = new Vector3(0.04168F, 0.95129F, 0.15072F);
+			lightningDisplay.rules[1].localAngles = new Vector3(335.6771F, 357.8F, 180F);
+			lightningDisplay.rules[1].localScale = new Vector3(-0.40586F, 0.40586F, 0.40586F);
+			
 			charModel.itemDisplayRuleSet = idrs;
-
 			#endregion
 
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();

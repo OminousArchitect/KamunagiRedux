@@ -23,7 +23,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			EffectManager.SimpleMuzzleFlash(MuzzlePrefab, gameObject, twinMuzzle, false);
 			if (isAuthority)
 			{
-				duration = 0.45f / attackSpeedStat;
+				duration = 0.25f / attackSpeedStat;
 				var aimRay = GetAimRay();
 				ProjectileManager.instance.FireProjectile(new FireProjectileInfo
 				{
@@ -65,13 +65,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.skillName = "Primary 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY0_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("bundle2:darkpng"));
+			skill.icon= (await LoadAsset<Sprite>("bundle:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 4;
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 1.3f;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;
-			skill.rechargeStock = 2;
+			skill.rechargeStock = 1;
+			skill.attackSpeedBuffsRestockSpeed = true;
 			return skill;
 		}
 

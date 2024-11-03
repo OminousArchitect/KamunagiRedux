@@ -143,23 +143,27 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var projectile =
-				(await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidRaidCrab/VoidRaidCrabMissileProjectile.prefab")!
-				).InstantiateClone("TwinsTrackingProjectile");
-
+			var projectile = (await LoadAsset<GameObject>("RoR2/DLC1/VoidBarnacle/VoidBarnacleBullet.prefab")!).InstantiateClone("TwinsTrackingProjectile");
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 0.6f;
-			//projectile.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 15f;
-			projectile.GetComponent<ProjectileDamage>().damage = 1f;
+			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 145f;
+			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 60f;
+			var target = projectile.GetComponent<ProjectileDirectionalTargetFinder>();
+			target.lookRange = 20f;
+			target.lookCone = 125f;
+			target.targetSearchInterval = 0.35f;
+			target.allowTargetLoss = true;
 			return projectile;
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = (await LoadAsset<GameObject>(
-					"addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterSmallGhost.prefab")!
-				).InstantiateClone("TwinsTrackingGhost", false);
+			var ghost = (await LoadAsset<GameObject>("RoR2/DLC1/VoidBarnacle/VoidBarnacleBulletGhost.prefab")!).InstantiateClone("TwinsTrackingGhost", false);
 			ghost.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
+			var goo = ghost.transform.GetChild(2).gameObject;
+			goo.GetComponent<ParticleSystemRenderer>().enabled = false;
+			ghost.transform.localScale = Vector3.one * 1.22f;
+			var sphere = ghost.transform.Find("Rotator/Scaler/Sphere").gameObject;
 			return ghost;
 		}
 
@@ -235,7 +239,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			coreM.startLifetime = 0.13f;
 			coreM.startSpeed = 5f;
 			coreM.startSize3D = false;
-			coreM.startSizeY = 0.6f;
+			coreM.startSizeY = 0.4f; //sparkle size
 			coreM.startRotation3D = false;
 			coreM.startRotationZ = 0.1745f;
 			coreM.startSpeed = 0f;

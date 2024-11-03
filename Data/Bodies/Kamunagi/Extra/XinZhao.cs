@@ -53,7 +53,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class XinZhaoForceFieldState : BaseTwinState
 	{
 		public (Vector3, HealthComponent)[] hurtBoxes;
-		public override int meterGain => 0;
 		public Vector3 forceFieldPosition;
 
 		public override void OnSerialize(NetworkWriter writer)
@@ -131,7 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA3_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("bundle2:172714677590348517")); //lol, lmao
+			skill.icon= (await LoadAsset<Sprite>("bundle:darkpng")); //lol, lmao
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -156,12 +155,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 					).InstantiateClone("ForceField", true);
 			forceField.GetComponent<TeamFilter>().teamIndex = TeamIndex.Player;
 			forceField.transform.Find("Collision").gameObject.AddComponent<RootMotionGoByeBye>();
-			/*
-			var ward = forceField.AddComponent<BuffWard>();
-			ward.buffDef= (await LoadAsset<BuffDef>("RoR2/Base/Common/bdSlow80.asset"));
-			ward.teamFilter = forceField.GetComponent<TeamFilter>();
-			ward.radius = 20f;
-			*/
+			forceField.transform.GetChild(1).gameObject.transform.localScale = Vector3.one * 0.5f;
 			forceField.GetComponentInChildren<MeshCollider>().gameObject.layer = 3;
 			forceField.transform.localScale = Vector3.one * 0.45f;
 			UnityEngine.Object.Destroy(forceField.GetComponent<NetworkedBodyAttachment>());

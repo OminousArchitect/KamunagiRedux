@@ -272,11 +272,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			specialSkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilySpecial2>();
 
 
-			var skill = bodyPrefab.AddComponent<GenericSkill>();
-			skill.skillName = "SaraanaExtra";
-			skill._skillFamily = await GetSkillFamily<KamunagiSkillFamilyExtra1>();
-			extraSkillLocator.extraFourth = skill;
-
+			var divineSkill = bodyPrefab.AddComponent<GenericSkill>();
+			divineSkill.skillName = "SaraanaExtra";
+			divineSkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilyExtra>();
+			extraSkillLocator.extraFourth = divineSkill;
+			var divineSkill2 = bodyPrefab.AddComponent<GenericSkill>();
+			divineSkill2.skillName = "UruruuExtra";
+			divineSkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilyExtra2>();
 
 			var passiveSkill = bodyPrefab.AddComponent<GenericSkill>();
 			var family = await GetSkillFamily<KamunagiSkillFamilyPassive>();
@@ -284,6 +286,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			passiveSkill._skillFamily = family;
 			passiveSkill.hideInCharacterSelect = family.variants.Length == 1;
 
+			SetStateOnHurt timesweeper = bodyPrefab.GetComponent<SetStateOnHurt>();
+			timesweeper.targetStateMachine = bodyStateMachine;
+			timesweeper.idleStateMachine = new[] { weaponStateMachine, hoverStateMachine, spellStateMachine };
+			
 			skillLocator.passiveSkill = new SkillLocator.PassiveSkill
 			{
 				enabled = true,

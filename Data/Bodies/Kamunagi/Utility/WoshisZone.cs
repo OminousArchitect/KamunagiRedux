@@ -61,7 +61,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					await LoadAsset<Material>("RoR2/Base/BleedOnHitAndExplode/matBleedOnHitAndExplodeAreaIndicator.mat"));
 			woshisEnergy.SetFloat("_DstBlendFloat", 3f);
 			woshisEnergy.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampImp2.png"));
-			woshisEnergy.SetFloat("_Boost", 0.1f);
+			woshisEnergy.SetFloat("_Boost", 0.065f);
 			woshisEnergy.SetFloat("_RimPower", 0.48f);
 			woshisEnergy.SetFloat("_RimStrength", 0.12f);
 			woshisEnergy.SetFloat("_AlphaBoost", 6.55f);

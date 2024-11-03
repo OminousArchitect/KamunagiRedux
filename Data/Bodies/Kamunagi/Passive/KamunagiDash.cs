@@ -152,7 +152,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.PrioritySkill;
 	}
 
-	public class KamunagiDash : Asset, ISkill, IProjectile, IProjectileGhost
+	public class KamunagiDash : Asset, ISkill, IProjectile, IProjectileGhost, IEffect
 	{
 		public override async Task Initialize()
 		{
@@ -164,12 +164,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 				// ReSharper disable once SuspiciousTypeConversion.Global
 				(AnimationCurve) curve 
 					.serializedFieldsCollection.GetOrCreateField(nameof(FlyUpState.speedCoefficientCurve)).fieldValue.GetValue(field);
-			KamunagiDashState.blinkPrefab =
-				await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab");
+			KamunagiDashState.blinkPrefab = await this.GetEffect();
 			KamunagiDashState.muzzlePrefab = await GetEffect<FlyEffect>();
 			KamunagiChannelDashState.projectilePrefab = await this.GetProjectile();
 		}
 
+		async Task<GameObject> IEffect.BuildObject()
+		{	//await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab");
+			var variable = (await LoadAsset<GameObject>("RoR2/DLC1/VoidJailer/VoidJailerCaptureCharge.prefab"))!.InstantiateClone("TwinsVortex", false);
+			var vtex = variable.transform.Find("GrowingSphere").gameObject;
+			ParticleSystemRenderer r = vtex.GetComponent<ParticleSystemRenderer>();
+			r.material = new Material(r.material);
+			r.material.SetColor("_Tint", new Color(0.074f, 0f, 1f));
+			return variable;
+		}
+		
 		public Task<SkillDef> BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
@@ -230,10 +239,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 	{
 		public async Task<GameObject> BuildObject()
 		{
-			var mandatory =
-				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!
-				.InstantiateClone("InvisibleTether", false);
+			var mandatory = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!.InstantiateClone("InvisibleTether", false);
 			mandatory.GetComponent<LineRenderer>().enabled = false;
+			mandatory.EffectWithSound("");
 			return mandatory;
 		}
 	}

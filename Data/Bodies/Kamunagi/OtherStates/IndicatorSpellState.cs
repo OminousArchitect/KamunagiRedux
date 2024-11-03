@@ -5,7 +5,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	public class IndicatorSpellState : RaycastedSpellState
 	{
 		public virtual float indicatorScale => 3f;
-		private GameObject? indicator;
+		internal GameObject? indicator;
 		private bool wasActive;
 
 		public override void Update()

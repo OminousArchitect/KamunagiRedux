@@ -44,7 +44,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 						projectilePrefab = Asset.GetProjectile<ReaverMusou>().WaitForCompletion(),
 						owner = gameObject,
 						damage = characterBody.damage * 2.8f,
-						force = 200
+						force = 1
 					});
 					return false;
 				}
@@ -78,7 +78,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 						crit = RollCrit(),
 						projectilePrefab = Asset.GetProjectile<StickyBombDetonator>().WaitForCompletion(),
 						owner = gameObject,
-						damage = characterBody.damage * 2.8f,
+						damage = characterBody.damage,
 						force = 200
 					});
 					return false;
@@ -144,8 +144,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			effect.transform.GetChild(6).gameObject.SetActive(false);
 			effect.transform.localScale = Vector3.one * 0.4f;
 			var dist = effect.transform.GetChild(3).gameObject;
-			var distP = dist.GetComponentInChildren<ParticleSystem>().shape;
-			distP.scale = Vector3.one * 0.25f;
+			ParticleSystem p = dist.GetComponent<ParticleSystem>();
+			var main = p.main;
+			main.startSize = 1.4f;
 			var comp = effect.GetComponent<EffectComponent>();
 			//comp.parentToReferencedTransform = true;
 			//comp.positionAtReferencedTransform = true;
@@ -217,10 +218,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				switch (particleSystemRenderer.name)
 				{  //particleSystemRenderer.material.SetTexture("_RemapText",LoadAsset<Texture2D>(""));
 					case "Billboard, Long":
-						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
+						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/VoidRaidCrab/texRampVoidRaidCrabTripleBeam.png"));
 						break;
 					case "Billboard, Short":
-						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
+						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/VoidRaidCrab/texRampVoidRaidCrabTripleBeam.png"));
+						particleSystemRenderer.material.SetFloat("_Boost", 2f);
 						break;
 					case "Mesh, Donut":
 						particleSystemRenderer.material.SetTexture("_RemapTex",await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
@@ -244,7 +246,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			light.color = Colors.twinsDarkColor;
 			LightIntensityCurve curve = effect.GetOrAddComponent<LightIntensityCurve>();
 			curve.maxIntensity = 71f;
-			curve.timeMax = 0.85f;
+			curve.timeMax = 0.6f;
 			return effect;
 		}
 	}
@@ -265,10 +267,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = await GetEffect<ReaverExplosion>();
-			impact.bonusBlastForce = Vector3.zero;
+			impact.bonusBlastForce = new Vector3(0f, 0f, 0f);
+			impact.falloffModel = BlastAttack.FalloffModel.None;
+			impact.blastDamageCoefficient = 1.66f;
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
-			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from detonator
+			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
@@ -298,16 +303,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			sphere.GetComponent<MeshRenderer>().materials = new[] { primed, primedOutline };
 			var indicator = scaler.transform.GetChild(4).gameObject;
 			indicator.transform.localScale = Vector3.one * 15f;
-			var yikes = ghost.transform.Find("Scaler/Point Light").gameObject;
-			yikes.SetActive(true);
 			var light = scaler.transform.GetChild(0).gameObject;
+			light.SetActive(true);
+			UnityEngine.Object.Destroy(light.GetComponent<LightIntensityCurve>());
 			Light l = light.GetComponent<Light>();
-			l.range = 10f;
-			l.intensity = 60f;
-			l.color = Colors.twinsDarkColor;
-			LightIntensityCurve curve = light.GetOrAddComponent<LightIntensityCurve>();
-			curve.maxIntensity = 71f;
-			curve.timeMax = 0.6f;
+			l.range = 15f;
+			l.intensity = 65f;
+			l.color = Colors.twinsLightColor;
 			return ghost;
 		}
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
@@ -315,8 +317,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			if (damageInfo.HasModdedDamageType(TwinsReaver))
 			{
-				var fractionOfHealth = __instance.fullCombinedHealth * 0.35f;
-				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
 				if (damageInfo.damage >= __instance.health)
 				{
 					damageInfo.damageType = DamageType.VoidDeath;
@@ -337,14 +337,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			simple.velocityOverLifetime = null;
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.falloffModel = BlastAttack.FalloffModel.None;
-			impact.blastRadius = 
+			impact.bonusBlastForce = new Vector3(0f, 75f, 0f);
+			impact.blastDamageCoefficient = 2.15f;
 			impact.lifetime = 0.1f;
+			impact.blastRadius = 5f;
 			impact.destroyOnEnemy = false;
 			impact.destroyOnWorld = false;
 			impact.impactEffect = await GetEffect<ReaverExplosion>(); 
 			var crabController = proj.GetComponent<MegacrabProjectileController>(); //this is where the transformation happens
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<PrimedStickyBomb>();
-			crabController.whiteToBlackTransformationRadius = 5f;
+			crabController.whiteToBlackTransformationRadius = 13f;
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(PrimedStickyBomb.TwinsReaver);
 			return proj;
 		}
 
@@ -386,6 +389,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			return proj;
 		}
 	}
@@ -401,6 +405,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			return proj;
 		}
 	}

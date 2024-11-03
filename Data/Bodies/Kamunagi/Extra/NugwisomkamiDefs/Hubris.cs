@@ -8,7 +8,7 @@ using UnityEngine;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class WarMachine : Asset, IBody, IMaster //2
+	public class WarMachine : Concentric, IBody, IMaster //2
 	{
 		async Task<GameObject> IBody.BuildObject()
 		{
@@ -64,7 +64,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 	
-	internal class ReplaceHKPrimary : Asset, ISkill
+	internal class ReplaceHKPrimary : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -81,8 +81,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(FireWispGunsState) };
 	}
 	
-	public class HKPrimaryFamily : Asset, ISkillFamily
+	public class HKPrimaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<ReplaceHKPrimary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<ReplaceHKPrimary>() };
 	}
 }

@@ -84,7 +84,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.OnEnter();
 			if (!NetworkServer.active) return;
-			NetworkServer.Spawn(UnityEngine.Object.Instantiate(Asset.GetNetworkedObject<XinZhao>().WaitForCompletion(),
+			NetworkServer.Spawn(UnityEngine.Object.Instantiate(Concentric.GetNetworkedObject<XinZhao>().WaitForCompletion(),
 				forceFieldPosition,
 				Quaternion.identity));
 			foreach (var (position, healthComponent) in hurtBoxes)
@@ -122,7 +122,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class XinZhao : Asset, ISkill, INetworkedObject
+	public class XinZhao : Concentric, ISkill, INetworkedObject
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{

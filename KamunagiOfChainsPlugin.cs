@@ -66,7 +66,7 @@ namespace KamunagiOfChains
 			pluginPath = System.IO.Path.GetDirectoryName(Info.Location) ??
 			             throw new InvalidOperationException("Failed to find path of plugin.");
 
-			log.LogDebug("Loading Asset Bundle");
+			log.LogDebug("Loading Concentric Bundle");
 			// Load Assets
 			AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(pluginPath, AssetBundleName)).completed += operation =>
 			{
@@ -74,7 +74,7 @@ namespace KamunagiOfChains
 				bundle = (operation as AssetBundleCreateRequest)?.assetBundle;
 
 				log.LogDebug("Loading ContentPack");
-				ContentPackProvider.Initialize(Info.Metadata.GUID, Asset.BuildContentPack(Assembly.GetExecutingAssembly()));
+				ContentPackProvider.Initialize(Info.Metadata.GUID, Concentric.BuildContentPack(Assembly.GetExecutingAssembly()));
 			};
 			AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(pluginPath, AssetBundleName+"2")).completed += operation =>
 			{

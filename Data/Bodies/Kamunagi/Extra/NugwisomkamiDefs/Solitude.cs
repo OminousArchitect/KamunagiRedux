@@ -7,7 +7,7 @@ using UnityEngine;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class IceTank : Asset, IBody, IMaster //4
+	public class IceTank : Concentric, IBody, IMaster //4
 	{
 		async Task<GameObject> IBody.BuildObject()
 		{
@@ -100,7 +100,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		
 	}
 	
-	public class IceTankPrimary : Asset, ISkill
+	public class IceTankPrimary : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -117,14 +117,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(IceBeam) };
 	}
 	
-	public class IceTankPrimaryFamily : Asset, ISkillFamily
+	public class IceTankPrimaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<IceTankPrimary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<IceTankPrimary>() };
 	}
 	
 	//secondary state goes here
 	
-	public class IceTankSecondary : Asset, ISkill
+	public class IceTankSecondary : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -141,8 +141,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(IceBeam) };
 	}
 	
-	public class IceTankSecondaryFamily : Asset, ISkillFamily
+	public class IceTankSecondaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<IceTankSecondary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<IceTankSecondary>() };
 	}
 }

@@ -4,10 +4,10 @@ using RoR2;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
-	public class KamunagiSkillFamilySecondary : Asset, ISkillFamily
+	public class KamunagiSkillFamilySecondary : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() =>
-			new Asset[]
+		public IEnumerable<Concentric> GetSkillAssets() =>
+			new Concentric[]
 			{
 				GetAsset<EnnakamuyEarth>(), GetAsset<DenebokshiriBrimstone>(), GetAsset<KujyuriFrost>(), GetAsset<AccelerateWinds>(), GetAsset<LightPillar5>()
 			};

@@ -19,7 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			Util.PlaySound(EntityStates.BeetleQueenMonster.SpawnWards.attackSoundString, gameObject);
 			if (NetworkServer.active)
 			{
-				var ward = Object.Instantiate(Asset.GetNetworkedObject<MothMoth>().WaitForCompletion(), characterBody.corePosition, Quaternion.identity);
+				var ward = Object.Instantiate(Concentric.GetNetworkedObject<MothMoth>().WaitForCompletion(), characterBody.corePosition, Quaternion.identity);
 				ward.GetComponent<TeamComponent>().teamIndex = teamComponent.teamIndex;
 				ward.GetComponent<TeamFilter>().teamIndex = teamComponent.teamIndex;
 				NetworkServer.Spawn(ward);
@@ -38,7 +38,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class MothMoth : Asset, INetworkedObject, ISkill
+	public class MothMoth : Concentric, INetworkedObject, ISkill
 	{
 		private static readonly int Cull = Shader.PropertyToID("_Cull");
 		private static readonly int Color = Shader.PropertyToID("_Color");

@@ -24,7 +24,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         public static GameObject indicatorPrefab;
         public GameObject goodCrosshairPrefab = EntityStates.Mage.Weapon.PrepWall.goodCrosshairPrefab;
         public GameObject badCrosshairPrefab =  EntityStates.Mage.Weapon.PrepWall.badCrosshairPrefab;
-        public GameObject indicatorPrefabInstance; //declared in the entitystate, intialized in the asset class
+        public GameObject indicatorPrefabInstance; //declared in the entitystate, intialized in the Concentric class
         private float damageCoefficient = 1f;
         private Vector3 normal;
         private bool shouldInvert;
@@ -106,7 +106,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                         
                         ProjectileManager.instance.FireProjectile
                         (
-	                        Asset.GetProjectile<KujyuriFrost>().WaitForCompletion(),
+	                        Concentric.GetProjectile<KujyuriFrost>().WaitForCompletion(),
                             position, // position:
                             Util.QuaternionSafeLookRotation(crossproduct), // rotation:
                             base.gameObject, 
@@ -131,7 +131,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         }
 	}
 
-	public class PrepIceWallIndicator : Asset, IGenericObject
+	public class PrepIceWallIndicator : Concentric, IGenericObject
 	{
 		public override async Task Initialize()
 		{
@@ -147,7 +147,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 	
-	public class KujyuriFrost : Asset, ISkill, IEffect, IProjectile
+	public class KujyuriFrost : Concentric, ISkill, IEffect, IProjectile
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -245,7 +245,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public IEnumerable<Type> GetEntityStates() => new []{typeof(ExperimentalWallState)};
 	}
 
-	public class KujyuriFrostBlast : Asset, IEffect
+	public class KujyuriFrostBlast : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -256,7 +256,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 	
-	public class PillarSpawn : Asset, IEffect
+	public class PillarSpawn : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -265,7 +265,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 
-	public class IceMagicEffect : Asset, IEffect
+	public class IceMagicEffect : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{

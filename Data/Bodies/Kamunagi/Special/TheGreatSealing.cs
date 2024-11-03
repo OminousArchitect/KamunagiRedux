@@ -21,7 +21,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			base.Fire(targetPosition);
 
-			ProjectileManager.instance.FireProjectile(Asset.GetProjectile<PrimedObelisk>().WaitForCompletion(),
+			ProjectileManager.instance.FireProjectile(Concentric.GetProjectile<PrimedObelisk>().WaitForCompletion(),
 				targetPosition,
 				Quaternion.identity,
 				gameObject,
@@ -44,11 +44,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			base.OnExit();
 			if (chargeEffectInstance != null) chargeEffectInstance.ReturnToPool();
-			EffectManager.SimpleMuzzleFlash(Asset.GetEffect<SealingMuzzleFlash>().WaitForCompletion(), gameObject, "MuzzleCenter", false);
+			EffectManager.SimpleMuzzleFlash(Concentric.GetEffect<SealingMuzzleFlash>().WaitForCompletion(), gameObject, "MuzzleCenter", false);
 		}
 	}
 	
-	public class TheGreatSealing : Asset, ISkill, IEffect
+	public class TheGreatSealing : Concentric, ISkill, IEffect
 	{
 		public static Material[] onKamiMats;
 		public override async Task Initialize()
@@ -127,7 +127,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	}
 
 	// first
-	public class PrimedObelisk : Asset, IProjectile, IProjectileGhost
+	public class PrimedObelisk : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
@@ -171,7 +171,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 	// second
 	[HarmonyPatch]
-	public class TickingFuseObelisk : Asset, IProjectile, IProjectileGhost
+	public class TickingFuseObelisk : Concentric, IProjectile, IProjectileGhost
 	{
 		public static DamageAPI.ModdedDamageType Uitsalnemetia;
 
@@ -317,7 +317,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 	}
 
-	public class CyanDamageNumbers : Asset, IEffect
+	public class CyanDamageNumbers : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -330,7 +330,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 	}
 	
-	public class SealingMuzzleFlash : Asset, IEffect
+	public class SealingMuzzleFlash : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -343,7 +343,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	}
 
 	// third
-	public class ExplodingObelisk : Asset, IEffect
+	public class ExplodingObelisk : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{

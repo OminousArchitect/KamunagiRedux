@@ -6,7 +6,7 @@ using RoR2;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Events;
-using static ConcentricContent.Asset;
+using static ConcentricContent.Concentric;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
@@ -76,7 +76,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class SummonNugwisomkami : Asset, ISkill
+	public class SummonNugwisomkami : Concentric, ISkill
 	{
 		public override async Task Initialize()
 		{

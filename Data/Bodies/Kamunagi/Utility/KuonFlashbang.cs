@@ -105,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class KuonFlashbang : Asset, ISkill, IEffect
+	public class KuonFlashbang : Concentric, ISkill, IEffect
 	{
 		public override async Task Initialize()
 		{

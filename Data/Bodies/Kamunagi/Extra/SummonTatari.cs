@@ -18,7 +18,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			
 			var tatariSummon = new MasterSummon()
 			{
-				masterPrefab = Asset.GetMaster<TatariBody>().WaitForCompletion(),
+				masterPrefab = Concentric.GetMaster<TatariBody>().WaitForCompletion(),
 				position = position + Vector3.up * 4,
 				summonerBodyObject = gameObject,
 				ignoreTeamMemberLimit = true,
@@ -32,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class SummonTatari : Asset, ISkill
+	public class SummonTatari : Concentric, ISkill
 	{
 		public static DeployableSlot deployableSlot;
 
@@ -56,7 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonTatariState) };
 	}
 
-	public class TatariBody : Asset, IBody, IMaster
+	public class TatariBody : Concentric, IBody, IMaster
 	{
 		private static ConfigEntry<string> debuffBlacklist;
 		

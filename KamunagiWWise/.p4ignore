@@ -15,7 +15,7 @@
 *.prof
 *.validationcache
 *.wsettings
-AkWwiseProjectData.asset
+AkWwiseProjectData.Concentric
 IncrementalSoundBankData.xml
 
 # To use a private .p4ignore file, uncomment the following line (it will ignore itself).

@@ -27,7 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
 			
-			var effect = Asset.GetEffect<AccelerateWinds>().WaitForCompletion();
+			var effect = Concentric.GetEffect<AccelerateWinds>().WaitForCompletion();
 			if (muzzleTransform)
 			{
 				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
@@ -56,7 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		private void Fire()
 		{
-			var boomerang = Asset.GetProjectile<AccelerateWinds>().WaitForCompletion();
+			var boomerang = Concentric.GetProjectile<AccelerateWinds>().WaitForCompletion();
 			var aimRay = GetAimRay();
 			//boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
 
@@ -96,7 +96,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class AccelerateWinds : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
+	public class AccelerateWinds : Concentric, IProjectile, IProjectileGhost, IEffect, ISkill
 	{
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(AccelerateWindState) };
 
@@ -184,7 +184,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 
-	public class WindHitEffect : Asset, IEffect
+	public class WindHitEffect : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{

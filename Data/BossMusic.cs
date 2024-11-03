@@ -8,7 +8,7 @@ using UnityEngine;
 namespace KamunagiOfChains.Data
 {
 	[HarmonyPatch]
-	public class BossMusic : Asset, IMusicTrack //
+	public class BossMusic : Concentric, IMusicTrack //
 	{
 		Task<MusicTrackDef> IMusicTrack.BuildObject()
 		{

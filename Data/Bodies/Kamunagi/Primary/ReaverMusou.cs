@@ -34,14 +34,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				procCoefficient = 0,
 				smartCollision = true,
 				muzzleName = "MuzzleRight",
-				tracerEffectPrefab = Asset.GetEffect<ReaverMusou>().WaitForCompletion(),
+				tracerEffectPrefab = Concentric.GetEffect<ReaverMusou>().WaitForCompletion(),
 				hitCallback = (BulletAttack bulletAttack, ref BulletAttack.BulletHit hitInfo) =>
 				{
 					ProjectileManager.instance.FireProjectile(new FireProjectileInfo
 					{
 						position = hitInfo.point,
 						crit = RollCrit(),
-						projectilePrefab = Asset.GetProjectile<ReaverMusou>().WaitForCompletion(),
+						projectilePrefab = Concentric.GetProjectile<ReaverMusou>().WaitForCompletion(),
 						owner = gameObject,
 						damage = characterBody.damage,
 						force = 1
@@ -50,7 +50,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				}
 			};
 			testForTarget.Fire();
-			EffectManager.SimpleMuzzleFlash(Asset.GetEffect<ReaverMusou>().WaitForCompletion(), gameObject, twinMuzzle, false);
+			EffectManager.SimpleMuzzleFlash(Concentric.GetEffect<ReaverMusou>().WaitForCompletion(), gameObject, twinMuzzle, false);
 		}
 
 		void HarvestSeeds()
@@ -76,7 +76,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					{
 						position = hitInfo.point,
 						crit = RollCrit(),
-						projectilePrefab = Asset.GetProjectile<StickyBombDetonator>().WaitForCompletion(),
+						projectilePrefab = Concentric.GetProjectile<StickyBombDetonator>().WaitForCompletion(),
 						owner = gameObject,
 						damage = characterBody.damage,
 						force = 200
@@ -114,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	internal class ReaverMusou : Asset, ISkill, IEffect, IProjectile, IProjectileGhost
+	internal class ReaverMusou : Concentric, ISkill, IEffect, IProjectile, IProjectileGhost
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -199,7 +199,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		}
 	}
 
-	internal class ReaverExplosion : Asset, IEffect
+	internal class ReaverExplosion : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -252,7 +252,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	}
 	
 	[HarmonyPatch]
-	internal class PrimedStickyBomb : Asset, IProjectile, IProjectileGhost
+	internal class PrimedStickyBomb : Concentric, IProjectile, IProjectileGhost
 	{
 		//public static DamageAPI.ModdedDamageType TwinsReaver;
 		public override Task Initialize()
@@ -314,7 +314,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
 		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
 		{
-			if (damageInfo.damageType == RoR2.DamageType.Nullify && damageInfo.attacker.GetComponent<CharacterBody>().bodyIndex == Asset.GetBodyIndex<KamunagiAsset>().WaitForCompletion())
+			if (damageInfo.damageType == RoR2.DamageType.Nullify && damageInfo.attacker.GetComponent<CharacterBody>().bodyIndex == Concentric.GetBodyIndex<KamunagiAsset>().WaitForCompletion())
 			{
 				if (damageInfo.damage >= __instance.health)
 				{
@@ -324,7 +324,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		}
 	}
 	
-	internal class StickyBombDetonator : Asset, IProjectile, IProjectileGhost
+	internal class StickyBombDetonator : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
@@ -376,7 +376,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		}
 	}
 	
-	internal class Recursion1Projectile : Asset, IProjectile 
+	internal class Recursion1Projectile : Concentric, IProjectile 
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
@@ -392,7 +392,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		}
 	}
 
-	internal class Recursion2Projectile : Asset, IProjectile //this handles up to 3 recursive explosions, thats enough I guess. Vanilla component infinitely recurses and I couldn't manage that without stackoverflow because I'm 
+	internal class Recursion2Projectile : Concentric, IProjectile //this handles up to 3 recursive explosions, thats enough I guess. Vanilla component infinitely recurses and I couldn't manage that without stackoverflow because I'm 
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{

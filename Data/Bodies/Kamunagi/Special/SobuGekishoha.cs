@@ -33,18 +33,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			charModel = GetModelTransform().GetComponent<CharacterModel>();
 
 			Vector3 additive = characterDirection.forward * 0.5f;
-			darkSigilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<DarkSigil>().WaitForCompletion(), centerFarMuzzle, true);
+			darkSigilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<DarkSigil>().WaitForCompletion(), centerFarMuzzle, true);
 			darkSigilEffect.transform.localScale = Vector3.one * 0.7f;
-			tracerInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<SobuGekishoha>().WaitForCompletion(), centerFarMuzzle, true);
+			tracerInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<SobuGekishoha>().WaitForCompletion(), centerFarMuzzle, true);
 			tracerInstance.transform.localScale = new Vector3(1, 1, 0.03f * 180);
-			voidSphereMuzzle = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<VoidSphere>().WaitForCompletion(), centerFarMuzzle, true);
+			voidSphereMuzzle = EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<VoidSphere>().WaitForCompletion(), centerFarMuzzle, true);
 			voidSphereMuzzle.transform.localRotation = Quaternion.identity;
 			voidSphereMuzzle.transform.localScale = Vector3.one;
 			
 			overlay = TemporaryOverlayManager.AddOverlay(gameObject);
 			overlay.originalMaterial = overlayMaterial;
 			overlay.AddToCharacterModel(charModel);
-			characterBody.AddBuff(Asset.GetBuffDef<SobuGekishoha>().WaitForCompletion());
+			characterBody.AddBuff(Concentric.GetBuffDef<SobuGekishoha>().WaitForCompletion());
 			var component = voidSphereMuzzle.GetComponent<ScaleParticleSystemDuration>();
 			if (component)
 			{
@@ -131,7 +131,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				request.Dispose();
 			}
 
-			characterBody.RemoveBuff(Asset.GetBuffDef<SobuGekishoha>().WaitForCompletion());
+			characterBody.RemoveBuff(Concentric.GetBuffDef<SobuGekishoha>().WaitForCompletion());
 			Util.PlaySound(EntityStates.VoidRaidCrab.SpinBeamWindDown.enterSoundString, gameObject);
 			characterMotor.useGravity = true;
 			if (tracerInstance)
@@ -157,7 +157,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	}
 
 	[HarmonyPatch]
-	public class SobuGekishoha : Asset, ISkill, IEffect, IBuff, IOverlay
+	public class SobuGekishoha : Concentric, ISkill, IEffect, IBuff, IOverlay
 	{
 		public override async Task Initialize()
 		{
@@ -239,7 +239,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 	}
 
-	public class DarkSigil : Asset, IEffect
+	public class DarkSigil : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -252,7 +252,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 	}
 
-	public class VoidSphere : Asset, IEffect
+	public class VoidSphere : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{

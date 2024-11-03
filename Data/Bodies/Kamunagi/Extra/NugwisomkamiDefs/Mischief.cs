@@ -12,7 +12,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
 
-	public class AssassinSpirit : Asset, IBody, IMaster //1
+	public class AssassinSpirit : Concentric, IBody, IMaster //1
 	{
 		async Task<GameObject> IBody.BuildObject()
 		{
@@ -182,7 +182,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class AssassinSpiritPrimary : Asset, ISkill
+	public class AssassinSpiritPrimary : Concentric, ISkill
 	{
 		public override async Task Initialize()
 		{
@@ -212,9 +212,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(TrackingWispsState) };
 	}
 
-	public class AssassinSpiritPrimaryFamily : Asset, ISkillFamily
+	public class AssassinSpiritPrimaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<AssassinSpiritPrimary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<AssassinSpiritPrimary>() };
 	}
 
 	public class SpiritTeleportState : BaseState
@@ -294,7 +294,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	internal class AssassinSpiritSecondary : Asset, ISkill
+	internal class AssassinSpiritSecondary : Concentric, ISkill
 	{
 		public override async Task Initialize()
 		{
@@ -317,8 +317,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(SpiritTeleportState) };
 	}
 
-	public class AssassinSpiritSecondaryFamily : Asset, ISkillFamily
+	public class AssassinSpiritSecondaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<AssassinSpiritSecondary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<AssassinSpiritSecondary>() };
 	}
 }

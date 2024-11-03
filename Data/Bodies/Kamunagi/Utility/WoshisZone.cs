@@ -23,7 +23,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				NetworkServer.Destroy(twinBehaviour.activeBuffWard);
 			}
 
-			var ward = Object.Instantiate(Asset.GetNetworkedObject<WoshisZone>().WaitForCompletion(), targetPosition,
+			var ward = Object.Instantiate(Concentric.GetNetworkedObject<WoshisZone>().WaitForCompletion(), targetPosition,
 				Quaternion.identity);
 			ward.GetComponent<TeamFilter>().teamIndex = TeamIndex.Monster;
 			twinBehaviour.activeBuffWard = ward;
@@ -33,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class WoshisZone : Asset, ISkill, INetworkedObject, IBuff, IItem, IMaterialSwap
+	public class WoshisZone : Concentric, ISkill, INetworkedObject, IBuff, IItem, IMaterialSwap
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -167,7 +167,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public int Priority => 1;
 	}
 
-	public class WoshisZoneWispGhost : Asset, IMaterialSwap
+	public class WoshisZoneWispGhost : Concentric, IMaterialSwap
 	{
 		async Task<Material> IMaterialSwap.BuildObject()
 		{

@@ -1,7 +1,7 @@
 ﻿namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 {
-	public class KamunagiSkillFamilyPassive : Asset, ISkillFamily
+	public class KamunagiSkillFamilyPassive : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<KamunagiDash>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<KamunagiDash>() };
 	}
 }

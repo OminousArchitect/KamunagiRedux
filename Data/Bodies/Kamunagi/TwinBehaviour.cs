@@ -122,7 +122,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 		public void OnDeath()
 		{
-			if (master.GetBody().HasBuff(Asset.GetBuffIndex<MashiroBlessing>().WaitForCompletion()))
+			if (master.GetBody().HasBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion()))
 			{
 				master.preventGameOver = true;
 				Invoke(nameof(MashiroRebirth), 1.5f);
@@ -142,7 +142,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 			var body = master.Respawn(positionAtDeath, Quaternion.identity);
 			body.AddTimedBuff(RoR2Content.Buffs.Immune, 3f);
-			var rezEffect = Asset.GetEffect<MashiroBlessingRespawn>().WaitForCompletion();
+			var rezEffect = Concentric.GetEffect<MashiroBlessingRespawn>().WaitForCompletion();
 			if (!master.bodyInstanceObject) return;
 			var array = master.bodyInstanceObject.GetComponents<EntityStateMachine>();
 			foreach (var esm in array)

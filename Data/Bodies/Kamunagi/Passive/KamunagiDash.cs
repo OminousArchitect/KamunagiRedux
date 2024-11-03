@@ -152,7 +152,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.PrioritySkill;
 	}
 
-	public class KamunagiDash : Asset, ISkill, IProjectile, IProjectileGhost, IEffect
+	public class KamunagiDash : Concentric, ISkill, IProjectile, IProjectileGhost, IEffect
 	{
 		public override async Task Initialize()
 		{
@@ -162,8 +162,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			var field = typeof(KamunagiDashState).GetField(nameof(KamunagiDashState.flyCurve)); 
 			KamunagiDashState.flyCurve =
 				// ReSharper disable once SuspiciousTypeConversion.Global
-				(AnimationCurve) curve 
-					.serializedFieldsCollection.GetOrCreateField(nameof(FlyUpState.speedCoefficientCurve)).fieldValue.GetValue(field);
+				(AnimationCurve) curve.serializedFieldsCollection.GetOrCreateField(nameof(FlyUpState.speedCoefficientCurve)).fieldValue.GetValue(field);
 			KamunagiDashState.blinkPrefab = await this.GetEffect();
 			KamunagiDashState.muzzlePrefab = await GetEffect<FlyEffect>();
 			KamunagiChannelDashState.projectilePrefab = await this.GetProjectile();
@@ -235,7 +234,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		}
 	}
 
-	public class RequiredTetherVFX : Asset, IEffect
+	public class RequiredTetherVFX : Concentric, IEffect
 	{
 		public async Task<GameObject> BuildObject()
 		{
@@ -246,7 +245,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		}
 	}
 
-	public class FlyEffect : Asset, IEffect
+	public class FlyEffect : Concentric, IEffect
 	{
 		public async Task<GameObject> BuildObject()
 		{

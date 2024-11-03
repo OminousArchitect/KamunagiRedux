@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 namespace KamunagiOfChains
 {
 	[HarmonyPatch]
-	public class KamunagiHUD : Asset, IGenericObject
+	public class KamunagiHUD : Concentric, IGenericObject
 	{
 		private static GameObject hud;
 		public override async Task Initialize()
@@ -58,7 +58,7 @@ namespace KamunagiOfChains
 		public void Start()
 		{
 			hud = GetComponentInParent<HUD>();
-			kamunagiIndex = Asset.GetObjectOrThrow<KamunagiAsset, IBody, GameObject>().WaitForCompletion().GetComponent<CharacterBody>().bodyIndex;
+			kamunagiIndex = Concentric.GetObjectOrThrow<KamunagiAsset, IBody, GameObject>().WaitForCompletion().GetComponent<CharacterBody>().bodyIndex;
 			zealBar.transform.SetParent(hud.healthBar.transform.parent);
 		}
 

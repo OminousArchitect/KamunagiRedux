@@ -22,7 +22,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var muzzleTransform = FindModelChild("MuzzleCenter");
 			if (!muzzleTransform) return;
 			chargeEffectInstance =
-				EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<Mikazuchi>().WaitForCompletion(),
+				EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<Mikazuchi>().WaitForCompletion(),
 					muzzleTransform, true);
 		}
 
@@ -44,7 +44,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				teamIndex = teamComponent.teamIndex
 			};
 			blastAttack.Fire();
-			EffectManager.SpawnEffect(Asset.GetEffect<MikazuchiLightningStrike>().WaitForCompletion(),
+			EffectManager.SpawnEffect(Concentric.GetEffect<MikazuchiLightningStrike>().WaitForCompletion(),
 				new EffectData() { origin = targetPosition, scale = blastAttack.radius }, true);
 
 			var xoro = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
@@ -55,7 +55,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			for (var i = 0; i < projectileCount; i++)
 			{
 				ProjectileManager.instance.FireProjectile(
-					Asset.GetProjectile<MikazuchiLightningOrb>().WaitForCompletion(),
+					Concentric.GetProjectile<MikazuchiLightningOrb>().WaitForCompletion(),
 					centerPoint,
 					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
 					gameObject,
@@ -86,7 +86,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class Mikazuchi : Asset, IEffect, ISkill
+	public class Mikazuchi : Concentric, IEffect, ISkill
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -125,7 +125,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class MikazuchiLightningStrike : Asset, IEffect
+	public class MikazuchiLightningStrike : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -175,7 +175,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class MikazuchiLightningStrikeSilent : Asset, IEffect
+	public class MikazuchiLightningStrikeSilent : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -185,7 +185,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class MikazuchiLightningOrb : Asset, IProjectile, IProjectileGhost
+	public class MikazuchiLightningOrb : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
@@ -233,7 +233,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class MikazuchiLightningSeeker : Asset, IProjectile, IProjectileGhost
+	public class MikazuchiLightningSeeker : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
@@ -258,7 +258,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class MikazuchiStakeNova : Asset, IEffect
+	public class MikazuchiStakeNova : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{

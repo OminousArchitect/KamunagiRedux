@@ -31,12 +31,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			blastAttack.position = targetPostion;
 			blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
 			blastAttack.teamIndex = base.teamComponent.teamIndex;
+			
 			blastAttack.Fire();//lol, lmao even
 			
 			if (Physics.Raycast(targetPostion + Vector3.up * 1f, Vector3.down, out var hitInfo, 100f, LayerIndex.world.mask))
 			
 			{ //this is technically not even a child anymore
-				/*GameObject pillarChild = UnityEngine.Object.Instantiate( Asset.GetProjectile<Light5PillarAsset>().WaitForCompletion(), hitInfo.point, Quaternion.identity);
+				/*GameObject pillarChild = UnityEngine.Object.Instantiate( Concentric.GetProjectile<Light5PillarAsset>().WaitForCompletion(), hitInfo.point, Quaternion.identity);
 				ProjectileController controller = pillarChild.GetComponent<ProjectileController>();
 				if (controller)
 				{
@@ -60,7 +61,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	}
 
 	[HarmonyPatch]
-	public class LightPillar5 : Asset, ISkill, IEffect
+	public class LightPillar5 : Concentric, ISkill, IEffect
 	{
 		public static DamageColorIndex damageColorIndex;
 		public override async Task Initialize()
@@ -97,14 +98,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		[HarmonyPostfix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
 		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
 		{
-			if (damageInfo.damageType != DamageType.BypassArmor || damageInfo.attacker.GetComponent<CharacterBody>().bodyIndex != Asset.GetBodyIndex<KamunagiAsset>().WaitForCompletion()) return;
+			if (damageInfo.damageType != DamageType.BypassArmor || damageInfo.attacker.GetComponent<CharacterBody>().bodyIndex != Concentric.GetBodyIndex<KamunagiAsset>().WaitForCompletion()) return;
 			
 			if (__instance.body.isFlying || __instance.body.bodyIndex == pestIndex || __instance.body.bodyIndex == vultureIndex)
 			{//spawn projectile without ProjectileManager
 				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
 				if (!Physics.Raycast(damageInfo.position + Vector3.up * 1f, Vector3.down, out var hitInfo, 100f, LayerIndex.world.mask)) return;
 				GameObject projectile = UnityEngine.Object.Instantiate(
-					Asset.GetProjectile<Light5PillarAsset>().WaitForCompletion(), hitInfo.point,
+					Concentric.GetProjectile<Light5PillarAsset>().WaitForCompletion(), hitInfo.point,
 					Quaternion.identity);
 				ProjectileController controller = projectile.GetComponent<ProjectileController>();
 				if (controller)
@@ -131,7 +132,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
 				if (!Physics.Raycast(damageInfo.position + Vector3.up * 1f, Vector3.down, out var hitInfo, 100f, LayerIndex.world.mask)) return;
 				GameObject projectile = UnityEngine.Object.Instantiate(
-					Asset.GetProjectile<NightshadePrison>().WaitForCompletion(), hitInfo.point,
+					Concentric.GetProjectile<NightshadePrison>().WaitForCompletion(), hitInfo.point,
 					Quaternion.identity);
 				ProjectileController controller = projectile.GetComponent<ProjectileController>();
 				if (controller)
@@ -156,7 +157,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 
-	public class Light5PillarAsset : Asset, IProjectile, IProjectileGhost
+	public class Light5PillarAsset : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
@@ -173,7 +174,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 
-	public class NightshadePrison : Asset, IProjectile
+	public class NightshadePrison : Concentric, IProjectile
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{

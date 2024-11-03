@@ -25,7 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				force = 500,
 				owner = gameObject,
 				position = aimRay.origin + (aimRay.direction * 2),
-				projectilePrefab = Asset.GetProjectile<EnnakamuyEarth>().WaitForCompletion(),
+				projectilePrefab = Concentric.GetProjectile<EnnakamuyEarth>().WaitForCompletion(),
 				rotation = Quaternion.LookRotation(aimRay.direction)
 			});
 		}
@@ -33,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.PrioritySkill;
 	}
 
-	public class EnnakamuyEarth : Asset, ISkill, IEffect, IProjectile, IProjectileGhost
+	public class EnnakamuyEarth : Concentric, ISkill, IEffect, IProjectile, IProjectileGhost
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -97,7 +97,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 
-	public class EnnakamuyEarthChild : Asset, IProjectile, IProjectileGhost
+	public class EnnakamuyEarthChild : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{

@@ -3,9 +3,9 @@ using RoR2;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
-	public class KamunagiSkillFamilyExtra : Asset, ISkillFamily
+	public class KamunagiSkillFamilyExtra : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[]
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[]
 		{
 			GetAsset<MothMoth>(), GetAsset<XinZhao>(), 
 			GetAsset<SummonTatari>(), 

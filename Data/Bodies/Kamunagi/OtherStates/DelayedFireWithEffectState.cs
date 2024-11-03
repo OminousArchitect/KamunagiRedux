@@ -2,7 +2,7 @@
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {
-	public class DelayedFireWithEffectState<T> : BaseTwinState where T : Asset, IEffect
+	public class DelayedFireWithEffectState<T> : BaseTwinState where T : Concentric, IEffect
 	{
 		public virtual float baseDuration => 1.25f;
 		public virtual float baseDelay => 0.4f;
@@ -19,7 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			fireDelay = baseDelay / attackSpeedStat;
 			var muzzleTransform = FindModelChild(muzzle);
 			if (muzzleTransform)
-				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Asset.GetEffect<T>().WaitForCompletion(), muzzleTransform, true);
+				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<T>().WaitForCompletion(), muzzleTransform, true);
 		}
 
 		public virtual void Fire()

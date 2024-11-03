@@ -34,7 +34,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		}
 	}
 	
-	public class VoidPortalStates : Asset, IEntityStates
+	public class VoidPortalStates : Concentric, IEntityStates
 	{
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(VoidPortalSpawnState), typeof(BufferPortal) };
 		public override async Task Initialize()

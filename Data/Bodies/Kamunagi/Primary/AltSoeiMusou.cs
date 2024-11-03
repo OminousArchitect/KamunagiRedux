@@ -32,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			{
 				chargeEffectInstance =
 					EffectManagerKamunagi.GetAndActivatePooledEffect(
-						Asset.GetEffect<AltSoeiMusou>().WaitForCompletion(), muzzleTransform, true);
+						Concentric.GetEffect<AltSoeiMusou>().WaitForCompletion(), muzzleTransform, true);
 				var scale = chargeEffectInstance.effectComponent.GetComponent<ObjectScaleCurve>();
 				scale.baseScale = Vector3.one * 0.7f;
 				scale.timeMax = projectileFireFrequency;
@@ -52,7 +52,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					force = 120,
 					owner = gameObject,
 					position = muzzleTransform.position,
-					projectilePrefab = Asset.GetProjectile<AltSoeiMusou>().WaitForCompletion(),
+					projectilePrefab = Concentric.GetProjectile<AltSoeiMusou>().WaitForCompletion(),
 					rotation = Quaternion.LookRotation(GetAimRay().direction)
 				});
 		}
@@ -72,7 +72,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				projectilePrefab =
 					fixedAge < maxChargeTime
 						? megaBlaster
-						: Asset.GetProjectile<AltMusouChargeBall>().WaitForCompletion(),
+						: Concentric.GetProjectile<AltMusouChargeBall>().WaitForCompletion(),
 				rotation = Quaternion.LookRotation(GetAimRay().direction)
 			});
 		}
@@ -113,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class AltSoeiMusou : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
+	public class AltSoeiMusou : Concentric, IProjectile, IProjectileGhost, IEffect, ISkill
 	{
 		public override async Task Initialize()
 		{
@@ -280,7 +280,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		}
 	}
 
-	public class AltMusouChargeBall : Asset, IProjectile, IProjectileGhost
+	public class AltMusouChargeBall : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{

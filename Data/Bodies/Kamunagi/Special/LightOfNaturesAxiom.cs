@@ -30,10 +30,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			PlayAnimation("Ururuu Override", "EnterAxiom");
 			spawnPos = childLocator.FindChild("MuzzleCenter").position + characterDirection.forward * 5;
 			leftMuzzleInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(
-				Asset.GetEffect<LightOfNaturesAxiom>().WaitForCompletion(), childLocator.FindChild("MuzzleLeft"), true,
+				Concentric.GetEffect<LightOfNaturesAxiom>().WaitForCompletion(), childLocator.FindChild("MuzzleLeft"), true,
 				new EffectData() { scale = 0.3f });
 			rightMuzzleInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(
-				Asset.GetEffect<LightOfNaturesAxiom>().WaitForCompletion(), childLocator.FindChild("MuzzleRight"), true,
+				Concentric.GetEffect<LightOfNaturesAxiom>().WaitForCompletion(), childLocator.FindChild("MuzzleRight"), true,
 				new EffectData() { scale = 0.3f });
 			channelSound = Util.PlaySound(ChannelSunStart.beginSoundName, gameObject);
 			if (!isAuthority) return;
@@ -49,13 +49,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (isAuthority && !IsKeyDownAuthority()) outer.SetNextStateToMain();
 			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 			if (!NetworkServer.active || fixedAge < 1 || sun) return;
-			sun = UnityEngine.Object.Instantiate(Asset.GetNetworkedObject<NaturesAxiom>().WaitForCompletion(), spawnPos,
+			sun = UnityEngine.Object.Instantiate(Concentric.GetNetworkedObject<NaturesAxiom>().WaitForCompletion(), spawnPos,
 				Quaternion.identity);
 			sun.GetComponent<GenericOwnership>().ownerObject = gameObject;
 			sun.GetComponent<UmbralSunController>().bullseyeSearch.teamMaskFilter =
 				TeamMask.GetEnemyTeams(teamComponent.teamIndex);
 			NetworkServer.Spawn(sun);
-			EffectManager.SimpleEffect(Asset.GetEffect<NaturesAxiom>().WaitForCompletion(), spawnPos,
+			EffectManager.SimpleEffect(Concentric.GetEffect<NaturesAxiom>().WaitForCompletion(), spawnPos,
 				Quaternion.identity, true);
 		}
 
@@ -65,7 +65,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (sun)
 			{
 				Destroy(sun);
-				EffectManager.SimpleEffect(Asset.GetEffect<NaturesAxiom>().WaitForCompletion(), spawnPos,
+				EffectManager.SimpleEffect(Concentric.GetEffect<NaturesAxiom>().WaitForCompletion(), spawnPos,
 					Quaternion.identity,
 					true);
 			}
@@ -81,7 +81,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Death;
 	}
 
-	public class LightOfNaturesAxiom : Asset, ISkill, IEffect
+	public class LightOfNaturesAxiom : Concentric, ISkill, IEffect
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -142,7 +142,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	}
 
 	[HarmonyPatch]
-	public class NaturesAxiom : Asset, INetworkedObject, IEffect, IBuff
+	public class NaturesAxiom : Concentric, INetworkedObject, IEffect, IBuff
 	{
 		async Task<GameObject> INetworkedObject.BuildObject()
 		{
@@ -316,7 +316,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 	}
 
-	public class CurseParticles : Asset, IEffect
+	public class CurseParticles : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -564,8 +564,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private void Start()
 		{
 			activeSoundLoop = AkSoundEngine.PostEvent(activeLoopDef.startSoundName, base.gameObject);
-			overheatBuffDef = Asset.GetBuffIndex<NaturesAxiom>().WaitForCompletion();
-			overheatApplyEffect = Asset.GetEffect<AxiomBurn>().WaitForCompletion();
+			overheatBuffDef = Concentric.GetBuffIndex<NaturesAxiom>().WaitForCompletion();
+			overheatApplyEffect = Concentric.GetEffect<AxiomBurn>().WaitForCompletion();
 		}
 
 		private void OnDestroy()
@@ -720,7 +720,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		}
 	}
 
-	public class AxiomBurn : Asset, IEffect, IBuff, IMaterial
+	public class AxiomBurn : Concentric, IEffect, IBuff, IMaterial
 	{
 		public async Task<GameObject> BuildObject()
 		{

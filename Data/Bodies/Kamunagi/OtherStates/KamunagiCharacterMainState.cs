@@ -209,7 +209,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class KamunagiHover : Asset, IEntityStates, IEffect
+	public class KamunagiHover : Concentric, IEntityStates, IEffect
 	{
 		public override async Task Initialize()
 		{

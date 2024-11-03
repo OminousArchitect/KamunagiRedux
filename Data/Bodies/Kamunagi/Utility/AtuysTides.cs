@@ -14,8 +14,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public int totalProjectileCount;
 		public int projectilesFired;
 
-		public GameObject projectilePrefab = Asset.GetProjectile<AtuysTides>().WaitForCompletion();
-		public GameObject luckyProjectilePrefab = Asset.GetProjectile<AtuysTidesLucky>().WaitForCompletion();
+		public GameObject projectilePrefab = Concentric.GetProjectile<AtuysTides>().WaitForCompletion();
+		public GameObject luckyProjectilePrefab = Concentric.GetProjectile<AtuysTidesLucky>().WaitForCompletion();
 		private float chanceToSweep;
 
 		public override void OnEnter()
@@ -51,7 +51,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				force = 20,
 				owner = gameObject,
 				position = aimRay.origin,
-				projectilePrefab = Asset.GetProjectile<AtuysTides>().WaitForCompletion(),
+				projectilePrefab = Concentric.GetProjectile<AtuysTides>().WaitForCompletion(),
 				rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
 				speedOverride = 80f
 			};
@@ -62,7 +62,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				force = 20,
 				owner = gameObject,
 				position = aimRay.origin,
-				projectilePrefab = Asset.GetProjectile<AtuysTidesLucky>().WaitForCompletion(),
+				projectilePrefab = Concentric.GetProjectile<AtuysTidesLucky>().WaitForCompletion(),
 				rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
 				speedOverride = 80f
 			};
@@ -80,7 +80,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class AtuysTides : Asset, IProjectileGhost, IProjectile, ISkill
+	public class AtuysTides : Concentric, IProjectileGhost, IProjectile, ISkill
 	{
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
@@ -142,7 +142,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class AtuysTidesLucky : Asset, IProjectile
+	public class AtuysTidesLucky : Concentric, IProjectile
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
@@ -161,7 +161,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class AtuysTidesEruption : Asset, IProjectile, IEffect
+	public class AtuysTidesEruption : Concentric, IProjectile, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -251,7 +251,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class AtuysTidesImpact : Asset, IEffect
+	public class AtuysTidesImpact : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{

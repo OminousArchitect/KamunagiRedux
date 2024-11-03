@@ -6,7 +6,7 @@ using UnityEngine;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class VirusArchWisp : Asset, IBody, IMaster //3
+	public class VirusArchWisp : Concentric, IBody, IMaster //3
 	{
 		async Task<GameObject> IBody.BuildObject()
 		{
@@ -41,12 +41,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	}
 	#endregion
 	
-	public class LargeArchWispPrimaryFamily : Asset, ISkillFamily
+	public class LargeArchWispPrimaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[] { GetAsset<LargeArchWispPrimary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<LargeArchWispPrimary>() };
 	}
 
-	internal class LargeArchWispPrimary : Asset, ISkill
+	internal class LargeArchWispPrimary : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{

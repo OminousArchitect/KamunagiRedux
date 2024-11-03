@@ -27,7 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
-			var effect = Asset.GetEffect<DenebokshiriBrimstone>().WaitForCompletion();
+			var effect = Concentric.GetEffect<DenebokshiriBrimstone>().WaitForCompletion();
 			if (muzzleTransform)
 			{
 				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
@@ -39,7 +39,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		private void FireProjectile()
 		{
-			var prefab = Asset.GetProjectile<DenebokshiriBrimstone>().WaitForCompletion();
+			var prefab = Concentric.GetProjectile<DenebokshiriBrimstone>().WaitForCompletion();
 			var zapDamage = prefab.GetComponent<ProjectileProximityBeamController>();
 			zapDamage.damageCoefficient = damageCoefficient;
 			if (isAuthority)
@@ -86,7 +86,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	}
 
 	[HarmonyPatch]
-	public class DenebokshiriBrimstone : Asset, IProjectile, IProjectileGhost, IEffect, ISkill
+	public class DenebokshiriBrimstone : Concentric, IProjectile, IProjectileGhost, IEffect, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -209,7 +209,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 
-	public class FireHitEffect : Asset, IEffect
+	public class FireHitEffect : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
@@ -234,7 +234,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	}
 
 	[HarmonyPatch]
-	public class LightningEffect : Asset, IEffect
+	public class LightningEffect : Concentric, IEffect
 	{
 		[HarmonyILManipulator]
 		[HarmonyPatch(typeof(LightningOrb), nameof(LightningOrb.Begin))]
@@ -275,7 +275,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 
-	public class LightningEndEffect : Asset, IEffect
+	public class LightningEndEffect : Concentric, IEffect
 	{
 		public async Task<GameObject> BuildObject()
 		{

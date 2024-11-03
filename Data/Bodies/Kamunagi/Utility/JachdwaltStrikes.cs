@@ -189,7 +189,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			public override void OnEnter()
 			{
 				base.OnEnter();
-				blinkPrefab = Asset.GetEffect<CherryBlossoms>().WaitForCompletion();
+				blinkPrefab = Concentric.GetEffect<CherryBlossoms>().WaitForCompletion();
 				CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
 				Util.PlayAttackSpeedSound(beginSoundString, base.gameObject, 1.2f);
 				crit = Util.CheckRoll(critStat, base.characterBody.master);
@@ -237,7 +237,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						{
 							Vector3 position = hurtBox2.transform.position;
 							Vector2 normalized = UnityEngine.Random.insideUnitCircle.normalized;
-							EffectManager.SimpleImpactEffect(normal: new Vector3(normalized.x, 0f, normalized.y), effectPrefab: Asset.GetEffect<JachdwaltStrikes>().WaitForCompletion(), hitPos: position, transmit: false);
+							EffectManager.SimpleImpactEffect(normal: new Vector3(normalized.x, 0f, normalized.y), effectPrefab: Concentric.GetEffect<JachdwaltStrikes>().WaitForCompletion(), hitPos: position, transmit: false);
 							Transform transform = hurtBox.hurtBoxGroup.transform;
 							TemporaryOverlayInstance temporaryOverlayInstance = TemporaryOverlayManager.AddOverlay(transform.gameObject);
 							temporaryOverlayInstance.duration = num;
@@ -320,7 +320,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			}
 		}
 
-		public class JachdwaltStrikes : Asset, ISkill, IEffect
+		public class JachdwaltStrikes : Concentric, ISkill, IEffect
 		{
 			async Task<SkillDef> ISkill.BuildObject()
 			{
@@ -432,7 +432,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			}
 		}
 
-		public class CherryBlossoms : Asset, IEffect
+		public class CherryBlossoms : Concentric, IEffect
 		{
 			async Task<GameObject> IEffect.BuildObject()
 			{

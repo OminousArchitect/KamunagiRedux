@@ -30,7 +30,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
-			var effect = Asset.GetEffect<HonokasVeil>().WaitForCompletion();
+			var effect = Concentric.GetEffect<HonokasVeil>().WaitForCompletion();
 			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
 			EffectManager.SpawnEffect(muzzleEffect, new EffectData
 			{
@@ -71,7 +71,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 	}
 
-	public class HonokasVeil : Asset, ISkill, IEffect
+	public class HonokasVeil : Concentric, ISkill, IEffect
 	{
 		public override async Task Initialize()
 		{

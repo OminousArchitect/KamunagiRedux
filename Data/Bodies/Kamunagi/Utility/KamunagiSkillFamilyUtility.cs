@@ -3,10 +3,10 @@ using RoR2;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-	public class KamunagiSkillFamilyUtility : Asset, ISkillFamily
+	public class KamunagiSkillFamilyUtility : Concentric, ISkillFamily
 	
 	{
-		public IEnumerable<Asset> GetSkillAssets() => new Asset[] 
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] 
 			{ 
 				GetAsset<KuonFlashbang>(),
 				GetAsset<WoshisZone>(), 

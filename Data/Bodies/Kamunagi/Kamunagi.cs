@@ -1,5 +1,6 @@
 using EntityStates;
 using ExtraSkillSlots;
+using Kamunagi;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Secondary;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
@@ -16,7 +17,7 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi
 {
-	public class KamunagiAsset : Asset, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin, IMaster, IEffect
+	public class KamunagiAsset : Concentric, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin, IMaster, IEffect
 	{
 		public const string tokenPrefix = "NINES_KAMUNAGI_BODY_";
 
@@ -55,7 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			return master;
 		}
 
-		IEnumerable<Asset> IModel.GetSkins() => new Asset[] { this };
+		IEnumerable<Concentric> IModel.GetSkins() => new Concentric[] { this };
 
 		async Task<GameObject> IModel.BuildObject()
 		{

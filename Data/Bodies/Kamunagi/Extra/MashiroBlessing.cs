@@ -49,7 +49,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				if (fixedAge > duration)
 				{
-					characterBody.AddTimedBuffAuthority(Asset.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
+					characterBody.AddTimedBuffAuthority(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
 				}
 				outer.SetNextStateToMain();
 				return;
@@ -99,7 +99,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				if (_spellStateMachine == null || !_spellStateMachine)
 				{
 					_spellStateMachine = Bar!.source.body.skillLocator
-						.FindSkillByDef(Asset.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;
+						.FindSkillByDef(Concentric.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;
 				}
 
 				return _spellStateMachine;
@@ -107,7 +107,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 	
-	public class MashiroBlessing : Asset, IEffect, ISkill, IBuff, IOverlay
+	public class MashiroBlessing : Concentric, IEffect, ISkill, IBuff, IOverlay
 	{
 		public static DamageColorIndex damageColorIndex;
 
@@ -179,7 +179,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override bool IsReady(GenericSkill skillSlot) => base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
 	}
 
-	public class MashiroBlessingRespawn : Asset, IEffect
+	public class MashiroBlessingRespawn : Concentric, IEffect
 	{
 		public async Task<GameObject> BuildObject()
 		{

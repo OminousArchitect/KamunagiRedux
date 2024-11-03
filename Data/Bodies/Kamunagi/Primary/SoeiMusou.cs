@@ -33,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					owner = gameObject,
 					position = aimRay.origin,
 					rotation = Quaternion.LookRotation(aimRay.direction),
-					projectilePrefab = Asset.GetProjectile<SoeiMusou>().WaitForCompletion(),
+					projectilePrefab = Concentric.GetProjectile<SoeiMusou>().WaitForCompletion(),
 					useSpeedOverride = true,
 					speedOverride = 105f
 				});
@@ -50,7 +50,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	internal class SoeiMusou : Asset, ISkill, IProjectile, IProjectileGhost
+	internal class SoeiMusou : Concentric, ISkill, IProjectile, IProjectileGhost
 	{
 		public override async Task Initialize()
 		{

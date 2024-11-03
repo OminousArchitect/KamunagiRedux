@@ -22,6 +22,47 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public SceneDef? currentStage;
 		public static SceneDef meridianDef;
 		public static SceneDef sulfurPoolsDef;
+		private bool _chainsPrimed;
+
+		public bool chainsPrimed
+		{
+			get
+			{
+				return _chainsPrimed;
+			}
+			set
+			{
+				if (value != _chainsPrimed)
+				{
+					if (value)
+					{
+						if (chainsLeftInstance != null || chainsLeftInstance)
+						{
+							chainsLeftInstance!.GetComponent<Renderer>().material.color = Colors.twinsLightColor;
+						}
+
+						if (chainsRightInstance != null || chainsRightInstance)
+						{
+							chainsRightInstance!.GetComponent<Renderer>().material.color = Colors.twinsLightColor;
+						}
+					}
+					else
+					{
+						if (chainsLeftInstance != null || chainsLeftInstance)
+						{
+							chainsLeftInstance!.GetComponent<Renderer>().material.color = Colors.twinsDarkColor;
+						}
+
+						if (chainsRightInstance != null || chainsRightInstance)
+						{
+							chainsRightInstance!.GetComponent<Renderer>().material.color = Colors.twinsDarkColor;
+						}
+					}
+
+					_chainsPrimed = value;
+				}
+			}
+		}
 
 		public override void OnEnter()
 		{
@@ -36,6 +77,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 		public override void OnExit() {
 			base.OnExit();
+			chainsPrimed = false;
 			if (chainsLeftInstance != null || chainsLeftInstance)
 			{
 				chainsLeftInstance!.ReturnToPool();
@@ -61,6 +103,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 				if (chainsRightInstance == null || !chainsRightInstance)
 					chainsRightInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, SBone,
 						data: new EffectData() { rootObject = SBone.gameObject });
+				chainsPrimed = false;
 				chainsSpawned = true;
 			}
 			else if (chainsSpawned && !passiveSkill.IsReady())
@@ -92,9 +135,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			{
 				if (hasInputBank)
 				{
-					if (inputBank.jump.justPressed && (characterMotor as IPhysMotor).velocity.y <= -14f && passiveSkill.ExecuteIfReady()) //ascension threshold
+					if ((characterMotor as IPhysMotor).velocity.y <= -14f)
 					{
-						return;
+						chainsPrimed = true;
+						if (inputBank.jump.justPressed && passiveSkill.ExecuteIfReady()) //ascension threshold
+						{
+							chainsPrimed = false;
+							return;
+						}
 					}
 
 					if (inputBank.jump.down && (characterMotor as IPhysMotor).velocity.y <= 0)

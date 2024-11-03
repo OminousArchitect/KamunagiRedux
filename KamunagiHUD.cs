@@ -93,6 +93,7 @@ namespace KamunagiOfChains
 		public HealthBarStyle.BarStyle trailingOverZealStyle;
 		public static Material zealMat;
 		public Material defaultMaterial;
+		private const float LerpStart = 0.6f;
 
 		public void InitFromHealthBar(HealthBar healthBar)
 		{
@@ -138,8 +139,7 @@ namespace KamunagiOfChains
 			ApplyStyle(ref zealInfo, zealStyle, defaultMaterial);
 			zealInfo.normalizedXMax = twinsBehaviour.zealMeterNormalized;
 			zealInfo.enabled = !zealInfo.normalizedXMax.Equals(0);
-			if (zealInfo.enabled)
-				barInfos.Add(zealInfo);
+			
 			
 			var trailingOverZeal = new BarInfo();
 			ApplyStyle(ref trailingOverZeal, trailingOverZealStyle, zealMat);
@@ -147,7 +147,11 @@ namespace KamunagiOfChains
 				float.PositiveInfinity, Time.deltaTime);
 			trailingOverZeal.normalizedXMax = cachedZealForLerp > 0.01 ? cachedZealForLerp : 0;
 			trailingOverZeal.enabled = !trailingOverZeal.normalizedXMax.Equals(0);
-			trailingOverZeal.color = Color.Lerp(trailingOverZealStyle.baseColor, Color.red, trailingOverZeal.normalizedXMax);
+			trailingOverZeal.color = Color.Lerp(trailingOverZealStyle.baseColor, Color.red, Mathf.Max(0f, trailingOverZeal.normalizedXMax - LerpStart) / (1-LerpStart));
+
+			zealInfo.color = trailingOverZeal.color * 1.1f;
+			if (zealInfo.enabled)
+				barInfos.Add(zealInfo);
 			if (trailingOverZeal.enabled)
 				barInfos.Add(trailingOverZeal);
 			
@@ -195,16 +199,18 @@ namespace KamunagiOfChains
 				image.sprite = barInfo.sprite;
 			}
 
-			if (barInfo.color != image.color)
-			{
-				cachedBarInfo.color = barInfo.color;
-				image.color = barInfo.color;
-			}
-
 			if (barInfo.material != image.material)
 			{
 				cachedBarInfo.material = barInfo.material;
 				image.material = barInfo.material;
+			}
+			
+			if (barInfo.color != image.color)
+			{
+				cachedBarInfo.color = barInfo.color;
+				image.color = barInfo.color;
+				if (image.material != defaultMaterial)
+					image.material.color = barInfo.color;
 			}
 
 			if (Mathf.Abs(barInfo.normalizedXMin - cachedBarInfo.normalizedXMin) > 0.01)

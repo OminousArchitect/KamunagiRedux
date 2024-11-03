@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace KamunagiOfChains
+namespace Kamunagi
 {
 	[ExecuteInEditMode]
 	public class ParticleUVScroll : MonoBehaviour

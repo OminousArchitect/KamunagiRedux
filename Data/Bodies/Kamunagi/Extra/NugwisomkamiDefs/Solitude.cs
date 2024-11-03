@@ -19,7 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			
 			var nugwisoBody= (await LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab"))!.InstantiateClone("Nugwiso4", true);
 			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
-			charModel.baseLightInfos[0].defaultColor = Colors.wispNeonGreen;
+			charModel.baseLightInfos[0].defaultColor = Colors.jachdwaltColor;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
 			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();

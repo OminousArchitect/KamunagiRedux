@@ -92,7 +92,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			aimDirectionVector = base.inputBank.aimDirection;
 			var modelTransform = GetModelTransform();
 			Material coloredOverlay = new Material(LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashExpanded"));
-			coloredOverlay.SetColor("_TintColor", Colors.wispNeonGreen);
+			coloredOverlay.SetColor("_TintColor", Colors.jachdwaltColor);
 					
 			TemporaryOverlayInstance mercEvisTarget = TemporaryOverlayManager.AddOverlay(modelTransform.gameObject);
 			mercEvisTarget.duration = 0.6f;
@@ -289,7 +289,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				if (modelTransform)
 				{
 					Material purpleStuff = new Material(LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashExpanded"));
-					purpleStuff.SetColor("_TintColor", Colors.wispNeonGreen);
+					purpleStuff.SetColor("_TintColor", Colors.jachdwaltColor);
 					
 					TemporaryOverlayInstance mercEvisTarget = TemporaryOverlayManager.AddOverlay(modelTransform.gameObject);
 					mercEvisTarget.duration = 0.6f;

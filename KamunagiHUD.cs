@@ -147,7 +147,7 @@ namespace KamunagiOfChains
 				float.PositiveInfinity, Time.deltaTime);
 			trailingOverZeal.normalizedXMax = cachedZealForLerp > 0.01 ? cachedZealForLerp : 0;
 			trailingOverZeal.enabled = !trailingOverZeal.normalizedXMax.Equals(0);
-			trailingOverZeal.color = Color.Lerp(trailingOverZealStyle.baseColor, Color.red, Mathf.Max(0f, trailingOverZeal.normalizedXMax - LerpStart) / (1-LerpStart));
+			trailingOverZeal.color = Color.Lerp(Colors.earlyZeal, Colors.zealColor, Mathf.Max(0f, trailingOverZeal.normalizedXMax - LerpStart) / (1-LerpStart));
 
 			zealInfo.color = trailingOverZeal.color * 1.1f;
 			if (zealInfo.enabled)

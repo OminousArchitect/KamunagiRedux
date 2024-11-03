@@ -173,6 +173,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			dotZone.onEnd.m_PersistentCalls = new UnityEngine.Events.PersistentCallGroup();
 			dotZone.fireFrequency = 0.7f;
 			dotZone.lifetime = 5.7f;
+			dotZone.overlapProcCoefficient = 1f;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Freeze2s;
+
+			var hitboxResize = Vector3.one * 2.9f;
+			proj.GetComponent<HitBoxGroup>().hitBoxes[0].gameObject.transform.localScale = hitboxResize;
+			proj.GetComponent<HitBoxGroup>().hitBoxes[0].gameObject.transform.localPosition = new Vector3(0f, 2f, 0f);
+			proj.GetComponent<HitBoxGroup>().hitBoxes[1].gameObject.transform.localScale = hitboxResize;
+
 			var stockParticles = proj.transform.Find("FX/ScaledOnImpact").gameObject;
 			stockParticles.transform.GetChild(0).gameObject.SetActive(false);
 			stockParticles.transform.GetChild(2).gameObject.SetActive(false);
@@ -182,7 +190,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			icePillar.transform.localScale = Vector3.one; //touching this appears to break normalizing to floor, so I'll leave it alone
 			icePillar.transform.localPosition = Vector3.zero;
 			icePillar.transform.SetParent(parent);
-			
 			var icyFx = (await LoadAsset<GameObject>("RoR2/Base/Icicle/IcicleAura.prefab")).transform.GetChild(0).gameObject!.InstantiateClone("IceFX", false);
 			icyFx.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 			UnityEngine.Object.Destroy(icyFx.transform.Find("Area").gameObject);

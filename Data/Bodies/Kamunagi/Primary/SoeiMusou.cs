@@ -73,6 +73,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.cancelSprintingOnActivation = false;
 			skill.rechargeStock = 1;
 			skill.attackSpeedBuffsRestockSpeed = true;
+			skill.mustKeyPress = true;
 			return skill;
 		}
 

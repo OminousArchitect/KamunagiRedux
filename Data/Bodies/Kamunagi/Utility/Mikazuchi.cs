@@ -9,11 +9,12 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-	public class MikazuchiState : IndicatorSpellState
+	public class MikazuchiState : RaycastedSpellState
 	{
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileCount = 3f;
-		public override float duration => 5f;
+		public override float duration => 0.7f;
+		public override bool requireFullCharge => true;
 		public override float failedCastCooldown => 2f;
 
 		public override void OnEnter()
@@ -62,7 +63,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					damageStat,
 					10f,
 					RollCrit(),
-					speedOverride: xoro.RangeInt(13, 28)
+					speedOverride: xoro.RangeInt(20, 35)
 				);
 			}
 		}
@@ -188,22 +189,28 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	public class MikazuchiLightningOrb : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
-		{
-			var projectile =
-				(await LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricOrbProjectile.prefab")!
-				).InstantiateClone("MikazuchiLightningOrbProjectile");
+		{	//(await LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricOrbProjectile.prefab")!).InstantiateClone("MikazuchiLightningOrbProjectile");
+			var projectile = (await LoadAsset<GameObject>("RoR2/DLC1/VoidBarnacle/VoidBarnacleBullet.prefab")!).InstantiateClone("MikazuchiLightningOrbProjectile");
 			var controller = projectile.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.procCoefficient = 0.8f;
-
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Shock5s;
-			var lightningImpact = projectile.GetComponent<ProjectileImpactExplosion>();
+			var lightningImpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightningImpact.impactEffect = await GetEffect<MikazuchiLightningStrikeSilent>();
 			lightningImpact.childrenProjectilePrefab = await GetProjectile<MikazuchiLightningSeeker>();
 			lightningImpact.childrenDamageCoefficient = 0.5f;
-			var lightpact = projectile.GetComponent<ProjectileImpactExplosion>();
+			var lightpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
 			lightpact.blastDamageCoefficient = 4.5f;
+			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+			projectile.GetComponent<ProjectileController>().procCoefficient = 0.6f;
+			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 145f;
+			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
+			var target = projectile.GetComponent<ProjectileDirectionalTargetFinder>();
+			target.lookRange = 45f;
+			target.lookCone = 180f;
+			target.targetSearchInterval = 0.30f;
+			target.allowTargetLoss = false;
 			return projectile;
 		}
 

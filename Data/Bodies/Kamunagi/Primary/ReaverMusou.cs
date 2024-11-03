@@ -254,13 +254,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	[HarmonyPatch]
 	internal class PrimedStickyBomb : Concentric, IProjectile, IProjectileGhost
 	{
-		//public static DamageAPI.ModdedDamageType TwinsReaver;
-		public override Task Initialize()
-		{
-			//TwinsReaver = DamageAPI.ReserveDamageType();
-			return base.Initialize();
-		}
-
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("TwinsPrimedReaverProjectile", true);

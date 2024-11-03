@@ -14,7 +14,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	public class ExperimentalWallState : BaseTwinState
 	{
 		public float maxDistance = 600f;
-        public float maxSlopeAngle = 122f;
+        public float maxSlopeAngle = 119f;
         public float baseDuration = 0.5f;
         public float duration;
         public string prepWallSoundString = "Play_mage_shift_start";
@@ -26,7 +26,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         public GameObject badCrosshairPrefab =  EntityStates.Mage.Weapon.PrepWall.badCrosshairPrefab;
         public GameObject indicatorPrefabInstance; //declared in the entitystate, intialized in the Concentric class
         private float damageCoefficient = 1f;
-        private Vector3 normal;
         private bool shouldInvert;
 
         public override void OnEnter()

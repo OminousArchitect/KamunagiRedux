@@ -14,7 +14,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	public class ExperimentalWallState : BaseTwinState
 	{
 		public float maxDistance = 600f;
-        public float maxSlopeAngle = 90f;
+        public float maxSlopeAngle = 122f;
         public float baseDuration = 0.5f;
         public float duration;
         public string prepWallSoundString = "Play_mage_shift_start";
@@ -51,14 +51,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 {
 	                shouldInvert = Vector3.Angle(Vector3.up, raycastHit.normal) > maxSlopeAngle;
                     indicatorPrefabInstance.transform.position = raycastHit.point;
-                    indicatorPrefabInstance.transform.up = raycastHit.normal;
+                    indicatorPrefabInstance.transform.forward = -aimRay.direction;
+                    
                     if (shouldInvert)
                     {
-	                    indicatorPrefabInstance.transform.forward = aimRay.direction;
+	                    indicatorPrefabInstance.transform.up = -raycastHit.normal;
                     }
                     else
                     {
-	                    indicatorPrefabInstance.transform.forward = -aimRay.direction;
+	                    indicatorPrefabInstance.transform.up = raycastHit.normal;
                     }
                     //goodPlacement = Vector3.Angle(Vector3.up, raycastHit.normal) " maxSlopeAngle;
                     goodPlacement = true;

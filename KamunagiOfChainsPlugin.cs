@@ -49,6 +49,9 @@ namespace KamunagiOfChains
 		public const string Guid = "com.Nines.Kamunagi";
 		public const string Name = "KamunagiOfChains";
 		public const string Version = "1.0.0";
+		
+		public static BodyIndex vultureIndex;
+		public static BodyIndex pestIndex;
 
 		public void Awake()
 		{
@@ -81,6 +84,13 @@ namespace KamunagiOfChains
 
 			Language.collectLanguageRootFolders +=
 				folders => folders.Add(System.IO.Path.Combine(pluginPath, "Language"));
+			
+			log.LogDebug("Caching BodyIndexes");
+			RoR2Application.onLoad += () =>
+			{
+				vultureIndex = BodyCatalog.FindBodyIndex("VultureBody");
+				pestIndex = BodyCatalog.FindBodyIndex("FlyingVerminBody"); //cache these like KatarinaMod, because I need all flying enemies, and these guys have isFlying set to false
+			};
 
 			log.LogDebug("Finished Awake");
 		}

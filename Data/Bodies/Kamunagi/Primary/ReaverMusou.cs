@@ -43,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 						crit = RollCrit(),
 						projectilePrefab = Asset.GetProjectile<ReaverMusou>().WaitForCompletion(),
 						owner = gameObject,
-						damage = characterBody.damage * 2.8f,
+						damage = characterBody.damage,
 						force = 1
 					});
 					return false;
@@ -254,10 +254,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	[HarmonyPatch]
 	internal class PrimedStickyBomb : Asset, IProjectile, IProjectileGhost
 	{
-		public static DamageAPI.ModdedDamageType TwinsReaver;
+		//public static DamageAPI.ModdedDamageType TwinsReaver;
 		public override Task Initialize()
 		{
-			TwinsReaver = DamageAPI.ReserveDamageType();
+			//TwinsReaver = DamageAPI.ReserveDamageType();
 			return base.Initialize();
 		}
 
@@ -269,12 +269,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			impact.impactEffect = await GetEffect<ReaverExplosion>();
 			impact.bonusBlastForce = new Vector3(0f, 0f, 0f);
 			impact.falloffModel = BlastAttack.FalloffModel.None;
-			impact.blastDamageCoefficient = 1.66f;
+			impact.blastDamageCoefficient = 1.25f;
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
 
@@ -315,7 +314,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
 		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
 		{
-			if (damageInfo.HasModdedDamageType(TwinsReaver))
+			if (damageInfo.damageType == RoR2.DamageType.Nullify && damageInfo.attacker.GetComponent<CharacterBody>().bodyIndex == Asset.GetBodyIndex<KamunagiAsset>().WaitForCompletion())
 			{
 				if (damageInfo.damage >= __instance.health)
 				{
@@ -338,7 +337,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.falloffModel = BlastAttack.FalloffModel.None;
 			impact.bonusBlastForce = new Vector3(0f, 75f, 0f);
-			impact.blastDamageCoefficient = 2.15f;
+			impact.blastDamageCoefficient = 2f;
 			impact.lifetime = 0.1f;
 			impact.blastRadius = 5f;
 			impact.destroyOnEnemy = false;
@@ -347,7 +346,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>(); //this is where the transformation happens
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<PrimedStickyBomb>();
 			crabController.whiteToBlackTransformationRadius = 13f;
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(PrimedStickyBomb.TwinsReaver);
 			return proj;
 		}
 
@@ -394,7 +392,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		}
 	}
 
-	internal class Recursion2Projectile : Asset, IProjectile //this handles up to 3 recursive explosions, thats enough I guess. Vanilla component infinitely recurses and I couldn't manage that without stackoverflow
+	internal class Recursion2Projectile : Asset, IProjectile //this handles up to 3 recursive explosions, thats enough I guess. Vanilla component infinitely recurses and I couldn't manage that without stackoverflow because I'm 
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{

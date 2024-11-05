@@ -196,7 +196,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			controller.procCoefficient = 0.8f;
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Shock5s;
 			var lightningImpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
-			lightningImpact.impactEffect = await GetEffect<MikazuchiLightningStrikeSilent>();
+			lightningImpact.impactEffect = await GetEffect<MikazuchiLightningStrike>();
 			lightningImpact.childrenProjectilePrefab = await GetProjectile<MikazuchiLightningSeeker>();
 			lightningImpact.childrenDamageCoefficient = 0.5f;
 			var lightpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();

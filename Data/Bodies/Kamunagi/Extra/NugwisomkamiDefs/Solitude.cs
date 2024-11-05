@@ -1,6 +1,8 @@
-﻿using EntityStates.LunarWisp;
+﻿using EntityStates;
+using EntityStates.LunarWisp;
 using R2API;
 using RoR2;
+using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
 
@@ -41,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			meshObject.transform.localScale = Vector3.one * 3;
 			var cb = nugwisoBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI4_BODY_NAME";
-			cb.baseMaxHealth = 200f;
+			cb.baseMaxHealth = 330f;
 			cb.baseDamage = 12f;
 			cb.baseMoveSpeed = 13f;
 
@@ -95,13 +97,40 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	}
 	#endregion
 
-	public class IceBeam : EntityStates.Wisp1Monster.ChargeEmbers
+	public class ShootDaggerState : BaseState
 	{
-		
+		public static GameObject? daggerFab;
+		public override void OnExit()
+		{
+			int projectileCount = 3;
+			var xoro = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
+			var spacingDegrees = 360f / projectileCount;
+			var forward = Vector3.ProjectOnPlane(inputBank.aimDirection, Vector3.up);
+			var centerPoint = characterBody.footPosition;
+			for (var i = 0; i < projectileCount; i++)
+			{
+				ProjectileManager.instance.FireProjectile(
+					daggerFab,
+					centerPoint,
+					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
+					gameObject,
+					damageStat * 2f,
+					95f,
+					RollCrit()
+				);
+			}
+			base.OnExit();
+		}
 	}
 	
 	public class IceTankPrimary : Concentric, ISkill
 	{
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			ShootDaggerState.daggerFab = await LoadAsset<GameObject>("RoR2/Base/Dagger/DaggerProjectile.prefab");
+		}
+		
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
@@ -114,7 +143,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 		
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(IceBeam) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ShootDaggerState) };
 	}
 	
 	public class IceTankPrimaryFamily : Concentric, ISkillFamily
@@ -138,7 +167,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 		
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(IceBeam) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ShootDaggerState) };
 	}
 	
 	public class IceTankSecondaryFamily : Concentric, ISkillFamily

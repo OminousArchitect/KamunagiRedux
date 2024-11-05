@@ -113,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					"TidalProjectile", true);
 			var projectileController = tidalProjectile.GetComponent<ProjectileController>();
 			projectileController.ghostPrefab = await this.GetProjectileGhost();
-			projectileController.startSound = null;
+			projectileController.startSound = "Play_miniMushroom_spore_shoot";
 			projectileController.procCoefficient = 1.2f;
 			tidalProjectile.GetComponent<Rigidbody>().useGravity = false;
 			tidalProjectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
@@ -155,6 +155,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			gImpact.childrenDamageCoefficient = 0.9f;
 			gImpact.childrenProjectilePrefab = await GetProjectile<AtuysTidesEruption>();
 			luckyTidalProjectile.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<AtuysTides>();
+			luckyTidalProjectile.GetComponent<ProjectileController>().startSound = "Play_miniMushroom_spore_shoot";
 			luckyTidalProjectile.GetComponent<Rigidbody>().useGravity = false;
 			luckyTidalProjectile.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
 			return luckyTidalProjectile;

@@ -114,24 +114,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				);
 			}
 		}
-
-		/*
-		 * if (!info.hitHurtBox.healthComponent.body.isFlying) return false;
-					if (Physics.Raycast(targetPostion + Vector3.up * 1f, Vector3.down, out var hitInfo, 100f, LayerIndex.world.mask))
-					{
-						ProjectileManager.instance.FireProjectile(
-							Concentric.GetProjectile<LightPillar5>().WaitForCompletion(),
-							hitInfo.point,
-							Quaternion.identity,
-							gameObject,
-							damageStat * 1.5f,
-							0f,
-							false,
-							LightPillar5.damageColorIndex
-						);
-					}
-					return true;
-		 */
 	}
 
 	[HarmonyPatch]
@@ -173,12 +155,40 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/Brother/BrotherFirePillar.prefab"))!.InstantiateClone("TwinsLight5Pillar", true);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+			proj.GetComponent<HitBoxGroup>().hitBoxes[0].gameObject.transform.localScale = new Vector3(4f, 150, 4f);
 			return proj;
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
 			var ghost = (await LoadAsset<GameObject>("RoR2/Base/Brother/BrotherFirePillarGhost.prefab"))!.InstantiateClone("TwinsLight5PillarGhost", false);
+			foreach (ParticleSystem p in ghost.GetComponentsInChildren<ParticleSystem>())
+			{
+				switch (p.name)
+				{
+					case "Glow, Looping":
+						var shape = p.shape;
+						shape.scale = new Vector3(1f, 1f, 15f); //3rd attempt at scaling this up, shape.scale also doesn't make a difference and I'm gonna give up on this for now
+						break;
+				}
+			}
+			foreach (ParticleSystemRenderer r in ghost.GetComponentsInChildren<ParticleSystemRenderer>())
+			{
+				switch (r.name)
+				{
+					case "Glow, Looping":
+						r.material = new Material(r.material);
+						r.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampHippoVoidEye.png"));
+						r.material.SetFloat("_DstBlendFloat", 1f);
+						break;
+					case "Glow, Initial":
+						r.material = new Material(r.material);
+						r.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampHippoVoidEye.png"));
+						r.material.SetFloat("_DstBlendFloat", 1f);
+						break;
+				}
+			}
+			ghost.GetComponentInChildren<Light>().color = Colors.twinsDarkColor;
 			return ghost;
 		}
 	}

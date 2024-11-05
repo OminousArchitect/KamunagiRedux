@@ -187,8 +187,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			TrackingWispsState.muzzleflashPrefab =
-				(await LoadAsset<GameObject>("RoR2/Base/Gravekeeper/MuzzleflashTrackingFireball.prefab"))!;
+			TrackingWispsState.muzzleflashPrefab = (await LoadAsset<GameObject>("RoR2/Base/Gravekeeper/MuzzleflashTrackingFireball.prefab"))!;
 			TrackingWispsState.jarOpenEffectPrefab =
 				(await LoadAsset<GameObject>("RoR2/Base/Gravekeeper/GravekeeperJarOpen.prefab"))!;
 			TrackingWispsState.jarCloseEffectPrefab =

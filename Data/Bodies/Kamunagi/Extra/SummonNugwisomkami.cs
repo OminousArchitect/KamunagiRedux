@@ -56,6 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 					var equipList = NugwisoEliteDefs[whichSpirit];
 					var whichEquip = equipList[Mathf.RoundToInt(UnityEngine.Random.Range(0, equipList.Count))];
 					master.inventory.SetEquipmentIndex(EquipmentCatalog.FindEquipmentIndex(whichEquip));
+					master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth);
 					twinBehaviour.masterBehaviour.NugwisoSpiritDefs[whichSpirit] = master;
 				};
 				var characterMaster = summon.Perform();

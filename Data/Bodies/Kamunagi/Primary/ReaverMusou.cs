@@ -1,6 +1,7 @@
 using EntityStates;
 using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -254,6 +255,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	[HarmonyPatch]
 	internal class PrimedStickyBomb : Concentric, IProjectile, IProjectileGhost
 	{
+		public static DamageAPI.ModdedDamageType TwinsReaver;
+		public override Task Initialize()
+		{
+			TwinsReaver = DamageAPI.ReserveDamageType();
+			return base.Initialize();
+		}
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("TwinsPrimedReaverProjectile", true);
@@ -267,6 +274,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
 
@@ -307,7 +315,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
 		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
 		{
-			if (damageInfo.damageType == RoR2.DamageType.Nullify && damageInfo.attacker.GetComponent<CharacterBody>().bodyIndex == Concentric.GetBodyIndex<KamunagiAsset>().WaitForCompletion())
+			if (damageInfo.HasModdedDamageType(TwinsReaver))
 			{
 				if (damageInfo.damage >= __instance.health)
 				{
@@ -330,7 +338,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.falloffModel = BlastAttack.FalloffModel.None;
 			impact.bonusBlastForce = new Vector3(0f, 75f, 0f);
-			impact.blastDamageCoefficient = 2f;
+			impact.blastDamageCoefficient = 1.75f;
 			impact.lifetime = 0.1f;
 			impact.blastRadius = 5f;
 			impact.destroyOnEnemy = false;
@@ -381,6 +389,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(PrimedStickyBomb.TwinsReaver);
 			return proj;
 		}
 	}
@@ -397,6 +406,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(PrimedStickyBomb.TwinsReaver);
 			return proj;
 		}
 	}

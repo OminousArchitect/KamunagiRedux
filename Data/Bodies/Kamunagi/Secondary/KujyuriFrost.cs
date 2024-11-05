@@ -175,6 +175,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			dotZone.lifetime = 5.7f;
 			dotZone.overlapProcCoefficient = 1f;
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Freeze2s;
+			UnityEngine.Object.Destroy(proj.GetComponent<AkGameObj>());
 
 			var hitboxResize = Vector3.one * 2.9f;
 			proj.GetComponent<HitBoxGroup>().hitBoxes[0].gameObject.transform.localScale = hitboxResize;

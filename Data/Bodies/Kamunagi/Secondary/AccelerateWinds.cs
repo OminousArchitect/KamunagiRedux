@@ -91,6 +91,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			{
 				chargeEffectInstance.ReturnToPool();
 			}
+
+			if (NetworkServer.active)
+			{
+				Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false,
+					removeCooldownBuffs: false, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
+			}
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;

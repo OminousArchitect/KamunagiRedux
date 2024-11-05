@@ -148,6 +148,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.procCoefficient = 0.6f;
 			proj.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 20f;
+			proj.GetComponent<ProjectileSimple>().lifetime = 2f;
 			return proj;
 		}
 

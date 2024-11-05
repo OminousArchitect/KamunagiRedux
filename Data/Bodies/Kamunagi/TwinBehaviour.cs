@@ -49,6 +49,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			}
 			var extra = extraLocator.extraFourth;
 			extra.SetSkillOverride(this, body.skillLocator.allSkills[9].skillDef, GenericSkill.SkillOverridePriority.Contextual);
+			body.skillLocator.ResetSkills();
+			extraLocator.extraFourth.Reset();
 		}
 
 		private void UnsetOverrides()
@@ -63,6 +65,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			}
 			var extra = extraLocator.extraFourth;
 			extra.UnsetSkillOverride(this, body.skillLocator.allSkills[9].skillDef, GenericSkill.SkillOverridePriority.Contextual);
+			body.skillLocator.ResetSkills();
+			extraLocator.extraFourth.Reset();
 		}
 
 		public string twinMuzzle

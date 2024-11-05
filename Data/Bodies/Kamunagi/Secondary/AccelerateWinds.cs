@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -19,34 +20,49 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	{
 		public override int meterGain => 5;
 		private float damageCoefficient = 2f;
+		private float distanceMult;
+		private float minDistance = 0.2f;
+		private float maxDistance = 0.2f;
+		private const float maxChargeTime = 1.5f;
 		private EffectManagerHelper? chargeEffectInstance;
 		private CameraTargetParams.AimRequest? aimRequest;
+		public static BuffDef parryBuff;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
-			
 			var effect = Concentric.GetEffect<AccelerateWinds>().WaitForCompletion();
 			if (muzzleTransform)
 			{
 				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
 					new EffectData() { rootObject = muzzleTransform.gameObject });
 			}
+
+			//minDistance = twinBehaviour.runtimeNumber1;
+			//maxDistance = twinBehaviour.runtimeNumber2;
 			
 			aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
+			characterBody.SetBuffCount(parryBuff.buffIndex, 1);
 		}
 
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+			distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
 			if (!isAuthority) return;
 			if (!IsKeyDownAuthority())
 			{
 				outer.SetNextStateToMain();
 			}
+
+			if (inputBank.skill1.down)
+			{
+				Fire();
+				outer.SetNextStateToMain();
+			}
 			
-			if (fixedAge > 1.2f)
+			if (fixedAge > maxChargeTime)
 			{
 				skillLocator.DeductCooldownFromAllSkillsAuthority(2f);
 				characterBody.AddTimedBuffAuthority(RoR2.DLC1Content.Buffs.KillMoveSpeed.buffIndex, 2f);
@@ -58,7 +74,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			var boomerang = Concentric.GetProjectile<AccelerateWinds>().WaitForCompletion();
 			var aimRay = GetAimRay();
-			//boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
+			boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
 
 			if (isAuthority)
 			{
@@ -92,18 +108,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				chargeEffectInstance.ReturnToPool();
 			}
 
-			if (NetworkServer.active)
-			{
-				Util.CleanseBody(base.characterBody, removeDebuffs: true, removeBuffs: false,
-					removeCooldownBuffs: false, removeDots: true, removeStun: true, removeNearbyProjectiles: true);
-			}
+			characterBody.SetBuffCount(parryBuff.buffIndex, 0);
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class AccelerateWinds : Concentric, IProjectile, IProjectileGhost, IEffect, ISkill
+	[HarmonyPatch]
+	public class AccelerateWinds : Concentric, IProjectile, IProjectileGhost, IEffect, ISkill, IBuff
 	{
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			AccelerateWindState.parryBuff = await this.GetBuffDef();
+		}
+
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(AccelerateWindState) };
 
 		async Task<SkillDef> ISkill.BuildObject()
@@ -114,6 +133,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY2_DESCRIPTION";
 			skill.icon= (await LoadAsset<Sprite>("bundle:windpng"));
 			skill.activationStateMachineName = "Weapon";
+			skill.fullRestockOnAssign = true;
 			skill.baseMaxStock = 2;
 			skill.baseRechargeInterval = 8f;
 			skill.stockToConsume = 1;
@@ -121,7 +141,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.canceledFromSprinting = false;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = false;
-			skill.mustKeyPress = false;
+			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = true;
 			return skill;
 		}
@@ -188,8 +208,44 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			attributes.DoNotPool = false;
 			return effect;
 		}
+
+		async Task<BuffDef> IBuff.BuildObject()
+		{
+			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
+			buffDef.name = "TwinsWindDeflect";
+			buffDef.buffColor = Colors.earlyZeal;
+			buffDef.canStack = false;
+			buffDef.isDebuff = false;
+			buffDef.iconSprite= (await LoadAsset<Sprite>("RoR2/Junk/Common/texBuffBodyArmorIcon.tif"));
+			buffDef.isHidden = false;
+			return buffDef;
+		}
+		
+		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		private static void TwinsParry(HealthComponent __instance, DamageInfo damageInfo)
+		{
+			if (__instance.body.bodyIndex != Concentric.GetBodyIndex<KamunagiAsset>().WaitForCompletion()) return;
+			if (!__instance.body.HasBuff(Concentric.GetBuffDef<AccelerateWinds>().WaitForCompletion())) return;
+			EffectData effectData = new EffectData
+			{
+				origin = damageInfo.position,
+				rotation = Util.QuaternionSafeLookRotation((damageInfo.force != Vector3.zero) ? damageInfo.force : UnityEngine.Random.onUnitSphere)
+			};
+			EffectManager.SpawnEffect(RoR2.HealthComponent.AssetReferences.bearEffectPrefab, effectData, transmit: true);
+			damageInfo.rejected = true;
+		}
 	}
 
+	public class WindBlockEffect : Concentric, IEffect
+	{
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			var effect = (await LoadAsset<GameObject>("RoR2/Base/Bear/BearProc.prefab"))!.InstantiateClone("TwinsParryEffect", true);
+			
+			return effect;
+		}
+	}
+	
 	public class WindHitEffect : Concentric, IEffect
 	{
 		async Task<GameObject> IEffect.BuildObject()

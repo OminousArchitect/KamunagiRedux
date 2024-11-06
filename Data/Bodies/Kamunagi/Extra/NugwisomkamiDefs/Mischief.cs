@@ -62,6 +62,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
 			
 			var fireDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset"));
+			var fireRules = new ItemDisplayRule[fireDisplay.rules.Length];
+			Array.Copy(fireDisplay.rules, fireRules, fireDisplay.rules.Length);
 			fireDisplay.rules[0].childName = "Muzzle";
 			fireDisplay.rules[0].localPos = new Vector3(0.37824F, 0.18649F, 0.31578F);
 			fireDisplay.rules[0].localAngles = new Vector3(290.8627F, 338.1044F, 46.19113F);
@@ -72,6 +74,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			fireDisplay.rules[1].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 			
 			var lightningDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset"));
+			var lightningRules = new ItemDisplayRule[lightningDisplay.rules.Length];
+			Array.Copy(lightningDisplay.rules, lightningRules, lightningDisplay.rules.Length);
 			lightningDisplay.rules[0].childName = "Muzzle";
 			lightningDisplay.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			lightningDisplay.rules[0].localAngles = new Vector3(0F, 0F, 0F);

@@ -18,6 +18,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override void Fire(Vector3 targetPosition)
 		{
 			base.Fire(targetPosition);
+			if (!NetworkServer.active) return;
 			if (twinBehaviour.activeBuffWard)
 			{
 				NetworkServer.Destroy(twinBehaviour.activeBuffWard);

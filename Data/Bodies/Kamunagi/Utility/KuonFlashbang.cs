@@ -42,10 +42,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
 			availableNodes = characterMotor.isGrounded ? groundNodes : airNodes;
 			var nodesInRange = availableNodes.FindNodesInRange(characterBody.footPosition, 25f, 37f, HullMask.Human);
-			NodeGraph.NodeIndex nodeIndex = nodesInRange.ElementAt(UnityEngine.Random.Range(1, nodesInRange.Count));
-			availableNodes.GetNodePosition(nodeIndex, out var footPosition);
-			footPosition += Vector3.up * 1.5f;
-			teleportPosition = footPosition;
+			if (nodesInRange.Count > 0)
+			{
+				NodeGraph.NodeIndex nodeIndex = nodesInRange.ElementAt(UnityEngine.Random.Range(1, nodesInRange.Count));
+				availableNodes.GetNodePosition(nodeIndex, out var footPosition);
+				footPosition += Vector3.up * 1.5f;
+				teleportPosition = footPosition;
+			}
 			
 			new BlastAttack
 			{

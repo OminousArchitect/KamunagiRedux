@@ -36,11 +36,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				Concentric.GetEffect<LightOfNaturesAxiom>().WaitForCompletion(), childLocator.FindChild("MuzzleRight"), true,
 				new EffectData() { scale = 0.3f });
 			channelSound = Util.PlaySound(ChannelSunStart.beginSoundName, gameObject);
+			animator = GetModelAnimator();
+			animator.SetBool("inAxiom", true);
 			if (!isAuthority) return;
 			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 			characterMotor.useGravity = false;
-			animator = GetModelAnimator();
-			animator.SetBool("inAxiom", true);
 		}
 
 		public override void FixedUpdate()
@@ -74,8 +74,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (leftMuzzleInstance != null) leftMuzzleInstance.ReturnToPool();
 			if (rightMuzzleInstance != null) rightMuzzleInstance.ReturnToPool();
 			AkSoundEngine.StopPlayingID(channelSound);
-			if (!isAuthority) return;
-			characterMotor.useGravity = true;
+			if (isAuthority)
+			{
+				characterMotor.useGravity = true;
+			}
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Death;

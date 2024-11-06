@@ -8,18 +8,22 @@ using RoR2;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
-	public class SummonTatariState : IndicatorSpellState
+	public class SpawnTatariState : BaseState
 	{
-		public override void Fire(Vector3 position)
+		public Vector3 position;
+
+		public override void OnEnter()
 		{
-			
+			base.OnEnter();
+			if (!NetworkServer.active) return;
 			var tatariSummon = new MasterSummon()
 			{
 				masterPrefab = Concentric.GetMaster<TatariBody>().WaitForCompletion(),
-				position = position + Vector3.up * 4,
+				position = position,
 				summonerBodyObject = gameObject,
 				ignoreTeamMemberLimit = true,
 				useAmbientLevel = true,
@@ -29,6 +33,25 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			deployable.onUndeploy ??= new UnityEvent();
 			deployable.onUndeploy.AddListener(tatariMaster.TrueKill);
 			characterBody.master.AddDeployable(deployable, SummonTatari.deployableSlot);
+		}
+
+		public override void OnSerialize(NetworkWriter writer)
+		{
+			 base.OnSerialize(writer);
+			 writer.Write(position);
+		}
+
+		public override void OnDeserialize(NetworkReader reader)
+		{
+			base.OnDeserialize(reader);
+			position = reader.ReadVector3();
+		}
+	}
+	public class SummonTatariState : IndicatorSpellState
+	{
+		public override void Fire(Vector3 position)
+		{
+			outer.SetNextState(new SpawnTatariState() { position = position + Vector3.up * 4 });
 		}
 	}
 
@@ -52,7 +75,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonTatariState) };
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonTatariState), typeof(SpawnTatariState) };
 	}
 
 	public class TatariBody : Concentric, IBody, IMaster

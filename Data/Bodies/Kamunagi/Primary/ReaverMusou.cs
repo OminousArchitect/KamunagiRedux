@@ -184,7 +184,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var lightC = flicker.GetComponent<Light>();
 			lightC.color = new Color(0.4333f, 0.0726f, 0.8925f);
 			lightC.range = 10f;
-			lightC.intensity = 40f; //todo fix later
+			lightC.intensity = 40f;
 			flicker.transform.parent = ghost.transform;
 			UnityEngine.Object.Destroy(flicker.GetComponent<FlickerLight>());
 			flicker.transform.localPosition = Vector3.zero;
@@ -241,7 +241,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 						break;
 				}
 			}
-			Light light = effect.AddComponent<Light>(); //todo light1
+			Light light = effect.AddComponent<Light>();
 			light.range = 10f;
 			light.intensity = 60f;
 			light.color = Colors.twinsDarkColor;

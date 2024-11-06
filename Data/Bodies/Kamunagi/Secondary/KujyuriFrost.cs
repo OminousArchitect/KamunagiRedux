@@ -114,7 +114,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                             false,
                             DamageColorIndex.Default
                         );
-                        Util.PlaySound("Play_mage_shift_stop", base.gameObject);
                     }
                 }
                 else

@@ -195,7 +195,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					case "SoftGlow, Backdrop":
 						r.material =
 							new Material(await LoadAsset<Material>("RoR2/Junk/Common/VFX/matTeleportOutBodyGlow.mat"));
-						r.material.SetColor("_TintColor", new Color(0f, 0.4F, 1)); //todo example of new Material()
+						r.material.SetColor("_TintColor", new Color(0f, 0.4F, 1));
 						r.transform.localScale = Vector3.one * 0.5f;
 						break;
 					case "Donut":

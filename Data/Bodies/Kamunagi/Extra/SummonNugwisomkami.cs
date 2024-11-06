@@ -225,6 +225,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonNugwisomkamiState) };
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonNugwisomkamiState), typeof(SpawnNugwisokamiState), typeof(RespawnNugwisokamiState), typeof(NugwisoKamiSpawnedState) };
 	}
 }

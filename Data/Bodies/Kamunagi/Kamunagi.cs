@@ -136,6 +136,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
 			var twinBehaviour = bodyPrefab.AddComponent<TwinBehaviour>();
 
+
+			bodyHealthComponent.body = bodyComponent;
+
 			bodyComponent.preferredPodPrefab = null;
 			bodyComponent.baseNameToken = tokenPrefix + "NAME";
 			bodyComponent.subtitleNameToken = tokenPrefix + "SUBTITLE";
@@ -185,6 +188,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			model.transform.parent = bodyModelLocator.modelBaseTransform;
 			model.GetComponent<CharacterModel>().body = bodyComponent;
 			bodyModelLocator.modelTransform = model.transform;
+			bodyHealthComponent.modelLocator = bodyModelLocator;
 
 			#endregion
 

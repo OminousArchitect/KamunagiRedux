@@ -115,7 +115,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			var hitEffect = await GetEffect<FireHitEffect>();
 
-			var proj = (await GetProjectile<AccelerateWinds>())!.InstantiateClone("TwinsMiniSun", true);
+			var proj = (await GetProjectile<YamatoWinds>())!.InstantiateClone("TwinsMiniSun", true);
 			UnityEngine.Object.Destroy(proj.GetComponent<WindBoomerangProjectileBehaviour>());
 			UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>()); //bro what is this spaghetti
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());

@@ -16,7 +16,7 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
-	internal class AccelerateWindState : BaseTwinState
+	internal class YamatoWindsState : BaseTwinState
 	{
 		public override int meterGain => 5;
 		private float damageCoefficient = 2f;
@@ -32,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
-			var effect = Concentric.GetEffect<AccelerateWinds>().WaitForCompletion();
+			var effect = Concentric.GetEffect<YamatoWinds>().WaitForCompletion();
 			if (muzzleTransform)
 			{
 				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
@@ -72,7 +72,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		private void Fire()
 		{
-			var boomerang = Concentric.GetProjectile<AccelerateWinds>().WaitForCompletion();
+			var boomerang = Concentric.GetProjectile<YamatoWinds>().WaitForCompletion();
 			var aimRay = GetAimRay();
 			boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
 
@@ -115,15 +115,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	}
 
 	[HarmonyPatch]
-	public class AccelerateWinds : Concentric, IProjectile, IProjectileGhost, IEffect, ISkill, IBuff
+	public class YamatoWinds : Concentric, IProjectile, IProjectileGhost, IEffect, ISkill, IBuff
 	{
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			AccelerateWindState.parryBuff = await this.GetBuffDef();
+			YamatoWindsState.parryBuff = await this.GetBuffDef();
 		}
 
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(AccelerateWindState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(YamatoWindsState) };
 
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -225,13 +225,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		private static void TwinsParry(HealthComponent __instance, DamageInfo damageInfo)
 		{
 			if (__instance.body.bodyIndex != Concentric.GetBodyIndex<KamunagiAsset>().WaitForCompletion()) return;
-			if (!__instance.body.HasBuff(Concentric.GetBuffDef<AccelerateWinds>().WaitForCompletion())) return;
+			if (!__instance.body.HasBuff(Concentric.GetBuffDef<YamatoWinds>().WaitForCompletion())) return;
 			EffectData effectData = new EffectData
 			{
 				origin = damageInfo.position,
 				rotation = Util.QuaternionSafeLookRotation((damageInfo.force != Vector3.zero) ? damageInfo.force : UnityEngine.Random.onUnitSphere)
 			};
-			EffectManager.SpawnEffect(RoR2.HealthComponent.AssetReferences.bearEffectPrefab, effectData, transmit: true);
+			EffectManager.SpawnEffect(GetEffect<WindBlockEffect>().WaitForCompletion(), effectData, transmit: true);
 			damageInfo.rejected = true;
 		}
 	}
@@ -241,7 +241,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		async Task<GameObject> IEffect.BuildObject()
 		{
 			var effect = (await LoadAsset<GameObject>("RoR2/Base/Bear/BearProc.prefab"))!.InstantiateClone("TwinsParryEffect", true);
-			
+			effect.EffectWithSound("Play_merc_m1_hard_swing");
 			return effect;
 		}
 	}

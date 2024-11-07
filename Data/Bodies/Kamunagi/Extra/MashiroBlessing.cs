@@ -37,7 +37,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var chargeFraction = fixedAge / duration;
 			var amountToDecrease = Mathf.Max(1f,healthComponent.fullHealth * chargeFraction * 0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
 
-			if (!NetworkServer.active || !healthComponent) return;
+			if (!healthComponent) return;
 			healthComponent.Networkhealth -= amountToDecrease;
 		}
 
@@ -45,13 +45,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.FixedUpdate();
 
-			if (isAuthority && !characterBody.outOfDanger || fixedAge > duration)
+			if (NetworkServer.active && !characterBody.outOfDanger || fixedAge > duration)
 			{
 				if (fixedAge > duration)
 				{
 					int cursestacks = characterBody.GetBuffCount(RoR2Content.Buffs.PermanentCurse);
 					characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, cursestacks += 12);
-					characterBody.AddTimedBuffAuthority(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
+					characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
 				}
 				outer.SetNextStateToMain();
 				return;

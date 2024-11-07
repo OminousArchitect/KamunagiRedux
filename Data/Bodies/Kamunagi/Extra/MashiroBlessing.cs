@@ -48,34 +48,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.FixedUpdate();
 
-			if (!characterBody.outOfDanger)
+			if (!characterBody.outOfDanger || !IsKeyDownAuthority())
 			{
 				outer.SetNextStateToMain();
 				return;
 			}
 
-			if (fixedAge > duration && NetworkServer.active)
-			{
-				int cursestacks = characterBody.GetBuffCount(RoR2Content.Buffs.PermanentCurse) + 12;
-				characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, cursestacks);
-				characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
-				outer.SetNextStateToMain();
-				return;
-			}
-
-
-			if (!IsKeyDownAuthority())
-			{
-				outer.SetNextStateToMain();
-				return;
-			}
-
-			stopwatch += Time.deltaTime;
-			if (stopwatch < 0.075f) return;
-			//0.2 frequency is equal to 5 times per second
-			//0.1 would be 10 times per second
-			//0.075 is 24 times in 2 seconds
-			stopwatch = 0;
+			if (fixedAge < duration || !NetworkServer.active) return;
+			var cursestacks = characterBody.GetBuffCount(RoR2Content.Buffs.PermanentCurse) + 12;
+			characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, cursestacks);
+			characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
+			outer.SetNextStateToMain();
 		}
 	}
 

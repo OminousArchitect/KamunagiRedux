@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using Newtonsoft.Json.Utilities;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -11,7 +12,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	public class SpawnNugwisokamiState : BaseState
 	{
-		public GameObject whichSpirit;
+		public int whichSpirit;
 		public EquipmentIndex whichEquip;
 		public Vector3 spawnPosition;
 
@@ -21,7 +22,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (!NetworkServer.active) return;
 			var summon = new MasterSummon
 			{
-				masterPrefab = whichSpirit,
+				masterPrefab = SummonNugwisomkamiState.NugwisoEliteDefs.Keys.ElementAt(whichSpirit),
 				position = spawnPosition,
 				summonerBodyObject = gameObject,
 				ignoreTeamMemberLimit = true,
@@ -52,7 +53,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnDeserialize(NetworkReader reader)
 		{
 			base.OnDeserialize(reader);
-			whichSpirit = reader.ReadGameObject();
+			whichSpirit = reader.ReadInt32();
 			whichEquip = reader.ReadEquipmentIndex();
 			spawnPosition = reader.ReadVector3();
 		}
@@ -92,13 +93,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class NugwisoKamiSpawnedState : BaseTwinState
 	{
 		public override int meterGain => 0;
-		public GameObject whichSpirit;
+		public int whichSpirit;
 		public CharacterMaster master;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			twinBehaviour.masterBehaviour.NugwisoSpiritDefs[whichSpirit] = master;
+			twinBehaviour.masterBehaviour.NugwisoSpiritDefs[SummonNugwisomkamiState.NugwisoEliteDefs.Keys.ElementAt(whichSpirit)] = master;
 		}
 		
 		public override void OnSerialize(NetworkWriter writer)
@@ -111,7 +112,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnDeserialize(NetworkReader reader)
 		{
 			base.OnDeserialize(reader);
-			whichSpirit = reader.ReadGameObject();
+			whichSpirit = reader.ReadInt32();
 			master = Util.FindNetworkObject(reader.ReadNetworkId()).GetComponent<CharacterMaster>();
 		}
 	}
@@ -123,7 +124,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		public static Dictionary<GameObject, List<string>> NugwisoEliteDefs;
 		private bool didSpawn;
-		private GameObject whichSpirit;
+		private int whichSpirit;
 		private EquipmentIndex whichEquip;
 		private bool didRespawn;
 		private CharacterMaster whichRespawnedMaster;
@@ -149,9 +150,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				didSpawn = true;
 				var index = Mathf.RoundToInt(UnityEngine.Random.Range(0, possibleSpirits.Length));
 				log.LogInfo("Index: " + index);
-				whichSpirit = possibleSpirits[index];
+				whichSpirit = NugwisoEliteDefs.Keys.IndexOf(x => x == possibleSpirits[index]);
 
-				var equipList = NugwisoEliteDefs[whichSpirit];
+				var equipList = NugwisoEliteDefs[possibleSpirits[index]];
 				whichEquip =
 					EquipmentCatalog.FindEquipmentIndex(
 						equipList[Mathf.RoundToInt(UnityEngine.Random.Range(0, equipList.Count))]);

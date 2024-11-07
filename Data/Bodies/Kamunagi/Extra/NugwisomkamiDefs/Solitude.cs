@@ -58,6 +58,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var hauntedDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
 			var hauntedRules = new ItemDisplayRule[hauntedDisplay.rules.Length];
 			Array.Copy(hauntedDisplay.rules, hauntedRules, hauntedDisplay.rules.Length);
+			hauntedDisplay.rules = hauntedRules;
 			hauntedDisplay.rules[0].childName = "Muzzle";
 			hauntedDisplay.rules[0].localPos = new Vector3(-0.02014F, 0.18649F, -0.16408F);
 			hauntedDisplay.rules[0].localAngles = new Vector3(270F, 0F, 0F);
@@ -66,6 +67,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var iceDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteIce/EliteIceEquipment.asset"));
 			var iceRules = new ItemDisplayRule[iceDisplay.rules.Length];
 			Array.Copy(iceDisplay.rules, iceRules, iceDisplay.rules.Length);
+			iceDisplay.rules = iceRules;
 			iceDisplay.rules[0].childName = "Muzzle";
 			iceDisplay.rules[0].localPos = new Vector3(0.0189F, 1.05928F, 0.03792F);
 			iceDisplay.rules[0].localAngles = new Vector3(270F, 0F, 0F);

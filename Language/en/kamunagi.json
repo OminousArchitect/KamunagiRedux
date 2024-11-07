@@ -53,6 +53,9 @@
 	  "NINES_KAMUNAGI_BODY_SECONDARY2_DESCRIPTION": "Accelerate cooldowns and gain a movespeed buff",
 	  "NINES_KAMUNAGI_BODY_SECONDARY3_NAME": "Frost of Kujyuri",
 	  "NINES_KAMUNAGI_BODY_SECONDARY3_DESCRIPTION": "Instantly <style=cIsUtility>freeze</style> a single enemy for <style=cIsDamage>100% damage</style> or charge to freeze multiple enemies for <style=cIsDamage>165% damage</style>.",
+	  "NINES_KAMUNAGI_BODY_SECONDARY4_NAME": "Illumination of Kotuahamuru",
+	  "NINES_KAMUNAGI_BODY_SECONDARY4_DESCRIPTION": "",
+
 
 	  "NINES_KAMUNAGI_BODY_UTILITY0_NAME": "Mikazuchi's Fury",
 	  "NINES_KAMUNAGI_BODY_UTILITY0_DESCRIPTION": "Strike an enemy for <style=cIsDamage>1000% damage</style>. Summons 3 <color=#1661D4>aftershocks</color> for <style=cIsDamage>500% damage</style>.",

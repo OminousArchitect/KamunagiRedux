@@ -48,7 +48,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			EffectManager.SpawnEffect(Concentric.GetEffect<MikazuchiLightningStrike>().WaitForCompletion(),
 				new EffectData() { origin = targetPosition, scale = blastAttack.radius }, true);
 
-			var xoro = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
+			var xoro = new Xoroshiro128Plus(RoR2Application.rng.nextUlong);
 			var spacingDegrees = 360f / projectileCount;
 			var forward = Vector3.ProjectOnPlane(inputBank.aimDirection, Vector3.up);
 			float multiplier = UnityEngine.Random.Range(3f, 5f);

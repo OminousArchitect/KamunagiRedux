@@ -10,9 +10,51 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RoR2.Orbs;
 using RoR2.Skills;
+using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
+	public class DenebokshiriBrimstoneFireState : BaseState
+	{
+		public Ray aimRay;
+		public float damageCoefficient;
+
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			var prefab = Concentric.GetProjectile<DenebokshiriBrimstone>().WaitForCompletion();
+			var zapDamage = prefab.GetComponent<ProjectileProximityBeamController>();
+			zapDamage.damageCoefficient = damageCoefficient;
+			if (!NetworkServer.active) return;
+			var fireProjectileInfo = new FireProjectileInfo
+			{
+				crit = RollCrit(),
+				damage = characterBody.damage,
+				damageColorIndex = DamageColorIndex.Default,
+				force = damageCoefficient * 100,
+				owner = gameObject,
+				position = aimRay.origin, //aimRay.origin + aimRay.direction * 2,
+				procChainMask = default,
+				projectilePrefab = prefab,
+				rotation = Quaternion.LookRotation(aimRay.direction)
+			};
+			ProjectileManager.instance.FireProjectile(fireProjectileInfo);
+		}
+
+		public override void OnSerialize(NetworkWriter writer)
+		{
+			base.OnSerialize(writer);
+			writer.Write(aimRay);
+			writer.Write(damageCoefficient);
+		}
+
+		public override void OnDeserialize(NetworkReader reader)
+		{
+			base.OnDeserialize(reader);
+			aimRay = reader.ReadRay();
+			damageCoefficient = reader.ReadSingle();
+		}
+	}
 	internal class DenebokshiriBrimstoneState : BaseTwinState
 	{
 		private float remapMin = 1.5f;
@@ -37,38 +79,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			soundID = AkSoundEngine.PostEvent("Play_fireballsOnHit_pool_aliveLoop", gameObject);
 		}
 
-		private void FireProjectile()
-		{
-			var prefab = Concentric.GetProjectile<DenebokshiriBrimstone>().WaitForCompletion();
-			var zapDamage = prefab.GetComponent<ProjectileProximityBeamController>();
-			zapDamage.damageCoefficient = damageCoefficient;
-			if (isAuthority)
-			{
-				var aimRay = GetAimRay();
-				var fireProjectileInfo = new FireProjectileInfo
-				{
-					crit = RollCrit(),
-					damage = characterBody.damage,
-					damageColorIndex = DamageColorIndex.Default,
-					force = damageCoefficient * 100,
-					owner = gameObject,
-					position = aimRay.origin, //aimRay.origin + aimRay.direction * 2,
-					procChainMask = default,
-					projectilePrefab = prefab,
-					rotation = Quaternion.LookRotation(aimRay.direction)
-				};
-				ProjectileManager.instance.FireProjectile(fireProjectileInfo);
-			}
-		}
-
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			damageCoefficient = Util.Remap(fixedAge, 0, maxChargeTime, remapMin, remapMax);
 
 			if (!isAuthority || (fixedAge < maxChargeTime && IsKeyDownAuthority())) return;
-			FireProjectile();
-			outer.SetNextStateToMain();
+			outer.SetNextState(new DenebokshiriBrimstoneFireState() {aimRay = GetAimRay(), damageCoefficient = damageCoefficient});
 		}
 
 		public override void OnExit()
@@ -109,7 +126,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			return skill;
 		}
 
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(DenebokshiriBrimstoneState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(DenebokshiriBrimstoneState), typeof(DenebokshiriBrimstoneFireState) };
 
 		async Task<GameObject> IProjectile.BuildObject()
 		{

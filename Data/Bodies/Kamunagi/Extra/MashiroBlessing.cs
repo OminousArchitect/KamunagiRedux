@@ -49,8 +49,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				if (fixedAge > duration)
 				{
-					int cursestacks = characterBody.GetBuffCount(RoR2Content.Buffs.PermanentCurse);
-					characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, cursestacks += 12);
+					int cursestacks = characterBody.GetBuffCount(RoR2Content.Buffs.PermanentCurse) + 12;
+					characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, cursestacks);
 					characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
 				}
 				outer.SetNextStateToMain();

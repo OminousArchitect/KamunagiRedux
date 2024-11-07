@@ -35,7 +35,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (muzzleInstanceLeft != null) muzzleInstanceLeft.ReturnToPool();
 			if (muzzleInstanceRight != null) muzzleInstanceRight.ReturnToPool();
 			var chargeFraction = fixedAge / duration;
-			var amountToDecrease = Mathf.Max(1f,healthComponent.fullHealth * chargeFraction * 0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
+			var amountToDecrease =
+				Mathf.Max(1f,
+					healthComponent.fullHealth * chargeFraction *
+					0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
 
 			if (!healthComponent) return;
 			healthComponent.Networkhealth -= amountToDecrease;
@@ -45,31 +48,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.FixedUpdate();
 
-			if (NetworkServer.active && !characterBody.outOfDanger || fixedAge > duration)
-			{
-				if (fixedAge > duration)
-				{
-					int cursestacks = characterBody.GetBuffCount(RoR2Content.Buffs.PermanentCurse) + 12;
-					characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, cursestacks);
-					characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
-				}
-				outer.SetNextStateToMain();
-				return;
-			}
-
-			
-			if (!IsKeyDownAuthority())
+			if (!characterBody.outOfDanger || !IsKeyDownAuthority())
 			{
 				outer.SetNextStateToMain();
 				return;
 			}
 
-			stopwatch += Time.deltaTime;
-			if (stopwatch < 0.075f) return;
-			//0.2 frequency is equal to 5 times per second
-			//0.1 would be 10 times per second
-			//0.075 is 24 times in 2 seconds
-			stopwatch = 0;
+			if (fixedAge < duration || !NetworkServer.active) return;
+			var cursestacks = characterBody.GetBuffCount(RoR2Content.Buffs.PermanentCurse) + 12;
+			characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, cursestacks);
+			characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
+			outer.SetNextStateToMain();
 		}
 	}
 
@@ -83,17 +72,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return style;
 		}
 
-		public override void UpdateInfo(ref HealthBar.BarInfo inf, HealthComponent.HealthBarValues healthBarValues, ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
+		public override void UpdateInfo(ref HealthBar.BarInfo inf, HealthComponent.HealthBarValues healthBarValues,
+			ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
 		{
 			base.UpdateInfo(ref inf, healthBarValues, extraHealthBarInfoTracker);
 			inf.enabled = false;
 			if (!spellStateMachine || spellStateMachine!.state is not MashiroBlessingState blessingState) return;
 			inf.enabled = true;
-			inf.normalizedXMin = Mathf.Max(0f,healthBarValues.healthFraction - blessingState.fixedAge / blessingState.duration * 0.25f);
+			inf.normalizedXMin = Mathf.Max(0f,
+				healthBarValues.healthFraction - blessingState.fixedAge / blessingState.duration * 0.25f);
 			inf.normalizedXMax = healthBarValues.healthFraction;
 		}
-		
+
 		private EntityStateMachine? _spellStateMachine;
+
 		public EntityStateMachine? spellStateMachine
 		{
 			get
@@ -108,7 +100,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			}
 		}
 	}
-	
+
 	public class MashiroBlessing : Concentric, IEffect, ISkill, IBuff, IOverlay
 	{
 		public static DamageColorIndex damageColorIndex;
@@ -135,14 +127,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return effect;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new []{typeof(MashiroBlessingState)};
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(MashiroBlessingState) };
 
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<BlessingDef>();
 			skill.skillName = "Extra Skill 6";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA6_NAME";
-			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix +  "EXTRA6_DESCRIPTION";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA6_DESCRIPTION";
 			skill.icon = await LoadAsset<Sprite>("bundle2:Mashiro");
 			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 3f;
@@ -178,7 +170,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class BlessingDef : SkillDef
 	{
-		public override bool IsReady(GenericSkill skillSlot) => base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
+		public override bool IsReady(GenericSkill skillSlot) =>
+			base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
 	}
 
 	public class MashiroBlessingRespawn : Concentric, IEffect

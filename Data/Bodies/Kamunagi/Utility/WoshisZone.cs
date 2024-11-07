@@ -5,10 +5,42 @@ using RoR2;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
+using Console = System.Console;
 using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
+	public class SpawnWoshisWard : BaseTwinState
+	{
+		public Vector3 position;
+
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			if (!NetworkServer.active) return;
+			if (twinBehaviour.activeBuffWard)
+			{
+				NetworkServer.Destroy(twinBehaviour.activeBuffWard);
+			}
+
+			var ward = Object.Instantiate(Concentric.GetNetworkedObject<WoshisZone>().WaitForCompletion(), position, Quaternion.identity);
+			ward.GetComponent<TeamFilter>().teamIndex = TeamIndex.Monster;
+			twinBehaviour.activeBuffWard = ward;
+			NetworkServer.Spawn(ward);
+		}
+
+		public override void OnSerialize(NetworkWriter writer)
+		{
+			base.OnSerialize(writer);
+			writer.Write(position);
+		}
+
+		public override void OnDeserialize(NetworkReader reader)
+		{
+			base.OnDeserialize(reader);
+			position = reader.ReadVector3();
+		}
+	}
 	public class WoshisZoneState : IndicatorSpellState
 	{
 		public override float duration => 0.45f;
@@ -17,18 +49,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		public override void Fire(Vector3 targetPosition)
 		{
-			base.Fire(targetPosition);
-			if (!NetworkServer.active) return;
-			if (twinBehaviour.activeBuffWard)
-			{
-				NetworkServer.Destroy(twinBehaviour.activeBuffWard);
-			}
-
-			var ward = Object.Instantiate(Concentric.GetNetworkedObject<WoshisZone>().WaitForCompletion(), targetPosition,
-				Quaternion.identity);
-			ward.GetComponent<TeamFilter>().teamIndex = TeamIndex.Monster;
-			twinBehaviour.activeBuffWard = ward;
-			NetworkServer.Spawn(ward);
+			outer.SetNextState(new SpawnWoshisWard() { position = targetPosition });
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;

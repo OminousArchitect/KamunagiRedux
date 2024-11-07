@@ -72,17 +72,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			base.FixedUpdate();
 			if (!isAuthority) return;
 
-			if (fixedAge > 0.2f)
-			{
-				teleported = true;
-				Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
-				TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
-			}
-			
-			if (base.fixedAge >= duration)
-			{
-				outer.SetNextStateToMain();
-			}
+			if (fixedAge < 0.2f) return;
+			teleported = true;
+			Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
+			TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
+			outer.SetNextStateToMain();
 		}
 		
 		public void DoChildFx(Vector3 effectPos)

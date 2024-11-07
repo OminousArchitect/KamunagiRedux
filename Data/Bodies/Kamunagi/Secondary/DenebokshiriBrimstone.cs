@@ -44,14 +44,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override void OnSerialize(NetworkWriter writer)
 		{
 			base.OnSerialize(writer);
-			writer.Write(aimRay);
+			writer.Write(aimRay.origin);
+			writer.Write(aimRay.direction);
 			writer.Write(damageCoefficient);
 		}
 
 		public override void OnDeserialize(NetworkReader reader)
 		{
 			base.OnDeserialize(reader);
-			aimRay = reader.ReadRay();
+			aimRay = new Ray(reader.ReadVector3(), reader.ReadVector3());
 			damageCoefficient = reader.ReadSingle();
 		}
 	}

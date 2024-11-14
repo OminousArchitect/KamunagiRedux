@@ -198,8 +198,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			Material poolMat = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidRaidCrab/matVoidRaidCrabTripleBeamDotZoneDecal.mat	"));
-			poolMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>(""));
+			Material poolMat = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidRaidCrab/matVoidRaidCrabTripleBeamDotZoneDecal.mat"));
+			//poolMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>(""));
 			
 			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabMultiBeamDotZone.prefab"))!.InstantiateClone("TwinsLight5Zone", true);
 			proj.GetComponentInChildren<Light>().color = Color.red;

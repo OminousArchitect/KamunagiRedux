@@ -55,8 +55,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			}
 
 			if (fixedAge < duration || !NetworkServer.active) return;
-			var cursestacks = characterBody.GetBuffCount(RoR2Content.Buffs.PermanentCurse) + 12;
-			characterBody.SetBuffCount(RoR2Content.Buffs.PermanentCurse.buffIndex, cursestacks);
+			var currentStacks = GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
+			characterBody.SetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion(), currentStacks + 15);
 			characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
 			outer.SetNextStateToMain();
 		}
@@ -67,15 +67,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override HealthBarStyle.BarStyle GetStyle()
 		{
 			if (Bar == null) return default;
-			var style = Bar.style.curseBarStyle;
+			var style = Bar.style.barrierBarStyle;
 			style.baseColor = Colors.twinsLightColor;
 			return style;
 		}
 
-		public override void UpdateInfo(ref HealthBar.BarInfo inf, HealthComponent.HealthBarValues healthBarValues,
+		public override void UpdateInfo(ref HealthBar.BarInfo inf, ref HealthComponent.HealthBarValues healthBarValues,
 			ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
 		{
-			base.UpdateInfo(ref inf, healthBarValues, extraHealthBarInfoTracker);
+			base.UpdateInfo(ref inf, ref healthBarValues, extraHealthBarInfoTracker);
 			inf.enabled = false;
 			if (!spellStateMachine || spellStateMachine!.state is not MashiroBlessingState blessingState) return;
 			inf.enabled = true;
@@ -92,11 +92,40 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				if (_spellStateMachine == null || !_spellStateMachine)
 				{
-					_spellStateMachine = Bar!.source.body.skillLocator
-						.FindSkillByDef(Concentric.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;
+					_spellStateMachine = Bar!.source.body.skillLocator.FindSkillByDef(Concentric.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;
 				}
 
 				return _spellStateMachine;
+			}
+		}
+	}
+
+	public class MashiroCurseBarSegment : BarData
+	{
+		public override HealthBarStyle.BarStyle GetStyle()
+		{
+			if (Bar == null) return default;
+			var style = Bar.style.curseBarStyle;
+			style.baseColor = new Color(0.98f, 1, 0.58f);
+			return style;
+		}
+
+		public override void UpdateInfo(ref HealthBar.BarInfo inf, ref HealthComponent.HealthBarValues healthBarValues, ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
+		{
+			base.UpdateInfo(ref inf, ref healthBarValues, extraHealthBarInfoTracker);
+			var curseStacks = Bar.source.body.GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
+			inf.enabled = false;
+			if (curseStacks >= 1)
+			{
+				inf.enabled = true;
+				
+				
+				inf.normalizedXMax = 1f - healthBarValues.curseFraction;
+				inf.normalizedXMin = inf.normalizedXMax - (inf.normalizedXMax / 100 * curseStacks);
+				var barStuff = 0.01f;
+				healthBarValues.healthFraction = Mathf.Clamp01(healthBarValues.healthFraction - barStuff * curseStacks);
+				healthBarValues.shieldFraction = Mathf.Clamp01(healthBarValues.shieldFraction - barStuff * curseStacks);
+				healthBarValues.barrierFraction = Mathf.Clamp01(healthBarValues.barrierFraction - barStuff * curseStacks);
 			}
 		}
 	}
@@ -165,6 +194,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		bool IOverlay.CheckEnabled(CharacterModel model)
 		{
 			return model.body && model.body.HasBuff(this.GetBuffIndex().WaitForCompletion());
+		}
+	}
+
+	public class MashiroCurseDebuff : Concentric, IBuff
+	{
+		async Task<BuffDef> IBuff.BuildObject()
+		{
+			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
+			buffDef.name = "MashiroCurseDebuff";
+			buffDef.buffColor = Color.yellow;
+			buffDef.canStack = true;
+			buffDef.isDebuff = true;
+			buffDef.iconSprite = await LoadAsset<Sprite>("RoR2/Base/EclipseRun/texBuffPermanentCurse.tif");
+			buffDef.isHidden = false;
+			return buffDef;
 		}
 	}
 

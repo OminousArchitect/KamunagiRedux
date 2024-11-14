@@ -42,6 +42,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		public void FireProjectiles()
 		{
+			var aimRay = GetAimRay();
 			if (isAuthority)
 				ProjectileManager.instance.FireProjectile(new FireProjectileInfo()
 				{
@@ -53,7 +54,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					owner = gameObject,
 					position = muzzleTransform.position,
 					projectilePrefab = Concentric.GetProjectile<AltSoeiMusou>().WaitForCompletion(),
-					rotation = Quaternion.LookRotation(GetAimRay().direction)
+					rotation = Util.QuaternionSafeLookRotation(aimRay.direction)
 				});
 		}
 
@@ -135,7 +136,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;
-			skill.keywordTokens = new[] { "KEYWORD_AGILE" };
 			return skill;
 		}
 

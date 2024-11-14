@@ -92,7 +92,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.canceledFromSprinting = true;
 			skill.mustKeyPress = true;
 			skill.interruptPriority = InterruptPriority.Any;
-			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSBLESSING_KEYWORD" };
 			return skill;
 		}
 

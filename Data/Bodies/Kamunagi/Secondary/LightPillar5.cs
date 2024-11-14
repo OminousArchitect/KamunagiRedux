@@ -6,6 +6,7 @@ using R2API;
 using RoR2;
 using RoR2.Projectile;
 using RoR2.Skills;
+using ThreeEyedGames;
 using UnityEngine;
 using UnityEngine.Networking;
 using Console = System.Console;
@@ -77,7 +78,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		void SpawnPuddle(Vector3 hitPos)
 		{
 			if (!Physics.Raycast(hitPos + Vector3.up * 1f, Vector3.down, out var hitInfo, 100f, LayerIndex.world.mask)) return;
-			GameObject voidGooPuddle = UnityEngine.Object.Instantiate( Concentric.GetProjectile<NightshadePrison>().WaitForCompletion(), hitInfo.point, Quaternion.identity);
+			GameObject voidGooPuddle = UnityEngine.Object.Instantiate( Concentric.GetProjectile<LightPool5>().WaitForCompletion(), hitInfo.point, Quaternion.identity);
 			ProjectileController controller = voidGooPuddle.GetComponent<ProjectileController>();
 			if (controller)
 			{
@@ -193,10 +194,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 	}
 
-	public class NightshadePrison : Concentric, IProjectile
+	public class LightPool5 : Concentric, IProjectile
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
+			Material poolMat = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidRaidCrab/matVoidRaidCrabTripleBeamDotZoneDecal.mat	"));
+			poolMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>(""));
+			
 			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabMultiBeamDotZone.prefab"))!.InstantiateClone("TwinsLight5Zone", true);
 			proj.GetComponentInChildren<Light>().color = Color.red;
 			proj.transform.localScale = Vector3.one * 0.7f;
@@ -204,6 +208,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			dotZone.damageCoefficient = 0.5f;
 			dotZone.resetFrequency = 10f;
 			dotZone.lifetime = 5f;
+
+			var vfxChild = proj.transform.Find("FX/ScaledOnImpact").gameObject;
+			Decal decal = vfxChild.transform.GetChild(0).gameObject.GetComponent<Decal>();
+			decal.Material = new Material("RoR2/DLC1/VoidRaidCrab/matVoidRaidCrabTripleBeamDotZoneDecal.mat");
 			return proj;
 		}
 	}

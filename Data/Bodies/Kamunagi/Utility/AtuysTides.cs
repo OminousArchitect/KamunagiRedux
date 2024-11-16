@@ -138,6 +138,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.baseRechargeInterval = 4f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
+			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSBLESSING_KEYWORD" };
 			return skill;
 		}
 	}
@@ -246,7 +247,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			healImpact.fractionOfDamage = 0.5f;
 			var geyserImpact = tidalEruptionProjectile.GetComponent<ProjectileImpactExplosion>();
 			geyserImpact.falloffModel = BlastAttack.FalloffModel.None;
-			geyserImpact.blastDamageCoefficient = 3f;
+			geyserImpact.blastDamageCoefficient = 2.1f;
 			tidalEruptionProjectile.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
 			return tidalEruptionProjectile;
 		}

@@ -129,6 +129,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;
+			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSRAYCAST_KEYWORD" };
 			return skill;
 		}
 

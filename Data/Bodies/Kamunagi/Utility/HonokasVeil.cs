@@ -38,6 +38,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
 			}, false);
 			veilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, characterBody.coreTransform, true);
+			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			characterMotor.useGravity = false;
 		}
 

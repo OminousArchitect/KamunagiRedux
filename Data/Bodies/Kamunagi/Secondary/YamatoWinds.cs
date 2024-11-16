@@ -143,6 +143,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.isCombatSkill = false;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = true;
+			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSWIND_KEYWORD" };
 			return skill;
 		}
 
@@ -222,7 +223,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 		
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
-		private static void TwinsParry(HealthComponent __instance, DamageInfo damageInfo)
+		private static void TakeDamageProcessParry(HealthComponent __instance, DamageInfo damageInfo)
 		{
 			if (__instance.body.bodyIndex != Concentric.GetBodyIndex<KamunagiAsset>().WaitForCompletion()) return;
 			if (!__instance.body.HasBuff(Concentric.GetBuffDef<YamatoWinds>().WaitForCompletion())) return;
@@ -240,7 +241,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = (await LoadAsset<GameObject>("RoR2/Base/Bear/BearProc.prefab"))!.InstantiateClone("TwinsParryEffect", true);
+			var effect = (await LoadAsset<GameObject>("RoR2/Base/Bear/BearProc.prefab"))!.InstantiateClone("TwinsParryEffect", false);
 			effect.EffectWithSound("Play_merc_m1_hard_swing");
 			return effect;
 		}

@@ -95,6 +95,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 if (goodPlacement)
                 {
                     Util.PlaySound(fireSoundString, gameObject);
+                    Util.PlaySound("Play_mage_shift_wall_explode", gameObject);
                     if (indicatorPrefabInstance && base.isAuthority)
                     {
 	                    var forward = indicatorPrefabInstance.transform.forward;
@@ -160,6 +161,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = false;
 			skill.beginSkillCooldownOnSkillEnd = false;
+			skill.keywordTokens = new[] { "KEYWORD_FREEZING" };
 			return skill;
 		}
 

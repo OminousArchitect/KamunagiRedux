@@ -336,6 +336,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				skill.isCombatSkill = true;
 				skill.mustKeyPress = false;
 				skill.cancelSprintingOnActivation = true;
+				skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSRAYCAST_KEYWORD" };
 				return skill;
 			}
 

@@ -17,7 +17,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public EffectManagerHelper? veilEffect;
 		public static GameObject childTpFx;
 		private Vector3 teleportPosition;
-		private float duration = 0.45f;
 		private bool teleported;
 		private NodeGraph? availableNodes;
 		public override int meterGain => 0;
@@ -72,7 +71,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			base.FixedUpdate();
 			if (!isAuthority) return;
 
-			if (fixedAge < 0.2f) return;
+			if (fixedAge < 0.45f) return;
 			teleported = true;
 			Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
 			TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
@@ -123,6 +122,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.canceledFromSprinting = false;
 			skill.mustKeyPress = true;
 			skill.interruptPriority = InterruptPriority.Any;
+			skill.keywordTokens = new[] { "KEYWORD_STUNNING" };
 			return skill;
 		}
 

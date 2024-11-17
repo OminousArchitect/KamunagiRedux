@@ -1,5 +1,8 @@
-﻿using RoR2;
+﻿using Rewired.UI.ControlMapper;
+using RoR2;
+using RoR2.Navigation;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace KamunagiOfChains
 {
@@ -101,7 +104,7 @@ namespace KamunagiOfChains
 			dict[key] = value;
 			return value;
 		}
-
+		
 		public static EffectComponent EffectWithSound(this GameObject gameObject, string soundName)
 		{
 			var comp = gameObject.GetComponent<EffectComponent>();
@@ -114,6 +117,30 @@ namespace KamunagiOfChains
 
 			comp.soundName = soundName;
 			return comp;
+		}
+		
+		public static Vector3 FindNearestNodePosition(Vector3 targetPosition, MapNodeGroup.GraphType nodeGraphType)
+		{
+			SpawnCard spawnCard = ScriptableObject.CreateInstance<SpawnCard>();
+			spawnCard.hullSize = HullClassification.Human;
+			spawnCard.nodeGraphType = nodeGraphType;
+			spawnCard.prefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/DirectorSpawnProbeHelperPrefab.prefab").WaitForCompletion();
+			Vector3 result = targetPosition;
+			GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(spawnCard, new DirectorPlacementRule
+			{
+				placementMode = DirectorPlacementRule.PlacementMode.NearestNode,
+				position = targetPosition
+			}, RoR2Application.rng));
+			if (gameObject)
+			{
+				result = gameObject.transform.position;
+			}
+			if (gameObject)
+			{
+				UnityEngine.Object.Destroy(gameObject);
+			}
+			UnityEngine.Object.Destroy(spawnCard);
+			return result;
 		}
 	}
 }

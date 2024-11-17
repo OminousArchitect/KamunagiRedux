@@ -104,7 +104,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		async Task<GameObject> IMaster.BuildObject()
 		{
 			var master =
-				(await LoadAsset<GameObject>("RoR2/Base/Wisp/WispMaster.prefab"))!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab"))!.InstantiateClone(
 					"Nugwiso1Master", true);
 			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
 			return master;
@@ -137,7 +137,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			base.OnEnter();
 
 			EffectManager.SimpleMuzzleFlash(jarOpenEffectPrefab, base.gameObject, muzzleString, false);
-			Util.PlaySound(jarOpenSoundString, base.gameObject);
+			//Util.PlaySound(jarOpenSoundString, base.gameObject);
 			base.characterBody.SetAimTimer(firingDuration + 1f);
 		}
 
@@ -165,7 +165,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnExit()
 		{
 			EffectManager.SimpleMuzzleFlash(jarCloseEffectPrefab, base.gameObject, muzzleString, false);
-			Util.PlaySound(jarCloseSoundString, base.gameObject);
+			//Util.PlaySound(jarCloseSoundString, base.gameObject);
 			base.OnExit();
 		}
 
@@ -258,6 +258,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			availableNodes.GetNodePosition(nodeIndex, out var footPosition);
 			footPosition += Vector3.up * 1.5f;
 			teleportPosition = footPosition;
+			characterBody.AddTimedBuffAuthority(RoR2Content.Buffs.CrocoRegen.buffIndex, 1.5f);
 		}
 
 		public void DoChildFx(Vector3 effectPos)
@@ -273,7 +274,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (fixedAge > 0.2f && !teleported)
 			{
 				teleported = true;
-				Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
 				TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
 			}
 

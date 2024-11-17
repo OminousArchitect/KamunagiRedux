@@ -3,6 +3,7 @@ using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using Newtonsoft.Json.Utilities;
 using R2API;
 using RoR2;
+using RoR2.Navigation;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Events;
@@ -165,15 +166,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		public override void Fire(Vector3 targetPosition)
 		{
+			var properNode = ExtensionMethods.FindNearestNodePosition(targetPosition, MapNodeGroup.GraphType.Air);
 			if (didSpawn)
 				outer.SetNextState(new SpawnNugwisomkamiState()
 				{
-					spawnPosition = targetPosition, whichSpirit = whichSpirit, whichEquip = whichEquip
+					spawnPosition = properNode, whichSpirit = whichSpirit, whichEquip = whichEquip
 				});
 			else
 				outer.SetNextState(new RespawnNugwisomkamiState()
 				{
-					spawnPosition = targetPosition, nextSpiritMaster = whichRespawnedMaster
+					spawnPosition = properNode, nextSpiritMaster = whichRespawnedMaster
 				});
 		}
 	}
@@ -223,7 +225,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
 			skill.icon = (await LoadAsset<Sprite>("bundle2:Nugwisomkami"));
-			skill.mustKeyPress = true;
+			//skill.mustKeyPress = true; //this breaks things apparently
 			return skill;
 		}
 

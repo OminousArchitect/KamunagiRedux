@@ -102,7 +102,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				$"{(await GetBuffDef<NaturesAxiom>()).name} {(await GetBuffDef<AxiomBurn>()).name} {(await GetBuffDef<NaturesAxiom>()).name} {(await GetBuffDef<SobuGekishoha>()).name} {(await GetBuffDef<WoshisZone>()).name}" +
 				$"{(await GetBuffDef<MashiroBlessing>()).name}",
 				"description");
-			
+
 			RoR2.GlobalEventManager.onServerDamageDealt += GlobalEventManagerOnonServerDamageDealt;
 			debuffBlacklist.SettingChanged += DebuffBlacklistOnSettingChanged;
 		}

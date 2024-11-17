@@ -9,7 +9,7 @@ using UnityEngine;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class IceTank : Concentric, IBody, IMaster //4
+	public class SolitudeSpirit : Concentric, IBody, IMaster //4
 	{
 		async Task<GameObject> IBody.BuildObject()
 		{
@@ -78,17 +78,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
-			secondary._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();
-			secondary.baseSkill = await GetSkillDef<IceTankSecondary>();
+			secondary._skillFamily = await GetSkillFamily<SolitudePrimaryFamily>();
+			secondary.baseSkill = await GetSkillDef<SolitudeSecondary>();
 			nugwisoBody.GetComponent<SkillLocator>().secondary = secondary;
 			var array = nugwisoBody.GetComponents<GenericSkill>();
-			array[0]._skillFamily = await GetSkillFamily<IceTankPrimaryFamily>();
+			array[0]._skillFamily = await GetSkillFamily<SolitudePrimaryFamily>();
 			return nugwisoBody;
 		}
 
 		async Task<GameObject> IMaster.BuildObject()
 		{
-			var master= (await LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab"))!.InstantiateClone("Nugwiso4Master", true);
+			var master= (await LoadAsset<GameObject>("RoR2/Base/Drones/Drone1Master.prefab"))!.InstantiateClone("Nugwiso4Master", true);
 			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
 			return master;
 		}
@@ -100,7 +100,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public static GameObject? daggerFab;
 		public override void OnExit()
 		{
-			int projectileCount = 3;
+			int projectileCount = 4;
 			var xoro = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
 			var spacingDegrees = 360f / projectileCount;
 			var forward = Vector3.ProjectOnPlane(inputBank.aimDirection, Vector3.up);
@@ -121,7 +121,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 	
-	public class IceTankPrimary : Concentric, ISkill
+	public class SolitudePrimary : Concentric, ISkill
 	{
 		public override async Task Initialize()
 		{
@@ -143,15 +143,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ShootDaggerState) };
 	}
-	
-	public class IceTankPrimaryFamily : Concentric, ISkillFamily
+	public class SolitudePrimaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<IceTankPrimary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<SolitudePrimary>() };
 	}
-	
 	//secondary state goes here
-	
-	public class IceTankSecondary : Concentric, ISkill
+	public class SolitudeSecondary : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -167,9 +164,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ShootDaggerState) };
 	}
-	
-	public class IceTankSecondaryFamily : Concentric, ISkillFamily
+	public class SolitudeSecondaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<IceTankSecondary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<SolitudeSecondary>() };
 	}
 }

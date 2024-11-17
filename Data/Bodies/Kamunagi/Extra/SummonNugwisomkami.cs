@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
-	public class SpawnNugwisokamiState : BaseState
+	public class SpawnNugwisomkamiState : BaseState
 	{
 		public int whichSpirit;
 		public EquipmentIndex whichEquip;
@@ -32,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				master.inventory.SetEquipmentIndex(whichEquip);
 				master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth);
-				outer.SetNextState(new NugwisoKamiSpawnedState() { master = master, whichSpirit = whichSpirit });
+				outer.SetNextState(new NugwisomkamiSpawnedState() { master = master, whichSpirit = whichSpirit });
 			};
 			var characterMaster = summon.Perform();
 			var deployable = characterMaster.gameObject.AddComponent<Deployable>();
@@ -59,7 +59,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class RespawnNugwisokamiState : BaseTwinState
+	public class RespawnNugwisomkamiState : BaseTwinState
 	{
 		public CharacterMaster nextSpiritMaster;
 		public Vector3 spawnPosition;
@@ -90,7 +90,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class NugwisoKamiSpawnedState : BaseTwinState
+	public class NugwisomkamiSpawnedState : BaseTwinState
 	{
 		public override int meterGain => 0;
 		public int whichSpirit;
@@ -120,7 +120,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class SummonNugwisomkamiState : IndicatorSpellState
 	{
 		public override int meterGain => 0;
-		public override int meterGainOnExit => didSpawn ? 10 : 0;
+		public override int meterGainOnExit => didSpawn ? 5 : 0;
 
 		public static Dictionary<GameObject, List<string>> NugwisoEliteDefs;
 		private bool didSpawn;
@@ -166,12 +166,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void Fire(Vector3 targetPosition)
 		{
 			if (didSpawn)
-				outer.SetNextState(new SpawnNugwisokamiState()
+				outer.SetNextState(new SpawnNugwisomkamiState()
 				{
 					spawnPosition = targetPosition, whichSpirit = whichSpirit, whichEquip = whichEquip
 				});
 			else
-				outer.SetNextState(new RespawnNugwisokamiState()
+				outer.SetNextState(new RespawnNugwisomkamiState()
 				{
 					spawnPosition = targetPosition, nextSpiritMaster = whichRespawnedMaster
 				});
@@ -196,14 +196,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				{
 					await GetMaster<WarMachine>(),
 					new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" } //completely done
-				}, //Hubris
+				}, //War
 
 				/*{
 				 await GetMaster<VirusArchWisp>(),
 					new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
 				}, //Pestilence*/
 				{
-					await GetMaster<IceTank>(), new List<string>() { "EliteIceEquipment", "EliteHauntedEquipment" }
+					await GetMaster<SolitudeSpirit>(), new List<string>() { "EliteIceEquipment", "EliteHauntedEquipment" }
 				} //Solitude
 			};
 		}
@@ -223,9 +223,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
 			skill.icon = (await LoadAsset<Sprite>("bundle2:Nugwisomkami"));
+			skill.mustKeyPress = true;
 			return skill;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonNugwisomkamiState), typeof(SpawnNugwisokamiState), typeof(RespawnNugwisokamiState), typeof(NugwisoKamiSpawnedState) };
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonNugwisomkamiState), typeof(SpawnNugwisomkamiState), typeof(RespawnNugwisomkamiState), typeof(NugwisomkamiSpawnedState) };
 	}
 }

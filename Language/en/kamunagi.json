@@ -34,7 +34,7 @@
 	  "NINES_KAMUNAGI_BODY_PASSIVE_DESCRIPTION": "Ururuu and Saraana have independent loadouts and <style=cIsUtility>switch turns</style> upon reaching maximum <color=#EDA717>Zeal</color>.",
 
 	  "NUGWISOMKAMI1_BODY_NAME": "Mischief",
-	  "NUGWISOMKAMI2_BODY_NAME": "Hubris",
+	  "NUGWISOMKAMI2_BODY_NAME": "War",
 	  "NUGWISOMKAMI3_BODY_NAME": "Pestilence",
 	  "NUGWISOMKAMI4_BODY_NAME": "Solitude",
 	  
@@ -79,15 +79,15 @@
 	  "NINES_KAMUNAGI_BODY_EXTRA2_NAME": "Kuon's Flashbang",
 	  "NINES_KAMUNAGI_BODY_EXTRA2_DESCRIPTION": "<style=cIsDamage>Stunning</style>. Deal <style=cIsDamage>175% damage</style>, briefly <style=cIsUtility>disappear</style>, and then <style=cIsUtility>reappear</style> in a nearby location.",
 	  "NINES_KAMUNAGI_BODY_EXTRA4_NAME": "Summon Shikigami: Mothmoth",
-	  "NINES_KAMUNAGI_BODY_EXTRA4_DESCRIPTION": "Call Mothmoth to the battlefield. He grants <style=cIsHealth>lifesteal</style> to nearby allies.",
+	  "NINES_KAMUNAGI_BODY_EXTRA4_DESCRIPTION": "Call <style=cIsDamage>Mothmoth</style> to the battlefield. He grants <style=cIsHealth>lifesteal</style> to all allies around him.",
 	  "NINES_KAMUNAGI_BODY_EXTRA3_NAME": "Nightshade Mantle",
 	  "NINES_KAMUNAGI_BODY_EXTRA3_DESCRIPTION": "<style=cIsUtility>Push</style> away enemies and conjure an <style=cIsUtility>impenetrable barrier</style> that is <style=cIsHealth>impassable from the outside</style>.",
 	  "NINES_KAMUNAGI_BODY_EXTRA5_NAME": "Summon Nugwisomkami",
-	  "NINES_KAMUNAGI_BODY_EXTRA5_DESCRIPTION": "Summon an <color=#4d108f>evil spirit</color>.",
+	  "NINES_KAMUNAGI_BODY_EXTRA5_DESCRIPTION": "Summon a primeval spirit to attack enemies.",
 	  "NINES_KAMUNAGI_BODY_EXTRA6_NAME": "Mashiro's Blessing",
 	  "NINES_KAMUNAGI_BODY_EXTRA6_DESCRIPTION": "",
 	  "NINES_KAMUNAGI_BODY_EXTRA7_NAME": "Summon Tatari",
-	  "NINES_KAMUNAGI_BODY_EXTRA7_DESCRIPTION": "Summon a Tatari.",
+	  "NINES_KAMUNAGI_BODY_EXTRA7_DESCRIPTION": "Summon a <style=cIsDamage>profane coagulation</style> that stuns enemies and <style=cIsUtility>inflicts debuffs</style> the <style=cIsHealth>closer it gets to death</style>.",
 
 	  "WOSHISGHOST_NAME": "never trust the yaoi artist"
   }

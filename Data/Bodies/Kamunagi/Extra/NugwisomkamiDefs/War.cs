@@ -33,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseMaxHealth = 230f;
 
 			var array = nugwisoBody.GetComponents<GenericSkill>();
-			array[0]._skillFamily = await GetSkillFamily<HKPrimaryFamily>();
+			array[0]._skillFamily = await GetSkillFamily<WarMachinePrimaryFamily>();
 			return nugwisoBody;
 		}
 
@@ -64,7 +64,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 	
-	internal class ReplaceHKPrimary : Concentric, ISkill
+	internal class WarMachinePrimary : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -81,8 +81,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(FireWispGunsState) };
 	}
 	
-	public class HKPrimaryFamily : Concentric, ISkillFamily
+	public class WarMachinePrimaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<ReplaceHKPrimary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<WarMachinePrimary>() };
 	}
 }

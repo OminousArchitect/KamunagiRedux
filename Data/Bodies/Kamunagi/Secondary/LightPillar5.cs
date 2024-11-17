@@ -145,7 +145,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.keywordTokens = new[]
 			{
 				KamunagiAsset.tokenPrefix + "TWINSRAYCAST_KEYWORD",
-				KamunagiAsset.tokenPrefix + "KEYWORD_PERCENT_HP"
+				"KEYWORD_PERCENT_HP"
 			};
 			return skill;
 		}

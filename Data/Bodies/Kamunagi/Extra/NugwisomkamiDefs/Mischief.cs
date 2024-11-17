@@ -104,7 +104,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		async Task<GameObject> IMaster.BuildObject()
 		{
 			var master =
-				(await LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispMaster.prefab"))!.InstantiateClone(
+				(await LoadAsset<GameObject>("RoR2/Base/Wisp/WispMaster.prefab"))!.InstantiateClone(
 					"Nugwiso1Master", true);
 			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
 			return master;

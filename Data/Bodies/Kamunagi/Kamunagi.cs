@@ -131,12 +131,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var model = await this.GetModel();
 			var bodyPrefab = (await LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/MageBody"))!
 				.InstantiateClone("NinesKamunagiBody");
-
+			
 			var bodyComponent = bodyPrefab.GetComponent<CharacterBody>();
 			var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
 			var twinBehaviour = bodyPrefab.AddComponent<TwinBehaviour>();
-
-
+			
 			bodyHealthComponent.body = bodyComponent;
 
 			bodyComponent.preferredPodPrefab = null;

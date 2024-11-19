@@ -32,7 +32,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			summon.preSpawnSetupCallback += master =>
 			{
 				master.inventory.SetEquipmentIndex(whichEquip);
-				master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth);
+				log.LogDebug($"spirit was [ {whichSpirit} ]");
+				/*if (whichSpirit == 3)
+				{
+					log.LogDebug("this was the 3 spirit");
+					master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth, 3);
+				}
+				else
+				{
+					log.LogDebug("this wasn't the 3 spirit");
+					master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth, 1);
+				}*/
 				outer.SetNextState(new NugwisomkamiSpawnedState() { master = master, whichSpirit = whichSpirit });
 			};
 			var characterMaster = summon.Perform();
@@ -187,21 +197,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			await base.Initialize();
 			SummonNugwisomkamiState.NugwisoEliteDefs = new Dictionary<GameObject, List<string>>()
 			{
-				{ //Mischief
+				{ //Mischief 0
 					await GetMaster<AssassinSpirit>(),
-					new List<string>()
-					{
-						"EliteLightningEquipment", "EliteFireEquipment"
-					}
+					new List<string>() { "EliteLightningEquipment", "EliteFireEquipment" }
 				},
 
-				{ //War
+				{ //War 1
 					await GetMaster<WarMachine>(),
 					new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" }
 				}, 
 				
-				{ //Solitude
-					await GetMaster<SolitudeSpirit>(), new List<string>() { "ElitePoisonEquipment", "EliteHauntedEquipment" }
+				{ //Decay 2
+					await GetMaster<DecaySpirit>(), 
+					new List<string>() { "ElitePoisonEquipment", "EliteHauntedEquipment" }
 				} 
 
 				/*

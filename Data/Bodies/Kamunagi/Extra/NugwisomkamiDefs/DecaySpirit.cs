@@ -9,7 +9,7 @@ using UnityEngine;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class SolitudeSpirit : Concentric, IBody, IMaster //4
+	public class DecaySpirit : Concentric, IBody, IMaster //4
 	{
 		async Task<GameObject> IBody.BuildObject()
 		{
@@ -45,7 +45,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseNameToken = "NUGWISOMKAMI4_BODY_NAME";
 			cb.baseMaxHealth = 330f;
 			cb.baseDamage = 12f;
-			cb.baseMoveSpeed = 13f;
+			cb.baseMoveSpeed = 4f;
 
 			var cPairs = mdl.GetComponent<ChildLocator>().transformPairs;
 			cPairs[0].transform = mdl.transform;
@@ -78,11 +78,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
-			secondary._skillFamily = await GetSkillFamily<SolitudePrimaryFamily>();
-			secondary.baseSkill = await GetSkillDef<SolitudeSecondary>();
+			secondary._skillFamily = await GetSkillFamily<DecayPrimaryFamily>();
+			secondary.baseSkill = await GetSkillDef<DecaySecondary>();
 			nugwisoBody.GetComponent<SkillLocator>().secondary = secondary;
 			var array = nugwisoBody.GetComponents<GenericSkill>();
-			array[0]._skillFamily = await GetSkillFamily<SolitudePrimaryFamily>();
+			array[0]._skillFamily = await GetSkillFamily<DecayPrimaryFamily>();
 			return nugwisoBody;
 		}
 
@@ -121,7 +121,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 	
-	public class SolitudePrimary : Concentric, ISkill
+	public class DecayPrimary : Concentric, ISkill
 	{
 		public override async Task Initialize()
 		{
@@ -136,19 +136,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
-			skill.baseRechargeInterval = 3f;
+			skill.baseRechargeInterval = 5f;
 			skill.icon= (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}
 		
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ShootDaggerState) };
 	}
-	public class SolitudePrimaryFamily : Concentric, ISkillFamily
+	public class DecayPrimaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<SolitudePrimary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<DecayPrimary>() };
 	}
 	//secondary state goes here
-	public class SolitudeSecondary : Concentric, ISkill
+	public class DecaySecondary : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
@@ -157,15 +157,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
-			skill.baseRechargeInterval = 6f;
+			skill.baseRechargeInterval = 3f;
 			skill.icon= (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}
 		
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ShootDaggerState) };
 	}
-	public class SolitudeSecondaryFamily : Concentric, ISkillFamily
+	public class DecaySecondaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<SolitudeSecondary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<DecaySecondary>() };
 	}
 }

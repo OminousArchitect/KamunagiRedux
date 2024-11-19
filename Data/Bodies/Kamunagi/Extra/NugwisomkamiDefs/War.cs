@@ -33,6 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var cb = nugwisoBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI2_BODY_NAME";
 			cb.baseMaxHealth = 230f;
+			cb.levelDamage = 2.3f;
 
 			var array = nugwisoBody.GetComponents<GenericSkill>();
 			array[0]._skillFamily = await GetSkillFamily<WarMachinePrimaryFamily>();
@@ -72,7 +73,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			log.LogDebug("lol, lmao");
 			duration = (baseDuration + spinUpDuration) / attackSpeedStat;
 			muzzleTransformRoot = FindModelChild(muzzleNameRoot);
 			muzzleTransformOne = FindModelChild(muzzleNameOne);
@@ -145,6 +145,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.OnEnter();
 			baseDuration = 2.5f;
+			baseDamagePerSecondCoefficient = 5f;
 		}
 	}
 

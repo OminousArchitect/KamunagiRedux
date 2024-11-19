@@ -88,7 +88,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		async Task<GameObject> IMaster.BuildObject()
 		{
-			var master= (await LoadAsset<GameObject>("RoR2/Base/Drones/Drone1Master.prefab"))!.InstantiateClone("Nugwiso4Master", true);
+			var master= (await LoadAsset<GameObject>("RoR2/Base/Wisp/WispMaster.prefab"))!.InstantiateClone("Nugwiso4Master", true);
 			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
 			return master;
 		}
@@ -136,7 +136,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
-			skill.baseRechargeInterval = 6f;
+			skill.baseRechargeInterval = 3f;
 			skill.icon= (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}

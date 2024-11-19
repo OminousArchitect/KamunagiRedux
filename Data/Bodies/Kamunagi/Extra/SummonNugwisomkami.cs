@@ -187,26 +187,28 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			await base.Initialize();
 			SummonNugwisomkamiState.NugwisoEliteDefs = new Dictionary<GameObject, List<string>>()
 			{
-				{
+				{ //Mischief
 					await GetMaster<AssassinSpirit>(),
 					new List<string>()
 					{
 						"EliteLightningEquipment", "EliteFireEquipment"
-					} //needs recoloring, then done(?)
-				}, //Mischief
+					}
+				},
 
-				{
+				{ //War
 					await GetMaster<WarMachine>(),
-					new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" } //completely done
-				}, //War
+					new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" }
+				}, 
+				
+				{ //Solitude
+					await GetMaster<SolitudeSpirit>(), new List<string>() { "ElitePoisonEquipment", "EliteHauntedEquipment" }
+				} 
 
-				/*{
-				 await GetMaster<VirusArchWisp>(),
-					new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
-				}, //Pestilence*/
-				{
-					await GetMaster<SolitudeSpirit>(), new List<string>() { "EliteIceEquipment", "EliteHauntedEquipment" }
-				} //Solitude
+				/*
+				{ //Pestilence
+				    await GetMaster<VirusArchWisp>(), new List<string>() { "EliteEarthEquipment", "ElitePoisonEquipment" }
+				}, 
+				*/
 			};
 		}
 

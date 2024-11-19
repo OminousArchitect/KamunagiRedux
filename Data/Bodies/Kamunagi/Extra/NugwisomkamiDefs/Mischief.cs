@@ -50,9 +50,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var cb = nugwisoBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI1_BODY_NAME";
 			cb.baseMaxHealth = 200f;
-			cb.baseDamage = 12f;
+			cb.baseDamage = 20f;
+			cb.levelDamage = 2.3f;
 			cb.baseMoveSpeed = 13f;
-			
+
 			var array = mdl.GetComponent<ChildLocator>().transformPairs;
 			array[0].transform = mdl.transform;
 			array[0].name = "Muzzle";
@@ -118,8 +119,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		private float stopwatch;
 		private float missileStopwatch;
 		public static float firingDuration = 3.5f;
-		public static float missileForce = 825f;
-		public static float damageCoefficient = 1.4f;
+		public static float missileForce = 700;
+		public static float damageCoefficient = 1f;
 		public static float maxSpread = 165f;
 
 		public static string muzzleString = "Head";
@@ -143,17 +144,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		private void FireWispyBall(Ray projectileRay, float bonusPitch, float bonusYaw)
 		{
-			projectileRay.direction =
-				Util.ApplySpread(projectileRay.direction, 0f, maxSpread, 1f, 1f, bonusYaw, bonusPitch);
+			projectileRay.direction = Util.ApplySpread(projectileRay.direction, 0f, maxSpread, 1f, 1f, bonusYaw, bonusPitch);
 			EffectManager.SimpleMuzzleFlash(muzzleflashPrefab, base.gameObject, muzzleString, false);
 			if (base.isAuthority)
 			{
 				ProjectileManager.instance.FireProjectile(
 					projectilePrefab,
-					projectileRay.origin + Vector3.up * 2f,
+					projectileRay.origin + Vector3.down * 2f,
 					Util.QuaternionSafeLookRotation(projectileRay.direction),
 					base.gameObject,
-					damageStat * damageCoefficient, missileForce,
+					damageStat * damageCoefficient, 
+					missileForce,
 					Util.CheckRoll(this.critStat, base.characterBody.master),
 					DamageColorIndex.Default,
 					null,
@@ -209,7 +210,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
-			skill.baseRechargeInterval = 6f;
+			skill.baseRechargeInterval = 3f;
 			skill.icon = (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}

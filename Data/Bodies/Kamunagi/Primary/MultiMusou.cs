@@ -26,49 +26,48 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			base.FixedUpdate();
 			timeBetweenShots += Time.fixedDeltaTime;
-			int missiles = 4;
 
-			for (int i = 0; i < remainingMissilesToFire; i++)
-			{
-				
-			}
-			
-			if (remainingMissilesToFire > 0 && timeBetweenShots > 0.3f)
+			if (timeBetweenShots > 0.15f)
 			{
 				timeBetweenShots = 0f;
-				Vector3 vector = inputBank ? inputBank.aimDirection : transform.forward;
-				float intervalDegrees = 180f / missiles;
-				float d = 2f + characterBody.radius * 1f;
-				Quaternion rotation = Util.QuaternionSafeLookRotation(vector);
-				Vector3 b = Quaternion.AngleAxis(
-					            (remainingMissilesToFire - 1) * intervalDegrees - intervalDegrees * (missiles - 1) / 2f,
-					            vector) *
-				            Vector3.up * d;
-				Vector3 position = characterBody.aimOrigin + b;
-				FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
-				{
-					projectilePrefab = lunarMissilePrefab,
-					position = position,
-					rotation = rotation,
-					owner = base.gameObject,
-					damage = characterBody.damage * 2f,
-					crit = RollCrit(),
-					force = 200f
-				};
-				ProjectileManager.instance.FireProjectile(fireProjectileInfo);
+				MissileBarrage();
 				remainingMissilesToFire--;
+				if (remainingMissilesToFire == 0)
+				{
+					outer.SetNextStateToMain();
+				}
 			}
-
-			if (IsKeyDownAuthority() && remainingMissilesToFire == 0)
+		}
+		
+		void MissileBarrage()
+		{
+			int missiles = 4;
+			
+			Vector3 vector = inputBank ? inputBank.aimDirection : transform.forward;
+			float intervalDegrees = 180f / missiles;
+			float d = 0.5f + characterBody.radius * 1f;
+			Quaternion rotation = Util.QuaternionSafeLookRotation(vector);
+			Vector3 b = Quaternion.AngleAxis((remainingMissilesToFire - 1) * intervalDegrees - intervalDegrees * (missiles - 1) / 2f, vector) * Vector3.up * d;
+			Vector3 position = characterBody.aimOrigin + b;
+			FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
 			{
-				outer.SetNextStateToMain();
-			}
+				projectilePrefab = lunarMissilePrefab,
+				position = position,
+				rotation = rotation,
+				owner = base.gameObject,
+				damage = characterBody.damage * 2f,
+				crit = RollCrit(),
+				force = 200f
+			};
+			ProjectileManager.instance.FireProjectile(fireProjectileInfo);
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
 		}
+		
+		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
 	public class MultiMusou : Concentric, ISkill, IProjectile, IProjectileGhost
@@ -84,6 +83,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/EliteLunar/LunarMissileProjectile.prefab"))!.InstantiateClone("MultiMusouProjectile", true);
+			proj.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 300;
 			return proj;
 		}
 
@@ -102,10 +102,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.icon= (await LoadAsset<Sprite>("bundle:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.interruptPriority = InterruptPriority.Any;
-			skill.mustKeyPress = false;
+			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = false;
 			skill.beginSkillCooldownOnSkillEnd = false;
-			skill.baseRechargeInterval = 0f;
+			skill.baseRechargeInterval = 2f;
 			return skill;
 		}
 	}

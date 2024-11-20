@@ -93,7 +93,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			base.FixedUpdate();
 			stopwatch += Time.deltaTime;
 			
-			if (stopwatch >= twinBehaviour.runtimeNumber2 && isAuthority)
+			if (stopwatch >= 0.5f && isAuthority)
 			{
 				SowSeeds();
 				stopwatch = 0;

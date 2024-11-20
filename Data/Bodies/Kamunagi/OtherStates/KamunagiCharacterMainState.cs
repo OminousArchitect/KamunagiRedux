@@ -224,7 +224,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var mashiroEffect = (await GetEffect<MashiroBlessing>()!).InstantiateClone("mashiroEffect", false);
+			var mashiroEffect = await GetEffect<ShadowflameMuzzle>();
 			var electricOrbPink= (await LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab"))!.InstantiateClone("TwinsPinkHandEnergy", false);
 			mashiroEffect.transform.SetParent(electricOrbPink.transform);
 			electricOrbPink.AddComponent<ModelAttachedEffect>();
@@ -253,6 +253,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			electricOrbPink.SetActive(false);
 			electricOrbPink.EffectWithSound("");
 			return electricOrbPink;
+		}
+	}
+
+	public class ShadowflameMuzzle : Concentric, IEffect
+	{
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			var effect = await LoadAsset<GameObject>("bundle:ShadowFlame.prefab")!;
+			var vfx = effect.AddComponent<VFXAttributes>();
+			vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
+			vfx.DoNotPool = false;
+			effect.transform.localPosition = Vector3.zero;
+			effect.transform.localScale = Vector3.one * 0.6f;
+			effect.GetComponent<EffectComponent>().noEffectData = true;
+			return effect;
 		}
 	}
 }

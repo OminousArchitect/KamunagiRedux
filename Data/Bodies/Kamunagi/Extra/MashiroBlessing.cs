@@ -130,7 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class MashiroBlessing : Concentric, IEffect, ISkill, IBuff, IOverlay
+	public class MashiroBlessing : Concentric, ISkill, IBuff, IOverlay
 	{
 		public static DamageColorIndex damageColorIndex;
 
@@ -142,18 +142,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			MashiroBlessingState.muzzleEffect = await this.GetEffect();
-		}
-
-		async Task<GameObject> IEffect.BuildObject()
-		{
-			var effect = await LoadAsset<GameObject>("bundle:ShadowFlame.prefab")!;
-			var vfx = effect.AddComponent<VFXAttributes>();
-			vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
-			vfx.DoNotPool = false;
-			effect.transform.localPosition = Vector3.zero;
-			effect.transform.localScale = Vector3.one * 0.6f;
-			return effect;
+			//MashiroBlessingState.muzzleEffect = await this.GetEffect();
 		}
 
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(MashiroBlessingState) };
@@ -214,8 +203,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class BlessingDef : SkillDef
 	{
-		public override bool IsReady(GenericSkill skillSlot) =>
-			base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
+		public override bool IsReady(GenericSkill skillSlot) => base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
 	}
 
 	public class MashiroBlessingRespawn : Concentric, IEffect

@@ -43,35 +43,33 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			meshObject.transform.localScale = Vector3.one * 3;
 			var cb = nugwisoBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI4_BODY_NAME";
-			cb.baseMaxHealth = 330f;
-			cb.baseDamage = 12f;
+			cb.baseMaxHealth = 400;
+			cb.levelMaxHealth = 130;
+			cb.baseDamage = 13f;
+			cb.levelDamage = 1.5f;
 			cb.baseMoveSpeed = 4f;
-
-			var cPairs = mdl.GetComponent<ChildLocator>().transformPairs;
-			cPairs[0].transform = mdl.transform;
-			cPairs[0].name = "Muzzle";
 			
 			#region itemdisplays
 			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
 			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
 			
-			var hauntedDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
-			var hauntedRules = new ItemDisplayRule[hauntedDisplay.rules.Length];
-			Array.Copy(hauntedDisplay.rules, hauntedRules, hauntedDisplay.rules.Length);
-			hauntedDisplay.rules = hauntedRules;
-			hauntedDisplay.rules[0].childName = "Muzzle";
-			hauntedDisplay.rules[0].localPos = new Vector3(-0.02014F, 0.18649F, -0.16408F);
-			hauntedDisplay.rules[0].localAngles = new Vector3(270F, 0F, 0F);
-			hauntedDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			var fireDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
+			var fireRules = new ItemDisplayRule[fireDisplay.rules.Length];
+			Array.Copy(fireDisplay.rules, fireRules, fireDisplay.rules.Length);
+			fireDisplay.rules = fireRules;
+			fireDisplay.rules[0].childName = "Head";
+			fireDisplay.rules[0].localPos = new Vector3(0.37824F, 0.18649F, 0.31578F);
+			fireDisplay.rules[0].localAngles = new Vector3(290.8627F, 338.1044F, 46.19113F);
+			fireDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 
-			var iceDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteIce/EliteIceEquipment.asset"));
-			var iceRules = new ItemDisplayRule[iceDisplay.rules.Length];
-			Array.Copy(iceDisplay.rules, iceRules, iceDisplay.rules.Length);
-			iceDisplay.rules = iceRules;
-			iceDisplay.rules[0].childName = "Muzzle";
-			iceDisplay.rules[0].localPos = new Vector3(0.0189F, 1.05928F, 0.03792F);
-			iceDisplay.rules[0].localAngles = new Vector3(270F, 0F, 0F);
-			iceDisplay.rules[0].localScale = new Vector3(0.08F, 0.08F, 0.08F);
+			var lightningDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/ElitePoison/ElitePoisonEquipment.asset"));
+			var lightningRules = new ItemDisplayRule[lightningDisplay.rules.Length];
+			Array.Copy(lightningDisplay.rules, lightningRules, lightningDisplay.rules.Length);
+			lightningDisplay.rules = lightningRules;
+			lightningDisplay.rules[0].childName = "Head";
+			lightningDisplay.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			lightningDisplay.rules[0].localAngles = new Vector3(0F, 0F, 0F);
+			lightningDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 
 			charModel.itemDisplayRuleSet = idrs;
 			#endregion
@@ -95,29 +93,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	}
 	#endregion
 
-	public class ShootDaggerState : BaseState
+	public class WeakenAOE : BaseState
 	{
-		public static GameObject? daggerFab;
-		public override void OnExit()
+		public override void OnEnter()
 		{
-			int projectileCount = 4;
-			var xoro = new Xoroshiro128Plus(Run.instance.runRNG.nextUlong);
-			var spacingDegrees = 360f / projectileCount;
-			var forward = Vector3.ProjectOnPlane(inputBank.aimDirection, Vector3.up);
-			var centerPoint = characterBody.footPosition;
-			for (var i = 0; i < projectileCount; i++)
+			base.OnEnter();
+			var search = new SphereSearch { origin = characterBody.corePosition, radius = 25, mask = LayerIndex.entityPrecise.mask }
+				.RefreshCandidates()
+				.FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(teamComponent.teamIndex))
+				.FilterCandidatesByDistinctHurtBoxEntities()
+				.GetHurtBoxes();
+			for (int i = 0; i < search.Length; i++)
 			{
-				ProjectileManager.instance.FireProjectile(
-					daggerFab,
-					centerPoint,
-					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
-					gameObject,
-					damageStat * 2f,
-					95f,
-					RollCrit()
-				);
+				search[i].healthComponent.body.AddTimedBuffAuthority(RoR2Content.Buffs.Weak.buffIndex, 10f);
 			}
-			base.OnExit();
 		}
 	}
 	
@@ -126,7 +115,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			ShootDaggerState.daggerFab = await LoadAsset<GameObject>("RoR2/Base/Dagger/DaggerProjectile.prefab");
 		}
 		
 		async Task<SkillDef> ISkill.BuildObject()
@@ -141,13 +129,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 		
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ShootDaggerState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(WeakenAOE) };
 	}
 	public class DecayPrimaryFamily : Concentric, ISkillFamily
 	{
 		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<DecayPrimary>() };
 	}
-	//secondary state goes here
+
+	public class TBDstate : BaseState
+	{
+		public override void OnEnter()
+		{
+			base.OnEnter();
+		}
+	}
 	public class DecaySecondary : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
@@ -162,7 +157,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 		
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(ShootDaggerState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(TBDstate) };
 	}
 	public class DecaySecondaryFamily : Concentric, ISkillFamily
 	{

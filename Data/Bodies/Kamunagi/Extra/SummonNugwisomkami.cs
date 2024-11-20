@@ -32,17 +32,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			summon.preSpawnSetupCallback += master =>
 			{
 				master.inventory.SetEquipmentIndex(whichEquip);
-				log.LogDebug($"spirit was [ {whichSpirit} ]");
-				/*if (whichSpirit == 3)
+				switch (whichSpirit)
 				{
-					log.LogDebug("this was the 3 spirit");
-					master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth, 3);
+					case 0:
+						master.inventory.GiveItem(DLC2Content.Items.TeleportOnLowHealth, 1);
+						master.inventory.GiveItem(RoR2Content.Items.Phasing, 1);
+						break;
+					case 1:
+						master.inventory.GiveItem(RoR2Content.Items.BarrierOnKill, 1);
+						break;
+					case 2:
+						master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth, 3);
+						master.inventory.GiveItem(RoR2Content.Items.Phasing, 1);
+						break;
 				}
-				else
-				{
-					log.LogDebug("this wasn't the 3 spirit");
-					master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth, 1);
-				}*/
+				
 				outer.SetNextState(new NugwisomkamiSpawnedState() { master = master, whichSpirit = whichSpirit });
 			};
 			var characterMaster = summon.Perform();

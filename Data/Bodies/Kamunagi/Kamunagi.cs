@@ -155,15 +155,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			bodyComponent.baseAcceleration = 80f;
 			bodyComponent.baseJumpPower = 15f;
 
-			//bodyCharacterBody.levelDamage = 2.6f; overwrote by below values in henry
+			bodyComponent.levelDamage = 2.6f;
 			bodyComponent.levelMaxHealth = Mathf.Round(bodyComponent.baseMaxHealth * 0.3f);
 			bodyComponent.levelMaxShield = Mathf.Round(bodyComponent.baseMaxShield * 0.3f);
 			bodyComponent.levelRegen = bodyComponent.baseRegen * 0.2f;
 
 			bodyComponent.levelMoveSpeed = 0f;
 			bodyComponent.levelJumpPower = 0f;
-
-			bodyComponent.levelDamage = bodyComponent.baseDamage * 0.2f;
+			
 			bodyComponent.levelAttackSpeed = 0f;
 			bodyComponent.levelCrit = 0f;
 
@@ -189,6 +188,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			bodyModelLocator.modelTransform = model.transform;
 			bodyHealthComponent.modelLocator = bodyModelLocator;
 
+			#region OhNoBro
+			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
+			var kamRuleset = model.GetComponent<CharacterModel>().itemDisplayRuleSet;
+			kamRuleset.keyAssetRuleGroups = idrs.keyAssetRuleGroups;
+			#endregion
+			
 			#endregion
 
 			#region Setup StateMachines

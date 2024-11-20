@@ -32,8 +32,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			mdl.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
 			var cb = nugwisoBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI2_BODY_NAME";
-			cb.baseMaxHealth = 230f;
-			cb.levelDamage = 2.3f;
+			cb.baseMaxHealth = 200f;
+			cb.levelMaxHealth = 70f;
+			cb.baseDamage = 14f;
+			cb.levelDamage = 3f;
 
 			var array = nugwisoBody.GetComponents<GenericSkill>();
 			array[0]._skillFamily = await GetSkillFamily<WarMachinePrimaryFamily>();
@@ -56,7 +58,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public static string muzzleNameRoot = "Root";
 		public static string muzzleNameOne = "MuzzleLeft";
 		public static string muzzleNameTwo = "MuzzleRight";
-		public static float baseDuration = 1f;
 		public static string windUpSound = "Play_Lunar_wisp_attack1_windUp";
 		public static GameObject chargeEffectPrefab;
 		private GameObject chargeInstance;
@@ -73,7 +74,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			duration = (baseDuration + spinUpDuration) / attackSpeedStat;
+			duration = 0.8f;
 			muzzleTransformRoot = FindModelChild(muzzleNameRoot);
 			muzzleTransformOne = FindModelChild(muzzleNameOne);
 			muzzleTransformTwo = FindModelChild(muzzleNameTwo);

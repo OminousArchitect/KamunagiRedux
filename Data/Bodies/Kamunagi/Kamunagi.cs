@@ -189,9 +189,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			bodyHealthComponent.modelLocator = bodyModelLocator;
 
 			#region OhNoBro
-			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
+			/*var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
 			var kamRuleset = model.GetComponent<CharacterModel>().itemDisplayRuleSet;
-			kamRuleset.keyAssetRuleGroups = idrs.keyAssetRuleGroups;
+			kamRuleset.keyAssetRuleGroups = idrs.keyAssetRuleGroups;*/
 			#endregion
 			
 			#endregion

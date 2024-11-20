@@ -56,9 +56,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var legs = gupBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
 			legs.GetComponent<SkinnedMeshRenderer>().enabled = false; //attempt #1
 			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			var disableOrangeStuff = model.GetComponent<FootstepHandler>();
-			disableOrangeStuff.enableFootstepDust = false;
-			disableOrangeStuff.footstepDustPrefab = null;
+			var omfg = model.AddComponent<FootstepReplacer>();
+			omfg.dust = await (GetGenericObject<TatariStepDust>());
+
 			CharacterModel mdl = model.GetComponent<CharacterModel>();
 			mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
 			mdl.baseRendererInfos[1].renderer.enabled = false; //attempt #2
@@ -132,6 +132,43 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				legs.SetActive(false);
 			}
+		}
+		
+		public class FootstepReplacer : MonoBehaviour
+		{
+			private Animator animator;
+			public GameObject dust;
+			public void Start()
+			{
+				animator = GetComponent<Animator>();
+
+				foreach (var clip in animator.runtimeAnimatorController.animationClips)
+				{
+					foreach (var animEvent in clip.events)
+					{
+						if (animEvent.stringParameter == "StepPosition")
+						{
+							animEvent.objectReferenceParameter = dust;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public class TatariStepDust : Concentric, IGenericObject
+	{
+		async Task<GameObject> IGenericObject.BuildObject()
+		{
+			Material purpleGooMat = new Material(await LoadAsset<Material>("RoR2/DLC1/Gup/matGupBlood.mat"));
+			purpleGooMat.name = "TatariBlood";
+			purpleGooMat.SetColor("_EmissionColor", new Color32(30, 0, 10, 255)); //255 color casting!!!!
+			purpleGooMat.SetColor("_TintColor", new Color32(109, 14, 31, 255));
+			
+			var dust = (await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupStep.prefab"))!.InstantiateClone("TatariStepDust", false);
+			var gooParticles = dust.transform.Find("Particles/Goo").gameObject;
+			gooParticles.GetComponent<ParticleSystemRenderer>().material = purpleGooMat;
+			return dust;
 		}
 	}
 

@@ -24,6 +24,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			charModel.baseLightInfos[0].defaultColor = Colors.jachdwaltColor;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
+			var childL = mdl.GetComponent<ChildLocator>().transformPairs;
+			childL[0].name = "The";
+			childL[0].transform = mdl.transform.Find("WispArmature/ROOT/Base/Head/Muzzle");
 			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
 			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
 			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
@@ -48,28 +51,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseDamage = 13f;
 			cb.levelDamage = 1.5f;
 			cb.baseMoveSpeed = 4f;
-			
-			#region itemdisplays
-			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
-			
-			var fireDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
-			var fireRules = new ItemDisplayRule[fireDisplay.rules.Length];
-			Array.Copy(fireDisplay.rules, fireRules, fireDisplay.rules.Length);
-			fireDisplay.rules = fireRules;
-			fireDisplay.rules[0].childName = "Head";
-			fireDisplay.rules[0].localPos = new Vector3(0.37824F, 0.18649F, 0.31578F);
-			fireDisplay.rules[0].localAngles = new Vector3(290.8627F, 338.1044F, 46.19113F);
-			fireDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 
-			var lightningDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/ElitePoison/ElitePoisonEquipment.asset"));
-			var lightningRules = new ItemDisplayRule[lightningDisplay.rules.Length];
-			Array.Copy(lightningDisplay.rules, lightningRules, lightningDisplay.rules.Length);
-			lightningDisplay.rules = lightningRules;
-			lightningDisplay.rules[0].childName = "Head";
-			lightningDisplay.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			lightningDisplay.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			lightningDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			#region itemdisplays
+			var idrs = charModel.itemDisplayRuleSet;
+			var hauntedDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
+			var customHauntedRules = new ItemDisplayRule[hauntedDisplay.rules.Length];
+			Array.Copy(hauntedDisplay.rules, customHauntedRules, hauntedDisplay.rules.Length);
+			customHauntedRules[0].childName = "The";
+			customHauntedRules[0].localPos = new Vector3(0f, 0.23f, -0.08f);
+			customHauntedRules[0].localAngles = new Vector3(270f, 0f, 0f);
+			customHauntedRules[0].localScale = new Vector3(0.3f, 0.3f, 0.3f);
+			hauntedDisplay.rules = customHauntedRules;
 
 			charModel.itemDisplayRuleSet = idrs;
 			#endregion

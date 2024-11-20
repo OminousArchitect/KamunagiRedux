@@ -18,7 +18,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public Transform muzzleTransform = null!;
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileFireFrequency = 0.2f;
-		public float ballDamageCoefficient = 6f;
+		public float ballDamageCoefficient = 4f;
 		public float stopwatch;
 		public bool charged;
 		public override int meterGain => 0;
@@ -47,7 +47,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				ProjectileManager.instance.FireProjectile(new FireProjectileInfo()
 				{
 					crit = RollCrit(),
-					damage = characterBody.damage * 1.2f,
 					damageTypeOverride = DamageTypeCombo.Generic,
 					damageColorIndex = DamageColorIndex.Default,
 					force = 120,
@@ -70,10 +69,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				force = 100 * ballDamageCoefficient,
 				owner = gameObject,
 				position = muzzleTransform.position,
-				projectilePrefab =
-					fixedAge < maxChargeTime
-						? megaBlaster
-						: Concentric.GetProjectile<AltMusouChargeBall>().WaitForCompletion(),
+				projectilePrefab = fixedAge < maxChargeTime ? megaBlaster : Concentric.GetProjectile<AltMusouChargeBall>().WaitForCompletion(),
 				rotation = Quaternion.LookRotation(GetAimRay().direction)
 			});
 		}

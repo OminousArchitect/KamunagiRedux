@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using EntityStates;
+using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
@@ -10,6 +11,7 @@ using UnityEngine;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
+	[HarmonyPatch]
 	public class TatariBody : Concentric, IBody, IMaster
 	{
 		private static ConfigEntry<string> debuffBlacklist;
@@ -40,6 +42,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			}
 		}
 
+		[HarmonyPrefix, HarmonyPatch(typeof(FootstepHandler), nameof(FootstepHandler.Footstep), typeof(string), typeof(GameObject))]
+		public static void FootStepReplacer(FootstepHandler __instance, ref GameObject footstepEffect)
+		{
+			if (__instance.body.bodyIndex == tatariIndex)
+			{
+				footstepEffect = __instance.footstepDustPrefab;
+			}
+		}
+
 		async Task<GameObject> IBody.BuildObject()
 		{
 			Material tatariMat = new Material(await LoadAsset<Material>("RoR2/DLC1/Gup/matGupBodySimple.mat"));
@@ -51,13 +62,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			tatariMat.SetFloat("_FlowSpeed", 15f);
 			//mat.SetFloat("");
 			
-			var gupBody= (await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab"))!.InstantiateClone("TatariBody", true);
-			gupBody.GetComponent<CharacterDeathBehavior>().deathState = new SerializableEntityStateType(typeof(VoidDeathState));
+			var gupBody = (await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab")).InstantiateClone("TatariBody", true);
+			gupBody.GetComponent<CharacterDeathBehavior>().deathState =
+				new SerializableEntityStateType(typeof(VoidDeathState));
 			var legs = gupBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
 			legs.GetComponent<SkinnedMeshRenderer>().enabled = false; //attempt #1
 			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			var omfg = model.AddComponent<FootstepReplacer>();
-			omfg.dust = await (GetGenericObject<TatariStepDust>());
+			//var omfg = model.AddComponent<FootstepReplacer>();
+			//omfg.dust = await (GetGenericObject<TatariStepDust>());
+
+			var handler = model.GetComponent<FootstepHandler>();
+			handler.enableFootstepDust = false; // we dont actually want to use this, because we're gonna use it in the hook
+			handler.footstepDustPrefab = await GetEffect<TatariStepDust>();
 
 			CharacterModel mdl = model.GetComponent<CharacterModel>();
 			mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
@@ -156,9 +172,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class TatariStepDust : Concentric, IGenericObject
+	public class TatariStepDust : Concentric, IEffect
 	{
-		async Task<GameObject> IGenericObject.BuildObject()
+		async Task<GameObject> IEffect.BuildObject()
 		{
 			Material purpleGooMat = new Material(await LoadAsset<Material>("RoR2/DLC1/Gup/matGupBlood.mat"));
 			purpleGooMat.name = "TatariBlood";

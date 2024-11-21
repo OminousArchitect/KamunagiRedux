@@ -95,7 +95,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                 if (goodPlacement)
                 {
                     Util.PlaySound(fireSoundString, gameObject);
-                    Util.PlaySound("Play_mage_shift_wall_explode", gameObject);
+                    //Util.PlaySound("Play_mage_shift_wall_explode", gameObject);
                     if (indicatorPrefabInstance && base.isAuthority)
                     {
 	                    var forward = indicatorPrefabInstance.transform.forward;
@@ -215,6 +215,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				//r.materials = new Material[] { r.material, r.material, r.material, r.material, r.material, r.material, r.material, r.material }; //whatisthis
 			}
 			icyFx.transform.SetParent(parent);
+			var simple = proj.AddComponent<ProjectileSimple>();
+			simple.lifetimeExpiredEffect = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab");
+			simple.lifetime = 5.7f;
+			simple.updateAfterFiring = false;
+			simple.desiredForwardSpeed = 0;
 			return proj;
 		}
 

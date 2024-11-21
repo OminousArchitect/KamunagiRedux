@@ -216,7 +216,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 			var vfxChild = proj.transform.Find("FX/ScaledOnImpact").gameObject;
 			Decal decal = vfxChild.transform.GetChild(0).gameObject.GetComponent<Decal>();
-			decal.Material = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidRaidCrab/matVoidRaidCrabTripleBeamDotZoneDecal.mat"));
+			decal.Material = poolMat;
 			return proj;
 		}
 	}

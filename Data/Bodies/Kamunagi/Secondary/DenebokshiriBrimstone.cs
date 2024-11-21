@@ -203,14 +203,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			effect.transform.GetChild(1).gameObject.SetActive(true);
 			return effect;
 		}
-
-		public static DamageAPI.ModdedDamageType Denebokshiri;
-
-		public override Task Initialize()
-		{
-			Denebokshiri = DamageAPI.ReserveDamageType();
-			return base.Initialize();
-		}
+		
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
 		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
 		{

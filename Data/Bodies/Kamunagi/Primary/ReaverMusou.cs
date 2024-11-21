@@ -256,12 +256,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	[HarmonyPatch]
 	internal class PrimedStickyBomb : Concentric, IProjectile, IProjectileGhost
 	{
-		public static DamageAPI.ModdedDamageType TwinsReaver;
-		public override Task Initialize()
-		{
-			TwinsReaver = DamageAPI.ReserveDamageType();
-			return base.Initialize();
-		}
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("TwinsPrimedReaverProjectile", true);
@@ -390,7 +384,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(PrimedStickyBomb.TwinsReaver);
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
 	}
@@ -407,7 +401,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(PrimedStickyBomb.TwinsReaver);
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
 	}

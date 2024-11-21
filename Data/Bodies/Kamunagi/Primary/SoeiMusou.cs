@@ -55,8 +55,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			SoeiMusouState.MuzzlePrefab = await (LoadAsset<GameObject>(
-				"addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab"))!;
+			SoeiMusouState.MuzzlePrefab = await (LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab"))!;
 		}
 
 		async Task<SkillDef> ISkill.BuildObject()

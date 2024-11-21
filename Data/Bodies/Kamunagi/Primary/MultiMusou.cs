@@ -1,5 +1,7 @@
 ﻿using EntityStates;
+using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -13,7 +15,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override int meterGain => 0;
 		
 		private float timeBetweenShots;
-		public static GameObject? lunarMissilePrefab;
+		public static GameObject? missilePrefab;
+		public static GameObject? muzzleFlash;
 		private int remainingMissilesToFire;
 
 		public override void OnEnter()
@@ -51,15 +54,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			Vector3 position = characterBody.aimOrigin + b;
 			FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
 			{
-				projectilePrefab = lunarMissilePrefab,
+				projectilePrefab = missilePrefab,
 				position = position,
 				rotation = rotation,
 				owner = base.gameObject,
-				damage = characterBody.damage * 2f,
+				damage = characterBody.damage * 1f,
 				crit = RollCrit(),
 				force = 200f
 			};
 			ProjectileManager.instance.FireProjectile(fireProjectileInfo);
+			EffectManager.SimpleMuzzleFlash(muzzleFlash, gameObject, twinMuzzle, false);
 		}
 
 		public override void OnExit()
@@ -70,26 +74,47 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
+	[HarmonyPatch]
 	public class MultiMusou : Concentric, ISkill, IProjectile, IProjectileGhost, IEffect
 	{
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(MultiMusouState) };
+
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			MultiMusouState.lunarMissilePrefab = await this.GetProjectile();
+			MultiMusouState.missilePrefab = await this.GetProjectile();
+			MultiMusouState.muzzleFlash = await (LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab"))!;
 		}
-
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(MultiMusouState) };
-
+		
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/EliteLunar/LunarMissileProjectile.prefab"))!.InstantiateClone("MultiMusouProjectile", true);
+			UnityEngine.Object.Destroy(proj.GetComponent<BoxCollider>());
+			proj.AddComponent<SphereCollider>().radius = 0.5f;
 			var controller = proj.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.startSound = "Play_item_use_molotov_throw";
-			proj.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 30f;
-			proj.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 15f;
+			proj.GetComponent<ProjectileSimple>().desiredForwardSpeed = 175f;
+			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileSteerTowardTarget>());
+			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDirectionalTargetFinder>());
 			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
+			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(CurseFlames);
 			return proj;
+		}
+
+		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
+		{
+			if (damageInfo.HasModdedDamageType(CurseFlames))
+			{
+				DotController.InflictDot(
+					__instance.gameObject,
+					damageInfo.attacker,
+					NaturesAxiom.CurseIndex, 
+					2f, 
+					damageInfo.damage * 0.2f
+					);
+			}
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
@@ -138,10 +163,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.icon= (await LoadAsset<Sprite>("bundle:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.interruptPriority = InterruptPriority.Any;
-			skill.mustKeyPress = true;
+			skill.mustKeyPress = false;
 			skill.cancelSprintingOnActivation = false;
 			skill.beginSkillCooldownOnSkillEnd = false;
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 2.5f;
 			return skill;
 		}
 	}

@@ -52,6 +52,10 @@ namespace KamunagiOfChains
 		
 		public static BodyIndex vultureIndex;
 		public static BodyIndex pestIndex;
+		public static DamageAPI.ModdedDamageType Denebokshiri;
+		public static DamageAPI.ModdedDamageType TwinsReaver;
+		public static DamageAPI.ModdedDamageType Uitsalnemetia;
+		public static DamageAPI.ModdedDamageType CurseFlames;
 
 		public void Awake()
 		{
@@ -92,6 +96,11 @@ namespace KamunagiOfChains
 				pestIndex = BodyCatalog.FindBodyIndex("FlyingVerminBody"); //cache these like KatarinaMod, because I need all flying enemies, and these guys have isFlying set to false
 			};
 
+			Denebokshiri = DamageAPI.ReserveDamageType();
+			TwinsReaver = DamageAPI.ReserveDamageType();
+			Uitsalnemetia = DamageAPI.ReserveDamageType();
+			CurseFlames = DamageAPI.ReserveDamageType();
+			
 			log.LogDebug("Finished Awake");
 		}
 

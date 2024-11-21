@@ -173,13 +173,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	[HarmonyPatch]
 	public class TickingFuseObelisk : Concentric, IProjectile, IProjectileGhost
 	{
-		public static DamageAPI.ModdedDamageType Uitsalnemetia;
-
-		public override Task Initialize()
-		{
-			Uitsalnemetia = DamageAPI.ReserveDamageType();
-			return base.Initialize();
-		}
 
 		async Task<GameObject> IProjectile.BuildObject()
 		{

@@ -24,14 +24,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			charModel.baseLightInfos[0].defaultColor = Colors.jachdwaltColor;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			var childL = mdl.GetComponent<ChildLocator>().transformPairs;
-			childL[0].name = "The";
-			childL[0].transform = mdl.transform.Find("WispArmature/ROOT/Base/Head/Muzzle");
+			var childL = mdl.GetComponent<ChildLocator>();
+			childL.SetChild("The", mdl.transform.Find("WispArmature/ROOT/Base/Head/Muzzle")); // what this shit is i have no idea, but i put it into the new extension method
 			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
 			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
 			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
 			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it
 			var meshObject = mdl.transform.GetChild(0).gameObject;
+			childL.SetChild("Head", meshObject.transform);
+			
 			UnityEngine.Object.Destroy(meshObject.GetComponent<SkinnedMeshRenderer>());
 			UnityEngine.Object.Destroy(mdl.GetComponentInChildren<SkinnedMeshRenderer>());
 			meshObject.AddComponent<MeshFilter>().mesh= (await LoadAsset<Mesh>("bundle2:IceMask"));

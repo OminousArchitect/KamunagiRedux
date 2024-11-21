@@ -1,4 +1,6 @@
-﻿using Rewired.UI.ControlMapper;
+﻿using HarmonyLib;
+using Newtonsoft.Json.Utilities;
+using Rewired.UI.ControlMapper;
 using RoR2;
 using RoR2.Navigation;
 using UnityEngine;
@@ -141,6 +143,22 @@ namespace KamunagiOfChains
 			}
 			UnityEngine.Object.Destroy(spawnCard);
 			return result;
+		}
+
+		public static void SetChild(this ChildLocator locator, string key, Transform transform)
+		{
+			var index = locator.transformPairs.IndexOf(x => x.name == key);
+			if (index < 0)
+			{
+				locator.transformPairs = locator.transformPairs.AddItem(new ChildLocator.NameTransformPair
+				{
+					name = key, transform = transform
+				}).ToArray();
+			}
+			else
+			{
+				locator.transformPairs[index].transform = transform;
+			}
 		}
 	}
 }

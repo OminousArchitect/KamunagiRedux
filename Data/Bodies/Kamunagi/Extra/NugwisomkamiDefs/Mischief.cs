@@ -55,15 +55,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.levelDamage = 2.3f;
 			cb.baseMoveSpeed = 13f;
 
-			var array = mdl.GetComponent<ChildLocator>().transformPairs;
-			array[0].transform = mdl.transform;
-			array[0].name = "Muzzle";
+			var childL = mdl.GetComponent<ChildLocator>();
+			childL.SetChild("Muzzle", mdl.transform);
 
 			#region itemdisplays
 			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
 			idrs.keyAssetRuleGroups = charModel.itemDisplayRuleSet.keyAssetRuleGroups;
 			
-			var fireDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset"));
+			var keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset");
+			var fireDisplay = idrs.FindDisplayRuleGroup(keyAsset);
 			var fireRules = new ItemDisplayRule[fireDisplay.rules.Length];
 			Array.Copy(fireDisplay.rules, fireRules, fireDisplay.rules.Length);
 			fireDisplay.rules = fireRules;
@@ -75,8 +75,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			fireDisplay.rules[1].localPos = new Vector3(-0.34832F, 0.26794F, 0.14957F);
 			fireDisplay.rules[1].localAngles = new Vector3(52.33278F, 60.16898F, 218.7332F);
 			fireDisplay.rules[1].localScale = new Vector3(0.3F, 0.3F, 0.3F);
-			
-			var lightningDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset"));
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup
+			{
+				rules = fireRules
+			});
+
+			keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset");
+			var lightningDisplay = idrs.FindDisplayRuleGroup(keyAsset);
 			var lightningRules = new ItemDisplayRule[lightningDisplay.rules.Length];
 			Array.Copy(lightningDisplay.rules, lightningRules, lightningDisplay.rules.Length);
 			lightningDisplay.rules = lightningRules;
@@ -88,6 +93,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			lightningDisplay.rules[1].localPos = new Vector3(0.04168F, 0.95129F, 0.15072F);
 			lightningDisplay.rules[1].localAngles = new Vector3(335.6771F, 357.8F, 180F);
 			lightningDisplay.rules[1].localScale = new Vector3(-0.40586F, 0.40586F, 0.40586F);
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup
+			{
+				rules = lightningRules
+			});
 			
 			charModel.itemDisplayRuleSet = idrs;
 			#endregion

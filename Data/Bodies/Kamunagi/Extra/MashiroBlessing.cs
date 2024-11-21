@@ -7,6 +7,7 @@ using RoR2.Skills;
 using RoR2.UI;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
@@ -56,7 +57,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 			if (fixedAge < duration || !NetworkServer.active) return;
 			var currentStacks = GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
-			characterBody.SetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion(), currentStacks + 15);
+			characterBody.SetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion(),
+				currentStacks + 15);
 			characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
 			outer.SetNextStateToMain();
 		}
@@ -92,7 +94,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				if (_spellStateMachine == null || !_spellStateMachine)
 				{
-					_spellStateMachine = Bar!.source.body.skillLocator.FindSkillByDef(Concentric.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;
+					_spellStateMachine = Bar!.source.body.skillLocator
+						.FindSkillByDef(Concentric.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;
 				}
 
 				return _spellStateMachine;
@@ -102,6 +105,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class MashiroCurseBarSegment : BarData
 	{
+		public static Material overlayMat;
+
 		public override HealthBarStyle.BarStyle GetStyle()
 		{
 			if (Bar == null) return default;
@@ -110,23 +115,32 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return style;
 		}
 
-		public override void UpdateInfo(ref HealthBar.BarInfo inf, ref HealthComponent.HealthBarValues healthBarValues, ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
+		public override void UpdateInfo(ref HealthBar.BarInfo inf, ref HealthComponent.HealthBarValues healthBarValues,
+			ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
 		{
 			base.UpdateInfo(ref inf, ref healthBarValues, extraHealthBarInfoTracker);
-			var curseStacks = Bar.source.body.GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
+			var curseStacks =
+				Bar.source.body.GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
 			inf.enabled = false;
 			if (curseStacks >= 1)
 			{
 				inf.enabled = true;
-				
-				
+
+
 				inf.normalizedXMax = 1f - healthBarValues.curseFraction;
 				inf.normalizedXMin = inf.normalizedXMax - (inf.normalizedXMax / 100 * curseStacks);
 				var barStuff = 0.01f;
 				healthBarValues.healthFraction = Mathf.Clamp01(healthBarValues.healthFraction - barStuff * curseStacks);
 				healthBarValues.shieldFraction = Mathf.Clamp01(healthBarValues.shieldFraction - barStuff * curseStacks);
-				healthBarValues.barrierFraction = Mathf.Clamp01(healthBarValues.barrierFraction - barStuff * curseStacks);
+				healthBarValues.barrierFraction =
+					Mathf.Clamp01(healthBarValues.barrierFraction - barStuff * curseStacks);
 			}
+		}
+
+		public override void ApplyBar(ref HealthBar.BarInfo inf, Image image, ref int i)
+		{
+			base.ApplyBar(ref inf, image, ref i);
+			image.material = overlayMat;
 		}
 	}
 
@@ -143,6 +157,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			await base.Initialize();
 			//MashiroBlessingState.muzzleEffect = await this.GetEffect();
+
+			MashiroCurseBarSegment.overlayMat = await LoadAsset<Material>("bundle2:ZealMat");
 		}
 
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(MashiroBlessingState) };
@@ -203,7 +219,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class BlessingDef : SkillDef
 	{
-		public override bool IsReady(GenericSkill skillSlot) => base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
+		public override bool IsReady(GenericSkill skillSlot) =>
+			base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
 	}
 
 	public class MashiroBlessingRespawn : Concentric, IEffect

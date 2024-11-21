@@ -209,8 +209,8 @@ namespace KamunagiOfChains
 			{
 				cachedBarInfo.color = barInfo.color;
 				image.color = barInfo.color;
-				if (image.material != defaultMaterial)
-					image.material.color = barInfo.color;
+				//if (image.material != defaultMaterial) // BUG: this is bad, since the material instance is shared across all instances. the shader should pull from image.color not this way
+					//image.material.color = barInfo.color;
 			}
 
 			if (Mathf.Abs(barInfo.normalizedXMin - cachedBarInfo.normalizedXMin) > 0.01)

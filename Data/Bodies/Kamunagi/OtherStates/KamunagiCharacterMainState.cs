@@ -224,19 +224,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var mashiroEffect = await GetEffect<ShadowflameMuzzle>();
-			var electricOrbPink= (await LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab"))!.InstantiateClone("TwinsPinkHandEnergy", false);
-			mashiroEffect.transform.SetParent(electricOrbPink.transform);
-			electricOrbPink.AddComponent<ModelAttachedEffect>();
-			UnityEngine.Object.Destroy(electricOrbPink.GetComponent<ProjectileGhostController>());
-			UnityEngine.Object.Destroy(electricOrbPink.GetComponent<VFXAttributes>());
-			var pinkChild = electricOrbPink.transform.GetChild(0);
+			var hoverFlames = (await GetEffect<ShadowflameMuzzle>())!.InstantiateClone("TwinsHoverFlames", false);
+			UnityEngine.Object.Destroy(hoverFlames.GetComponent<EffectComponent>());
+			var doubleHoverFx= (await LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab"))!.InstantiateClone("TwinsPinkHandEnergy", false);
+			hoverFlames.transform.SetParent(doubleHoverFx.transform);
+			doubleHoverFx.AddComponent<ModelAttachedEffect>();
+			UnityEngine.Object.Destroy(doubleHoverFx.GetComponent<ProjectileGhostController>());
+			UnityEngine.Object.Destroy(doubleHoverFx.GetComponent<VFXAttributes>());
+			var pinkChild = doubleHoverFx.transform.GetChild(0);
 			pinkChild.transform.localScale = Vector3.one * 0.1f;
 			var pinkTransform = pinkChild.transform.GetChild(0);
 			pinkTransform.transform.localScale = Vector3.one * 0.25f;
 			var pink = new Color(1f, 0f, 0.34f);
 			var pinkAdditive = new Color(0.91f, 0.3f, 0.84f);
-			foreach (var r in electricOrbPink.GetComponentsInChildren<ParticleSystemRenderer>(true))
+			foreach (var r in doubleHoverFx.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{
 				var name = r.name;
 				if (name != "SpitCore") continue;
@@ -246,13 +247,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 				r.material.SetColor("_TintColor", pinkAdditive);
 			}
 
-			var pinkTrails = electricOrbPink.GetComponentsInChildren<TrailRenderer>();
+			var pinkTrails = doubleHoverFx.GetComponentsInChildren<TrailRenderer>();
 			pinkTrails[0].material.SetColor("_TintColor", pink);
 			pinkTrails[1].material.SetColor("_TintColor", pink);
-			electricOrbPink.GetComponentInChildren<Light>().color = Colors.twinsDarkColor;
-			electricOrbPink.SetActive(false);
-			electricOrbPink.EffectWithSound("");
-			return electricOrbPink;
+			doubleHoverFx.GetComponentInChildren<Light>().color = Colors.twinsDarkColor;
+			doubleHoverFx.SetActive(false);
+			doubleHoverFx.EffectWithSound("");
+			return doubleHoverFx;
 		}
 	}
 
@@ -266,7 +267,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			vfx.DoNotPool = false;
 			effect.transform.localPosition = Vector3.zero;
 			effect.transform.localScale = Vector3.one * 0.6f;
-			effect.GetComponent<EffectComponent>().noEffectData = true;
 			return effect;
 		}
 	}

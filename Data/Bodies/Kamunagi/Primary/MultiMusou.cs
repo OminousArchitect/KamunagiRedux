@@ -27,7 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			base.FixedUpdate();
 			timeBetweenShots += Time.fixedDeltaTime;
 
-			if (timeBetweenShots > 0.15f)
+			if (timeBetweenShots > twinBehaviour.firingDelay && isAuthority)
 			{
 				timeBetweenShots = 0f;
 				MissileBarrage();
@@ -45,9 +45,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			
 			Vector3 vector = inputBank ? inputBank.aimDirection : transform.forward;
 			float intervalDegrees = 180f / missiles;
-			float d = 0.5f + characterBody.radius * 1f;
+			float d = twinBehaviour.radius + characterBody.radius * 1f;
 			Quaternion rotation = Util.QuaternionSafeLookRotation(vector);
-			Vector3 b = Quaternion.AngleAxis((remainingMissilesToFire - 1) * intervalDegrees - intervalDegrees * (missiles - 1) / 2f, vector) * Vector3.up * d;
+			Vector3 b = Quaternion.AngleAxis((remainingMissilesToFire - 1) * intervalDegrees - intervalDegrees * (missiles - 1) / 2f, vector) * Vector3.up * (d - 0.5f);
 			Vector3 position = characterBody.aimOrigin + b;
 			FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
 			{
@@ -70,7 +70,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class MultiMusou : Concentric, ISkill, IProjectile, IProjectileGhost
+	public class MultiMusou : Concentric, ISkill, IProjectile, IProjectileGhost, IEffect
 	{
 		public override async Task Initialize()
 		{
@@ -83,14 +83,50 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/EliteLunar/LunarMissileProjectile.prefab"))!.InstantiateClone("MultiMusouProjectile", true);
-			proj.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 300;
+			var controller = proj.GetComponent<ProjectileController>();
+			controller.ghostPrefab = await this.GetProjectileGhost();
+			controller.startSound = "Play_item_use_molotov_throw";
+			proj.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 30f;
+			proj.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 15f;
+			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
 			return proj;
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = (await LoadAsset<GameObject>("RoR2/Base/EliteLunar/LunarMissileGhost.prefab"))!.InstantiateClone("MultiMusouGhost", false);
+			Material fireMat = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matFireStaticBlueLarge.mat"));
+			fireMat.name = "MusouFire";
+			fireMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/texRampDeathBomb.png"));
+			fireMat.SetFloat("_SrcBlend", 1f);
+			fireMat.SetFloat("_InvFade", 0.893f);
+			fireMat.SetFloat("_Boost", 3.7f);
+			fireMat.SetFloat("_AlphaBoost", 3.7f);
+			fireMat.SetFloat("_DistortionStrength", 0.82f);
+			fireMat.SetColor("_TintColor", new Color32(193, 0, 255, 255));
+			
+			
+			var ghost = (await LoadAsset<GameObject>("RoR2/Base/bazaar/Bazaar_Light.prefab"))!.transform.Find("FireLODLevel/BlueFire").gameObject!.InstantiateClone("MultiMusouGhost", false);
+			ghost.GetComponent<ParticleSystemRenderer>().material = fireMat;
+			ghost.AddComponent<ProjectileGhostController>();
 			return ghost;
+		}
+
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			Material puffMat = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniExplosion1.mat"));
+			puffMat.name = "MusouPuff";
+			puffMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampNullifierOffset.png"));
+			
+			var effect = (await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniExplosionVFXQuick.prefab"))!.InstantiateClone("DarkFlameImpact", false);
+			var spark = effect.transform.GetChild(0).gameObject; //hitspark
+			spark.GetComponent<ParticleSystemRenderer>().material = await LoadAsset<Material>("RoR2/DLC1/Common/Void/matOmniHitspark1Void.mat");
+			
+			var puff = effect.transform.GetChild(9).gameObject; //flame impact
+			puff.GetComponent<ParticleSystemRenderer>().material = puffMat;
+			
+			var light = effect.transform.GetChild(11).gameObject;
+			light.GetComponent<Light>().color = Colors.twinsLightColor;
+			return effect;
 		}
 
 		async Task<SkillDef> ISkill.BuildObject()

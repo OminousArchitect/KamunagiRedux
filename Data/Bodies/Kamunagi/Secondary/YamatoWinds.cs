@@ -27,6 +27,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		private EffectManagerHelper? chargeEffectInstance;
 		private CameraTargetParams.AimRequest? aimRequest;
 		public static BuffDef parryBuff;
+		private float stopwatch;
+		private bool hasFired;
 
 		public override void OnEnter()
 		{
@@ -39,9 +41,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 					new EffectData() { rootObject = muzzleTransform.gameObject });
 			}
 
-			//minDistance = twinBehaviour.runtimeNumber1;
-			//maxDistance = twinBehaviour.runtimeNumber2;
-			
 			aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
 			characterBody.SetBuffCount(parryBuff.buffIndex, 1);
 		}
@@ -51,15 +50,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			base.FixedUpdate();
 			distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
 			if (!isAuthority) return;
-			if (!IsKeyDownAuthority())
+			if (!IsKeyDownAuthority() || stopwatch >= 0.08f)
 			{
 				outer.SetNextStateToMain();
 			}
 
 			if (inputBank.skill1.down)
 			{
-				Fire();
-				outer.SetNextStateToMain();
+				stopwatch += Time.fixedDeltaTime;
+				if (!hasFired)
+				{
+					Fire();
+				}
 			}
 			
 			if (fixedAge > maxChargeTime)
@@ -72,6 +74,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		private void Fire()
 		{
+			hasFired = true;
+			if (chargeEffectInstance != null)
+			{
+				chargeEffectInstance.ReturnToPool();
+			}
 			var boomerang = Concentric.GetProjectile<YamatoWinds>().WaitForCompletion();
 			var aimRay = GetAimRay();
 			boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
@@ -107,11 +114,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			{
 				chargeEffectInstance.ReturnToPool();
 			}
-
 			characterBody.SetBuffCount(parryBuff.buffIndex, 0);
 		}
 
-		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
+		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.PrioritySkill;
 	}
 
 	[HarmonyPatch]
@@ -207,6 +213,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var attributes = effect.AddComponent<VFXAttributes>();
 			attributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
 			attributes.DoNotPool = false;
+			var spaghet = (await LoadAsset<GameObject>("RoR2/Base/Merc/EvisProjectile.prefab"))!.InstantiateClone("Scuffed", false);
+			UnityEngine.Object.Destroy(spaghet.GetComponent<NetworkIdentity>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileController>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<Rigidbody>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileNetworkTransform>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileSimple>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileDamage>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<TeamFilter>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileImpactExplosion>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<BoxCollider>());
+			spaghet.transform.SetParent(effect.transform);
 			return effect;
 		}
 

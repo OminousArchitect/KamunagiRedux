@@ -58,11 +58,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var hauntedDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
 			var customHauntedRules = new ItemDisplayRule[hauntedDisplay.rules.Length];
 			Array.Copy(hauntedDisplay.rules, customHauntedRules, hauntedDisplay.rules.Length);
-			customHauntedRules[0].childName = "The";
-			customHauntedRules[0].localPos = new Vector3(0f, 0.23f, -0.08f);
-			customHauntedRules[0].localAngles = new Vector3(270f, 0f, 0f);
-			customHauntedRules[0].localScale = new Vector3(0.3f, 0.3f, 0.3f);
+			customHauntedRules[0].childName = "Head";
+			customHauntedRules[0].localPos = new Vector3(-0.003F, 0.15007F, 0.86463F);
+			customHauntedRules[0].localAngles = new Vector3(356.479F, 0F, 0F);
+			customHauntedRules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
 			hauntedDisplay.rules = customHauntedRules;
+			
+			var poisonDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
+			var poisonDisplayRules = new ItemDisplayRule[poisonDisplay.rules.Length];
+			Array.Copy(poisonDisplay.rules, poisonDisplayRules, poisonDisplay.rules.Length);
+			poisonDisplayRules[0].childName = "The";
+			poisonDisplayRules[0].localPos = new Vector3(-0.03552F, 0.15193F, 0.48367F);
+			poisonDisplayRules[0].localAngles = new Vector3(0F, 0F, 0F);
+			poisonDisplayRules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
+			poisonDisplay.rules = poisonDisplayRules;
 
 			charModel.itemDisplayRuleSet = idrs;
 			#endregion

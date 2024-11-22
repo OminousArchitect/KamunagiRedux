@@ -79,6 +79,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	{
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(MultiMusouState) };
 
+		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
+		{
+			if (damageInfo.HasModdedDamageType(CurseFlames))
+			{
+				DotController.InflictDot(
+					__instance.gameObject,
+					damageInfo.attacker,
+					NaturesAxiom.CurseIndex, 
+					2f, 
+					damageInfo.damage * 0.2f
+				);
+			}
+		}
+		
 		public override async Task Initialize()
 		{
 			await base.Initialize();
@@ -94,27 +109,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var controller = proj.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.startSound = "Play_item_use_molotov_throw";
-			proj.GetComponent<ProjectileSimple>().desiredForwardSpeed = 175f;
+			proj.GetComponent<ProjectileSimple>().desiredForwardSpeed = 150f;
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileSteerTowardTarget>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDirectionalTargetFinder>());
 			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(CurseFlames);
 			return proj;
-		}
-
-		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
-		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
-		{
-			if (damageInfo.HasModdedDamageType(CurseFlames))
-			{
-				DotController.InflictDot(
-					__instance.gameObject,
-					damageInfo.attacker,
-					NaturesAxiom.CurseIndex, 
-					2f, 
-					damageInfo.damage * 0.2f
-					);
-			}
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()

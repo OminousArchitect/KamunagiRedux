@@ -36,11 +36,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (muzzleInstanceLeft != null) muzzleInstanceLeft.ReturnToPool();
 			if (muzzleInstanceRight != null) muzzleInstanceRight.ReturnToPool();
 			var chargeFraction = fixedAge / duration;
-			var amountToDecrease =
-				Mathf.Max(1f,
-					healthComponent.fullHealth * chargeFraction *
-					0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
-
+			var amountToDecrease = Mathf.Max(1f, healthComponent.fullHealth * chargeFraction * 0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
 			if (!healthComponent) return;
 			healthComponent.Networkhealth -= amountToDecrease;
 		}
@@ -158,7 +154,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			await base.Initialize();
 			//MashiroBlessingState.muzzleEffect = await this.GetEffect();
 
-			MashiroCurseBarSegment.overlayMat = await LoadAsset<Material>("bundle2:ZealMat");
+			MashiroCurseBarSegment.overlayMat = await LoadAsset<Material>("bundle2:MashiroBlessCurse");
 		}
 
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(MashiroBlessingState) };

@@ -80,7 +80,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				rules = fireRules
 			});
 
-			keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset");
+			/*keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset");
 			var lightningDisplay = idrs.FindDisplayRuleGroup(keyAsset);
 			var lightningRules = new ItemDisplayRule[lightningDisplay.rules.Length];
 			Array.Copy(lightningDisplay.rules, lightningRules, lightningDisplay.rules.Length);
@@ -96,7 +96,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup
 			{
 				rules = lightningRules
-			});
+			});*/
 			
 			charModel.itemDisplayRuleSet = idrs;
 			#endregion

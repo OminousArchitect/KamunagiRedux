@@ -20,12 +20,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	{
 		public override int meterGain => 5;
 		private float damageCoefficient = 2f;
-		private float distanceMult;
-		private float minDistance = 0.2f;
-		private float maxDistance = 0.2f;
 		private const float maxChargeTime = 1.5f;
 		private EffectManagerHelper? chargeEffectInstance;
 		private CameraTargetParams.AimRequest? aimRequest;
+		public static GameObject boomerangPrefab;
 		public static BuffDef parryBuff;
 		private float stopwatch;
 		private bool hasFired;
@@ -48,7 +46,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			distanceMult = Util.Remap(fixedAge, 0, maxChargeTime, minDistance, maxDistance);
 			if (!isAuthority) return;
 			if (!IsKeyDownAuthority() || stopwatch >= 0.08f)
 			{
@@ -79,9 +76,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			{
 				chargeEffectInstance.ReturnToPool();
 			}
-			var boomerang = Concentric.GetProjectile<YamatoWinds>().WaitForCompletion();
 			var aimRay = GetAimRay();
-			boomerang.GetComponent<WindBoomerangProjectileBehaviour>().distanceMultiplier = distanceMult;
 
 			if (isAuthority)
 			{
@@ -95,7 +90,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 					owner = gameObject,
 					position = aimRay.origin,
 					procChainMask = default,
-					projectilePrefab = boomerang,
+					projectilePrefab = boomerangPrefab,
 					rotation = Quaternion.LookRotation(aimRay.direction),
 					useFuseOverride = false,
 					useSpeedOverride = true,
@@ -127,6 +122,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			await base.Initialize();
 			YamatoWindsState.parryBuff = await this.GetBuffDef();
+			YamatoWindsState.boomerangPrefab = await this.GetProjectile();
 		}
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(YamatoWindsState) };

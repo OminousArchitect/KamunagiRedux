@@ -99,7 +99,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = true;
-			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSCURSE_KEYWORD" };
+			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSCURSE2_KEYWORD" };
 			return skill;
 		}
 

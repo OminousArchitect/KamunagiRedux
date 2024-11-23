@@ -73,6 +73,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 			if (fixedAge < 0.45f) return;
 			teleported = true;
+			if (teleportPosition == Vector3.zero)
+			{
+				teleportPosition = characterBody.corePosition;
+			}
 			Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
 			TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
 			outer.SetNextStateToMain();

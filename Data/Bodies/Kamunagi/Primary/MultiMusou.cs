@@ -167,6 +167,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.cancelSprintingOnActivation = false;
 			skill.beginSkillCooldownOnSkillEnd = false;
 			skill.baseRechargeInterval = 2.5f;
+			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSCURSE1_KEYWORD" };
 			return skill;
 		}
 	}

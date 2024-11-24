@@ -7,6 +7,7 @@ using RoR2.Projectile;
 using RoR2.Skills;
 using ThreeEyedGames;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
@@ -172,10 +173,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var parent = proj.transform.GetChild(0).gameObject.transform;
 			parent.transform.localScale = new Vector3(10f, 4f, 10f);
 			var dotZone = proj.GetComponent<ProjectileDotZone>();
-			dotZone.onEnd.m_PersistentCalls = new UnityEngine.Events.PersistentCallGroup();
 			dotZone.fireFrequency = 0.7f;
 			dotZone.lifetime = 5.7f;
 			dotZone.overlapProcCoefficient = 1f;
+			dotZone.onEnd.AddListener(delegate
+			{
+				EffectData effectData = new EffectData();
+				effectData.rotation = Quaternion.identity;
+				effectData.origin = proj.transform.position;
+				
+				EffectManager.SpawnEffect(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab").WaitForCompletion(), effectData, false);
+			});
+			
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Freeze2s;
 			UnityEngine.Object.Destroy(proj.GetComponent<AkGameObj>());
 
@@ -198,7 +207,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			UnityEngine.Object.Destroy(icyFx.transform.Find("Area").gameObject);
 			UnityEngine.Object.Destroy(icyFx.transform.Find("Ring, Outer").gameObject);
 			UnityEngine.Object.Destroy(icyFx.transform.GetChild(0).gameObject);
-			UnityEngine.Object.Destroy(icyFx.transform.GetChild(1).gameObject);
+			UnityEngine.Object.Destroy(icyFx.transform.GetChild(1).gameObject); 
 			foreach (ParticleSystem p in icyFx.GetComponentsInChildren<ParticleSystem>())
 			{
 				p.transform.localScale = Vector3.one * 18f;
@@ -214,12 +223,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				var r = p.GetComponent<ParticleSystemRenderer>();
 				//r.materials = new Material[] { r.material, r.material, r.material, r.material, r.material, r.material, r.material, r.material }; //whatisthis
 			}
+			
 			icyFx.transform.SetParent(parent);
-			var simple = proj.AddComponent<ProjectileSimple>();
-			simple.lifetimeExpiredEffect = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab");
-			simple.lifetime = 5.7f;
-			simple.updateAfterFiring = false;
-			simple.desiredForwardSpeed = 0;
 			return proj;
 		}
 

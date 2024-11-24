@@ -20,7 +20,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public MasterTwinBehaviour masterBehaviour;
 		public float firingDelay = 0.15f;
 		public float radius = 1.25f;
-
+		public float runtimeNumber = 0.13f;
+		
 		public int zealMeter
 		{
 			get => _zealMeter;

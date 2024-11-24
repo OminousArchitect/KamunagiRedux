@@ -49,6 +49,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					crit = RollCrit(),
 					damageTypeOverride = DamageTypeCombo.Generic,
 					damageColorIndex = DamageColorIndex.Default,
+					damage = 1f * damageStat,
 					force = 120,
 					owner = gameObject,
 					position = muzzleTransform.position,

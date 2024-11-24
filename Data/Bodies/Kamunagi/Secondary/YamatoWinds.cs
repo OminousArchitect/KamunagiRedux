@@ -47,7 +47,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			base.FixedUpdate();
 			if (!isAuthority) return;
-			if (!IsKeyDownAuthority() || stopwatch >= 0.08f)
+			if (!IsKeyDownAuthority() || stopwatch >= 0.2f)
 			{
 				outer.SetNextStateToMain();
 			}

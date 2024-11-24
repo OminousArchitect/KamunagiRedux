@@ -99,7 +99,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = true;
-			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSCURSE2_KEYWORD" };
+			skill.keywordTokens = new[]
+			{
+				KamunagiAsset.tokenPrefix + "TWINSCURSE2_KEYWORD",
+				KamunagiAsset.tokenPrefix + "TWINSCURSE3_KEYWORD"
+			};
 			return skill;
 		}
 
@@ -541,7 +545,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 		public float overheatBuffDuration = 2f;
 		public float cycleInterval = 0.5f;
-		public float maxDistance = 75f;
+		public float maxDistance = 50f;
 		public int minimumStacksBeforeBurning = 2;
 		public float burnDuration = 1f;
 		private Run.FixedTimeStamp previousCycle = Run.FixedTimeStamp.negativeInfinity;

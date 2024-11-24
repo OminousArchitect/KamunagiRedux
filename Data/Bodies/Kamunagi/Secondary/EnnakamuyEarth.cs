@@ -113,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var childMesh = ghost.GetComponentInChildren<MeshFilter>();
 			var theRock= (await LoadAsset<Mesh>("RoR2/Base/skymeadow/SMRockAngular.fbx"));
 			childMesh.mesh = theRock;
-			ghost.transform.localScale = new Vector3(0.06f, -0.1f, 0.2f);
+			ghost.transform.localScale = new Vector3(0.16f, -0.2f, 0.2f);
 			return ghost;
 		}
 	}

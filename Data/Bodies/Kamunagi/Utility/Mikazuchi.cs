@@ -123,8 +123,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.cancelSprintingOnActivation = false;
 			skill.keywordTokens = new[]
 			{
-				KamunagiAsset.tokenPrefix + "TWINSSHOCK_KEYWORD",
-				KamunagiAsset.tokenPrefix + "TWINSRAYCAST_KEYWORD"
+				"KEYWORD_SHOCKING",
+				KamunagiAsset.tokenPrefix + "TWINSRAYCAST_KEYWORD",
 			};
 			return skill;
 		}

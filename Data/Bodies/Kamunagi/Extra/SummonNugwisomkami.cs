@@ -34,16 +34,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				master.inventory.SetEquipmentIndex(whichEquip);
 				switch (whichSpirit)
 				{
-					case 0:
+					case 0: //Mischief
 						master.inventory.GiveItem(DLC2Content.Items.TeleportOnLowHealth, 1);
 						master.inventory.GiveItem(RoR2Content.Items.Phasing, 1);
+						
+						master.inventory.GiveItem(RoR2Content.Items.MinionLeash);
 						break;
-					case 1:
+					case 1: //War
 						master.inventory.GiveItem(RoR2Content.Items.BarrierOnKill, 1);
+						master.inventory.GiveItem(RoR2Content.Items.MinionLeash);
 						break;
-					case 2:
+					case 2: //Decay
 						master.inventory.GiveItem(RoR2Content.Items.SiphonOnLowHealth, 3);
-						master.inventory.GiveItem(RoR2Content.Items.Phasing, 1);
+						master.inventory.GiveItem(RoR2Content.Items.MinionLeash);
 						break;
 				}
 				

@@ -116,6 +116,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                             false,
                             DamageColorIndex.Default
                         );
+                        var blastAttack = new BlastAttack //need this as a disguise for the first loop of the particle system
+                        {
+	                        attacker = gameObject,
+	                        baseDamage = damageStat,
+	                        baseForce = 0,
+	                        crit = false,
+	                        damageType = DamageType.Freeze2s,
+	                        falloffModel = BlastAttack.FalloffModel.None,
+	                        procCoefficient = 1,
+	                        radius = 13f,
+	                        position = position,
+	                        attackerFiltering = AttackerFiltering.NeverHitSelf,
+	                        teamIndex = teamComponent.teamIndex
+                        };
+                        blastAttack.Fire();
                     }
                 }
                 else
@@ -174,13 +189,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			parent.transform.localScale = new Vector3(10f, 4f, 10f);
 			var dotZone = proj.GetComponent<ProjectileDotZone>();
 			dotZone.fireFrequency = 0.7f;
-			dotZone.lifetime = 5.7f;
+			dotZone.lifetime = 5.8f;
 			dotZone.overlapProcCoefficient = 1f;
-
 			var pdzef = proj.AddComponent<ProjectileDotZoneEndEffect>();
 			pdzef.effect = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab");
-			dotZone.onEnd.AddListener(pdzef.OnEnd);
-
+			dotZone.onEnd.AddListener(pdzef.OnDestroy);
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Freeze2s;
 			UnityEngine.Object.Destroy(proj.GetComponent<AkGameObj>());
 
@@ -216,8 +229,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				
 				main.loop = true;
 				main.playOnAwake = true;
-				var r = p.GetComponent<ParticleSystemRenderer>();
-				//r.materials = new Material[] { r.material, r.material, r.material, r.material, r.material, r.material, r.material, r.material }; //whatisthis
 			}
 			
 			icyFx.transform.SetParent(parent);
@@ -264,7 +275,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	{
 		public GameObject effect;
 
-		public void OnEnd()
+		public void OnDestroy()
 		{
 			var effectData = new EffectData { rotation = Quaternion.identity, origin = transform.position };
 			EffectManager.SpawnEffect(effect, effectData, false);

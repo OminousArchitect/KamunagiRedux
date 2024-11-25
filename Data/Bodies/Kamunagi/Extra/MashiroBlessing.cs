@@ -49,7 +49,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.FixedUpdate();
 
-			if (!characterBody.outOfDanger || !IsKeyDownAuthority() || healthComponent.health < healthComponent.fullHealth * 0.25f)
+			if (!characterBody.outOfDanger || !IsKeyDownAuthority() || healthComponent.health < healthComponent.fullHealth * 0.2f)
 			{
 				outer.SetNextStateToMain();
 				return;
@@ -236,8 +236,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class BlessingDef : SkillDef
 	{
+		// you are disallowed from casting and offering your hp if it was never enough to begin with, except for an
+		// overlap of 5%. This is to ensure you're always offering enough hp, and in the event you aren't, you die and revive anyways
 		public override bool IsReady(GenericSkill skillSlot) =>
-			base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
+			base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger && skillSlot.characterBody.healthComponent.health > skillSlot.characterBody.healthComponent.fullHealth * 0.2f; 
 	}
 
 	public class MashiroBlessingRespawn : Concentric, IEffect

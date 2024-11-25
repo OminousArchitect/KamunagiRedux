@@ -130,12 +130,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 
 				inf.normalizedXMax = 1f - healthBarValues.curseFraction;
-				inf.normalizedXMin = inf.normalizedXMax - (inf.normalizedXMax / 100 * curseStacks);
-				var barStuff = 0.01f;
-				healthBarValues.healthFraction = Mathf.Clamp01(healthBarValues.healthFraction - barStuff * curseStacks);
-				healthBarValues.shieldFraction = Mathf.Clamp01(healthBarValues.shieldFraction - barStuff * curseStacks);
-				healthBarValues.barrierFraction =
-					Mathf.Clamp01(healthBarValues.barrierFraction - barStuff * curseStacks);
+				var curseSize = inf.normalizedXMax / 100 * curseStacks;
+				inf.normalizedXMin = inf.normalizedXMax - curseSize;
+				healthBarValues.healthFraction = Mathf.Clamp01(healthBarValues.healthFraction - curseSize);
+				healthBarValues.shieldFraction = Mathf.Clamp01(healthBarValues.shieldFraction - curseSize);
+				healthBarValues.barrierFraction = Mathf.Clamp01(healthBarValues.barrierFraction - curseSize);
 			}
 		}
 

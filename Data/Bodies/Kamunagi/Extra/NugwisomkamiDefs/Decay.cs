@@ -24,15 +24,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			charModel.baseLightInfos[0].defaultColor = Colors.jachdwaltColor;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			var childL = mdl.GetComponent<ChildLocator>();
-			childL.SetChild("The", mdl.transform.Find("WispArmature/ROOT/Base/Head/Muzzle")); // what this shit is i have no idea, but i put it into the new extension method
 			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
 			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
 			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
 			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it
 			var meshObject = mdl.transform.GetChild(0).gameObject;
-			childL.SetChild("Head", meshObject.transform);
-			
+
 			UnityEngine.Object.Destroy(meshObject.GetComponent<SkinnedMeshRenderer>());
 			UnityEngine.Object.Destroy(mdl.GetComponentInChildren<SkinnedMeshRenderer>());
 			meshObject.AddComponent<MeshFilter>().mesh= (await LoadAsset<Mesh>("bundle2:IceMask"));
@@ -53,29 +50,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.levelDamage = 1.5f;
 			cb.baseMoveSpeed = 4f;
 
-			#region itemdisplays
-			var idrs = charModel.itemDisplayRuleSet;
-			var hauntedDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
-			var customHauntedRules = new ItemDisplayRule[hauntedDisplay.rules.Length];
-			Array.Copy(hauntedDisplay.rules, customHauntedRules, hauntedDisplay.rules.Length);
-			customHauntedRules[0].childName = "Head";
-			customHauntedRules[0].localPos = new Vector3(-0.003F, 0.15007F, 0.86463F);
-			customHauntedRules[0].localAngles = new Vector3(356.479F, 0F, 0F);
-			customHauntedRules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
-			hauntedDisplay.rules = customHauntedRules;
-			
-			var poisonDisplay = idrs.FindDisplayRuleGroup(await LoadAsset<EquipmentDef>("RoR2/Base/EliteHaunted/EliteHauntedEquipment.asset"));
-			var poisonDisplayRules = new ItemDisplayRule[poisonDisplay.rules.Length];
-			Array.Copy(poisonDisplay.rules, poisonDisplayRules, poisonDisplay.rules.Length);
-			poisonDisplayRules[0].childName = "The";
-			poisonDisplayRules[0].localPos = new Vector3(-0.03552F, 0.15193F, 0.48367F);
-			poisonDisplayRules[0].localAngles = new Vector3(0F, 0F, 0F);
-			poisonDisplayRules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
-			poisonDisplay.rules = poisonDisplayRules;
-
-			charModel.itemDisplayRuleSet = idrs;
-			#endregion
-			
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";
 			secondary._skillFamily = await GetSkillFamily<DecayPrimaryFamily>();

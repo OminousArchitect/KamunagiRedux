@@ -189,7 +189,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			parent.transform.localScale = new Vector3(10f, 4f, 10f);
 			var dotZone = proj.GetComponent<ProjectileDotZone>();
 			dotZone.fireFrequency = 0.7f;
-			dotZone.lifetime = 5.8f;
+			dotZone.lifetime = 2.9f;
 			dotZone.overlapProcCoefficient = 1f;
 			var pdzef = proj.AddComponent<ProjectileDotZoneEndEffect>();
 			pdzef.effect = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab");

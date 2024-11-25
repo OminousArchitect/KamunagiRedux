@@ -81,9 +81,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			inf.enabled = false;
 			if (!spellStateMachine || spellStateMachine!.state is not MashiroBlessingState blessingState) return;
 			inf.enabled = true;
+			var curseInfo = extraHealthBarInfoTracker.BarInfos.FirstOrDefault(x => x is MashiroCurseBarSegment)!.Info;
+			var curseSize = curseInfo.normalizedXMax - curseInfo.normalizedXMin;
 			inf.normalizedXMin = Mathf.Max(0f,
-				healthBarValues.healthFraction - blessingState.fixedAge / blessingState.duration * 0.25f);
-			inf.normalizedXMax = healthBarValues.healthFraction;
+				healthBarValues.healthFraction - blessingState.fixedAge / blessingState.duration * 0.25f - curseSize);
+			inf.normalizedXMax = healthBarValues.healthFraction - curseSize;
 		}
 
 		private EntityStateMachine? _spellStateMachine;

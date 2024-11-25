@@ -37,7 +37,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			//if (muzzleInstanceLeft != null) muzzleInstanceLeft.ReturnToPool();
 			//if (muzzleInstanceRight != null) muzzleInstanceRight.ReturnToPool();
 			var chargeFraction = fixedAge / duration;
-			var amountToDecrease = Mathf.Max(1f, healthComponent.fullHealth * chargeFraction * 0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
+			var amountToDecrease =
+				Mathf.Max(1f,
+					healthComponent.fullHealth * chargeFraction *
+					0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
 			if (!healthComponent) return;
 			healthComponent.Networkhealth -= amountToDecrease;
 		}
@@ -198,19 +201,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			return model.body && model.body.HasBuff(this.GetBuffIndex().WaitForCompletion());
 		}
-		
-		[HarmonyPostfix, HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.RecalculateStats))]
-		private static void WeOuttaMaxHealth(CharacterBody __instance)
-		{
-			if (__instance.HasBuff(Concentric.GetBuffDef<MashiroCurseDebuff>().WaitForCompletion()))
-			{
-				if (!NetworkServer.active) return;
-				int stacks = __instance.GetBuffCount(GetBuffDef<MashiroCurseDebuff>().WaitForCompletion());
-				var extraStep = (100 - stacks) * 0.01f;
-				__instance.maxHealth *= extraStep;
-				__instance.healthComponent.Networkhealth *= extraStep;
-			}
-		}
 	}
 
 	public class MashiroCurseDebuff : Concentric, IBuff
@@ -226,11 +216,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			buffDef.isHidden = false;
 			return buffDef;
 		}
+
+		public MashiroCurseDebuff()
+		{
+			RecalculateStatsAPI.GetStatCoefficients += GetStats;
+		}
+
+		private static void GetStats(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+		{
+			args.healthMultAdd -= sender.GetBuffCount(GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion()) * 0.01f;
+		}
 	}
 
 	public class BlessingDef : SkillDef
 	{
-		public override bool IsReady(GenericSkill skillSlot) => base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
+		public override bool IsReady(GenericSkill skillSlot) =>
+			base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
 	}
 
 	public class MashiroBlessingRespawn : Concentric, IEffect

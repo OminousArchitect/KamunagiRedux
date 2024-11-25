@@ -26,6 +26,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 namespace KamunagiOfChains
 {
 	//[BepInDependency(DotAPI.PluginGUID), BepInDependency(DamageAPI.PluginGUID), BepInDependency(ColorsAPI.PluginGUID), BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID)]
+	[BepInDependency(RecalculateStatsAPI.PluginGUID)]
 	[BepInDependency(PrefabAPI.PluginGUID)]
 	[BepInDependency(ColorsAPI.PluginGUID)]
 	[BepInDependency(DeployableAPI.PluginGUID)]

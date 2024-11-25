@@ -155,7 +155,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			bodyComponent.baseAcceleration = 80f;
 			bodyComponent.baseJumpPower = 15f;
 
-			bodyComponent.levelDamage = 2.6f;
+			bodyComponent.levelDamage = 2.4f;
 			bodyComponent.levelMaxHealth = Mathf.Round(bodyComponent.baseMaxHealth * 0.3f);
 			bodyComponent.levelMaxShield = Mathf.Round(bodyComponent.baseMaxShield * 0.3f);
 			bodyComponent.levelRegen = bodyComponent.baseRegen * 0.2f;

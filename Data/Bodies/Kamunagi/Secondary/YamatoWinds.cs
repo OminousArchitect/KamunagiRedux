@@ -27,6 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public static BuffDef parryBuff;
 		private float stopwatch;
 		private bool hasFired;
+		private bool condition;
 
 		public override void OnEnter()
 		{
@@ -41,11 +42,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 			aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
 			characterBody.SetBuffCount(parryBuff.buffIndex, 1);
+			condition = true;
 		}
 
 		public override void FixedUpdate()
 		{
-			base.FixedUpdate();
+			base.FixedUpdate(); 
+			// this is some real spaghetti because I'm tired of
+			// reworking this skill for the 6th time, please forgive
 			if (!isAuthority) return;
 			if (!IsKeyDownAuthority() || stopwatch >= 0.2f)
 			{
@@ -54,14 +58,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 			if (inputBank.skill1.down)
 			{
+				condition = false;
 				stopwatch += Time.fixedDeltaTime;
+				characterBody.SetBuffCount(Concentric.GetBuffIndex<YamatoWinds>().WaitForCompletion(), 0);
 				if (!hasFired)
 				{
 					Fire();
 				}
 			}
 			
-			if (fixedAge > maxChargeTime)
+			if (fixedAge > maxChargeTime && condition)
 			{
 				skillLocator.DeductCooldownFromAllSkillsAuthority(2f);
 				characterBody.AddTimedBuffAuthority(RoR2.DLC1Content.Buffs.KillMoveSpeed.buffIndex, 2f);
@@ -173,15 +179,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var windyGreen = new Color(0.175f, 0.63f, 0.086f);
-
 			var ghost= (await LoadAsset<GameObject>("RoR2/Base/LunarSkillReplacements/LunarSecondaryGhost.prefab"))!
 				.InstantiateClone("TwinsWindBoomerangGhost", false);
 			var windPsr = ghost.GetComponentsInChildren<ParticleSystemRenderer>();
-			windPsr[0].material.SetColor("_TintColor", windyGreen);
+			windPsr[0].material.SetColor("_TintColor", Colors.windyGreen);
 			windPsr[2].enabled = false;
 			windPsr[3].enabled = false;
-			windPsr[3].material.SetColor("_TintColor", windyGreen);
+			windPsr[3].material.SetColor("_TintColor", Colors.windyGreen);
 			windPsr[3].material.SetTexture("_RemapTex",
 				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
 			windPsr[4].enabled = false;
@@ -190,12 +194,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			boomerangTrail.material = new Material(boomerangTrail.material);
 			boomerangTrail.material.SetTexture("_RemapTex",
 				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
-			boomerangTrail.material.SetColor("_TintColor", windyGreen);
+			boomerangTrail.material.SetColor("_TintColor", Colors.windyGreen);
 			var windLight = ghost.GetComponentInChildren<Light>();
-			windLight.color = windyGreen;
+			windLight.color = Colors.windyGreen;
 			windLight.intensity = 20f;
 			var windMR = ghost.GetComponentsInChildren<MeshRenderer>();
-			windMR[0].material.SetColor("_TintColor", windyGreen);
+			windMR[0].material.SetColor("_TintColor", Colors.windyGreen);
 			windMR[1].material.SetTexture("_RemapTex",
 				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampHealing.png"));
 			return ghost;
@@ -245,8 +249,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				origin = damageInfo.position,
 				rotation = Util.QuaternionSafeLookRotation((damageInfo.force != Vector3.zero) ? damageInfo.force : UnityEngine.Random.onUnitSphere)
 			};
-			EffectManager.SpawnEffect(GetEffect<WindBlockEffect>().WaitForCompletion(), effectData, transmit: true);
 			damageInfo.rejected = true;
+			EffectManager.SpawnEffect(GetEffect<WindBlockEffect>().WaitForCompletion(), effectData, transmit: true);
 		}
 	}
 
@@ -294,7 +298,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		private float attackScale = 4f;
 
-		public float distanceMultiplier = 0.05f;
+		public float distanceMultiplier = 0.3f;
 
 		private float maxFlyStopwatch;
 
@@ -338,6 +342,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			rigidbody = GetComponent<Rigidbody>();
 			projectileController = GetComponent<ProjectileController>();
 			projectileDamage = GetComponent<ProjectileDamage>();
+
 			if (projectileController && projectileController.owner)
 			{
 				ownerTransform = projectileController.owner.transform;

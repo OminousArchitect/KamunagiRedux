@@ -11,6 +11,7 @@ namespace KamunagiOfChains
 		public static Color oceanColor = new Color(0.13f, 0.79f, 0.85f);
 		public static Color zealColor = new Color(0.9294118f, 0.654902f, 0.09019608f);
 		public static Color jachdwaltColor = new Color(0.14f, 1f, 0f);
+		public static Color windyGreen = new Color(0.175f, 0.63f, 0.086f);
 		public static Color earlyZeal = new Color(0.65f, 1f, 0.06f);
 	}
 }

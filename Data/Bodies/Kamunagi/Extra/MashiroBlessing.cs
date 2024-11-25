@@ -5,6 +5,7 @@ using R2API;
 using RoR2;
 using RoR2.Skills;
 using RoR2.UI;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -22,19 +23,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			muzzleInstanceLeft =
+			/*muzzleInstanceLeft =
 				EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect,
 					new EffectData() { rootObject = FindModelChild("MuzzleLeft").gameObject });
 			muzzleInstanceRight =
 				EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect,
-					new EffectData() { rootObject = FindModelChild("MuzzleRight").gameObject });
+					new EffectData() { rootObject = FindModelChild("MuzzleRight").gameObject });*/
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
-			if (muzzleInstanceLeft != null) muzzleInstanceLeft.ReturnToPool();
-			if (muzzleInstanceRight != null) muzzleInstanceRight.ReturnToPool();
+			//if (muzzleInstanceLeft != null) muzzleInstanceLeft.ReturnToPool();
+			//if (muzzleInstanceRight != null) muzzleInstanceRight.ReturnToPool();
 			var chargeFraction = fixedAge / duration;
 			var amountToDecrease = Mathf.Max(1f, healthComponent.fullHealth * chargeFraction * 0.25f); // by mathf max you ensure people die when at 1hp ie trancendence
 			if (!healthComponent) return;
@@ -54,7 +55,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (fixedAge < duration || !NetworkServer.active) return;
 			var currentStacks = GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
 			characterBody.SetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion(),
-				currentStacks + 15);
+				currentStacks + 4);
 			characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
 			outer.SetNextStateToMain();
 		}
@@ -140,6 +141,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
+	[HarmonyPatch]
 	public class MashiroBlessing : Concentric, ISkill, IBuff, IOverlay
 	{
 		public static DamageColorIndex damageColorIndex;
@@ -196,6 +198,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			return model.body && model.body.HasBuff(this.GetBuffIndex().WaitForCompletion());
 		}
+		
+		[HarmonyPostfix, HarmonyPatch(typeof(CharacterBody), nameof(CharacterBody.RecalculateStats))]
+		private static void WeOuttaMaxHealth(CharacterBody __instance)
+		{
+			if (__instance.HasBuff(Concentric.GetBuffDef<MashiroCurseDebuff>().WaitForCompletion()))
+			{
+				if (!NetworkServer.active) return;
+				int stacks = __instance.GetBuffCount(GetBuffDef<MashiroCurseDebuff>().WaitForCompletion());
+				var extraStep = (100 - stacks) * 0.01f;
+				__instance.maxHealth *= extraStep;
+				__instance.healthComponent.Networkhealth *= extraStep;
+			}
+		}
 	}
 
 	public class MashiroCurseDebuff : Concentric, IBuff
@@ -204,7 +219,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			var buffDef = ScriptableObject.CreateInstance<BuffDef>();
 			buffDef.name = "MashiroCurseDebuff";
-			buffDef.buffColor = Color.yellow;
+			buffDef.buffColor = new Color(0.98f, 1, 0.58f);
 			buffDef.canStack = true;
 			buffDef.isDebuff = true;
 			buffDef.iconSprite = await LoadAsset<Sprite>("RoR2/Base/EclipseRun/texBuffPermanentCurse.tif");
@@ -215,8 +230,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 	public class BlessingDef : SkillDef
 	{
-		public override bool IsReady(GenericSkill skillSlot) =>
-			base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
+		public override bool IsReady(GenericSkill skillSlot) => base.IsReady(skillSlot) && skillSlot.characterBody.outOfDanger;
 	}
 
 	public class MashiroBlessingRespawn : Concentric, IEffect

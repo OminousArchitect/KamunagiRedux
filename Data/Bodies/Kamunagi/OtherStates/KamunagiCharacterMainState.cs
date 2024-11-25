@@ -126,7 +126,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 		public override void ProcessJump()
 		{
-			base.ProcessJump();
 			if (characterMotor.isGrounded)
 			{
 				base.ProcessJump();

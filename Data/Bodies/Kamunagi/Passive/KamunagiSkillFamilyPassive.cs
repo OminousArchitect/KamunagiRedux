@@ -2,6 +2,9 @@
 {
 	public class KamunagiSkillFamilyPassive : Concentric, ISkillFamily
 	{
-		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<KamunagiDash>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[]
+		{
+			GetAsset<KamunagiDash>()
+		};
 	}
 }

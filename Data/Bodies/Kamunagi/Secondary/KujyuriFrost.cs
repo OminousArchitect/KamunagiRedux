@@ -176,15 +176,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			dotZone.fireFrequency = 0.7f;
 			dotZone.lifetime = 5.7f;
 			dotZone.overlapProcCoefficient = 1f;
-			dotZone.onEnd.AddListener(delegate
-			{
-				EffectData effectData = new EffectData();
-				effectData.rotation = Quaternion.identity;
-				effectData.origin = proj.transform.position;
-				
-				EffectManager.SpawnEffect(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab").WaitForCompletion(), effectData, false);
-			});
-			
+
+			var pdzef = proj.AddComponent<ProjectileDotZoneEndEffect>();
+			pdzef.effect = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab");
+			dotZone.onEnd.AddListener(pdzef.OnEnd);
+
 			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Freeze2s;
 			UnityEngine.Object.Destroy(proj.GetComponent<AkGameObj>());
 
@@ -262,6 +258,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 
 		public IEnumerable<Type> GetEntityStates() => new []{typeof(ExperimentalWallState)};
+	}
+
+	public class ProjectileDotZoneEndEffect : MonoBehaviour
+	{
+		public GameObject effect;
+
+		public void OnEnd()
+		{
+			var effectData = new EffectData { rotation = Quaternion.identity, origin = transform.position };
+			EffectManager.SpawnEffect(effect, effectData, false);
+		}
 	}
 
 	public class KujyuriFrostBlast : Concentric, IEffect

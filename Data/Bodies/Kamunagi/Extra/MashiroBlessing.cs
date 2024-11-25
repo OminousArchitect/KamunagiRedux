@@ -130,7 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 
 				inf.normalizedXMax = 1f - healthBarValues.curseFraction;
-				var curseSize = inf.normalizedXMax / 100 * curseStacks;
+				var curseSize = inf.normalizedXMax * MashiroBlessing.CurseAmount(curseStacks);
 				inf.normalizedXMin = inf.normalizedXMax - curseSize;
 				healthBarValues.healthFraction = Mathf.Clamp01(healthBarValues.healthFraction - curseSize);
 				healthBarValues.shieldFraction = Mathf.Clamp01(healthBarValues.shieldFraction - curseSize);
@@ -202,6 +202,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			return model.body && model.body.HasBuff(this.GetBuffIndex().WaitForCompletion());
 		}
+
+		public static float CurseAmount(int curseStacks)
+		{
+			return 0.01f * curseStacks;
+		}
 	}
 
 	public class MashiroCurseDebuff : Concentric, IBuff
@@ -225,7 +230,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		private static void GetStats(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
 		{
-			args.healthMultAdd -= sender.GetBuffCount(GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion()) * 0.01f;
+			args.healthMultAdd -= MashiroBlessing.CurseAmount(sender.GetBuffCount(GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion()));
 		}
 	}
 

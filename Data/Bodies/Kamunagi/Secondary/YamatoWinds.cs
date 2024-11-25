@@ -214,14 +214,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			attributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
 			attributes.DoNotPool = false;
 			var spaghet = (await LoadAsset<GameObject>("RoR2/Base/Merc/EvisProjectile.prefab"))!.InstantiateClone("Scuffed", false);
-			UnityEngine.Object.Destroy(spaghet.GetComponent<NetworkIdentity>());
-			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileController>());
-			UnityEngine.Object.Destroy(spaghet.GetComponent<Rigidbody>());
-			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileNetworkTransform>());
+			
 			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileSimple>());
 			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileDamage>());
-			UnityEngine.Object.Destroy(spaghet.GetComponent<TeamFilter>());
 			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileImpactExplosion>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileController>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<TeamFilter>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileNetworkTransform>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<NetworkIdentity>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<Rigidbody>());
 			UnityEngine.Object.Destroy(spaghet.GetComponent<BoxCollider>());
 			spaghet.transform.SetParent(effect.transform);
 			return effect;

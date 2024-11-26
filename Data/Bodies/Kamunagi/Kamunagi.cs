@@ -114,6 +114,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			mainHurtBoxComponent.isBullseye = true;
 			modelHurtBoxGroup.hurtBoxes = new[] { mainHurtBoxComponent };
 
+			// this might be why the client player was dying for hosts
+			modelHurtBoxGroup.mainHurtBox = mainHurtBoxComponent;
+
 			return model;
 		}
 
@@ -136,7 +139,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
 			var twinBehaviour = bodyPrefab.AddComponent<TwinBehaviour>();
 			
-			bodyHealthComponent.body = bodyComponent;
+			//bodyHealthComponent.body = bodyComponent; this isn't actually set in the commando prefab
 
 			bodyComponent.preferredPodPrefab = null;
 			bodyComponent.baseNameToken = tokenPrefix + "NAME";
@@ -186,7 +189,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			model.transform.parent = bodyModelLocator.modelBaseTransform;
 			model.GetComponent<CharacterModel>().body = bodyComponent;
 			bodyModelLocator.modelTransform = model.transform;
-			bodyHealthComponent.modelLocator = bodyModelLocator;
+			//bodyHealthComponent.modelLocator = bodyModelLocator; this isnt even serialized by unity, so its not set in the prefab either
 
 			#region OhNoBro
 			/*var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();

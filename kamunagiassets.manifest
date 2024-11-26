@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1373858032
+CRC: 1148395876
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 43d51e8d94e6bce008754624891ad3cb
+    Hash: d68d9d353ce25f044d3e56f893c56554
   TypeTreeHash:
     serializedVersion: 2
     Hash: 29ea1009c289b9418e65b7490a3a0a32
@@ -117,6 +117,7 @@ Assets:
 - Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth alpha.jpg
 - Assets/HenryAssets/Twins.png
 - Assets/HenryAssets/Materials/Saraana/CLOTH 01/S Cloth 1.mat
+- Assets/HenryAssets/MagicFlame.prefab
 - Assets/HenryAssets/Materials/Ururuu/ITEMS/GIRL _ITEMS _BaseColor.jpg
 - Assets/HenryAssets/Materials/Ururuu/BODY/GIRL _Body _Normal.jpg
 - Assets/HenryAssets/Materials/Saraana/ITEMS/GIRL _ITEMS _Metallic.jpg
@@ -202,9 +203,11 @@ Assets:
 - Assets/HenryAssets/Sprites/no-type2.png
 - Assets/HenryAssets/Materials/Saraana/CLOTH 01/MasterFile B.fbx
 - Assets/HenryAssets/skillTrail.shader
+- Assets/HenryAssets/skillSwingTrailComboRev.shader
 - Assets/HenryAssets/Materials/Saraana/CLOTH 01/GIRL _cloth 01_Metallic.jpg
 - Assets/HenryAssets/Materials/Saraana/ITEMS/S Items.mat
 - Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Spin1.anim
+- Assets/HenryAssets/Stuff.prefab
 - Assets/HenryAssets/Materials/Saraana/SHOE/GIRL _SHOE_Height.jpg
 - Assets/HenryAssets/Sprites/Atuy3.png
 - Assets/HenryAssets/Materials/Ururuu/CLOTH 02/U Cloth 2.mat

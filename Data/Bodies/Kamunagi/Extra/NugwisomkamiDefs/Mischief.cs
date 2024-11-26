@@ -114,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				ProjectileManager.instance.FireProjectile(
 					projectilePrefab,
-					projectileRay.origin + Vector3.down * 1f,
+					projectileRay.origin + Vector3.down * 1.5f,
 					Util.QuaternionSafeLookRotation(projectileRay.direction),
 					base.gameObject,
 					damageStat * damageCoefficient, 

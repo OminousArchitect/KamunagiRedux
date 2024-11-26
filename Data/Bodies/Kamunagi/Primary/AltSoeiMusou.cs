@@ -19,6 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileFireFrequency = 0.2f;
 		public float ballDamageCoefficient = 4f;
+		public float trackingDamage = 1.5f;
 		public float stopwatch;
 		public bool charged;
 		public override int meterGain => 0;
@@ -49,7 +50,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					crit = RollCrit(),
 					damageTypeOverride = DamageTypeCombo.Generic,
 					damageColorIndex = DamageColorIndex.Default,
-					damage = 1f * damageStat,
+					damage = trackingDamage * damageStat,
 					force = 120,
 					owner = gameObject,
 					position = muzzleTransform.position,

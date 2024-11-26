@@ -14,7 +14,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		private float duration = 5;
 		private float stopwatch;
-		private float damageCoefficient = 3;
+		private float damageCoefficient = 5;
 		private Transform centerFarMuzzle;
 		private EffectManagerHelper voidSphereMuzzle;
 		private EffectManagerHelper darkSigilEffect;
@@ -85,9 +85,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				Fire();
 				//Debug.Log($"{bulletCount}");
 			}
-
-			var timeUp = fixedAge >= duration;
-			if (timeUp || (!inputBank.skill4.down && isAuthority))
+			
+			if (fixedAge >= duration || (!inputBank.skill4.down && isAuthority))
 			{
 				outer.SetNextStateToMain();
 			}

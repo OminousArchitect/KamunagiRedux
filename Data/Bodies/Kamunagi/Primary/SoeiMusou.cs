@@ -28,7 +28,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				ProjectileManager.instance.FireProjectile(new FireProjectileInfo
 				{
 					crit = RollCrit(),
-					damage = characterBody.damage * 3.1f,
+					damage = characterBody.damage * 3.2f,
 					force = 500,
 					owner = gameObject,
 					position = aimRay.origin,

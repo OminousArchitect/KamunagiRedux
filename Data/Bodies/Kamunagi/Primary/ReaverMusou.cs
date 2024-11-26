@@ -17,6 +17,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		private float fireRate = 0.3f;
 		private const float fizzle = 0.3f;
 		private float stopwatch;
+		private float duration;
+
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			duration = 0.5f / attackSpeedStat;
+		}
 
 		void SowSeeds()
 		{
@@ -93,7 +100,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			base.FixedUpdate();
 			stopwatch += Time.deltaTime;
 			
-			if (stopwatch >= 0.5f && isAuthority)
+			if (stopwatch >= duration && isAuthority)
 			{
 				SowSeeds();
 				stopwatch = 0;
@@ -264,7 +271,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			impact.impactEffect = await GetEffect<ReaverExplosion>();
 			impact.bonusBlastForce = new Vector3(0f, 0f, 0f);
 			impact.falloffModel = BlastAttack.FalloffModel.None;
-			impact.blastDamageCoefficient = 1.25f;
+			impact.blastDamageCoefficient = 2.5f;
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3912996879
+CRC: 3540888591
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9fbede120fae49076ceccf4f357cf57d
+    Hash: 70a68243583280bd13913e8703440f98
   TypeTreeHash:
     serializedVersion: 2
     Hash: 05e8629778cd54a3675bf1d857b68d25
@@ -34,4 +34,6 @@ Assets:
 - Assets/HonokasVeil.png
 - Assets/ZealMat.mat
 - Assets/IceMask.mesh
+- Assets/MashiroBlessCurse.mat
+- Assets/BlessingCurseShader.shader
 Dependencies: []

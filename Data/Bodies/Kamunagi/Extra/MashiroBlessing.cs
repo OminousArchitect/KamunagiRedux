@@ -49,17 +49,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.FixedUpdate();
 
-			if (!characterBody.outOfDanger || isAuthority && !IsKeyDownAuthority() || healthComponent.health < healthComponent.fullHealth * 0.2f)
+			if (!characterBody.outOfDanger || isAuthority && !IsKeyDownAuthority() ||
+			    healthComponent.health < healthComponent.fullHealth * 0.2f)
 			{
 				outer.SetNextStateToMain();
 				return;
 			}
 
-			if (fixedAge < duration || !NetworkServer.active) return;
-			var currentStacks = GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
-			characterBody.SetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion(),
-				currentStacks + 4);
-			characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
+			if (fixedAge < duration) return;
+			if (NetworkServer.active)
+			{
+				var currentStacks = GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
+				characterBody.SetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion(),
+					currentStacks + 4);
+				characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 10f);
+			}
+
 			outer.SetNextStateToMain();
 		}
 	}
@@ -94,7 +99,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			get
 			{
-				if (_spellStateMachine == null || !_spellStateMachine)
+				if (_spellStateMachine == null || !_spellStateMachine || Bar && _spellStateMachine.gameObject != Bar!.source.gameObject)
 				{
 					_spellStateMachine = Bar!.source.body.skillLocator
 						.FindSkillByDef(Concentric.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;

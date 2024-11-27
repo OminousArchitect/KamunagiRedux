@@ -49,7 +49,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			base.FixedUpdate();
 
-			if (!characterBody.outOfDanger || !IsKeyDownAuthority() || healthComponent.health < healthComponent.fullHealth * 0.2f)
+			if (!characterBody.outOfDanger || isAuthority && !IsKeyDownAuthority() || healthComponent.health < healthComponent.fullHealth * 0.2f)
 			{
 				outer.SetNextStateToMain();
 				return;

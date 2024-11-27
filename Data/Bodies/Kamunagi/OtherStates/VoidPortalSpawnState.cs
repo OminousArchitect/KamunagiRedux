@@ -27,7 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			if (isAuthority && fixedAge >= minimumIdleDuration)
+			if (fixedAge >= minimumIdleDuration)
 			{
 				outer.SetNextState(new BufferPortal());
 			}

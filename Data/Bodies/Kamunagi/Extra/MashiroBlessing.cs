@@ -73,20 +73,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		public override HealthBarStyle.BarStyle GetStyle()
 		{
-			if (Bar == null) return default;
-			var style = Bar.style.barrierBarStyle;
+			var style = Tracker.HealthBar.style.barrierBarStyle;
 			style.baseColor = Colors.twinsLightColor;
 			return style;
 		}
 
-		public override void UpdateInfo(ref HealthBar.BarInfo inf, ref HealthComponent.HealthBarValues healthBarValues,
-			ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
+		public override void UpdateInfo(ref HealthBar.BarInfo inf, ref HealthComponent.HealthBarValues healthBarValues)
 		{
-			base.UpdateInfo(ref inf, ref healthBarValues, extraHealthBarInfoTracker);
+			base.UpdateInfo(ref inf, ref healthBarValues);
 			inf.enabled = false;
 			if (!spellStateMachine || spellStateMachine!.state is not MashiroBlessingState blessingState) return;
 			inf.enabled = true;
-			var curseInfo = extraHealthBarInfoTracker.BarInfos.FirstOrDefault(x => x is MashiroCurseBarSegment)!.Info;
+			var curseInfo = Tracker.BarInfos.FirstOrDefault(x => x is MashiroCurseBarSegment)!.Info;
 			var curseSize = curseInfo.normalizedXMax - curseInfo.normalizedXMin;
 			inf.normalizedXMin = Mathf.Max(0f,
 				healthBarValues.healthFraction - blessingState.fixedAge / blessingState.duration * 0.25f - curseSize);
@@ -99,9 +97,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			get
 			{
-				if (_spellStateMachine == null || !_spellStateMachine || Bar && _spellStateMachine.gameObject != Bar!.source.gameObject)
+				if (_spellStateMachine == null || !_spellStateMachine || _spellStateMachine.gameObject != Tracker.HealthBar.source.gameObject)
 				{
-					_spellStateMachine = Bar!.source.body.skillLocator
+					_spellStateMachine = Tracker.HealthBar.source.body.skillLocator
 						.FindSkillByDef(Concentric.GetSkillDef<MashiroBlessing>().WaitForCompletion())?.stateMachine;
 				}
 
@@ -116,31 +114,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		public override HealthBarStyle.BarStyle GetStyle()
 		{
-			if (Bar == null) return default;
-			var style = Bar.style.curseBarStyle;
+			var style = Tracker.HealthBar.style.curseBarStyle;
 			style.baseColor = new Color(0.98f, 1, 0.58f);
 			return style;
 		}
 
-		public override void UpdateInfo(ref HealthBar.BarInfo inf, ref HealthComponent.HealthBarValues healthBarValues,
-			ExtraHealthBarSegments.ExtraHealthBarInfoTracker extraHealthBarInfoTracker)
+		public override void UpdateInfo(ref HealthBar.BarInfo inf, ref HealthComponent.HealthBarValues healthBarValues)
 		{
-			base.UpdateInfo(ref inf, ref healthBarValues, extraHealthBarInfoTracker);
+			base.UpdateInfo(ref inf, ref healthBarValues);
 			var curseStacks =
-				Bar.source.body.GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
+				Tracker.HealthBar.source.body.GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
 			inf.enabled = false;
-			if (curseStacks >= 1)
-			{
-				inf.enabled = true;
+			if (curseStacks < 1) return;
+			inf.enabled = true;
 
-
-				inf.normalizedXMax = 1f - healthBarValues.curseFraction;
-				var curseSize = inf.normalizedXMax * MashiroBlessing.CurseAmount(curseStacks);
-				inf.normalizedXMin = inf.normalizedXMax - curseSize;
-				healthBarValues.healthFraction = Mathf.Clamp01(healthBarValues.healthFraction - curseSize);
-				healthBarValues.shieldFraction = Mathf.Clamp01(healthBarValues.shieldFraction - curseSize);
-				healthBarValues.barrierFraction = Mathf.Clamp01(healthBarValues.barrierFraction - curseSize);
-			}
+			inf.normalizedXMax = 1f - healthBarValues.curseFraction;
+			var curseSize = inf.normalizedXMax * MashiroBlessing.CurseAmount(curseStacks);
+			inf.normalizedXMin = inf.normalizedXMax - curseSize;
+			healthBarValues.healthFraction = Mathf.Clamp01(healthBarValues.healthFraction - curseSize);
+			healthBarValues.shieldFraction = Mathf.Clamp01(healthBarValues.shieldFraction - curseSize);
+			healthBarValues.barrierFraction = Mathf.Clamp01(healthBarValues.barrierFraction - curseSize);
 		}
 
 		public override void ApplyBar(ref HealthBar.BarInfo inf, Image image, ref int i)

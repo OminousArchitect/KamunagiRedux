@@ -18,7 +18,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public Transform muzzleTransform = null!;
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileFireFrequency = 0.2f;
-		public float ballDamageCoefficient = 4f;
+		public float ballDamageCoefficient = 5.5f;
 		public float trackingDamage = 1.5f;
 		public float stopwatch;
 		public bool charged;

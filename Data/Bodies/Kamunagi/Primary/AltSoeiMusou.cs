@@ -19,7 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileFireFrequency = 0.2f;
 		public float ballDamageCoefficient = 5.5f;
-		public float trackingDamage = 1.5f;
+		public float trackingDamage = 1.2f;
 		public float stopwatch;
 		public bool charged;
 		public override int meterGain => 0;
@@ -145,8 +145,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			ProjectileController controller = proj.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.procCoefficient = 0.6f;
-			proj.GetComponent<ProjectileDirectionalTargetFinder>().lookRange = 20f;
 			proj.GetComponent<ProjectileSimple>().lifetime = 2f;
+
+			var target = proj.GetComponent<ProjectileDirectionalTargetFinder>();
+			target.testLoS = true;
+			//target.lookRange = 35f;
+			//proj.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 340f;
 			return proj;
 		}
 

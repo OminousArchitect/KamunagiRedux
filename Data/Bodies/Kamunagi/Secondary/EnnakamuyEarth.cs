@@ -21,7 +21,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			ProjectileManager.instance.FireProjectile(new FireProjectileInfo
 			{
 				crit = RollCrit(),
-				damage = damageStat * 6,
+				damage = damageStat * 4.6f,
 				force = 500,
 				owner = gameObject,
 				position = aimRay.origin + (aimRay.direction * 2),
@@ -78,8 +78,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			boulderImpact.bonusBlastForce = new Vector3(20, 20, 20);
 			boulderImpact.blastRadius = 5f;
 			boulderImpact.childrenProjectilePrefab = await GetProjectile<EnnakamuyEarthChild>();
-			boulderImpact.blastDamageCoefficient = 1f;
-			boulderImpact.childrenDamageCoefficient = 0.43f;
+			boulderImpact.blastDamageCoefficient = 0.1f;
+			boulderImpact.childrenDamageCoefficient = 0.5f;
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
 			projectile.GetComponent<Rigidbody>().useGravity = true;
 			projectile.GetComponent<SphereCollider>().radius = 3.5f;

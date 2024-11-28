@@ -40,8 +40,7 @@ namespace KamunagiOfChains
 	{
 		public const string AssetBundleName = "kamunagiassets";
 		public const string SoundBankName = "KamunagiMusic.bnk";
-		public static AssetBundle? bundle;
-		public static AssetBundle? bundle2;
+		public static Dictionary<string, AssetBundle> bundles = new Dictionary<string, AssetBundle>();
 		public static string? pluginPath;
 		public static KamunagiOfChainsPlugin instance = null!;
 		public static ManualLogSource log = null!;
@@ -50,7 +49,7 @@ namespace KamunagiOfChains
 		public const string Guid = "com.Nines.Kamunagi";
 		public const string Name = "KamunagiOfChains";
 		public const string Version = "1.0.0";
-		
+
 		public static BodyIndex vultureIndex;
 		public static BodyIndex pestIndex;
 		public static DamageAPI.ModdedDamageType Denebokshiri;
@@ -71,37 +70,42 @@ namespace KamunagiOfChains
 			pluginPath = System.IO.Path.GetDirectoryName(Info.Location) ??
 			             throw new InvalidOperationException("Failed to find path of plugin.");
 
-			log.LogDebug("Loading Concentric Bundle");
-			// Load Assets
-			AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(pluginPath, AssetBundleName)).completed += operation =>
-			{
-				log.LogDebug("Bundle Loaded");
-				bundle = (operation as AssetBundleCreateRequest)?.assetBundle;
-
-				log.LogDebug("Loading ContentPack");
-				ContentPackProvider.Initialize(Info.Metadata.GUID, Concentric.BuildContentPack(Assembly.GetExecutingAssembly()));
-			};
-			AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(pluginPath, AssetBundleName+"2")).completed += operation =>
-			{
-				log.LogDebug("Bundle2 Loaded");
-				bundle2 = (operation as AssetBundleCreateRequest)?.assetBundle;
-			};
 
 			Language.collectLanguageRootFolders +=
 				folders => folders.Add(System.IO.Path.Combine(pluginPath, "Language"));
-			
+
 			log.LogDebug("Caching BodyIndexes");
 			RoR2Application.onLoad += () =>
 			{
 				vultureIndex = BodyCatalog.FindBodyIndex("VultureBody");
-				pestIndex = BodyCatalog.FindBodyIndex("FlyingVerminBody"); //cache these like KatarinaMod, because I need all flying enemies, and these guys have isFlying set to false
+				pestIndex = BodyCatalog.FindBodyIndex(
+					"FlyingVerminBody"); //cache these like KatarinaMod, because I need all flying enemies, and these guys have isFlying set to false
 			};
 
 			Denebokshiri = DamageAPI.ReserveDamageType();
 			TwinsReaver = DamageAPI.ReserveDamageType();
 			Uitsalnemetia = DamageAPI.ReserveDamageType();
 			CurseFlames = DamageAPI.ReserveDamageType();
-			
+
+
+			log.LogDebug("Loading Concentric Bundle");
+
+			var assetsPath = System.IO.Path.Join(pluginPath, "Assets");
+			var bundlePaths = Directory.EnumerateFiles(assetsPath).Where(x => !x.EndsWith("manifest")).ToArray();
+			foreach (var path in bundlePaths)
+			{
+				AssetBundle.LoadFromFileAsync(path).completed += operation =>
+				{
+					var name = System.IO.Path.GetFileName(path);
+					log.LogDebug(name + " Bundle Loaded");
+					bundles[name] = ((AssetBundleCreateRequest)operation).assetBundle;
+					if (bundles.Count != bundlePaths.Length) return;
+					log.LogDebug("Loading ContentPack");
+					ContentPackProvider.Initialize(Info.Metadata.GUID,
+						Concentric.BuildContentPack(Assembly.GetExecutingAssembly()));
+				};
+			}
+
 			log.LogDebug("Finished Awake");
 		}
 
@@ -112,25 +116,18 @@ namespace KamunagiOfChains
 				return Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..]).Task;
 			}
 
-			if (assetPath.StartsWith("bundle:"))
-			{
-				return !bundle
-					? Task.FromResult<T>(default!)
-					: bundle!.LoadAssetAsyncTask<T>(assetPath["bundle:".Length..]);
-			}
-			if (assetPath.StartsWith("bundle2:"))
-			{
-				return !bundle2
-					? Task.FromResult<T>(default!)
-					: bundle2!.LoadAssetAsyncTask<T>(assetPath["bundle2:".Length..]);
-			}
-
 			if (assetPath.StartsWith("legacy:"))
 			{
 				return LegacyResourcesAPI.LoadAsync<T>(assetPath["legacy:".Length..]).Task;
 			}
 
-			return Addressables.LoadAssetAsync<T>(assetPath).Task;
+			var colinIndex = assetPath.IndexOf(":", StringComparison.Ordinal);
+			if (colinIndex <= 0) return Addressables.LoadAssetAsync<T>(assetPath).Task;
+
+			var source = new TaskCompletionSource<T>();
+			var handle = bundles[assetPath[..colinIndex]].LoadAssetAsync<T>(assetPath[(colinIndex + 1)..]);
+			handle.completed += _ => source.SetResult((T)handle.asset);
+			return source.Task;
 		}
 
 		[HarmonyPrefix]
@@ -166,7 +163,7 @@ namespace KamunagiOfChains
 					yield return null;
 				if (_contentPack.IsFaulted)
 					throw _contentPack.Exception!;
-				
+
 				ContentPack.Copy(_contentPack.Result, args.output);
 				//Log.LogError(ContentPack.identifier);
 				args.ReportProgress(1f);

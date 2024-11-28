@@ -111,7 +111,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.skillName = "Special 1";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL1_DESCRIPTION";
-			skill.icon = await LoadAsset<Sprite>("bundle:Special1");
+			skill.icon = await LoadAsset<Sprite>("kamunagiassets:Special1");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 1;
 			skill.baseRechargeInterval = 8f;

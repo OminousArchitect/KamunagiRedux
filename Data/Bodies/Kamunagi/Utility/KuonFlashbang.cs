@@ -119,7 +119,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillName = "Utility 9";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
-			skill.icon = await LoadAsset<Sprite>("bundle2:Flashbang");
+			skill.icon = await LoadAsset<Sprite>("kamunagiassets2:Flashbang"); 
 			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 1f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -177,7 +177,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				pMain.startColor = Colors.twinsLightColor;
 				var renderer = spikyImpStuff.GetComponent<ParticleSystemRenderer>();
 				renderer.material = new Material(renderer.material);
-				renderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:purpleramp"));
+				renderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("kamunagiassets:purpleramp"));
 				renderer.material.SetFloat("_AlphaBias", 0.1f);
 				renderer.material.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
 			}

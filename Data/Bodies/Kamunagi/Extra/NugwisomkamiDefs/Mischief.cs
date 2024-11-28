@@ -37,7 +37,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var meshObject = mdl.transform.GetChild(0).gameObject;
 			UnityEngine.Object.Destroy(meshObject.GetComponent<SkinnedMeshRenderer>());
 			UnityEngine.Object.Destroy(mdl.GetComponentInChildren<SkinnedMeshRenderer>());
-			meshObject.AddComponent<MeshFilter>().mesh = (await LoadAsset<Mesh>("bundle2:TheMask"));
+			meshObject.AddComponent<MeshFilter>().mesh = (await LoadAsset<Mesh>("kamunagiassets2:TheMask")); 
 			nugwisoBody.GetComponent<Rigidbody>().mass = 300f;
 			var theRenderer = meshObject.AddComponent<MeshRenderer>();
 			theRenderer.material = (await LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"));

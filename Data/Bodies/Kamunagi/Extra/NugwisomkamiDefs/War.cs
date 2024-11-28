@@ -17,7 +17,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			Material wispMat = new Material(await LoadAsset<Material>("RoR2/Base/LunarWisp/matLunarWispFlames.mat"));
 			//wispMat.SetFloat("_BrightnessBoost", 2.63f);
 			//wispMat.SetFloat("_AlphaBoost", 1.2f);
-			wispMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:purpleramp"));
+			wispMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("kamunagiassets:purpleramp"));
 			wispMat.SetColor("_TintColor", Color.white);
 
 			var nugwisoBody = (await LoadAsset<GameObject>("RoR2/Base/LunarWisp/LunarWispBody.prefab"))!.InstantiateClone("Nugwiso2", true);

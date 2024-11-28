@@ -241,7 +241,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 5";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
-			skill.icon = (await LoadAsset<Sprite>("bundle2:Nugwisomkami"));
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets2:Nugwisomkami")); 
 			//skill.mustKeyPress = true; //this breaks things apparently
 			return skill;
 		}

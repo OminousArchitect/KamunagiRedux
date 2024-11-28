@@ -63,7 +63,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillName = "Utility 5";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY3_DESCRIPTION";
-			skill.icon = await LoadAsset<Sprite>("bundle:Woshis");
+			skill.icon = await LoadAsset<Sprite>("kamunagiassets:Woshis");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 4f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -106,7 +106,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			buffDef.buffColor = Color.red;
 			buffDef.canStack = false;
 			buffDef.isDebuff = true;
-			buffDef.iconSprite = await LoadAsset<Sprite>("bundle:CurseScroll");
+			buffDef.iconSprite = await LoadAsset<Sprite>("kamunagiassets:CurseScroll");
 			buffDef.isHidden = true;
 
 			return buffDef;
@@ -180,7 +180,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		async Task<Material> IMaterialSwap.BuildObject()
 		{
 			var woshisGhostOverlay = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matGhostEffect.mat"));
-			woshisGhostOverlay.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:texRampWoshis"));
+			woshisGhostOverlay.SetTexture("_RemapTex", await LoadAsset<Texture2D>("kamunagiassets:texRampWoshis"));
 			return woshisGhostOverlay;
 		}
 		

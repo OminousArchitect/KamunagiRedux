@@ -328,7 +328,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				skill.skillName = "Utility 5";
 				skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY2_NAME";
 				skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY2_DESCRIPTION";
-				skill.icon = await LoadAsset<Sprite>("bundle:Jachdwalt");
+				skill.icon = await LoadAsset<Sprite>("kamunagiassets:Jachdwalt");
 				skill.activationStateMachineName = "Spell";
 				skill.baseRechargeInterval = 4f;
 				skill.beginSkillCooldownOnSkillEnd = true;
@@ -437,7 +437,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			async Task<GameObject> IEffect.BuildObject()
 			{
-				var effect = await LoadAsset<GameObject>("bundle:CherryBlossom");
+				var effect = await LoadAsset<GameObject>("kamunagiassets:CherryBlossom");
 				effect.GetOrAddComponent<DestroyOnParticleEnd>();
 				return effect;
 			}

@@ -86,7 +86,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillName = "Utility 9";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA1_DESCRIPTION";
-			skill.icon = await LoadAsset<Sprite>("bundle:HonokasVeil");
+			skill.icon = await LoadAsset<Sprite>("kamunagiassets:HonokasVeil");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 1.5f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -143,7 +143,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				pMain.startColor = Colors.twinsLightColor;
 				var renderer = spikyImpStuff.GetComponent<ParticleSystemRenderer>();
 				renderer.material = new Material(renderer.material);
-				renderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:purpleramp"));
+				renderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("kamunagiassets:purpleramp"));
 				renderer.material.SetFloat("_AlphaBias", 0.1f);
 				renderer.material.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
 			}

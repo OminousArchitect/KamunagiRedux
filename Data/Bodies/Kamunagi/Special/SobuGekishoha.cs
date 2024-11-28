@@ -170,7 +170,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Special 0";
-			skill.icon = (await LoadAsset<Sprite>("bundle:SobuGekishoha"));
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:SobuGekishoha"));
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL0_DESCRIPTION";
 			skill.activationStateMachineName = "Weapon";
@@ -242,7 +242,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect= (await LoadAsset<GameObject>("bundle:LaserMuzzle.prefab"));
+			var effect= (await LoadAsset<GameObject>("kamunagiassets:LaserMuzzle.prefab"));
 			effect.transform.localScale = Vector3.one * 0.6f;
 			effect.GetOrAddComponent<EffectComponent>().applyScale = false;
 			effect.GetOrAddComponent<VFXAttributes>().DoNotPool = false;

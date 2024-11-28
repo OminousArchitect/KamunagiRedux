@@ -91,7 +91,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.skillName = "Special 2";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL2_DESCRIPTION";
-			skill.icon = (await LoadAsset<Sprite>("bundle:RoU"));
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:RoU"));
 			skill.activationStateMachineName = "Body";
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -772,7 +772,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			var buff = ScriptableObject.CreateInstance<BuffDef>();
 			buff.name = "KamunagiCurseDebuff";
-			buff.iconSprite = (await LoadAsset<Sprite>("bundle:CurseScroll"));
+			buff.iconSprite = (await LoadAsset<Sprite>("CurseScroll"));
 			buff.buffColor = Color.white;
 			buff.canStack = true;
 			buff.isDebuff = true;

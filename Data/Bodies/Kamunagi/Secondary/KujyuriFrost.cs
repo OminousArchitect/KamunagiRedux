@@ -171,7 +171,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.skillName = "Secondary 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY3_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("bundle:waterpng"));
+			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:waterpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;

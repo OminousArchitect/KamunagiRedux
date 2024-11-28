@@ -17,7 +17,7 @@ namespace KamunagiOfChains
 		{
 			await base.Initialize();
 			hud = await GetGenericObject<KamunagiHUD>();
-			ZealBar.zealMat = await LoadAsset<Material>("bundle2:ZealMat");
+			ZealBar.zealMat = await LoadAsset<Material>("kamunagiassets2:ZealMat"); 
 		}
 
 		async Task<GameObject> IGenericObject.BuildObject()

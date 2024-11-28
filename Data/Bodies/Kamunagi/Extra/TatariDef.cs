@@ -81,7 +81,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var cb = gupBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "TATARI_BODY_NAME";
 			cb.baseDamage = 14f;
-			cb.portraitIcon= (await LoadAsset<Texture>("bundle2:TatariIcon"));
+			cb.portraitIcon= (await LoadAsset<Texture>("kamunagiassets2:TatariIcon")); 
 
 			var secondary = gupBody.AddComponent<GenericSkill>();
 			secondary.skillName = "TatariSecondary";

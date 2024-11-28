@@ -38,7 +38,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
-			skill.icon= (await LoadAsset<Sprite>("bundle:earthpng"));
+			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:earthpng"));
 			skill.skillName = "Secondary 1";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY1_DESCRIPTION";

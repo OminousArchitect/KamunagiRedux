@@ -30,8 +30,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 		async Task<SkinDef> ISkin.BuildObject()
 		{
-			var icon = await LoadAsset<Sprite>("bundle:TwinsSkin");
-			var model = await LoadAsset<GameObject>("bundle:mdlKamunagi")!;
+			var icon = await LoadAsset<Sprite>("kamunagiassets:TwinsSkin");
+			var model = await LoadAsset<GameObject>("kamunagiassets:mdlKamunagi")!;
 			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
 			{
 				var skinDef = (SkinDef)obj;
@@ -60,7 +60,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 		async Task<GameObject> IModel.BuildObject()
 		{
-			var model = await LoadAsset<GameObject>("bundle:mdlKamunagi")!;
+			var model = await LoadAsset<GameObject>("kamunagiassets:mdlKamunagi")!;
 			var characterModel = model.GetOrAddComponent<CharacterModel>();
 			var childLocator = model.GetComponent<ChildLocator>();
 
@@ -125,7 +125,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var model = await this.GetModel();
 			var displayModel = model.InstantiateClone("KamunagiDisplay", false);
 			displayModel.GetComponent<Animator>().runtimeAnimatorController =
-				await LoadAsset<RuntimeAnimatorController>("bundle:animHenryMenu");
+				await LoadAsset<RuntimeAnimatorController>("kamunagiassets:animHenryMenu");
 			return displayModel;
 		}
 
@@ -145,7 +145,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			bodyComponent.baseNameToken = tokenPrefix + "NAME";
 			bodyComponent.subtitleNameToken = tokenPrefix + "SUBTITLE";
 			bodyComponent.bodyColor = Colors.twinsLightColor;
-			bodyComponent.portraitIcon = await LoadAsset<Texture>("bundle:Twins");
+			bodyComponent.portraitIcon = await LoadAsset<Texture>("kamunagiassets:Twins");
 			bodyComponent._defaultCrosshairPrefab = await LoadAsset<GameObject>("RoR2/Base/Croco/CrocoCrosshair.prefab");
 
 			bodyComponent.baseMaxHealth = 150f;
@@ -305,7 +305,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			skillLocator.passiveSkill = new SkillLocator.PassiveSkill
 			{
 				enabled = true,
-				icon = await LoadAsset<Sprite>("bundle:TwinsPassive"),
+				icon = await LoadAsset<Sprite>("kamunagiassets:TwinsPassive"),
 				skillDescriptionToken = tokenPrefix + "PASSIVE_DESCRIPTION",
 				skillNameToken = tokenPrefix + "PASSIVE_NAME"
 			};
@@ -333,7 +333,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var kamunagiChains = await LoadAsset<GameObject>("bundle:KamunagiChains")!;
+			var kamunagiChains = await LoadAsset<GameObject>("kamunagiassets:KamunagiChains")!;
 			kamunagiChains.AddComponent<ModelAttachedEffect>();
 			kamunagiChains.transform.position = Vector3.zero;
 			kamunagiChains.transform.rotation = Quaternion.identity;

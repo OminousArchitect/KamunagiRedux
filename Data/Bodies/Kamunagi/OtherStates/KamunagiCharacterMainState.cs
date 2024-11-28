@@ -260,7 +260,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = await LoadAsset<GameObject>("bundle:ShadowFlame.prefab")!;
+			var effect = await LoadAsset<GameObject>("kamunagiassets:ShadowFlame.prefab")!;
 			var vfx = effect.AddComponent<VFXAttributes>();
 			vfx.vfxPriority = VFXAttributes.VFXPriority.Medium;
 			vfx.DoNotPool = false;

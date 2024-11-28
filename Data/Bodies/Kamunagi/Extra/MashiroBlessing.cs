@@ -158,7 +158,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			await base.Initialize();
 			//MashiroBlessingState.muzzleEffect = await this.GetEffect();
 
-			MashiroCurseBarSegment.overlayMat = await LoadAsset<Material>("bundle2:MashiroBlessCurse");
+			MashiroCurseBarSegment.overlayMat = await LoadAsset<Material>("kamunagiassets2:MashiroBlessCurse"); 
 		}
 
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(MashiroBlessingState) };
@@ -169,7 +169,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Extra Skill 6";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA6_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA6_DESCRIPTION";
-			skill.icon = await LoadAsset<Sprite>("bundle2:Mashiro");
+			skill.icon = await LoadAsset<Sprite>("kamunagiassets2:Mashiro"); 
 			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 3f;
 			skill.beginSkillCooldownOnSkillEnd = true;

@@ -91,7 +91,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect = (await LoadAsset<GameObject>("bundle:MikazuchiMuzzle.prefab"))!;
+			var effect = (await LoadAsset<GameObject>("kamunagiassets:MikazuchiMuzzle.prefab"))!;
 
 			var comp = effect.GetOrAddComponent<EffectComponent>();
 			comp.applyScale = false;
@@ -114,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillName = "Utility 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY0_DESCRIPTION";
-			skill.icon = (await LoadAsset<Sprite>("bundle:Mikazuchi"));
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:Mikazuchi"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;

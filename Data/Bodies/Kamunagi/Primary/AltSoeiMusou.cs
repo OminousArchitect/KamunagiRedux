@@ -128,7 +128,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.skillName = "Primary 1";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY1_DESCRIPTION";
-			skill.icon = (await LoadAsset<Sprite>("bundle:darkpng"));
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;

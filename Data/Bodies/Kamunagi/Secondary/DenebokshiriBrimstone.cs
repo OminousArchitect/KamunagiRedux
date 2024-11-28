@@ -112,7 +112,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.skillName = "Secondary 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY0_DESCRIPTION";
-			skill.icon = await LoadAsset<Sprite>("bundle:firepng");
+			skill.icon = await LoadAsset<Sprite>("kamunagiassets:firepng");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 1;
 			skill.baseRechargeInterval = 2f;

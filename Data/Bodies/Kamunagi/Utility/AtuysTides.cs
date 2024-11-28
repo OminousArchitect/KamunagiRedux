@@ -90,7 +90,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			tidalProjectileGhost.transform.localScale = Vector3.one * 0.5f;
 			var gPsr = tidalProjectileGhost.GetComponentInChildren<ParticleSystemRenderer>();
 			var material = new Material(gPsr.material);
-			material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("bundle:geyserRemapTex"));
+			material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("kamunagiassets:geyserRemapTex"));
 			material.SetColor("_Color", Colors.oceanColor);
 			material.SetFloat("_AlphaCutoff", 0.13f);
 			gPsr.material = material;
@@ -133,7 +133,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "UTILITY1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY1_DESCRIPTION";
 			skill.activationState = new SerializableEntityStateType(typeof(AtuysTides));
-			skill.icon = await LoadAsset<Sprite>("bundle2:Atuy2");
+			skill.icon = await LoadAsset<Sprite>("kamunagiassets2:Atuy2"); 
 			skill.activationStateMachineName = "Spell";
 			skill.baseRechargeInterval = 4f;
 			skill.beginSkillCooldownOnSkillEnd = true;

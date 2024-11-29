@@ -9,6 +9,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	public class VoidPortalSpawnState : BaseState
 	{
 		public bool earlyBufferDone;
+		public bool fuck;
 		public static GameObject spawnEffectPrefab;
 		private CharacterModel charModel;
 
@@ -29,15 +30,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+			if (fixedAge >= 0.5f && !fuck && charModel)
+			{
+				fuck = true;
+				charModel.invisibilityCount--;
+			}
+			
 			if (fixedAge >= 1f && !earlyBufferDone)
 			{
 				earlyBufferDone = true;
 				Util.PlaySound("Play_nullifier_spawn", gameObject);
 				EffectManager.SimpleMuzzleFlash(spawnEffectPrefab, gameObject, "MuzzleRear", false);
-				if (charModel)
-				{
-					charModel.invisibilityCount--;
-				}
 			}
 
 			if (fixedAge >= 3.2f)

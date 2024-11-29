@@ -238,9 +238,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 	{
 		public async Task<GameObject> BuildObject()
 		{
-			var mandatory = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!.InstantiateClone("TwinsTether", false);
-			mandatory.EffectWithSound("");
-			return mandatory;
+			Material vacuum = new Material(await LoadAsset<Material>("RoR2/Base/Grandparent/matGrandParentSunChannelStartBeam.mat"));
+
+			var tetherLine = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!.InstantiateClone("TwinsTether", false);
+			tetherLine.EffectWithSound("");
+			tetherLine.GetComponent<LineRenderer>().materials = new[] { vacuum };
+			return tetherLine;
 		}
 	}
 

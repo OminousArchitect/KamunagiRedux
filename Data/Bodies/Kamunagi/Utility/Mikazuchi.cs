@@ -33,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var blastAttack = new BlastAttack
 			{
 				attacker = gameObject,
-				baseDamage = damageStat * twinBehaviour.runtimeNumber,
+				baseDamage = damageStat * 9f,
 				baseForce = 1800,
 				crit = RollCrit(),
 				damageType = DamageType.Shock5s,
@@ -60,7 +60,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					centerPoint,
 					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
 					gameObject,
-					damageStat * twinBehaviour.runtimeNumber2,
+					damageStat * 7.5f,
 					10f,
 					RollCrit(),
 					speedOverride: xoro.RangeInt(20, 35)
@@ -205,7 +205,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			lightningImpact.childrenDamageCoefficient = 0.5f;
 			var lightpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
-			lightpact.blastDamageCoefficient = 4.5f;
+			lightpact.blastDamageCoefficient = 1f;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 0.6f;
 			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 145f;

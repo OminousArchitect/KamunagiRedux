@@ -66,11 +66,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			EffectManager.SimpleMuzzleFlash(muzzleFlash, gameObject, twinMuzzle, false);
 		}
 
-		public override void OnExit()
-		{
-			base.OnExit();
-		}
-		
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 

@@ -16,7 +16,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override float duration => 0.7f;
 		public override bool requireFullCharge => true;
 		public override float failedCastCooldown => 2f;
-		private float damageCoeff = 9f;
 
 		public override void OnEnter()
 		{
@@ -34,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var blastAttack = new BlastAttack
 			{
 				attacker = gameObject,
-				baseDamage = damageStat * damageCoeff,
+				baseDamage = damageStat * twinBehaviour.runtimeNumber,
 				baseForce = 1800,
 				crit = RollCrit(),
 				damageType = DamageType.Shock5s,
@@ -61,7 +60,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					centerPoint,
 					Util.QuaternionSafeLookRotation(Quaternion.AngleAxis(spacingDegrees * i, Vector3.up) * forward),
 					gameObject,
-					damageStat,
+					damageStat * twinBehaviour.runtimeNumber2,
 					10f,
 					RollCrit(),
 					speedOverride: xoro.RangeInt(20, 35)

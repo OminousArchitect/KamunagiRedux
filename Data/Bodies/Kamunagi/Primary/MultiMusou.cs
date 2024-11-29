@@ -88,7 +88,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					__instance.gameObject,
 					damageInfo.attacker,
 					NaturesAxiom.CurseIndex, 
-					2f, 
+					2.4f, 
 					damageInfo.damage * 0.2f
 				);
 			}
@@ -105,7 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/EliteLunar/LunarMissileProjectile.prefab"))!.InstantiateClone("MultiMusouProjectile", true);
 			UnityEngine.Object.Destroy(proj.GetComponent<BoxCollider>());
-			proj.AddComponent<SphereCollider>().radius = 0.5f;
+			proj.AddComponent<SphereCollider>().radius = 0.75f;
 			var controller = proj.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.startSound = "Play_item_use_molotov_throw";
@@ -129,10 +129,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			fireMat.SetFloat("_DistortionStrength", 0.82f);
 			fireMat.SetColor("_TintColor", new Color32(193, 0, 255, 255));
 			
-			
 			var ghost = (await LoadAsset<GameObject>("RoR2/Base/bazaar/Bazaar_Light.prefab"))!.transform.Find("FireLODLevel/BlueFire").gameObject!.InstantiateClone("MultiMusouGhost", false);
 			ghost.GetComponent<ParticleSystemRenderer>().material = fireMat;
 			ghost.AddComponent<ProjectileGhostController>();
+			var l = ghost.AddComponent<Light>();
+			l.intensity = 70f;
+			l.range = 3f;
+			l.color = new Color32(195, 0, 255, 255);
 			return ghost;
 		}
 

@@ -1,14 +1,18 @@
 ManifestFileVersion: 0
-CRC: 3540888591
+CRC: 687638373
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 70a68243583280bd13913e8703440f98
+    Hash: 171648a0d0227bcedec57925afb1bb44
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 05e8629778cd54a3675bf1d857b68d25
+    Hash: 8209e8a7e01b0fb6f19570e045bc33d0
 HashAppended: 0
 ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
 - Class: 28
@@ -17,11 +21,16 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/OtherMask.mesh
+- Assets/InnerCoreDistCurve.prefab
 - Assets/Mothmoth.png
 - Assets/172714677590348517.png
 - Assets/Atuy2.png
@@ -29,7 +38,9 @@ Assets:
 - Assets/TatariIcon.png
 - Assets/Mashiro.png
 - Assets/Flashbang.png
+- Assets/InnerCoreDist.prefab
 - Assets/TheMask.mesh
+- Assets/InnerCoreDistCurve2.prefab
 - Assets/Nugwisomkami.png
 - Assets/HonokasVeil.png
 - Assets/ZealMat.mat

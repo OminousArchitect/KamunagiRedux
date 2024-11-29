@@ -2,13 +2,16 @@
 using EntityStates.GrandParent;
 using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
 using R2API;
 using RoR2;
 using RoR2.Audio;
+using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.PostProcessing;
+using Console = System.Console;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 {
@@ -149,17 +152,25 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 
 	[HarmonyPatch]
 	public class NaturesAxiom : Concentric, INetworkedObject, IEffect, IBuff
-	{
+	{ 
 		async Task<GameObject> INetworkedObject.BuildObject()
 		{
-			var naturesAxiom =
-				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSun.prefab"))!.InstantiateClone(
-					"TwinsUltSun",
-					true);
+			Material shell = new Material(await LoadAsset<Material>("RoR2/DLC1/TreasureCacheVoid/matLockboxVoidEgg.mat"));
+			shell.SetFloat("_SpecularStrength", 0.02f);
+			shell.SetFloat("_SpecularExponent", 0.38f);
+			
+			shell.SetFloat("_EmissionPower", 1.67f);
+			shell.SetFloat("_HeightStrength", 3.95f);
+			shell.SetFloat("_HeightBias", 0.28f);
+
+			var naturesAxiom = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandParentSun.prefab"))!.InstantiateClone("TwinsUltSun", true);
 			UnityEngine.Object.Destroy(naturesAxiom.GetComponent<EntityStateMachine>());
 			UnityEngine.Object.Destroy(naturesAxiom.GetComponent<NetworkStateMachine>());
 			UnityEngine.Object.Destroy(naturesAxiom.GetComponent<GrandParentSunController>());
 			naturesAxiom.AddComponent<UmbralSunController>();
+			var theMeshObject = naturesAxiom.transform.Find("VfxRoot/Mesh/SunMesh").gameObject;
+			theMeshObject.GetComponent<MeshRenderer>().material = shell;
+			theMeshObject.name = "DarkStarShell";
 			var vfxRoot = naturesAxiom.transform.GetChild(0).gameObject;
 			vfxRoot.transform.localScale = Vector3.one * 0.5f;
 			var sunL = naturesAxiom.GetComponentInChildren<Light>();
@@ -169,13 +180,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var sunMeshes = naturesAxiom.GetComponentsInChildren<MeshRenderer>(true);
 			var sunIndicator = sunMeshes[0];
 			sunIndicator.material = new Material(sunIndicator.material);
-			sunIndicator.material.SetTexture("_RemapTex",
-				await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampPortalVoid.png"));
+			sunIndicator.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampPortalVoid.png"));
 			sunIndicator.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
 			sunIndicator.transform.localScale = Vector3.one * 85f; //visual indicator
-			var Sunmesh2 = sunMeshes[1];
-			Sunmesh2.material = (await GetEffect<LightOfNaturesAxiom>()).GetComponentInChildren<MeshRenderer>(true)
-				.material;
 			sunMeshes[2].enabled = false;
 			var sunPP = naturesAxiom.GetComponentInChildren<PostProcessVolume>();
 			sunPP.profile = (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
@@ -203,6 +210,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 							new Material(await LoadAsset<Material>("RoR2/Junk/Common/VFX/matTeleportOutBodyGlow.mat"));
 						r.material.SetColor("_TintColor", new Color(0f, 0.4F, 1));
 						r.transform.localScale = Vector3.one * 0.5f;
+						//r.enabled = false
 						break;
 					case "Donut":
 					case "Trails":
@@ -219,7 +227,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 						break;
 				}
 			}
+			
+			var darkStarCore = (await GetProjectileGhost<PrimedStickyBomb>())!.InstantiateClone("DarkStarCore", false);
+			var trash = darkStarCore.transform.Find("Scaler/GameObject").gameObject;
+			darkStarCore.transform.localPosition = Vector3.zero;
+			UnityEngine.Object.Destroy(trash);
+			UnityEngine.Object.Destroy(darkStarCore.GetComponent<ProjectileGhostController>());
+			UnityEngine.Object.Destroy(darkStarCore.GetComponent<VFXAttributes>());
+			UnityEngine.Object.Destroy(darkStarCore.GetComponent<EffectManagerHelper>());
+			darkStarCore.transform.SetParent(theMeshObject.transform);
 
+			GameObject particle = await LoadAsset<GameObject>("kamunagiassets2:InnerCoreDistCurve2");
+			particle.GetComponent<ParticleSystemRenderer>().material = await LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat");
+			particle.transform.SetParent(theMeshObject.transform);
 			return naturesAxiom;
 		}
 
@@ -772,7 +792,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			var buff = ScriptableObject.CreateInstance<BuffDef>();
 			buff.name = "KamunagiCurseDebuff";
-			buff.iconSprite = (await LoadAsset<Sprite>("CurseScroll"));
+			buff.iconSprite = (await LoadAsset<Sprite>("kamunagiassets:CurseScroll"));
 			buff.buffColor = Color.white;
 			buff.canStack = true;
 			buff.isDebuff = true;

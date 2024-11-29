@@ -22,9 +22,9 @@
 	  "NINES_KAMUNAGI_BODY_MASTERY_SKIN_NAME": "Alternate",
 
 	  "NINES_KAMUNAGI_BODY_TWINSBLESSING_KEYWORD": "<style=cKeywordName><color=#00BDFF>Atuykarounkami's Blessings</color></style><style=cSub>On impact, create a <style=cIsDamage>tidal blast</style> on nearby surface that deals <style=cIsDamage>???% damage</style>",
-	  "NINES_KAMUNAGI_BODY_TWINSCURSE1_KEYWORD": "<style=cKeywordName><color=#711fa3>Hex</color></style><style=cSub>Deal an additional <style=cIsDamage>???% damage</style> over time.",
+	  "NINES_KAMUNAGI_BODY_TWINSCURSE1_KEYWORD": "<style=cKeywordName><color=#711fa3>Hex</color></style><style=cSub>Deal an additional <style=cIsDamage>100% damage</style> over time.",
 	  "NINES_KAMUNAGI_BODY_TWINSCURSE2_KEYWORD": "<style=cKeywordName><color=#711fa3>Hex</color></style><style=cSub>Deal an additional <style=cIsDamage>???% damage</style> over time.",
-	  "NINES_KAMUNAGI_BODY_TWINSCURSE3_KEYWORD": "<style=cKeywordName><color=#711fa3>Shadow Vulnerability</color></style><style=cSub>Increase <color=#711fa3>Hex</color> duration and <style=cIsDamage>additively</style> increases <color=#711fa3>Hex</color> damage with each stack.",
+	  "NINES_KAMUNAGI_BODY_TWINSCURSE3_KEYWORD": "<style=cKeywordName><color=#711fa3>Shadow Vulnerability</color></style><style=cSub>Increase <color=#711fa3>Hex</color> duration and <style=cIsDamage>additively</style> increase <color=#711fa3>Hex</color> damage with each stack.",
 	  "NINES_KAMUNAGI_BODY_TWINSRAYCAST_KEYWORD": "<style=cKeywordName><style=cIsDamage>Tiriryarai</style></style><style=cSub>Skill activates at your <style=cIsUtility>crosshair's location</style> with <style=cIsUtility>no travel time</style>.",
 	  "NINES_KAMUNAGI_BODY_TWINSWIND_KEYWORD": "<style=cKeywordName><color=#0b9c2d>Wind God's Perfect Defense</color></style><style=cSub>Block most attacks while channeling</style>.",
 	  

@@ -11,10 +11,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	internal class SoeiMusouState : BaseTwinState
 	{
 		public override int meterGain => 0;
-
 		public static GameObject MuzzlePrefab;
-
-		public float duration;
+		public const float duration = 0.2f;
 
 		public override void OnEnter()
 		{
@@ -23,7 +21,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			EffectManager.SimpleMuzzleFlash(MuzzlePrefab, gameObject, twinMuzzle, false);
 			if (isAuthority)
 			{
-				duration = 0.25f / attackSpeedStat;
 				var aimRay = GetAimRay();
 				ProjectileManager.instance.FireProjectile(new FireProjectileInfo
 				{

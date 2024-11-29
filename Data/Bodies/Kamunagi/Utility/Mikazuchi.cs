@@ -16,6 +16,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override float duration => 0.7f;
 		public override bool requireFullCharge => true;
 		public override float failedCastCooldown => 2f;
+		private float damageCoeff = 9f;
 
 		public override void OnEnter()
 		{
@@ -33,7 +34,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var blastAttack = new BlastAttack
 			{
 				attacker = gameObject,
-				baseDamage = damageStat * 7f,
+				baseDamage = damageStat * damageCoeff,
 				baseForce = 1800,
 				crit = RollCrit(),
 				damageType = DamageType.Shock5s,

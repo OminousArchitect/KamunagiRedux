@@ -3,7 +3,9 @@ using ExtraSkillSlots;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using RoR2;
+using RoR2.Networking;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi
 {
@@ -114,10 +116,37 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		}
 	}
 
-	public class MasterTwinBehaviour : MonoBehaviour
+	public class MasterTwinBehaviour : NetworkBehaviour
 	{
 		public CharacterMaster master;
 		public Dictionary<GameObject, CharacterMaster?> NugwisoSpiritDefs = null!;
+
+		public void SpawnedNugwiso(CharacterMaster characterMaster, int key)
+		{
+			if (!NetworkServer.active)
+			{
+				log.LogError("Called SpawnedNugwiso not on server.");
+				return;
+			}
+
+			var writer = new NetworkWriter();
+			writer.StartMessage(1);
+			writer.Write(netIdentity);
+			writer.Write(key);
+			writer.Write(characterMaster.networkIdentity);
+			writer.FinishMessage();
+			NetworkServer.SendWriterToReady(gameObject, writer, GetNetworkChannel());
+		}
+
+		[NetworkMessageHandler(msgType = 1, client = true, server = false)]
+		public static void HandleSpawnedNugwiso(NetworkMessage message)
+		{
+			var reader = message.reader;
+			var netId = reader.ReadNetworkIdentity();
+			var masterTwin = netId.gameObject.GetComponent<MasterTwinBehaviour>();
+			masterTwin.NugwisoSpiritDefs[SummonNugwisomkamiState.NugwisoEliteDefs.Keys.ElementAt(reader.ReadInt32())] = reader.ReadNetworkIdentity().GetComponent<CharacterMaster>();
+		}
+		
 		public void Awake()
 		{
 			NugwisoSpiritDefs = SummonNugwisomkamiState.NugwisoEliteDefs.Keys.ToDictionary(x => x, x => null as CharacterMaster);

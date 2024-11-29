@@ -11,8 +11,9 @@ using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
-	public class SpawnNugwisomkamiState : BaseState
+	public class SpawnNugwisomkamiState : BaseTwinState
 	{
+		public override int meterGain => 0; 
 		public int whichSpirit;
 		public EquipmentIndex whichEquip;
 		public Vector3 spawnPosition;
@@ -50,7 +51,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 						break;
 				}
 				
-				outer.SetNextState(new NugwisomkamiSpawnedState() { master = master, whichSpirit = whichSpirit });
+				twinBehaviour.masterBehaviour.SpawnedNugwiso(master, whichSpirit);
 			};
 			var characterMaster = summon.Perform();
 			var deployable = characterMaster.gameObject.AddComponent<Deployable>();
@@ -105,33 +106,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			base.OnDeserialize(reader);
 			nextSpiritMaster = Util.FindNetworkObject(reader.ReadNetworkId()).GetComponent<CharacterMaster>();
 			spawnPosition = reader.ReadVector3();
-		}
-	}
-
-	public class NugwisomkamiSpawnedState : BaseTwinState
-	{
-		public override int meterGain => 0;
-		public int whichSpirit;
-		public CharacterMaster master;
-
-		public override void OnEnter()
-		{
-			base.OnEnter();
-			twinBehaviour.masterBehaviour.NugwisoSpiritDefs[SummonNugwisomkamiState.NugwisoEliteDefs.Keys.ElementAt(whichSpirit)] = master;
-		}
-		
-		public override void OnSerialize(NetworkWriter writer)
-		{
-			base.OnSerialize(writer);
-			writer.Write(whichSpirit);
-			writer.Write(master.netId);
-		}
-
-		public override void OnDeserialize(NetworkReader reader)
-		{
-			base.OnDeserialize(reader);
-			whichSpirit = reader.ReadInt32();
-			master = Util.FindNetworkObject(reader.ReadNetworkId()).GetComponent<CharacterMaster>();
 		}
 	}
 
@@ -246,6 +220,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return skill;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonNugwisomkamiState), typeof(SpawnNugwisomkamiState), typeof(RespawnNugwisomkamiState), typeof(NugwisomkamiSpawnedState) };
+		public IEnumerable<Type> GetEntityStates() => new[] { typeof(SummonNugwisomkamiState), typeof(SpawnNugwisomkamiState), typeof(RespawnNugwisomkamiState) };
 	}
 }

@@ -11,7 +11,6 @@ using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.PostProcessing;
-using Console = System.Console;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 {
@@ -210,7 +209,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 							new Material(await LoadAsset<Material>("RoR2/Junk/Common/VFX/matTeleportOutBodyGlow.mat"));
 						r.material.SetColor("_TintColor", new Color(0f, 0.4F, 1));
 						r.transform.localScale = Vector3.one * 0.5f;
-						//r.enabled = false
+						r.enabled = false;
 						break;
 					case "Donut":
 					case "Trails":
@@ -227,19 +226,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 						break;
 				}
 			}
-			
 			var darkStarCore = (await GetProjectileGhost<PrimedStickyBomb>())!.InstantiateClone("DarkStarCore", false);
 			var trash = darkStarCore.transform.Find("Scaler/GameObject").gameObject;
-			darkStarCore.transform.localPosition = Vector3.zero;
 			UnityEngine.Object.Destroy(trash);
 			UnityEngine.Object.Destroy(darkStarCore.GetComponent<ProjectileGhostController>());
 			UnityEngine.Object.Destroy(darkStarCore.GetComponent<VFXAttributes>());
 			UnityEngine.Object.Destroy(darkStarCore.GetComponent<EffectManagerHelper>());
 			darkStarCore.transform.SetParent(theMeshObject.transform);
+			darkStarCore.transform.localPosition = Vector3.zero;
 
-			GameObject particle = await LoadAsset<GameObject>("kamunagiassets2:InnerCoreDistCurve2");
-			particle.GetComponent<ParticleSystemRenderer>().material = await LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat");
+			GameObject particle = (await LoadAsset<GameObject>("kamunagiassets2:InnerCoreDist"))!.InstantiateClone("Distortion", false);
+			var rend = particle.GetComponent<ParticleSystemRenderer>();
+			rend.material = await LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat");
 			particle.transform.SetParent(theMeshObject.transform);
+			particle.transform.localScale = Vector3.one * 2.9f;
+			particle.transform.localPosition = Vector3.zero;
 			return naturesAxiom;
 		}
 

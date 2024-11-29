@@ -13,7 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
 		public EffectManagerHelper? veilEffect;
-		public static GameObject muzzleEffect;
+		public static GameObject? muzzleEffect;
 		public override int meterGain => 0;
 
 		public override void OnEnter()
@@ -30,23 +30,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
-			var effect = Concentric.GetEffect<HonokasVeil>().WaitForCompletion();
 			if (NetworkServer.active) characterBody.AddBuff(RoR2Content.Buffs.CloakSpeed);
 			EffectManager.SpawnEffect(muzzleEffect, new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
 			}, false);
-			veilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, characterBody.coreTransform, true);
+			veilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<HonokasVeil>().WaitForCompletion(), characterBody.coreTransform, true);
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
-			characterMotor.useGravity = false;
 		}
 
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			if (!isAuthority) return;
-			if (!IsKeyDownAuthority() || fixedAge > 1f)
+			if (!IsKeyDownAuthority() || fixedAge > 1.5f)
 			{
 				outer.SetNextStateToMain();
 			}
@@ -58,17 +56,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			if (veilEffect != null) veilEffect.ReturnToPool();
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
-			characterMotor.useGravity = true;
 			EffectManager.SpawnEffect(muzzleEffect, new EffectData
 			{
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
 			}, false);
-			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)
-			{
-				charModel.invisibilityCount--;
-				hurtBoxGroup.hurtBoxesDeactivatorCounter--;
-			}
+			if (charModel == null || !charModel || hurtBoxGroup == null || !hurtBoxGroup) return;
+			charModel.invisibilityCount--;
+			hurtBoxGroup.hurtBoxesDeactivatorCounter--;
 		}
 	}
 
@@ -103,7 +98,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var impBoss = await LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab")!;
 			var dustCenter = impBoss.transform.Find("ModelBase/mdlImpBoss/DustCenter");
 
-			var effect = dustCenter.gameObject.InstantiateClone("VeilParticles", false);
+			var effect = dustCenter.gameObject!.InstantiateClone("VeilParticles", false);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
 			var distortion = effect.AddComponent<ParticleSystem>();
 			var coreR = effect.GetComponent<ParticleSystemRenderer>();

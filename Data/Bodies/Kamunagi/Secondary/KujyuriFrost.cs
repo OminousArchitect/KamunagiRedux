@@ -43,7 +43,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         {
             var wasGoodPlacement = goodPlacement;
             goodPlacement = false;
-            indicatorPrefabInstance.SetActive(true);
+			if (isAuthority)
+            {
+	            indicatorPrefabInstance.SetActive(true);
+            }
             if (indicatorPrefabInstance)
             {
                 var aimRay = GetAimRay();
@@ -119,7 +122,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
                         var blastAttack = new BlastAttack //need this as a disguise for the first loop of the particle system
                         {
 	                        attacker = gameObject,
-	                        baseDamage = damageStat,
+	                        baseDamage = characterBody.damage * 1f,
 	                        baseForce = 0,
 	                        crit = false,
 	                        damageType = DamageType.Freeze2s,

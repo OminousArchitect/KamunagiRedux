@@ -10,18 +10,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		public bool earlyBufferDone;
 		public static GameObject spawnEffectPrefab;
+		private CharacterModel charModel;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			/*if (NetworkServer.active)
+			if (NetworkServer.active)
 			{
 				characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 3f);
-			}*/
-			var characterModel = GetModelTransform().GetComponent<CharacterModel>();
-			if (characterModel)
+			}
+			charModel = GetModelTransform().GetComponent<CharacterModel>();
+			if (charModel)
 			{
-				characterModel.invisibilityCount++;
+				charModel.invisibilityCount++;
 			}
 		}
 
@@ -33,22 +34,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 				earlyBufferDone = true;
 				Util.PlaySound("Play_nullifier_spawn", gameObject);
 				EffectManager.SimpleMuzzleFlash(spawnEffectPrefab, gameObject, "MuzzleRear", false);
+				if (charModel)
+				{
+					charModel.invisibilityCount--;
+				}
 			}
 
 			if (fixedAge >= 3.2f)
 			{
 				outer.SetNextStateToMain();
 			}
-		}
-
-		public override void OnExit()
-		{
-			var characterModel = GetModelTransform().GetComponent<CharacterModel>();
-			if (characterModel)
-			{
-				characterModel.invisibilityCount--;
-			}
-			base.OnExit();
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Death;

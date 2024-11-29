@@ -201,7 +201,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			var vacuumSimple = proj.GetComponent<ProjectileSimple>();
 			vacuumSimple.desiredForwardSpeed = 0f;
 			vacuumSimple.lifetime = 1f;
-			//proj.GetComponent<TetherVfxOrigin>().tetherPrefab = await GetEffect<RequiredTetherVFX>();
+			proj.GetComponent<TetherVfxOrigin>().tetherPrefab = await GetEffect<TetherVFX>();
 			UnityEngine.Object.Destroy(proj.transform.GetChild(0).gameObject);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			return proj;
@@ -234,12 +234,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		}
 	}
 
-	public class RequiredTetherVFX : Concentric, IEffect
+	public class TetherVFX : Concentric, IEffect
 	{
 		public async Task<GameObject> BuildObject()
 		{
-			var mandatory = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!.InstantiateClone("InvisibleTether", false);
-			mandatory.GetComponent<LineRenderer>().enabled = false;
+			var mandatory = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!.InstantiateClone("TwinsTether", false);
 			mandatory.EffectWithSound("");
 			return mandatory;
 		}

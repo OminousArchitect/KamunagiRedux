@@ -79,12 +79,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			if (damageInfo.HasModdedDamageType(CurseFlames))
 			{
+				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
+				
 				DotController.InflictDot(
 					__instance.gameObject,
 					damageInfo.attacker,
 					NaturesAxiom.CurseIndex, 
 					2.4f, 
-					damageInfo.damage * 0.2f
+					attackerBody.damage * 1.5f
 				);
 			}
 		}

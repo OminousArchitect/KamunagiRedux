@@ -130,7 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			}
 
 			var writer = new NetworkWriter();
-			writer.StartMessage(1);
+			writer.StartMessage(1345);
 			writer.Write(netIdentity);
 			writer.Write(key);
 			writer.Write(characterMaster.networkIdentity);
@@ -138,7 +138,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			NetworkServer.SendWriterToReady(gameObject, writer, GetNetworkChannel());
 		}
 
-		[NetworkMessageHandler(msgType = 1, client = true, server = false)]
+		[NetworkMessageHandler(msgType = 1345, client = true, server = false)]
 		public static void HandleSpawnedNugwiso(NetworkMessage message)
 		{
 			var reader = message.reader;
@@ -146,7 +146,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var masterTwin = netId.gameObject.GetComponent<MasterTwinBehaviour>();
 			masterTwin.NugwisoSpiritDefs[SummonNugwisomkamiState.NugwisoEliteDefs.Keys.ElementAt(reader.ReadInt32())] = reader.ReadNetworkIdentity().GetComponent<CharacterMaster>();
 		}
-		
+
 		public void Awake()
 		{
 			NugwisoSpiritDefs = SummonNugwisomkamiState.NugwisoEliteDefs.Keys.ToDictionary(x => x, x => null as CharacterMaster);

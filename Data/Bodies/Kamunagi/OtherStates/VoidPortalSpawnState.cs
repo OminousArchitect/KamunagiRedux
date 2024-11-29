@@ -10,8 +10,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 	{
 		public bool earlyBufferDone;
 		public static GameObject spawnEffectPrefab;
-		private float stopwatch;
-		
+
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -34,10 +33,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 				earlyBufferDone = true;
 				Util.PlaySound("Play_nullifier_spawn", gameObject);
 				EffectManager.SimpleMuzzleFlash(spawnEffectPrefab, gameObject, "MuzzleRear", false);
-				stopwatch += Time.fixedDeltaTime;
 			}
 
-			if (stopwatch >= 2f)
+			if (fixedAge >= 3.2f)
 			{
 				outer.SetNextStateToMain();
 			}

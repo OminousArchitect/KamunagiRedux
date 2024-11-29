@@ -26,8 +26,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Primary 0";
-			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY0_NAME";
-			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY0_DESCRIPTION";
+			skill.skillNameToken = "? ? ?";
+			skill.skillDescriptionToken = "? ? ?";
 			skill.icon = await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 1;

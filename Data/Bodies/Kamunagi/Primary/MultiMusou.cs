@@ -85,8 +85,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					__instance.gameObject,
 					damageInfo.attacker,
 					NaturesAxiom.CurseIndex, 
-					2.4f, 
-					attackerBody.damage * 1.5f
+					2.4f,
+					0.8f
 				);
 			}
 		}

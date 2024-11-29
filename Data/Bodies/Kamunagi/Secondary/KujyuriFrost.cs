@@ -194,6 +194,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			dotZone.fireFrequency = 0.7f;
 			dotZone.lifetime = 2.9f;
 			dotZone.overlapProcCoefficient = 1f;
+			dotZone.damageCoefficient = 1f;
 			var pdzef = proj.AddComponent<ProjectileDotZoneEndEffect>();
 			pdzef.effect = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab");
 			dotZone.onEnd.AddListener(pdzef.OnDestroy);

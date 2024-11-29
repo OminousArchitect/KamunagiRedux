@@ -233,7 +233,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (!__instance) return;
 			if (__instance.HasBuff(GetBuffDef<SobuGekishoha>().WaitForCompletion()))
 			{
-				__instance.armor += 80f;
+				__instance.armor += 490f;
 			}
 		}
 	}

@@ -19,7 +19,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	internal class YamatoWindsState : BaseTwinState
 	{
 		public override int meterGain => 5;
-		private float damageCoefficient = 2f;
+		private float damageCoefficient = 2.5f;
 		private const float maxChargeTime = 1.5f;
 		private EffectManagerHelper? chargeEffectInstance;
 		private CameraTargetParams.AimRequest? aimRequest;
@@ -162,7 +162,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			Object.Destroy(proj.GetComponent<BoomerangProjectile>());
 			Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
 			var windDamage = proj.GetComponent<ProjectileDotZone>();
-			windDamage.damageCoefficient = 0.5f;
+			windDamage.damageCoefficient = 1f;
 			windDamage.overlapProcCoefficient = 0.3f;
 			windDamage.fireFrequency = 25f;
 			windDamage.resetFrequency = 10f;

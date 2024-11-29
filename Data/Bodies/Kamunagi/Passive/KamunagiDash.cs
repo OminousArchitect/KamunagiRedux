@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using EntityStates.Mage;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -24,6 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			base.OnEnter();
 			origin = this.transform.position;
 			thePosition = characterBody.footPosition + Vector3.up * 0.15f;
+			characterBody.SetBuffCount(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 1);
 			if (base.isAuthority)
 			{
 				FireVacuum();
@@ -73,6 +75,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override void OnExit()
 		{
 			//log.LogDebug("exiting channeldash");
+			characterBody.SetBuffCount(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 0);
 			base.OnExit();
 		}
 
@@ -106,6 +109,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 				false);
 			if (!isAuthority) return;
 			characterMotor.Motor.ForceUnground();
+			characterBody.AddTimedBuffAuthority(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 0.5f);
 			//log.LogDebug("dash is entering");
 		}
 
@@ -201,9 +205,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			var vacuumSimple = proj.GetComponent<ProjectileSimple>();
 			vacuumSimple.desiredForwardSpeed = 0f;
 			vacuumSimple.lifetime = 1f;
-			proj.GetComponent<TetherVfxOrigin>().tetherPrefab = await GetEffect<TetherVFX>();
+			proj.GetComponent<TetherVfxOrigin>().tetherPrefab = await GetGenericObject<TetherVFX>();
 			UnityEngine.Object.Destroy(proj.transform.GetChild(0).gameObject);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+			proj.GetComponent<RadialForce>().radius = 30f;
 			return proj;
 		}
 
@@ -234,12 +239,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		}
 	}
 
-	public class TetherVFX : Concentric, IEffect
+	public class TetherVFX : Concentric, IGenericObject
 	{
-		public async Task<GameObject> BuildObject()
+		async Task<GameObject> IGenericObject.BuildObject()
 		{
 			Material vacuum = new Material(await LoadAsset<Material>("RoR2/Base/Grandparent/matGrandParentSunChannelStartBeam.mat"));
-
+			//vacuum.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampHippoVoidEye.png"));
+			vacuum.SetFloat("_Boost", 18f);
+			vacuum.SetFloat("_AlphaBoost", 2.8f);
+			vacuum.SetColor("_TintColor", new Color32(105, 0, 229, 255));
+			
 			var tetherLine = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!.InstantiateClone("TwinsTether", false);
 			tetherLine.EffectWithSound("");
 			tetherLine.GetComponent<LineRenderer>().materials = new[] { vacuum };

@@ -309,7 +309,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				new DotController.DotDef
 				{
 					interval = 0.2f,
-					damageCoefficient = 0.1f,
+					damageCoefficient = 0.8f,
 					damageColorIndex = DamageColorIndex.Void,
 					associatedBuff = await GetBuffDef<AxiomBurn>()
 				}, (self, stack) =>
@@ -693,7 +693,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 								inflictDotInfo.dotIndex = NaturesAxiom.CurseIndex;
 								inflictDotInfo.attackerObject = ownership.ownerObject;
 								inflictDotInfo.victimObject = body.gameObject;
-								inflictDotInfo.damageMultiplier = 1f;
+								inflictDotInfo.damageMultiplier = 0.75f;
 
 								GenericOwnership genericOwnership = ownership;
 								CharacterBody characterBody;

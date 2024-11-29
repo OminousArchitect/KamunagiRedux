@@ -14,10 +14,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			if (NetworkServer.active)
+			/*if (NetworkServer.active)
 			{
 				characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 3f);
-			}
+			}*/
 			var characterModel = GetModelTransform().GetComponent<CharacterModel>();
 			if (characterModel)
 			{

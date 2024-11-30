@@ -206,8 +206,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonPreBoss.png"));
 			sealingProjectileMat.SetTexture("_MainTex",
 				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texLunarWispTracer 1.png"));
-			sealingProjectileMat.SetFloat("_SrcBlendFloat", 5f);
-			sealingProjectileMat.SetFloat("_DstBlendFloat", 1f);
+			sealingProjectileMat.SetFloat("_SrcBlend", 5f);
+			sealingProjectileMat.SetFloat("_DstBlend", 1f);
 			sealingProjectileMat.SetFloat("_IntersectionStrength", 0.4f);
 			sealingProjectileMat.SetFloat("_AlphaBoost", 9.041705f);
 			sealingProjectileMat.SetFloat("_RimStrength", 9.041705f);

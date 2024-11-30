@@ -147,7 +147,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			Material coolStuff =
 				new Material(await LoadAsset<Material>("RoR2/Base/EliteHaunted/matHauntedEliteAreaIndicator.mat"));
 			coolStuff.SetTexture("_RemapTex",await  LoadAsset<Texture2D>("RoR2/DLC1/voidraid/texRaidPlanetPurple.png"));
-			coolStuff.SetFloat("_DstBlendFloat", 1f);
+			coolStuff.SetFloat("_DstBlend", 1f);
 			coolStuff.SetTexture("_Cloud2Tex", await LoadAsset<Texture2D>("RoR2/Base/Common/texCloudCaustic3.jpg"));
 
 			var forceField =

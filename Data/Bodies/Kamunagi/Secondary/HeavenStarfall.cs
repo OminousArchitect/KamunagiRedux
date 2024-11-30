@@ -125,12 +125,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			darkStarCore.transform.localPosition = Vector3.zero;
 
 			Material rings = new Material(await LoadAsset<Material>("RoR2/DLC2/Child/matChildStarGlow.mat"));
-			rings.SetFloat("_DstBlendFloat", 10f);
+			rings.SetFloat("_DstBlend", 10f);
 			rings.SetColor("_TintColor", new Color32(0, 150, 255, 160));
 			Material bright = new Material(await LoadAsset<Material>("RoR2/Base/Captain/matCaptainAirstrikeCore.mat"));
 			bright.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
-			bright.SetFloat("_SrcBlendFloat", 1f);
-			bright.SetFloat("_DstBlendFloat", 1f);
+			bright.SetFloat("_SrcBlend", 1f);
+			bright.SetFloat("_DstBlend", 1f);
 			bright.name = "bright";
 			Material glow = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matGlow1.mat"));
 			glow.SetColor("_TintColor", new Color32(35, 0, 255, 128));

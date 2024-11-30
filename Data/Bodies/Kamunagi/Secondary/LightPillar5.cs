@@ -185,12 +185,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 					case "Glow, Looping":
 						r.material = new Material(r.material);
 						r.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampHippoVoidEye.png"));
-						r.material.SetFloat("_DstBlendFloat", 1f);
+						r.material.SetFloat("_DstBlend", 1f);
 						break;
 					case "Glow, Initial":
 						r.material = new Material(r.material);
 						r.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampHippoVoidEye.png"));
-						r.material.SetFloat("_DstBlendFloat", 1f);
+						r.material.SetFloat("_DstBlend", 1f);
 						break;
 				}
 			}

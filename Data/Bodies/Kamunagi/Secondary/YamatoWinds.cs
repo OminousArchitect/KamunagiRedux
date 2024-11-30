@@ -39,7 +39,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(effect, muzzleTransform, true,
 					new EffectData() { rootObject = muzzleTransform.gameObject });
 			}
-
 			aimRequest = cameraTargetParams.RequestAimType(CameraTargetParams.AimType.Aura);
 			characterBody.SetBuffCount(parryBuff.buffIndex, 1);
 			condition = true;

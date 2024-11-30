@@ -15,7 +15,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	public class ExperimentalWallState : BaseTwinState
 	{
 		public float maxDistance = 600f;
-        public float maxSlopeAngle = 119f;
+        public float maxSlopeAngle = 100f;
         public float baseDuration = 0.5f;
         public float duration;
         public string prepWallSoundString = "Play_mage_shift_start";
@@ -26,6 +26,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         public GameObject goodCrosshairPrefab = EntityStates.Mage.Weapon.PrepWall.goodCrosshairPrefab;
         public GameObject badCrosshairPrefab =  EntityStates.Mage.Weapon.PrepWall.badCrosshairPrefab;
         public GameObject indicatorPrefabInstance; //declared in the entitystate, intialized in the Concentric class
+        public static GameObject muzzleFlash;
         private float damageCoefficient = 1f;
         private bool shouldInvert;
 
@@ -146,6 +147,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             {
                 crosshairOverrideRequest.Dispose();
             }
+            EffectManager.SimpleMuzzleFlash(muzzleFlash, base.gameObject, twinMuzzle, false);
             base.OnExit();
         }
 	}
@@ -168,6 +170,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	
 	public class KujyuriFrost : Concentric, ISkill, IEffect, IProjectile
 	{
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			ExperimentalWallState.muzzleFlash = await this.GetEffect();
+		}
+
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();

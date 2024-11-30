@@ -41,7 +41,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override void OnExit()
 		{
 			Util.PlaySound(fireAirstrikeSoundString, base.gameObject);
-			AddRecoil(0f, 0f, -1f, -1f);
 			base.OnExit();
 		}
 
@@ -111,6 +110,42 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
 			var ghost = (await LoadAsset<GameObject>("RoR2/Base/Captain/CaptainAirstrikeGhost1.prefab"))!.InstantiateClone("TwinsCometGhost", false);
+			var fallingStar = ghost.transform.GetChild(2).gameObject;
+			//I'm being lazy again and copy-pasting this :haha: 
+			var darkStarCore = (await GetProjectileGhost<PrimedStickyBomb>())!.InstantiateClone("DarkStarCore", false);
+			var trash = darkStarCore.transform.Find("Scaler/GameObject").gameObject;
+			UnityEngine.Object.Destroy(trash);
+			UnityEngine.Object.Destroy(darkStarCore.GetComponent<ProjectileGhostController>());
+			UnityEngine.Object.Destroy(darkStarCore.GetComponent<VFXAttributes>());
+			UnityEngine.Object.Destroy(darkStarCore.GetComponent<EffectManagerHelper>());
+			darkStarCore.transform.SetParent(fallingStar.transform);
+			darkStarCore.transform.localPosition = Vector3.zero;
+			foreach (ParticleSystemRenderer r in fallingStar.GetComponentsInChildren<ParticleSystemRenderer>())
+			{
+				switch (r.name)
+				{
+					case "Rings":
+						break;
+					case "BrightFlash":
+						r.material = new Material(r.material);
+						r.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
+						break;
+					case "BrightFlash (1)":
+						r.material = new Material(r.material);
+						r.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
+						break;
+					case "Soft Glow":
+						break;
+				}
+			}
+			var line = fallingStar.transform.Find("FallingProjectile/Trail/TrailRenderer").gameObject;
+			TrailRenderer trailR = line.GetComponent<TrailRenderer>();
+			trailR.material = new Material(trailR.material);
+			trailR.material.SetColor("_TintColor", new Color32(1, 16, 232, 255));
+			trailR.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampGhost.png"));
+			trailR.material.SetFloat("_Boost", 6.2f);
+			var ind = ghost.transform.Find("Expander/Sphere, Inner Expanding").gameObject;
+			//ind.GetComponent<MeshRenderer>().material = 
 			return ghost;
 		}
 		

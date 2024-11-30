@@ -56,7 +56,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				crit = false,
 				damageType = DamageType.Stun1s,
 				falloffModel = BlastAttack.FalloffModel.None,
-				procCoefficient = 2f,
+				procCoefficient = 1f,
 				radius = 8f,
 				position = characterBody.corePosition,
 				attackerFiltering = AttackerFiltering.NeverHitSelf,
@@ -95,6 +95,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			base.OnExit();
 			DoChildFx(characterBody.corePosition);
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
+			SmallHop(characterMotor, 3f);
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)
 			{
 				charModel.invisibilityCount--;

@@ -114,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var projectileController = tidalProjectile.GetComponent<ProjectileController>();
 			projectileController.ghostPrefab = await this.GetProjectileGhost();
 			projectileController.startSound = "Play_miniMushroom_spore_shoot";
-			projectileController.procCoefficient = 1.2f;
+			projectileController.procCoefficient = 0.9f;
 			tidalProjectile.GetComponent<Rigidbody>().useGravity = false;
 			tidalProjectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
 			var impact = tidalProjectile.GetComponent<ProjectileImpactExplosion>();

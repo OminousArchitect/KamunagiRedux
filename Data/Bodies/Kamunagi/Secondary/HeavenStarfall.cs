@@ -104,13 +104,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/Captain/CaptainAirstrikeProjectile1.prefab"))!.InstantiateClone("TwinsCometProjectile", true);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+			proj.GetComponent<ProjectileImpactExplosion>().lifetime = 2.5f;
 			return proj;
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
 			var ghost = (await LoadAsset<GameObject>("RoR2/Base/Captain/CaptainAirstrikeGhost1.prefab"))!.InstantiateClone("TwinsCometGhost", false);
-			var fallingStar = ghost.transform.GetChild(2).gameObject;
+			var fallingStarParent = ghost.transform.GetChild(2).gameObject; //airstrike
+			var fallingStar = fallingStarParent.transform.GetChild(0).gameObject; //fallingprojectile
+			fallingStar.GetComponent<ObjectTransformCurve>().timeMax = 2.5f;
 			//I'm being lazy again and copy-pasting this :haha: 
 			var darkStarCore = (await GetProjectileGhost<PrimedStickyBomb>())!.InstantiateClone("DarkStarCore", false);
 			var trash = darkStarCore.transform.Find("Scaler/GameObject").gameObject;
@@ -120,32 +123,42 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			UnityEngine.Object.Destroy(darkStarCore.GetComponent<EffectManagerHelper>());
 			darkStarCore.transform.SetParent(fallingStar.transform);
 			darkStarCore.transform.localPosition = Vector3.zero;
+
+			Material rings = new Material(await LoadAsset<Material>("RoR2/DLC2/Child/matChildStarGlow.mat"));
+			rings.SetFloat("_DstBlendFloat", 10f);
+			rings.SetColor("_TintColor", new Color32(0, 150, 255, 160));
+			Material bright = new Material(await LoadAsset<Material>("RoR2/Base/Captain/matCaptainAirstrikeCore.mat"));
+			bright.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
+			bright.SetFloat("_SrcBlendFloat", 1f);
+			bright.SetFloat("_DstBlendFloat", 1f);
+			bright.name = "bright";
+			Material glow = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matGlow1.mat"));
+			glow.SetColor("_TintColor", new Color32(35, 0, 255, 128));
+			glow.name = "glow";
 			foreach (ParticleSystemRenderer r in fallingStar.GetComponentsInChildren<ParticleSystemRenderer>())
 			{
 				switch (r.name)
 				{
 					case "Rings":
+						r.material = rings;
 						break;
 					case "BrightFlash":
-						r.material = new Material(r.material);
-						r.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
+						r.material = bright;
 						break;
 					case "BrightFlash (1)":
-						r.material = new Material(r.material);
-						r.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
+						r.material = bright;
 						break;
 					case "Soft Glow":
+						r.material = glow;
 						break;
 				}
 			}
-			var line = fallingStar.transform.Find("FallingProjectile/Trail/TrailRenderer").gameObject;
+			var line = fallingStarParent.transform.Find("FallingProjectile/Trail/TrailRenderer").gameObject;
 			TrailRenderer trailR = line.GetComponent<TrailRenderer>();
 			trailR.material = new Material(trailR.material);
 			trailR.material.SetColor("_TintColor", new Color32(1, 16, 232, 255));
 			trailR.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampGhost.png"));
 			trailR.material.SetFloat("_Boost", 6.2f);
-			var ind = ghost.transform.Find("Expander/Sphere, Inner Expanding").gameObject;
-			//ind.GetComponent<MeshRenderer>().material = 
 			return ghost;
 		}
 		

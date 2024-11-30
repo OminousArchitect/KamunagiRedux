@@ -66,7 +66,7 @@
 	  "NINES_KAMUNAGI_BODY_UTILITY1_NAME": "Atuy's Sweeping Tides",
 	  "NINES_KAMUNAGI_BODY_UTILITY1_DESCRIPTION": "Fire a series of water bolts that deal <style=cIsDamage>250% damage</style> each. The number of bolts fired increases with attack speed. <style=cIsDamage>Critical Strikes</style> become <color=#00BDFF>Atuykarounkami's Blessings</color>.",
 	  "NINES_KAMUNAGI_BODY_UTILITY2_NAME": "Jachdwalt's Senranzakura",
-	  "NINES_KAMUNAGI_BODY_UTILITY2_DESCRIPTION": "<style=cIsDamage>Tiriryarai</style>. Call for the Mirage Blade's assistance in attacking enemies. His afterimages rapidly strike foes for <style=cIsDamage>???% damage</style>.",
+	  "NINES_KAMUNAGI_BODY_UTILITY2_DESCRIPTION": "<style=cIsDamage>Tiriryarai</style>. Call for the Mirage Blade's assistance in attacking enemies. His afterimages rapidly strike foes for <style=cIsDamage>135% damage</style>.",
 	  "NINES_KAMUNAGI_BODY_UTILITY3_NAME": "Woshis' Miasma",
 	  "NINES_KAMUNAGI_BODY_UTILITY3_DESCRIPTION": "Produce a <style=cIsUtility>miasma</style> at the targeted area. Enemies that die inside the <style=cIsUtility>miasma</style> have their souls <style=cIsUtility>bound to you</style> temporarily.",
 

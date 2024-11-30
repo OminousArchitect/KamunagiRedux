@@ -14,7 +14,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
-		public EffectManagerHelper? veilEffect;
 		public static GameObject childTpFx;
 		private Vector3 teleportPosition;
 		private bool teleported;
@@ -94,9 +93,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override void OnExit()
 		{
 			base.OnExit();
-			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
-			if (veilEffect != null) veilEffect.ReturnToPool();
 			DoChildFx(characterBody.corePosition);
+			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)
 			{
 				charModel.invisibilityCount--;

@@ -85,6 +85,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public float overlapSphereRadius = 8f;
 		private bool isDashing;
 		public Vector3 bulletHitPos;
+		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{
@@ -142,7 +143,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						LayerIndex.entityPrecise.mask
 						);
 					
-					for (int i = 0; i < colliders.Length; i++)
+					for (int i = 0; i < colliders.Length; i++) //I think this whole skill is serious spaghetti but it works and I don't feel like fixing it now
 					{
 						HurtBox hurtBox = colliders[i].GetComponent<HurtBox>();
 						if (hurtBox && hurtBox.healthComponent != base.healthComponent)
@@ -185,6 +186,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			private bool crit;
 			private static float minimumDuration = 0.5f;
 			public Vector3 theVector3;
+			public override int meterGain => 0;
 
 			public override void OnEnter()
 			{

@@ -70,11 +70,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		public override void FixedUpdate()
 		{
-			if (fixedAge < 0.2f && !IsKeyDownAuthority())
-			{
-				outer.SetNextStateToMain();
-			}
 			base.FixedUpdate();
+			if (!(fixedAge < duration) || IsKeyDownAuthority()) return;
+			skillLocator.utility.AddOneStock();
+			outer.SetNextStateToMain();
 		}
 
 		public override void OnExit()

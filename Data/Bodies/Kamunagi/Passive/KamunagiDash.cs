@@ -250,7 +250,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			vacuum.SetColor("_TintColor", new Color32(105, 0, 229, 255));
 			
 			var tetherLine = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphereTether.prefab"))!.InstantiateClone("TwinsTether", false);
-			tetherLine.EffectWithSound("");
 			tetherLine.GetComponent<LineRenderer>().materials = new[] { vacuum };
 			return tetherLine;
 		}

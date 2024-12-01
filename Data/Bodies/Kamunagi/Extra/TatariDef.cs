@@ -83,9 +83,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseDamage = 14f;
 			cb.portraitIcon= (await LoadAsset<Texture>("kamunagiassets2:TatariIcon"));
 
-			var skills = gupBody.GetComponents<GenericSkill>();
-			skills[0]._skillFamily = await GetSkillFamily<TatariPrimaryFamily>();
-
 			var lr = model.AddComponent<LegRemover>();
 			foreach (SkinnedMeshRenderer m in model.GetComponentsInChildren<SkinnedMeshRenderer>())
 			{
@@ -185,7 +182,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class RedSpikeAttack : BasicMeleeAttack
+	public class DeprecatedAttack : BasicMeleeAttack
 	{
 		public static GameObject customSpikeEffect; //swingeffectprefab
 		private string playbackRateParam = "SpikeAttack.playbackRate";
@@ -217,6 +214,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			impactSound = sound;
 			swingEffectPrefab = customSpikeEffect;
 			hitEffectPrefab = prefab;
+			animator = GetModelAnimator();
 			base.OnEnter();
 			var mdl = GetModelTransform().gameObject;
 			var uhh = mdl.GetComponent<HitBoxGroup>();
@@ -276,7 +274,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		public override void PlayAnimation()
 		{
-			PlayCrossfade(animationLayerName, animationStateName, playbackRateParam, duration, crossfadeDuration);
+			PlayCrossfade(animationLayerName, animationStateName, playbackRateParam, 2, crossfadeDuration);
 		}
 
 		public override void FixedUpdate()
@@ -288,15 +286,27 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			}
 		}
 	}
+
+	public class ThisDoesntWorkEither : EntityStates.Gup.GupSpikesState
+	{
+		public static GameObject customSpikeEffect;
+		public static NetworkSoundEventDef sound;
+		public static GameObject prefab;
+		public override void OnEnter()
+		{
+			swingEffectPrefab = customSpikeEffect;
+			base.OnEnter();
+		}
+	}
 	
 	public class TatariPrimary : Concentric, ISkill, IEffect
 	{
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			RedSpikeAttack.customSpikeEffect = await this.GetEffect();
-			RedSpikeAttack.sound = await LoadAsset<NetworkSoundEventDef>("RoR2/Base/Bandit2/nseBandit2ShivHit.asset");
-			RedSpikeAttack.prefab = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXMedium.prefab");
+			ThisDoesntWorkEither.customSpikeEffect = await this.GetEffect();
+			ThisDoesntWorkEither.sound = await LoadAsset<NetworkSoundEventDef>("RoR2/Base/Bandit2/nseBandit2ShivHit.asset");
+			ThisDoesntWorkEither.prefab = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXMedium.prefab");
 		}
 
 		async Task<SkillDef> ISkill.BuildObject()
@@ -337,7 +347,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return effect;
 		}
 
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(RedSpikeAttack) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(EntityStates.Gup.GupSpikesState) };
 	}
 	
 	public class TatariPrimaryFamily : Concentric, ISkillFamily

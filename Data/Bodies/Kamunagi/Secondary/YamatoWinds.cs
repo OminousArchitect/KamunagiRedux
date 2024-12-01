@@ -50,7 +50,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			// this is some real spaghetti because I'm tired of
 			// reworking this skill for the 6th time, please forgive
 			if (!isAuthority) return;
-			if (!IsKeyDownAuthority() || stopwatch >= 0.2f)
+			if (!IsKeyDownAuthority() || stopwatch >= 0.35f)
 			{
 				outer.SetNextStateToMain();
 			}
@@ -298,7 +298,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 		private float attackScale = 4f;
 
-		public float distanceMultiplier = 0.3f;
+		public float distanceMultiplier = 0.4f; //boomerang flight distance
 
 		private float maxFlyStopwatch;
 

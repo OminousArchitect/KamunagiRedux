@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 {
-	public class DebugZealState : BaseTwinState
+	public class OverzealState : BaseTwinState
 	{
 		public override int meterGain => 85;
 		private float duration = 0.2f;
@@ -20,15 +20,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		}
 	}
 
-	public class DebugZeal : Concentric, ISkill
+	public class Overzeal : Concentric, ISkill
 	{
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.skillName = "Primary 0";
-			skill.skillNameToken = "? ? ?";
-			skill.skillDescriptionToken = "? ? ?";
-			skill.icon = await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png");
+			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA8_NAME";
+			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA8_DESCRIPTION";
+			skill.icon = await LoadAsset<Sprite>("kamunagiassets2:Overzeal");
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 1;
 			skill.baseRechargeInterval = 1f;
@@ -39,6 +39,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			return skill;
 		}
 		
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(DebugZealState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(OverzealState) };
 	}
 }

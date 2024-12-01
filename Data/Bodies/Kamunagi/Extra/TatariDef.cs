@@ -81,13 +81,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var cb = gupBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "TATARI_BODY_NAME";
 			cb.baseDamage = 14f;
-			cb.portraitIcon= (await LoadAsset<Texture>("kamunagiassets2:TatariIcon")); 
+			cb.portraitIcon= (await LoadAsset<Texture>("kamunagiassets2:TatariIcon"));
 
-			var secondary = gupBody.AddComponent<GenericSkill>();
-			secondary.skillName = "TatariSecondary";
-			secondary._skillFamily = await GetSkillFamily<TatariSecondaryFamily>();
-			secondary.baseSkill = await GetSkillDef<TatariSecondary>();
-			gupBody.GetComponent<SkillLocator>().secondary = secondary;
+			var skills = gupBody.GetComponents<GenericSkill>();
+			skills[0]._skillFamily = await GetSkillFamily<TatariPrimaryFamily>();
 
 			var lr = model.AddComponent<LegRemover>();
 			foreach (SkinnedMeshRenderer m in model.GetComponentsInChildren<SkinnedMeshRenderer>())
@@ -188,29 +185,120 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 
-	public class TatariStunAOE : BaseState
+	public class RedSpikeAttack : BasicMeleeAttack
 	{
-		public override void OnExit()
+		public static GameObject customSpikeEffect; //swingeffectprefab
+		private string playbackRateParam = "SpikeAttack.playbackRate";
+		private string initialHitboxName = "InitialHitBox";
+		private string initialHitboxActiveParameter = "SpikeAttack.initialHitBoxActive";
+		public static NetworkSoundEventDef sound;
+		private float crossfadeDuration = 0.2f;
+		private string animationStateName = "SpikeAttack";
+		private string animationLayerName = "Body";
+		public float baseDuration = 2f;
+		public float damageCoefficient = 3f;
+		public string hitBoxGroupName = "Spikes";
+		public static GameObject prefab;
+		public float procCoefficient = 1f;
+		public float pushAwayForce = 2500f;
+		public float hitPauseDuration = 0.05f;
+		public string swingEffectMuzzleString = "Root";
+		public string mecanimHitboxActiveParameter = "SpikeAttack.innerHitBoxActive";
+		public string beginStateSoundString = "Play_gup_attack1_charge";
+		public string beginSwingSoundString = "Play_gup_attack1_shoot";
+		protected Animator animator;
+		private Run.FixedTimeStamp meleeAttackStartTime = Run.FixedTimeStamp.positiveInfinity;
+		private bool forceFire;
+		protected EffectManagerHelper _emh_swingEffectInstance;
+		private HitBox initialHitBox;
+
+		public override void OnEnter()
 		{
-			BlastAttack blast = new BlastAttack();
-			blast.attacker = gameObject;
-			blast.baseDamage = 0f;
-			blast.baseForce = 50f;
-			blast.crit = false;
-			blast.damageType = DamageType.Stun1s;
-			blast.falloffModel = BlastAttack.FalloffModel.None;
-			blast.procCoefficient = 2f;
-			blast.radius = 8f;
-			blast.position = characterBody.corePosition;
-			blast.attackerFiltering = AttackerFiltering.NeverHitSelf;
-			blast.teamIndex = teamComponent.teamIndex;
-			
-			base.OnExit();
+			impactSound = sound;
+			swingEffectPrefab = customSpikeEffect;
+			hitEffectPrefab = prefab;
+			base.OnEnter();
+			var mdl = GetModelTransform().gameObject;
+			var uhh = mdl.GetComponent<HitBoxGroup>();
+			if (uhh)
+			{
+				hitBoxGroup = uhh;
+			}
+			if (characterDirection)
+			{
+				base.characterDirection.moveVector = base.characterDirection.forward;
+			}
+			if (!hitBoxGroup)
+			{
+				return;
+			}
+			HitBox[] hitBoxes = hitBoxGroup.hitBoxes;
+			foreach (HitBox hitBox in hitBoxes)
+			{
+				if (hitBox.gameObject.name == initialHitboxName)
+				{
+					initialHitBox = hitBox;
+					break;
+				}
+			}
+		}
+		
+		public override void BeginMeleeAttackEffect()
+		{
+			if (meleeAttackStartTime != Run.FixedTimeStamp.positiveInfinity)
+			{
+				return;
+			}
+			meleeAttackStartTime = Run.FixedTimeStamp.now;
+			Util.PlaySound(beginSwingSoundString, base.gameObject);
+			if (customSpikeEffect)
+			{
+				Transform transform = base.FindModelChild(swingEffectMuzzleString);
+				if (transform)
+				{
+					if (!EffectManager.ShouldUsePooledEffect(customSpikeEffect))
+					{
+						swingEffectInstance = UnityEngine.Object.Instantiate<GameObject>(customSpikeEffect, transform);
+					}
+					else
+					{
+						_emh_swingEffectInstance = EffectManager.GetAndActivatePooledEffect(customSpikeEffect, transform, true);
+						swingEffectInstance = _emh_swingEffectInstance.gameObject;
+					}
+					ScaleParticleSystemDuration component = swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
+					if (component)
+					{
+						component.newDuration = component.initialDuration;
+					}
+				}
+			}
+		}
+
+		public override void PlayAnimation()
+		{
+			PlayCrossfade(animationLayerName, animationStateName, playbackRateParam, duration, crossfadeDuration);
+		}
+
+		public override void FixedUpdate()
+		{
+			base.FixedUpdate();
+			if (initialHitBox)
+			{
+				initialHitBox.enabled = animator.GetFloat(initialHitboxActiveParameter) > 0.5f;
+			}
 		}
 	}
 	
-	public class TatariSecondary : Concentric, ISkill
+	public class TatariPrimary : Concentric, ISkill, IEffect
 	{
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			RedSpikeAttack.customSpikeEffect = await this.GetEffect();
+			RedSpikeAttack.sound = await LoadAsset<NetworkSoundEventDef>("RoR2/Base/Bandit2/nseBandit2ShivHit.asset");
+			RedSpikeAttack.prefab = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXMedium.prefab");
+		}
+
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
@@ -219,15 +307,41 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = "";
 			skill.skillDescriptionToken = "";
 			skill.baseRechargeInterval = 6f;
-			skill.icon= (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
+			skill.icon = (await LoadAsset<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png"));
 			return skill;
 		}
-		
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(TatariStunAOE) };
+
+		async Task<GameObject> IEffect.BuildObject()
+		{ 
+			Material purpleGooMat = new Material(await LoadAsset<Material>("RoR2/DLC1/Gup/matGupBlood.mat"));
+			purpleGooMat.name = "TatariBlood";
+			purpleGooMat.SetColor("_EmissionColor", new Color32(30, 0, 10, 255)); //255 color casting!!!!
+			purpleGooMat.SetColor("_TintColor", new Color32(109, 14, 31, 255));
+			Material otherGoo = new Material(await LoadAsset<Material>("RoR2/DLC1/Gup/matGupBloodSphere.mat"));
+			otherGoo.SetColor("_EmissionColor", new Color32(30, 0, 10, 255)); //255 color casting!!!!
+			otherGoo.SetColor("_TintColor", new Color32(109, 14, 31, 255));
+			
+			var effect = (await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupSpikeAttack.prefab"))!.InstantiateClone("TatariSpikeEffect", false);
+			foreach (ParticleSystemRenderer r in effect.GetComponentsInChildren<ParticleSystemRenderer>())
+			{
+				switch (r.name)
+				{
+					case "BigBlood":
+						r.material = purpleGooMat;
+						break;
+					case "BloodSphere":
+						r.material = otherGoo;
+						break;
+				}
+			}
+			return effect;
+		}
+
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(RedSpikeAttack) };
 	}
 	
-	public class TatariSecondaryFamily : Concentric, ISkillFamily
+	public class TatariPrimaryFamily : Concentric, ISkillFamily
 	{
-		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<TatariSecondary>() };
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] { GetAsset<TatariPrimary>() };
 	}
 }

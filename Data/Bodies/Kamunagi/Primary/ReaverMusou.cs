@@ -184,8 +184,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			seedMaterial.SetFloat("_Boost", 10f);
 			seedMaterial.SetTexture("_MainTex", await LoadAsset<Texture2D>("RoR2/Base/Common/texCloudColor2.png"));
 			seedMaterial.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
-			seedMaterial.SetFloat("_SrcBlend", 10f);
-			seedMaterial.SetFloat("_DstBlend", 1f);
+			seedMaterial.SetFloat("_SrcBlendFloat", 10f);
+			seedMaterial.SetFloat("_DstBlendFloat", 1f);
 			
 			var ghost = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckGhost.prefab"))!.InstantiateClone("TwinsReaverGhost", false);
 			var flicker = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombletsGhost.prefab")).transform.GetChild(1).gameObject!.InstantiateClone("FlickerTwins", false);

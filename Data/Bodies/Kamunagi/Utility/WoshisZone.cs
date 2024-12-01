@@ -81,7 +81,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var woshisEnergy =
 				new Material(
 					await LoadAsset<Material>("RoR2/Base/BleedOnHitAndExplode/matBleedOnHitAndExplodeAreaIndicator.mat"));
-			woshisEnergy.SetFloat("_DstBlend", 3f);
+			woshisEnergy.SetFloat("_DstBlendFloat", 3f);
 			woshisEnergy.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampImp2.png"));
 			woshisEnergy.SetFloat("_Boost", 0.065f);
 			woshisEnergy.SetFloat("_RimPower", 0.48f);

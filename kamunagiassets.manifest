@@ -1,0 +1,266 @@
+ManifestFileVersion: 0
+CRC: 1148395876
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d68d9d353ce25f044d3e56f893c56554
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 29ea1009c289b9418e65b7490a3a0a32
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 261c50d8a80898e4ebf2e8e415ea6766, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: bafcb53fdf4930942a9317a2526d54e5, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: ChildLocator/NameTransformPair
+Assets:
+- Assets/HenryAssets/Sprites/windpng.png
+- Assets/HenryAssets/Sprites/earthpng.png
+- Assets/HenryAssets/Materials/Ururuu/BODY/GIRL _Body _BaseColor  0001.jpg
+- Assets/HenryAssets/ImportFromBlender/S StartAxiom.anim
+- Assets/HenryAssets/KamunagiDisplay.prefab
+- Assets/HenryAssets/Materials/Saraana/BODY/GIRL _Body _BaseColor.jpg
+- Assets/HenryAssets/Sprites/darkpng.png
+- Assets/HenryAssets/ImportFromBlender/S Test.fbx
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/CLOTH 02_ambient_occlusion.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu SprintIn.anim
+- Assets/HenryAssets/Materials/Saraana/ITEMS/GIRL _ITEMS _Height.jpg
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/GIRL _CLOTH 02_Height.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Jump.anim
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/CLOTH 02_curvature.jpg
+- Assets/HenryAssets/PersonaEffect.prefab
+- Assets/HenryAssets/NSMEffects.prefab
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/cloth 01_ambient_occlusion.jpg
+- Assets/HenryAssets/Sprites/lightpng.png
+- Assets/HenryAssets/Materials/Ururuu/BODY/U Hair.mat
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana SprintIn.anim
+- Assets/HenryAssets/Materials/Saraana/ITEMS/GIRL _ITEMS _BaseColor.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/S AxiomLoop1.anim
+- Assets/HenryAssets/Materials/Ururuu/SHOE/U Shoe.mat
+- Assets/HenryAssets/Sprites/Utility1.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana SprintOut.anim
+- Assets/HenryAssets/Materials/Ururuu/HAND ITEMS/GIRL _Hand Item_Metallic.jpg
+- Assets/HenryAssets/Sprites/RoU.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Jump.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/S Cast 3.anim
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/cloth 01_thickness.jpg
+- Assets/HenryAssets/ShadowFlame.prefab
+- Assets/HenryAssets/Sprites/Atuy2.png
+- Assets/HenryAssets/Materials/Ururuu/BODY/hair .jpg
+- Assets/HenryAssets/Materials/Ururuu/SHOE/GIRL _SHOE_Metallic.jpg
+- Assets/HenryAssets/Materials/Ururuu/HAND ITEMS/U Hand Items.mat
+- Assets/HenryAssets/Materials/Ururuu/SHOE/GIRL _SHOE_BaseColor.jpg
+- Assets/HenryAssets/Sprites/HonokasVeil.png
+- Assets/HenryAssets/Sprites/Atuy.png
+- Assets/HenryAssets/TwinsSkin.png
+- Assets/HenryAssets/ImportFromBlender/S newer.fbx
+- Assets/HenryAssets/Sprites/lightpng2.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Land.anim
+- Assets/HenryAssets/Sprites/texRampWoshis.png
+- Assets/HenryAssets/Sprites/texRampGhost.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu AscendDescend.anim
+- Assets/HenryAssets/mdlKamunagi.prefab
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/S Cast 2.anim
+- Assets/HenryAssets/Sprites/firepng.png
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/cloth 01_curvature.jpg
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/GIRL _CLOTH 02_Metallic.jpg
+- Assets/HenryAssets/Sprites/Mikazuchi.png
+- Assets/HenryAssets/Materials/Ururuu/BODY/Body _id.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U Channel.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu NSM.anim
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth 01_BaseColor.jpg
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/GIRL _cloth 01_Normal.jpg
+- Assets/HenryAssets/Materials/Ururuu/SHOE/GIRL _SHOE_Height.jpg
+- Assets/HenryAssets/matSummon2.mat
+- Assets/HenryAssets/Sprites/Mothmoth.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana AscendDescend.anim
+- Assets/HenryAssets/ImportFromBlender/S_nsm.fbx
+- Assets/HenryAssets/summon-p2.mesh
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Run New.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U spin_DoubleSpinAttack.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U Cast 2.anim
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth alpha.jpg
+- Assets/HenryAssets/Twins.png
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/S Cloth 1.mat
+- Assets/HenryAssets/MagicFlame.prefab
+- Assets/HenryAssets/Materials/Ururuu/ITEMS/GIRL _ITEMS _BaseColor.jpg
+- Assets/HenryAssets/Materials/Ururuu/BODY/GIRL _Body _Normal.jpg
+- Assets/HenryAssets/Materials/Saraana/ITEMS/GIRL _ITEMS _Metallic.jpg
+- Assets/HenryAssets/Materials/Saraana/BODY/Hair_.jpg
+- Assets/HenryAssets/Materials/Saraana/BODY/GIRL _Body _Height.jpg
+- Assets/HenryAssets/Materials/Ururuu/HAND ITEMS/GIRL _Hand Item_Roughness.jpg
+- Assets/HenryAssets/Materials/Ururuu/ITEMS/GIRL _ITEMS _Normal.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Sprint Loop.anim
+- Assets/HenryAssets/ImportFromBlender/U StartAxiom.anim
+- Assets/HenryAssets/Materials/Saraana/BODY/Body _ambient_occlusion.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U Cast 3.anim
+- Assets/HenryAssets/LaserMuzzle.prefab
+- Assets/HenryAssets/ImportFromBlender/U newer.fbx
+- Assets/HenryAssets/Materials/Saraana/SHOE/S Shoe.mat
+- Assets/HenryAssets/FrostMuzzle.prefab
+- Assets/HenryAssets/Materials/Saraana/BODY/GIRL _Body _Metallic.jpg
+- Assets/HenryAssets/Materials/Saraana/ITEMS/GIRL _ITEMS _Roughness.jpg
+- Assets/HenryAssets/Sprites/CurseScroll.png
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/GIRL _CLOTH 02_Normal.jpg
+- Assets/HenryAssets/Materials/Ururuu/BODY/Body _curvature.jpg
+- Assets/HenryAssets/Sprites/Special1.png
+- Assets/HenryAssets/Sprites/Uitsalnemetia.png
+- Assets/HenryAssets/Sprites/Mashiro.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu 3ChainAttack.anim
+- Assets/HenryAssets/ImportFromBlender/U Test.fbx
+- Assets/HenryAssets/ImportFromBlender/PrefabRootModels/Saraana_Girl2.fbx
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/GIRL _CLOTH 02_Roughness.jpg
+- Assets/HenryAssets/Sprites/Woshis2.png
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/GIRL _CLOTH 02_Metallic.jpg
+- Assets/HenryAssets/KamunagiChains.prefab
+- Assets/HenryAssets/Materials/Saraana/BODY/Body _curvature.jpg
+- Assets/HenryAssets/Materials/Saraana/BODY/GIRL _Body _Roughness.jpg
+- Assets/HenryAssets/Sprites/Flashbang.png
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/GIRL _cloth 01_Height.jpg
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth 01_Metallic.jpg
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/U Cloth 1.mat
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/S Cast 1.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana NSM.anim
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth 01_Normal.jpg
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/GIRL _CLOTH 02 alpha.jpg
+- Assets/HenryAssets/Materials/Ururuu/BODY/Body _thickness.jpg
+- Assets/HenryAssets/Materials/Ururuu/BODY/GIRL _Body _Roughness.jpg
+- Assets/HenryAssets/Materials/Ururuu/BODY/GIRL _Body _Height.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana SprintOut 567.anim
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/CLOTH 02_thickness.jpg
+- Assets/HenryAssets/Sprites/Special2.png
+- Assets/HenryAssets/Materials/Ururuu/BODY/U Body.mat
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu SprintOut.anim
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth 01_Height.jpg
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/GIRL _CLOTH 02_BaseColor.jpg
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/cloth 01_thickness.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Sprint Loop.anim
+- Assets/HenryAssets/Materials/Saraana/BODY/Body _thickness.jpg
+- Assets/HenryAssets/Materials/Ururuu/BODY/Body _ambient_occlusion.jpg
+- Assets/HenryAssets/ImportFromBlender/PrefabRootModels/Ururuu_Girl1.fbx
+- Assets/HenryAssets/Materials/Saraana/ITEMS/GIRL _ITEMS _Normal.jpg
+- Assets/HenryAssets/ImportFromBlender/animHenryMenu.controller
+- Assets/HenryAssets/Sprites/Nugwisomkami.png
+- Assets/HenryAssets/Materials/Ururuu/ITEMS/GIRL _ITEMS _Roughness.jpg
+- Assets/HenryAssets/Sprites/purpleramp.png
+- Assets/HenryAssets/Materials/Ururuu/HAND ITEMS/GIRL _Hand Item_Normal.jpg
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/CLOTH 02_curvature.jpg
+- Assets/HenryAssets/Sprites/RekkaSohazen.png
+- Assets/HenryAssets/MikazuchiMuzzle.prefab
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Dodge.anim
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/GIRL _cloth 01_Roughness.jpg
+- Assets/HenryAssets/Sprites/SoeiMusou.png
+- Assets/HenryAssets/Sprites/darkpng2.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Land.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Attack.anim
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/GIRL _CLOTH 02_Height.jpg
+- Assets/HenryAssets/Sprites/firepng2.png
+- Assets/HenryAssets/Sprites/Frost.png
+- Assets/HenryAssets/ImportFromBlender/U_nsm.fbx
+- Assets/HenryAssets/Sprites/windpng2.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/S Channel.anim
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/GIRL _CLOTH 02_BaseColor.jpg
+- Assets/HenryAssets/Materials/Saraana/BODY/GIRL _Body _Normal.jpg
+- Assets/HenryAssets/Materials/Ururuu/ITEMS/GIRL _ITEMS _Metallic.jpg
+- Assets/HenryAssets/Materials/Ururuu/SHOE/GIRL _SHOE_Roughness.jpg
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/cloth 01_curvature.jpg
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/GIRL _cloth 01_BaseColor.jpg
+- Assets/HenryAssets/Sprites/no-type2.png
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/MasterFile B.fbx
+- Assets/HenryAssets/skillTrail.shader
+- Assets/HenryAssets/skillSwingTrailComboRev.shader
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/GIRL _cloth 01_Metallic.jpg
+- Assets/HenryAssets/Materials/Saraana/ITEMS/S Items.mat
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Spin1.anim
+- Assets/HenryAssets/Stuff.prefab
+- Assets/HenryAssets/Materials/Saraana/SHOE/GIRL _SHOE_Height.jpg
+- Assets/HenryAssets/Sprites/Atuy3.png
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/U Cloth 2.mat
+- Assets/HenryAssets/Materials/Ururuu/ITEMS/U Items.mat
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Spin1.anim
+- Assets/HenryAssets/Sprites/Denebokshiri.png
+- Assets/HenryAssets/0b6947f0.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Idle.anim
+- Assets/HenryAssets/Materials/Saraana/BODY/Body _id.jpg
+- Assets/HenryAssets/Sprites/no-type.png
+- Assets/HenryAssets/Sprites/NameTBD.png
+- Assets/HenryAssets/Materials/Saraana/BODY/S Hair.mat
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/GIRL _CLOTH 02_Normal.jpg
+- Assets/HenryAssets/ImportFromBlender/animHenry Experimental.controller
+- Assets/HenryAssets/Materials/Ururuu/HAND ITEMS/GIRL _Hand Item_Height.jpg
+- Assets/HenryAssets/Sprites/SummonSpirits.png
+- Assets/HenryAssets/Sprites/waterpng.png
+- Assets/HenryAssets/Sprites/SobuGekishoha.png
+- Assets/HenryAssets/Sprites/geyserRemapTex.png
+- Assets/HenryAssets/ImportFromBlender/animHenry.controller
+- Assets/HenryAssets/Sprites/waterpng2.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/Ururuu Dodge.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U Cast 1.anim
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/CLOTH 02_ambient_occlusion.jpg
+- Assets/HenryAssets/Materials/Saraana/S Hand Items.mat
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 01/GIRL _cloth 01_Roughness.jpg
+- Assets/HenryAssets/MusouChargeEffect.prefab
+- Assets/HenryAssets/Sprites/Woshis.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Run New.anim
+- Assets/HenryAssets/CherryBlossom.prefab
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/CLOTH 02_thickness.jpg
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/GIRL _CLOTH 02_Roughness.jpg
+- Assets/HenryAssets/Materials/Saraana/SHOE/GIRL _SHOE_Metallic.jpg
+- Assets/HenryAssets/Materials/Ururuu/BODY/GIRL _Body _Metallic.jpg
+- Assets/HenryAssets/MikazuchiMuzzleOld.prefab
+- Assets/HenryAssets/Materials/Saraana/SHOE/GIRL _SHOE_Normal.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana Idle.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U Sprint Full.anim
+- Assets/HenryAssets/Sprites/earthpng2.png
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/S Sprint Full.anim
+- Assets/HenryAssets/ImportFromBlender/Anims/Ururuu/U AxiomLoop.anim
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/GIRL _cloth alpha.jpg
+- Assets/HenryAssets/ImportFromBlender/Anims/Saraana/Saraana 3ChainAttack.anim
+- Assets/HenryAssets/Materials/Ururuu/SHOE/GIRL _SHOE_Normal.jpg
+- Assets/HenryAssets/Materials/Saraana/CLOTH 02/S Cloth 2.mat
+- Assets/HenryAssets/skillSparkle.shader
+- Assets/HenryAssets/Materials/Saraana/SHOE/GIRL _SHOE_BaseColor.jpg
+- Assets/HenryAssets/Materials/Saraana/BODY/S Body.mat
+- Assets/HenryAssets/Sprites/SummonTatari.png
+- Assets/HenryAssets/Materials/Ururuu/CLOTH 02/GIRL _CLOTH 02_ ALPHA.jpg
+- Assets/HenryAssets/Materials/Saraana/SHOE/GIRL _SHOE_Roughness.jpg
+- Assets/HenryAssets/Sprites/Jachdwalt.png
+- Assets/HenryAssets/Materials/Ururuu/HAND ITEMS/GIRL _Hand Item_BaseColor.jpg
+- Assets/HenryAssets/Materials/Saraana/CLOTH 01/cloth 01_ambient_occlusion.jpg
+- Assets/HenryAssets/Materials/Ururuu/ITEMS/GIRL _ITEMS _Height.jpg
+Dependencies: []

@@ -110,6 +110,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			UnityEngine.Object.Destroy(effect.transform.GetChild(3).gameObject);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(4).gameObject);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(5).gameObject);
+			effect.EffectWithSound("");
 			return effect;
 		}
 

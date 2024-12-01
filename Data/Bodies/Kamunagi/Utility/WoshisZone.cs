@@ -46,6 +46,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override float duration => 0.45f;
 		public override float failedCastCooldown => 0f;
 		public override float indicatorScale => 10f;
+		public override int meterGain => 0;
 
 		public override void Fire(Vector3 targetPosition)
 		{

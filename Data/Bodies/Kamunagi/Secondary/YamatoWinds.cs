@@ -222,7 +222,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			UnityEngine.Object.Destroy(spaghet.GetComponent<ProjectileNetworkTransform>());
 			UnityEngine.Object.Destroy(spaghet.GetComponent<NetworkIdentity>());
 			UnityEngine.Object.Destroy(spaghet.GetComponent<Rigidbody>());
-			UnityEngine.Object.Destroy(spaghet.GetComponent<BoxCollider>());
+			UnityEngine.Object.Destroy(spaghet.GetComponent<BoxCollider>()); //ordered properly
 			spaghet.transform.SetParent(effect.transform);
 			return effect;
 		}

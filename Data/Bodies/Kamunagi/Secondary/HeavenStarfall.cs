@@ -16,7 +16,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	public class HeavenStarfallState : AimThrowableBase
 	{
 		public float airstrikeRadius = 20f;
-		public static string fireAirstrikeSoundString;
+		public static string fireAirstrikeSoundString = "Play_seeker_skill1_fire_orb";
 		public static GameObject star;
 
 		public override void OnEnter()
@@ -35,7 +35,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			base.characterBody.SetAimTimer(4f);
 		}
 
 		public override void OnExit()
@@ -69,7 +68,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	}
 
 	[HarmonyPatch]
-	public class HeavenStarfall : Concentric, ISkill, IEffect, IProjectile, IProjectileGhost
+	public class HeavenStarfall : Concentric, ISkill, IEffect, IProjectile, IProjectileGhost, IMaterial
 	{
 		public override async Task Initialize()
 		{
@@ -78,7 +77,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		}
 		
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(HeavenStarfallState) };
-		
+
+		async Task<Material> IMaterial.BuildObject()
+		{
+			var material = new Material(await LoadAsset<Material>("RoR2/Base/Captain/matCaptainAirstrikeCore.mat"));
+			material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
+			material.SetFloat("_SrcBlend", 1f);
+			material.SetFloat("_DstBlend", 1f);
+			material.SetFloat("_Boost", 20f);
+			material.SetFloat("_AlphaBoost", 2.05f);
+			material.SetFloat("_AlphaBias", 0f);
+			material.name = "bright";
+			return material;
+		}
+
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
@@ -104,7 +116,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/Captain/CaptainAirstrikeProjectile1.prefab"))!.InstantiateClone("TwinsCometProjectile", true);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
-			proj.GetComponent<ProjectileImpactExplosion>().lifetime = 2.5f;
+			proj.GetComponent<ProjectileImpactExplosion>().lifetime = 1.3f;
+			proj.GetComponent<ProjectileImpactExplosion>().impactEffect = await GetEffect<StarImpact>();
 			return proj;
 		}
 
@@ -113,25 +126,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var ghost = (await LoadAsset<GameObject>("RoR2/Base/Captain/CaptainAirstrikeGhost1.prefab"))!.InstantiateClone("TwinsCometGhost", false);
 			var fallingStarParent = ghost.transform.GetChild(2).gameObject; //airstrike
 			var fallingStar = fallingStarParent.transform.GetChild(0).gameObject; //fallingprojectile
-			fallingStar.GetComponent<ObjectTransformCurve>().timeMax = 2.5f;
+			fallingStar.GetComponent<ObjectTransformCurve>().timeMax = 1.3f;
 			//I'm being lazy again and copy-pasting this :haha: 
 			var darkStarCore = (await GetProjectileGhost<PrimedStickyBomb>())!.InstantiateClone("DarkStarCore", false);
 			var trash = darkStarCore.transform.Find("Scaler/GameObject").gameObject;
+			var trash2 = ghost.transform.Find("Expander/Sphere, Inner Expanding").gameObject;
 			UnityEngine.Object.Destroy(trash);
+			UnityEngine.Object.Destroy(trash2);
 			UnityEngine.Object.Destroy(darkStarCore.GetComponent<ProjectileGhostController>());
 			UnityEngine.Object.Destroy(darkStarCore.GetComponent<VFXAttributes>());
 			UnityEngine.Object.Destroy(darkStarCore.GetComponent<EffectManagerHelper>());
 			darkStarCore.transform.SetParent(fallingStar.transform);
 			darkStarCore.transform.localPosition = Vector3.zero;
-
 			Material rings = new Material(await LoadAsset<Material>("RoR2/DLC2/Child/matChildStarGlow.mat"));
 			rings.SetFloat("_DstBlend", 10f);
 			rings.SetColor("_TintColor", new Color32(0, 150, 255, 160));
-			Material bright = new Material(await LoadAsset<Material>("RoR2/Base/Captain/matCaptainAirstrikeCore.mat"));
-			bright.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
-			bright.SetFloat("_SrcBlend", 1f);
-			bright.SetFloat("_DstBlend", 1f);
-			bright.name = "bright";
 			Material glow = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matGlow1.mat"));
 			glow.SetColor("_TintColor", new Color32(35, 0, 255, 128));
 			glow.name = "glow";
@@ -143,10 +152,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 						r.material = rings;
 						break;
 					case "BrightFlash":
-						r.material = bright;
+						r.material = await this.GetMaterial();
 						break;
 					case "BrightFlash (1)":
-						r.material = bright;
+						r.material = await this.GetMaterial();
 						break;
 					case "Soft Glow":
 						r.material = glow;
@@ -159,6 +168,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			trailR.material.SetColor("_TintColor", new Color32(1, 16, 232, 255));
 			trailR.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampGhost.png"));
 			trailR.material.SetFloat("_Boost", 6.2f);
+			var sofuckingtired = ghost.transform.Find("Expander/AreaIndicatorCenter/Rings").gameObject;
+			Material ugh = new Material(await LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierStarParticle.mat"));
+			ugh.DisableKeyword("VERTEXCOLOR");
+			ugh.SetColor("_TintColor", new Color32(127, 0, 255, 255));
+			ugh.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampBottledChaos.png"));
+			ugh.name = "holyfuck";
+			sofuckingtired.GetComponent<ParticleSystemRenderer>().material = ugh;
 			return ghost;
 		}
 		
@@ -166,6 +182,45 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			var effect = (await LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorChargeMegaBlaster.prefab"))!.InstantiateClone("TwinsLight5Muzzle", false);
 			effect.EffectWithSound("");
+			return effect;
+		}
+	}
+
+	public class StarImpact : Concentric, IEffect
+	{
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			var effect = (await LoadAsset<GameObject>("RoR2/Base/Captain/CaptainAirstrikeImpact1.prefab"))!.InstantiateClone("StarImpactEffect", false);
+			var particles = effect.transform.GetChild(1).gameObject;
+			UnityEngine.Object.Destroy(particles.transform.GetChild(2).gameObject);
+			UnityEngine.Object.Destroy(particles.transform.GetChild(1).gameObject);
+			UnityEngine.Object.Destroy(particles.transform.GetChild(3).gameObject);
+			UnityEngine.Object.Destroy(particles.transform.GetChild(5).gameObject);
+			UnityEngine.Object.Destroy(particles.transform.GetChild(7).gameObject);
+			var remapped1 = particles.transform.GetChild(4).gameObject;
+			var remapped2 = remapped1.transform.GetChild(0).gameObject;
+			remapped1.GetComponent<ParticleSystemRenderer>().material = await GetMaterial<HeavenStarfall>();
+			remapped2.GetComponent<ParticleSystemRenderer>().material = await GetMaterial<HeavenStarfall>();
+			effect.transform.GetChild(0).gameObject.GetComponent<Light>().color = Color.blue;
+			
+			var haha = (await GetGenericObject<PurpleSparks>())!.InstantiateClone("PurpleSparks", false);
+			haha.transform.SetParent(effect.transform);
+			return effect;
+		}
+	}
+
+	public class PurpleSparks : Concentric, IGenericObject
+	{
+		async Task<GameObject> IGenericObject.BuildObject()
+		{
+			var effect = (await GetEffect<ReaverExplosion>())!.InstantiateClone("DebugSparks", false);
+			UnityEngine.Object.Destroy(effect.GetComponent<EffectComponent>());
+			UnityEngine.Object.Destroy(effect.GetComponent<VFXAttributes>());
+			UnityEngine.Object.Destroy(effect.GetComponent<ShakeEmitter>());
+			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
+			UnityEngine.Object.Destroy(effect.transform.GetChild(3).gameObject);
+			UnityEngine.Object.Destroy(effect.transform.GetChild(4).gameObject);
+			UnityEngine.Object.Destroy(effect.transform.GetChild(5).gameObject);
 			return effect;
 		}
 	}

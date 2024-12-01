@@ -71,7 +71,7 @@
 	  "NINES_KAMUNAGI_BODY_UTILITY3_DESCRIPTION": "Produce a <style=cIsUtility>miasma</style> at the targeted area. Enemies that die inside the <style=cIsUtility>miasma</style> have their souls <style=cIsUtility>bound to you</style> temporarily.",
 
 	  "NINES_KAMUNAGI_BODY_SPECIAL0_NAME": "Sobu Gekishoha",
-	  "NINES_KAMUNAGI_BODY_SPECIAL0_DESCRIPTION": "Unleash a <color=#4d108f>great roar of darkness</color> for <style=cIsDamage>9800%</style> total <style=cIsDamage>damage</style>.",
+	  "NINES_KAMUNAGI_BODY_SPECIAL0_DESCRIPTION": "Unleash a <color=#4d108f>great roar of darkness</color> for <style=cIsDamage>9800%</style> total <style=cIsDamage>damage</style>. Surviving enemies are <style=cIsDamage>marked for death</style>.",
 	  "NINES_KAMUNAGI_BODY_SPECIAL1_NAME": "The Great Sealing",
 	  "NINES_KAMUNAGI_BODY_SPECIAL1_DESCRIPTION": "Mark an area to be sealed after <style=cIsUtility>2.5s</style>. Once primed, the seal activates, dealing <style=cIsDamage>650% damage</style>. Enemies below <style=cIsHealth>20% health are executed</style>.",
 	  "NINES_KAMUNAGI_BODY_SPECIAL2_NAME": "Light of Nature's Axiom",

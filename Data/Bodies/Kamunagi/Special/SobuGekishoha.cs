@@ -2,6 +2,7 @@
 using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
+using Rewired.Demos;
 using RoR2;
 using RoR2.Skills;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		private float duration = 5;
 		private float stopwatch;
-		private float damageCoefficient = 5;
+		private float damageCoefficient = 6f;
 		private Transform centerFarMuzzle;
 		private EffectManagerHelper voidSphereMuzzle;
 		private EffectManagerHelper darkSigilEffect;
@@ -96,28 +97,29 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			if (!isAuthority) return;
 			var aimRay = GetAimRay();
-			new BulletAttack
-			{
-				maxDistance = 180f,
-				stopperMask = LayerIndex.noCollision.mask,
-				owner = gameObject,
-				weapon = gameObject,
-				origin = aimRay.origin,
-				aimVector = aimRay.direction,
-				minSpread = 0,
-				maxSpread = 0.4f,
-				bulletCount = 1U,
-				damage = damageStat * damageCoefficient,
-				force = 155,
-				tracerEffectPrefab = null,
-				muzzleName = twinMuzzle,
-				hitEffectPrefab= hitEffectPrefab,
-				isCrit = RollCrit(),
-				radius = 0.2f,
-				procCoefficient = 0.35f,
-				smartCollision = true,
-				damageType = DamageType.Generic
-			}.Fire();
+			
+			BulletAttack bullet = new BulletAttack();
+			bullet.maxDistance = 180f;
+			bullet.stopperMask = LayerIndex.noCollision.mask;
+			bullet.owner = gameObject;
+			bullet.weapon = gameObject;
+			bullet.origin = aimRay.origin;
+			bullet.aimVector = aimRay.direction;
+			bullet.minSpread = 0;
+			bullet.maxSpread = 0.4f;
+			bullet.bulletCount = 1U;
+			bullet.damage = damageStat * damageCoefficient;
+			bullet.force = 155;
+			bullet.tracerEffectPrefab = null;
+			bullet.muzzleName = twinMuzzle;
+			bullet.hitEffectPrefab= hitEffectPrefab;
+			bullet.isCrit = RollCrit();
+			bullet.radius = 0.2f;
+			bullet.procCoefficient = 0.35f;
+			bullet.smartCollision = true;
+			bullet.damageType = DamageType.Generic;
+			bullet.AddModdedDamageType(KamunagiOfChainsPlugin.SobuGekishoha);
+			bullet.Fire();
 		}
 
 		public static GameObject hitEffectPrefab;
@@ -234,6 +236,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (__instance.HasBuff(GetBuffDef<SobuGekishoha>().WaitForCompletion()))
 			{
 				__instance.armor += 490f;
+			}
+		}
+		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
+		{
+			if (damageInfo.HasModdedDamageType(KamunagiOfChainsPlugin.SobuGekishoha))
+			{
+				if (!__instance.body.HasBuff(RoR2Content.Buffs.DeathMark.buffIndex))
+				{
+					__instance.body.SetBuffCount(RoR2Content.Buffs.DeathMark.buffIndex, 1);
+				}
 			}
 		}
 	}

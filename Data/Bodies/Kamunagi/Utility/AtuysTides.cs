@@ -84,12 +84,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var tidalProjectileGhost =
-				(await LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelGhost.prefab"))!.InstantiateClone(
-					"TidalProjectileGhost", false);
+			var tidalProjectileGhost = (await LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelGhost.prefab"))!.InstantiateClone("TidalProjectileGhost", false);
 			tidalProjectileGhost.transform.localScale = Vector3.one * 0.5f;
 			var gPsr = tidalProjectileGhost.GetComponentInChildren<ParticleSystemRenderer>();
-			var material = new Material(gPsr.material);
+			var material = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matBloodClayLarge.mat"));
 			material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("kamunagiassets:geyserRemapTex"));
 			material.SetColor("_Color", Colors.oceanColor);
 			material.SetFloat("_AlphaCutoff", 0.13f);
@@ -171,7 +169,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				(await LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierMortarExplosion.prefab"))!.InstantiateClone(
 					"TidalEruptionEffect", false);
 			var eruptionDecal = tidalEruptionEffect.GetComponentInChildren<Decal>();
-			var eruptionDecalMaterial = new Material(eruptionDecal.Material);
+			var eruptionDecalMaterial = new Material(await LoadAsset<Material>("RoR2/DLC1/ClayGrenadier/matClayGooDecalMediumSplat.mat"));
 			eruptionDecalMaterial.SetTexture("_RemapTex",
 				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning2.png"));
 			eruptionDecal.Material = eruptionDecalMaterial;
@@ -260,20 +258,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var tidalImpactEffect = (await LoadAsset<GameObject>("RoR2/DLC1/ClayGrenadier/ClayGrenadierBarrelExplosion.prefab"))!.InstantiateClone("TidalImpactEffect", false);
 			tidalImpactEffect.transform.localScale = Vector3.one * 3f;
 			var giDecal = tidalImpactEffect.GetComponentInChildren<Decal>();
-			var giDecalMaterial = new Material(giDecal.Material);
+			var giDecalMaterial = new Material(await LoadAsset<Material>("RoR2/DLC1/ClayGrenadier/matClayGooDecalMediumSplat.mat"));
 			giDecalMaterial.SetTexture("_RemapTex",
 				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning2.png"));
 			giDecal.Material = giDecalMaterial;
 			var geyserParticles = tidalImpactEffect.GetComponentsInChildren<ParticleSystemRenderer>();
 			geyserParticles[0].enabled = false;
 
-			var geyserParticlesMat = new Material(geyserParticles[1].material);
+			var geyserParticlesMat = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matBloodClayLarge.mat"));
 			geyserParticlesMat.SetTexture("_RemapTex",
 				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning2.png"));
 			geyserParticlesMat.SetFloat("_Cutoff", 0.38f);
 			geyserParticles[1].material = geyserParticlesMat;
 
-			var geyserParticles2Mat = new Material(geyserParticles[2].material);
+			var geyserParticles2Mat = new Material(await LoadAsset<Material>("RoR2/Base/ClayBoss/matGooTrailLegs.mat"));
 			geyserParticles2Mat.SetTexture("_RemapTex",
 				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning2.png"));
 			geyserParticles[2].material = geyserParticles2Mat;

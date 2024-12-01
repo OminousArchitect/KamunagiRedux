@@ -28,7 +28,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			maxDistance = 1000f;
 			rayRadius = 0.2f;
 			endpointVisualizerPrefab = EntityStates.Huntress.ArrowRain.areaIndicatorPrefab;
-			damageCoefficient = 10f;
+			damageCoefficient = 9f;
 			baseMinimumDuration = 1f;
 		}
 
@@ -202,25 +202,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			remapped1.GetComponent<ParticleSystemRenderer>().material = await GetMaterial<HeavenStarfall>();
 			remapped2.GetComponent<ParticleSystemRenderer>().material = await GetMaterial<HeavenStarfall>();
 			effect.transform.GetChild(0).gameObject.GetComponent<Light>().color = Color.blue;
-			
-			var haha = (await GetGenericObject<PurpleSparks>())!.InstantiateClone("PurpleSparks", false);
-			haha.transform.SetParent(effect.transform);
-			return effect;
-		}
-	}
-
-	public class PurpleSparks : Concentric, IGenericObject
-	{
-		async Task<GameObject> IGenericObject.BuildObject()
-		{
-			var effect = (await GetEffect<ReaverExplosion>())!.InstantiateClone("DebugSparks", false);
-			UnityEngine.Object.Destroy(effect.GetComponent<EffectComponent>());
-			UnityEngine.Object.Destroy(effect.GetComponent<VFXAttributes>());
-			UnityEngine.Object.Destroy(effect.GetComponent<ShakeEmitter>());
-			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
-			UnityEngine.Object.Destroy(effect.transform.GetChild(3).gameObject);
-			UnityEngine.Object.Destroy(effect.transform.GetChild(4).gameObject);
-			UnityEngine.Object.Destroy(effect.transform.GetChild(5).gameObject);
 			return effect;
 		}
 	}

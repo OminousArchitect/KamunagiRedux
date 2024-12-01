@@ -58,6 +58,7 @@ namespace KamunagiOfChains
 		public static DamageAPI.ModdedDamageType TwinsReaver;
 		public static DamageAPI.ModdedDamageType Uitsalnemetia;
 		public static DamageAPI.ModdedDamageType CurseFlames;
+		public static DamageAPI.ModdedDamageType SobuGekishoha;
 
 		public void Awake()
 		{
@@ -88,7 +89,7 @@ namespace KamunagiOfChains
 			TwinsReaver = DamageAPI.ReserveDamageType();
 			Uitsalnemetia = DamageAPI.ReserveDamageType();
 			CurseFlames = DamageAPI.ReserveDamageType();
-
+			SobuGekishoha = DamageAPI.ReserveDamageType();
 
 			log.LogDebug("Loading Concentric Bundle");
 

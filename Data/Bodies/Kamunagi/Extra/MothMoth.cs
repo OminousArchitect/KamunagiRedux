@@ -1,5 +1,6 @@
 using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
 using R2API;
 using RoR2;
 using RoR2.Skills;
@@ -12,6 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class SummonMothMoth : BaseTwinState
 	{
 		private float duration = 0.55f;
+		public static GameObject effect;
 
 		public override void OnEnter()
 		{
@@ -24,6 +26,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				ward.GetComponent<TeamFilter>().teamIndex = teamComponent.teamIndex;
 				NetworkServer.Spawn(ward);
 			}
+			EffectManager.SpawnEffect(effect, new EffectData { origin = characterBody.corePosition, scale = characterBody.bestFitRadius }, true);
 		}
 
 		public override void FixedUpdate()
@@ -38,7 +41,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
-	public class MothMoth : Concentric, INetworkedObject, ISkill
+	public class MothMoth : Concentric, INetworkedObject, ISkill, IEffect
 	{
 		private static readonly int Cull = Shader.PropertyToID("_Cull");
 		private static readonly int Color = Shader.PropertyToID("_Color");
@@ -47,6 +50,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		private static readonly int PrintRamp = Shader.PropertyToID("_PrintRamp");
 		private static readonly int RemapTex = Shader.PropertyToID("_RemapTex");
 		private static readonly int TintColor = Shader.PropertyToID("_TintColor");
+
+		public override async Task Initialize()
+		{
+			await base.Initialize();
+			SummonMothMoth.effect = await this.GetEffect();
+		}
 
 		async Task<GameObject> INetworkedObject.BuildObject()
 		{
@@ -91,6 +100,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			mothMoth.GetComponent<BuffWard>().radius = 2.8f;
 			mothMoth.AddComponent<DestroyOnTimer>().duration = 10;
 			return mothMoth;
+		}
+
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			var effect = (await GetEffect<ReaverExplosion>())!.InstantiateClone("DebugSparks", false);
+			UnityEngine.Object.Destroy(effect.GetComponent<ShakeEmitter>());
+			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
+			UnityEngine.Object.Destroy(effect.transform.GetChild(3).gameObject);
+			UnityEngine.Object.Destroy(effect.transform.GetChild(4).gameObject);
+			UnityEngine.Object.Destroy(effect.transform.GetChild(5).gameObject);
+			return effect;
 		}
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(SummonMothMoth) };

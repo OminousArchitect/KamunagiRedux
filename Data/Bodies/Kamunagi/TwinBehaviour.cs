@@ -2,6 +2,7 @@
 using ExtraSkillSlots;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
 using RoR2;
 using RoR2.Networking;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public bool componentAddedToMaster;
 		public CharacterBody body;
 		public ExtraSkillLocator extraLocator;
+		public ModelLocator mdlL;
+		public ChildLocator childL;
 		private int _zealMeter;
 		public int maxZeal = 80;
 		public bool alternateSkills;
@@ -55,6 +58,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			extra.SetSkillOverride(this, body.skillLocator.allSkills[9].skillDef, GenericSkill.SkillOverridePriority.Contextual);
 			body.skillLocator.ResetSkills();
 			extraLocator.extraFourth.Reset();
+			
+			Vector3 ururuu = childL.transformPairs[22].transform.position;
+			EffectManager.SpawnEffect(Concentric.GetEffect<Overzeal>().WaitForCompletion(), new EffectData
+			{
+				origin = ururuu,
+				scale = 1f
+			}, transmit: true);
 		}
 
 		private void UnsetOverrides()
@@ -71,6 +81,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			extra.UnsetSkillOverride(this, body.skillLocator.allSkills[9].skillDef, GenericSkill.SkillOverridePriority.Contextual);
 			body.skillLocator.ResetSkills();
 			extraLocator.extraFourth.Reset();
+
+			Vector3 saraana = childL.transformPairs[23].transform.position;
+			EffectManager.SpawnEffect(Concentric.GetEffect<Overzeal>().WaitForCompletion(), new EffectData
+			{
+				origin = saraana,
+				scale = 1
+			}, transmit: true);
 		}
 
 		public string twinMuzzle
@@ -88,6 +105,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		{
 			body = GetComponent<CharacterBody>();
 			extraLocator = GetComponent<ExtraSkillLocator>();
+			mdlL = GetComponent<ModelLocator>();
+			childL = mdlL.modelTransform.GetComponent<ChildLocator>();
 			foreach (var esm in body.GetComponents<EntityStateMachine>())
 			{
 				esm.nextStateModifier += ModifyNextState;

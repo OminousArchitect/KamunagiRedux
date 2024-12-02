@@ -15,7 +15,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		private float duration = 5;
 		private float stopwatch;
-		private float damageCoefficient = 6f;
+		private float damageCoefficient = 5.7f;
 		private Transform centerFarMuzzle;
 		private EffectManagerHelper voidSphereMuzzle;
 		private EffectManagerHelper darkSigilEffect;

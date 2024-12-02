@@ -91,8 +91,8 @@
 	  "NINES_KAMUNAGI_BODY_EXTRA6_DESCRIPTION": "Offer <style=cIsHealth>25% of your life force</style> in a prayer to <style=cIsDamage>Lord Mashiro</style>. Once finished, you are granted a <style=cIsDamage>blessing</style> for the next <style=cIsUtility>30 seconds</style>. If you <style=cIsHealth>perish</style> while under the effect of a <style=cIsDamage>blessing</style>, you are <style=cIsDamage>reincarnated</style>. <style=cIsUtility>Taking damage will interrupt the prayer</style>.",
 	  "NINES_KAMUNAGI_BODY_EXTRA7_NAME": "Summon: Tatari",
 	  "NINES_KAMUNAGI_BODY_EXTRA7_DESCRIPTION": "Summon a <style=cIsDamage>profane coagulation</style> that stuns enemies and <style=cIsUtility>inflicts debuffs</style> the <style=cIsHealth>closer it gets to death</style>.",
-	  "NINES_KAMUNAGI_BODY_EXTRA8_NAME": "Overzeal",
-	  "NINES_KAMUNAGI_BODY_EXTRA8_DESCRIPTION":"Forego using a divine skill and swap zeal instantly.",
+	  "NINES_KAMUNAGI_BODY_EXTRA8_NAME": "Kuko Stimulant",
+	  "NINES_KAMUNAGI_BODY_EXTRA8_DESCRIPTION":"Consume a kuko fruit to <style=cIsDamage>instantly</style> gain maximum <color=#EDA717>Zeal</color>.",
 
 	  "WOSHISGHOST_NAME": "never trust the yaoi artist"
   }

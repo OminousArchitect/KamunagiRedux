@@ -56,8 +56,8 @@
 	  "NINES_KAMUNAGI_BODY_SECONDARY0_DESCRIPTION": "<style=cIsDamage>Ignite</style>. Charge up a slow-moving molten ball that <style=cIsDamage>scorches</style> nearby enemies for <style=cIsDamage>150%-250% damage</style>.",
 	  "NINES_KAMUNAGI_BODY_SECONDARY3_NAME": "Frost of Kujyuri",
 	  "NINES_KAMUNAGI_BODY_SECONDARY3_DESCRIPTION": "<style=cIsUtility>Freezing</style>. Summon a pillar of ice to periodically damage nearby enemies for <style=cIsDamage>???% damage</style>.",
-	  "NINES_KAMUNAGI_BODY_SECONDARY2_NAME": "Winds of Yamato",
-	  "NINES_KAMUNAGI_BODY_SECONDARY2_DESCRIPTION": "<color=#0b9c2d>Wind God's Perfect Defense</color>. Channel the <style=cIsUtility>fortune of the winds</style> for <style=cIsUtility>2s</style>. Fully channel to <style=cIsUtility>decrease all your cooldowns</style> by <style=cIsUtility>2s</style> or <style=cIsDamage>attack</style> to cancel <style=cIsUtility>early</style> and fire a <style=cIsDamage>blade of wind</style>. The blade slices enemies for <style=cIsDamage>???% damage</style> and <style=cIsDamage>returns</style> to you.",
+	  "NINES_KAMUNAGI_BODY_SECONDARY2_NAME": "Winds of Izuruha",
+	  "NINES_KAMUNAGI_BODY_SECONDARY2_DESCRIPTION": "<color=#0b9c2d>Wind God's Perfect Defense</color>. Fire a slicing blade of wind that strikes enemies for <style=cIsDamage>???% damage</style> or fully charge to <style=cIsUtility>decrease all your cooldowns</style> by <style=cIsUtility>2s</style> and gain a speed boost.",
 	  "NINES_KAMUNAGI_BODY_SECONDARY4_NAME": "Illumination of Kotuahamuru",
 	  "NINES_KAMUNAGI_BODY_SECONDARY4_DESCRIPTION": "<style=cIsDamage>Tiriryarai</style>. <style=cIsHealth>10% HP</style>. ? ? ?",
 	  

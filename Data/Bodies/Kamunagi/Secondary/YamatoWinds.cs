@@ -20,12 +20,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	{
 		public override int meterGain => 5;
 		private float damageCoefficient = 2.5f;
-		private const float maxChargeTime = 1.5f;
 		private EffectManagerHelper? chargeEffectInstance;
 		private CameraTargetParams.AimRequest? aimRequest;
 		public static GameObject boomerangPrefab;
 		public static BuffDef parryBuff;
-		private float stopwatch;
+		private float boomerangTimer = 1.5f;
 		private bool hasFired;
 		private bool condition;
 
@@ -50,71 +49,55 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			// this is some real spaghetti because I'm tired of
 			// reworking this skill for the 6th time, please forgive
 			if (!isAuthority) return;
-			if (!IsKeyDownAuthority() || stopwatch >= 0.35f)
+			if (!IsKeyDownAuthority() || fixedAge >= boomerangTimer)
 			{
-				outer.SetNextStateToMain();
-			}
-
-			if (inputBank.skill1.down)
-			{
-				condition = false;
-				stopwatch += Time.fixedDeltaTime;
-				characterBody.SetBuffCount(Concentric.GetBuffIndex<YamatoWinds>().WaitForCompletion(), 0);
-				if (!hasFired)
-				{
-					Fire();
-				}
-			}
-			
-			if (fixedAge > maxChargeTime && condition)
-			{
-				skillLocator.DeductCooldownFromAllSkillsAuthority(2f);
-				characterBody.AddTimedBuffAuthority(RoR2.DLC1Content.Buffs.KillMoveSpeed.buffIndex, 2f);
 				outer.SetNextStateToMain();
 			}
 		}
 
 		private void Fire()
 		{
-			hasFired = true;
-			if (chargeEffectInstance != null)
-			{
-				chargeEffectInstance.ReturnToPool();
-			}
 			var aimRay = GetAimRay();
-
-			if (isAuthority)
+			if (!isAuthority) return;
+			var fireProjectileInfo = new FireProjectileInfo
 			{
-				var fireProjectileInfo = new FireProjectileInfo
-				{
-					crit = RollCrit(),
-					damage = characterBody.damage * damageCoefficient,
-					damageTypeOverride = DamageType.Generic,
-					damageColorIndex = DamageColorIndex.Default,
-					force = 500,
-					owner = gameObject,
-					position = aimRay.origin,
-					procChainMask = default,
-					projectilePrefab = boomerangPrefab,
-					rotation = Quaternion.LookRotation(aimRay.direction),
-					useFuseOverride = false,
-					useSpeedOverride = true,
-					speedOverride = 50,
-					target = null
-				};
-				ProjectileManager.instance.FireProjectile(fireProjectileInfo);
-			}
+				crit = RollCrit(),
+				damage = characterBody.damage * damageCoefficient,
+				damageTypeOverride = DamageType.Generic,
+				damageColorIndex = DamageColorIndex.Default,
+				force = 500,
+				owner = gameObject,
+				position = aimRay.origin,
+				procChainMask = default,
+				projectilePrefab = boomerangPrefab,
+				rotation = Quaternion.LookRotation(aimRay.direction),
+				useFuseOverride = false,
+				useSpeedOverride = true,
+				speedOverride = 50,
+				target = null
+			};
+			ProjectileManager.instance.FireProjectile(fireProjectileInfo);
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
-			aimRequest?.Dispose();
 			if (chargeEffectInstance != null)
 			{
 				chargeEffectInstance.ReturnToPool();
 			}
+			aimRequest?.Dispose();
 			characterBody.SetBuffCount(parryBuff.buffIndex, 0);
+			
+			if (fixedAge <= boomerangTimer)
+			{
+				Fire();
+			}
+			else if (fixedAge >= boomerangTimer)
+			{
+				skillLocator.DeductCooldownFromAllSkillsAuthority(2f);
+				characterBody.AddTimedBuffAuthority(RoR2Content.Buffs.CloakSpeed.buffIndex, 1.5f);
+			}
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.PrioritySkill;
@@ -149,7 +132,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = false;
 			skill.mustKeyPress = true;
-			skill.cancelSprintingOnActivation = true;
+			skill.cancelSprintingOnActivation = false;
 			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSWIND_KEYWORD" };
 			return skill;
 		}

@@ -122,6 +122,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			customGhostItem.descriptionToken = "NINES_WOSHISGHOST_DESC";
 			customGhostItem.loreToken = "NINES_WOSHISGHOST_LORE";
 			customGhostItem.tier = ItemTier.NoTier;
+			customGhostItem.deprecatedTier = ItemTier.NoTier;
 			customGhostItem.pickupIconSprite = await LoadAsset<Sprite>("RoR2/Base/Beetle/texBuffBeetleJuiceIcon.tif");
 			customGhostItem.pickupModelPrefab = await LoadAsset<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab");
 			customGhostItem.canRemove = false;

@@ -196,7 +196,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var projectile = (await LoadAsset<GameObject>("RoR2/DLC1/VoidBarnacle/VoidBarnacleBullet.prefab")!).InstantiateClone("MikazuchiLightningOrbProjectile");
 			var controller = projectile.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
-			controller.procCoefficient = 0.8f;
+			controller.procCoefficient = 1f;
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Shock5s;
 			var lightningImpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightningImpact.impactEffect = await GetEffect<MikazuchiLightningStrike>();
@@ -206,7 +206,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
 			lightpact.blastDamageCoefficient = 1f;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
-			projectile.GetComponent<ProjectileController>().procCoefficient = 0.6f;
+			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
 			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 145f;
 			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
 			var target = projectile.GetComponent<ProjectileDirectionalTargetFinder>();

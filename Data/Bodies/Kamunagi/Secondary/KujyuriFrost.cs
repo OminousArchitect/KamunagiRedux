@@ -187,7 +187,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.mustKeyPress = true;
 			skill.cancelSprintingOnActivation = false;
 			skill.beginSkillCooldownOnSkillEnd = true;
-			skill.baseRechargeInterval = 8f;
+			skill.baseRechargeInterval = 10f;
 			skill.keywordTokens = new[] { "KEYWORD_FREEZING" };
 			return skill;
 		}

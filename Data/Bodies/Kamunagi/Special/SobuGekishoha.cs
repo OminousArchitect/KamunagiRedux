@@ -178,6 +178,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 3;
 			skill.baseRechargeInterval = 6f;
+			skill.requiredStock = 3;
 			skill.stockToConsume = 3;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;

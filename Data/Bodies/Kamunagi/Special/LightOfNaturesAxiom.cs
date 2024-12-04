@@ -98,6 +98,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.baseRechargeInterval = 5f;
 			skill.baseMaxStock = 5;
 			skill.stockToConsume = 5;
+			skill.requiredStock = 5;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = true;
 			skill.interruptPriority = InterruptPriority.Any;

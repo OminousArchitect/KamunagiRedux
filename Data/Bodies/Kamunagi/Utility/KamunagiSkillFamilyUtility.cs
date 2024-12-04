@@ -8,11 +8,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[] 
 			{ 
-				GetAsset<KuonFlashbang>(),
+				GetAsset<Mikazuchi>(),
 				GetAsset<WoshisZone>(), 
 				GetAsset<AtuysTides>(), 
 				GetAsset<JachdwaltStrikes>(),
-				GetAsset<Mikazuchi>(), 
+				GetAsset<KuonFlashbang>(), 
 				GetAsset<HonokasVeil>() 
 			};
 

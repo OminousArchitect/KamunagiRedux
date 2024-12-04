@@ -125,7 +125,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.activationStateMachineName = "Weapon";
 			skill.fullRestockOnAssign = true;
 			skill.baseMaxStock = 2;
-			skill.baseRechargeInterval = 8f;
+			skill.baseRechargeInterval = 5f;
 			skill.stockToConsume = 1;
 			skill.beginSkillCooldownOnSkillEnd = false;
 			skill.canceledFromSprinting = false;

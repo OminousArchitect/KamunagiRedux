@@ -95,7 +95,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL2_DESCRIPTION";
 			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:RoU"));
 			skill.activationStateMachineName = "Body";
-			skill.baseRechargeInterval = 3f;
+			skill.baseRechargeInterval = 5f;
+			skill.baseMaxStock = 5;
+			skill.stockToConsume = 5;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = true;
 			skill.interruptPriority = InterruptPriority.Any;
@@ -181,7 +183,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sunIndicator.material = new Material(sunIndicator.material);
 			sunIndicator.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampPortalVoid.png"));
 			sunIndicator.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
-			sunIndicator.transform.localScale = Vector3.one * 85f; //visual indicator
+			sunIndicator.transform.localScale = Vector3.one * 50f; //visual indicator
 			sunMeshes[2].enabled = false;
 			var sunPP = naturesAxiom.GetComponentInChildren<PostProcessVolume>();
 			sunPP.profile = (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
@@ -563,10 +565,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		private TeamFilter teamFilter;
 		private GenericOwnership ownership;
-
 		public float overheatBuffDuration = 2f;
 		public float cycleInterval = 0.5f;
-		public float maxDistance = 50f;
+		public float maxDistance = 100f;
 		public int minimumStacksBeforeBurning = 2;
 		public float burnDuration = 1f;
 		private Run.FixedTimeStamp previousCycle = Run.FixedTimeStamp.negativeInfinity;

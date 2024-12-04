@@ -83,7 +83,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA1_DESCRIPTION";
 			skill.icon = await LoadAsset<Sprite>("kamunagiassets:HonokasVeil");
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 1.5f;
+			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = true;
 			skill.mustKeyPress = true;

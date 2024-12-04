@@ -171,7 +171,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA6_DESCRIPTION";
 			skill.icon = await LoadAsset<Sprite>("kamunagiassets2:Mashiro"); 
 			skill.activationStateMachineName = "Spell";
-			skill.baseRechargeInterval = 3f;
+			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;

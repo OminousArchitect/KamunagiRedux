@@ -77,6 +77,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA7_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA7_DESCRIPTION";
 			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:Uitsalnemetia"));
+			skill.baseRechargeInterval = 10f;
 			return skill;
 		}
 

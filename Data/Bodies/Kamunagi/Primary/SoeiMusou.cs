@@ -64,7 +64,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseMaxStock = 4;
-			skill.baseRechargeInterval = 1.3f;
+			skill.baseRechargeInterval = 1.5f;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;
 			skill.rechargeStock = 1;

@@ -132,7 +132,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY2_DESCRIPTION";
 			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 0f;
+			skill.baseRechargeInterval = 1f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;

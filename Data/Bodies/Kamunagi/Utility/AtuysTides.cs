@@ -133,7 +133,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.activationState = new SerializableEntityStateType(typeof(AtuysTides));
 			skill.icon = await LoadAsset<Sprite>("kamunagiassets2:Atuy2"); 
 			skill.activationStateMachineName = "Spell";
-			skill.baseRechargeInterval = 4f;
+			skill.baseRechargeInterval = 6f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.keywordTokens = new[] { KamunagiAsset.tokenPrefix + "TWINSBLESSING_KEYWORD" };

@@ -114,16 +114,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY0_DESCRIPTION";
 			skill.icon = await LoadAsset<Sprite>("kamunagiassets:firepng");
 			skill.activationStateMachineName = "Weapon";
-			skill.baseMaxStock = 1;
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 6f;
+			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
-			skill.cancelSprintingOnActivation = false;
-			skill.baseMaxStock = 1;
-			skill.baseRechargeInterval = 2f;
-			skill.beginSkillCooldownOnSkillEnd = false;
-			skill.interruptPriority = InterruptPriority.Any;
-			skill.cancelSprintingOnActivation = false;
 			skill.mustKeyPress = true;
+			skill.cancelSprintingOnActivation = false;
 			return skill;
 		}
 
@@ -135,7 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 
 			var proj = (await GetProjectile<YamatoWinds>())!.InstantiateClone("TwinsMiniSun", true);
 			UnityEngine.Object.Destroy(proj.GetComponent<WindBoomerangProjectileBehaviour>());
-			UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>()); //bro what is this spaghetti
+			UnityEngine.Object.Destroy(proj.GetComponent<BoomerangProjectile>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileOverlapAttack>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDotZone>());
 			var minisunController = proj.GetComponent<ProjectileController>();

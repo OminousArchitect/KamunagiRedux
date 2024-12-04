@@ -30,6 +30,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			endpointVisualizerPrefab = EntityStates.Huntress.ArrowRain.areaIndicatorPrefab;
 			damageCoefficient = 9f;
 			baseMinimumDuration = 1f;
+			
+			if (NetworkServer.active && healthComponent.alive)
+			{
+				DamageInfo damageInfo = new DamageInfo();
+				damageInfo.damage = base.healthComponent.combinedHealth * 0.1f;
+				damageInfo.position = base.characterBody.corePosition;
+				damageInfo.force = Vector3.zero;
+				damageInfo.damageColorIndex = DamageColorIndex.Default;
+				damageInfo.crit = false;
+				damageInfo.attacker = null;
+				damageInfo.inflictor = null;
+				damageInfo.damageType = DamageType.NonLethal | DamageType.BypassArmor;
+				damageInfo.procCoefficient = 0f;
+				damageInfo.procChainMask = default(ProcChainMask);
+				base.healthComponent.TakeDamage(damageInfo);
+			}
 		}
 
 		public override void FixedUpdate()
@@ -99,7 +115,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY4_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY4_DESCRIPTION";
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 3f;
+			skill.baseRechargeInterval = 8f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;

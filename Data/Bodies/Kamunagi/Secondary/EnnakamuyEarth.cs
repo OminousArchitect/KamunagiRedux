@@ -43,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY1_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY1_DESCRIPTION";
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 4f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;

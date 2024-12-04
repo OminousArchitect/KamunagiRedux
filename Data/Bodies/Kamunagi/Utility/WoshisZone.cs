@@ -66,7 +66,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY3_DESCRIPTION";
 			skill.icon = await LoadAsset<Sprite>("kamunagiassets:Woshis");
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 4f;
+			skill.baseRechargeInterval = 9f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			return skill;

@@ -176,8 +176,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SPECIAL0_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SPECIAL0_DESCRIPTION";
 			skill.activationStateMachineName = "Weapon";
-			skill.baseMaxStock = 1;
-			skill.baseRechargeInterval = 10f;
+			skill.baseMaxStock = 3;
+			skill.baseRechargeInterval = 6f;
+			skill.stockToConsume = 3;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = true;

@@ -115,7 +115,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY0_DESCRIPTION";
 			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:Mikazuchi"));
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 9f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = false;

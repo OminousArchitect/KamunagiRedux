@@ -132,7 +132,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA3_DESCRIPTION";
 			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:darkpng2"));
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 30f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = false;
 			skill.fullRestockOnAssign = false;
@@ -163,7 +163,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var ffScale = forceField.GetComponentInChildren<ObjectScaleCurve>();
 			ffScale.useOverallCurveOnly = true;
 			ffScale.overallCurve = AnimationCurve.Linear(0, 0.35f, 1, 1);
-			forceField.AddComponent<DestroyOnTimer>().duration = 15;
+			forceField.AddComponent<DestroyOnTimer>().duration = 15; //forcefield duration
 			var forceMesh = forceField.GetComponentInChildren<MeshRenderer>();
 
 			forceMesh.sharedMaterials = new[] { coolStuff };

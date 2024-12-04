@@ -124,7 +124,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA4_DESCRIPTION";
 			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:no-type2"));
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 21f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = false;
 			skill.fullRestockOnAssign = false;

@@ -120,7 +120,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA2_DESCRIPTION";
 			skill.icon = await LoadAsset<Sprite>("kamunagiassets2:Flashbang"); 
 			skill.activationStateMachineName = "Spell";
-			skill.baseRechargeInterval = 1f;
+			skill.baseRechargeInterval = 1.5f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.canceledFromSprinting = false;
 			skill.mustKeyPress = true;

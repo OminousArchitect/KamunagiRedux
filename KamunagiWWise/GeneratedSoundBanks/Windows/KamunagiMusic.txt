@@ -12,12 +12,12 @@ Game Parameter	ID	Name			Wwise Object Path	Notes
 	3729143042	Volume_MSX			\Default Work Unit\Volume_MSX	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	280942812	Senran	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Senran_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran		17736
-	496611040	Ikusamanui	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ikusamanui_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ikusamanui\Ikusamanui		17736
-	576479314	Ranse no Tourai	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ranse no Tourai_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ranse no Tourai\Ranse no Tourai		17736
+	280942812	Senran	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Senran_11703E61.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran		22094
+	496611040	Ikusamanui	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ikusamanui_11703E61.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ikusamanui\Ikusamanui		10038
+	576479314	Ranse no Tourai	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ranse no Tourai_11703E61.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ranse no Tourai\Ranse no Tourai		18114
 
 Streamed Audio	ID	Name	Audio source file	Generated audio file	Wwise Object Path	Notes
-	280942812	Senran	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Senran_FBC78EF0.wem	280942812.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran	
-	496611040	Ikusamanui	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ikusamanui_FBC78EF0.wem	496611040.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ikusamanui\Ikusamanui	
-	576479314	Ranse no Tourai	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ranse no Tourai_FBC78EF0.wem	576479314.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ranse no Tourai\Ranse no Tourai	
+	280942812	Senran	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Senran_11703E61.wem	280942812.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran	
+	496611040	Ikusamanui	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ikusamanui_11703E61.wem	496611040.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ikusamanui\Ikusamanui	
+	576479314	Ranse no Tourai	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ranse no Tourai_11703E61.wem	576479314.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ranse no Tourai\Ranse no Tourai	
 

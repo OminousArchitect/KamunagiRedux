@@ -33,27 +33,27 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{F72A2225-5AEF-6968-92D6-66595945ACAD}">
+		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{655AB27F-1557-8447-6C4B-CDC334BE80E6}">
 			<ShortName>KamunagiMusic</ShortName>
 			<Path>KamunagiMusic.bnk</Path>
 			<Media>
 				<File Id="280942812" Language="SFX" Streaming="true" Location="Memory">
 					<ShortName>Senran.wav</ShortName>
 					<Path>Media/280942812.wem</Path>
-					<CachePath>SFX/Senran_FBC78EF0.wem</CachePath>
-					<PrefetchSize>17736</PrefetchSize>
+					<CachePath>SFX/Senran_11703E61.wem</CachePath>
+					<PrefetchSize>22094</PrefetchSize>
 				</File>
 				<File Id="496611040" Language="SFX" Streaming="true" Location="Memory">
 					<ShortName>Ikusamanui.wav</ShortName>
 					<Path>Media/496611040.wem</Path>
-					<CachePath>SFX/Ikusamanui_FBC78EF0.wem</CachePath>
-					<PrefetchSize>17736</PrefetchSize>
+					<CachePath>SFX/Ikusamanui_11703E61.wem</CachePath>
+					<PrefetchSize>10038</PrefetchSize>
 				</File>
 				<File Id="576479314" Language="SFX" Streaming="true" Location="Memory">
 					<ShortName>Ranse no Tourai.wav</ShortName>
 					<Path>Media/576479314.wem</Path>
-					<CachePath>SFX/Ranse no Tourai_FBC78EF0.wem</CachePath>
-					<PrefetchSize>17736</PrefetchSize>
+					<CachePath>SFX/Ranse no Tourai_11703E61.wem</CachePath>
+					<PrefetchSize>18114</PrefetchSize>
 				</File>
 			</Media>
 			<Events>
@@ -91,5 +91,5 @@
 			</StateGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{360EDA49-54CA-B42D-0D35-2D1265E83C47}</FileHash>
+	<FileHash>{820A91D1-123A-CC0F-7B5D-2C5E948A2CA6}</FileHash>
 </SoundBanksInfo>

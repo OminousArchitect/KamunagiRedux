@@ -184,7 +184,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sunIndicator.material = new Material(sunIndicator.material);
 			sunIndicator.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampPortalVoid.png"));
 			sunIndicator.material.SetColor("_TintColor", new Color(0.45f, 0, 1));
-			sunIndicator.transform.localScale = Vector3.one * 50f; //visual indicator
+			sunIndicator.transform.localScale = Vector3.one * 50f;
 			sunMeshes[2].enabled = false;
 			var sunPP = naturesAxiom.GetComponentInChildren<PostProcessVolume>();
 			sunPP.profile = (await LoadAsset<PostProcessProfile>("RoR2/Base/Common/ppLocalVoidFogMild.asset"));
@@ -193,7 +193,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var sunP = (await this.GetEffect()).GetComponentInChildren<ParticleSystemRenderer>(true);
 			var destroyed = naturesAxiom.transform.Find("VfxRoot/Particles/GlowParticles, Fast").gameObject;
 			var indicator = naturesAxiom.transform.Find("VfxRoot/Mesh/AreaIndicator");
-			indicator.transform.localScale = Vector3.one * 100f;
+			indicator.transform.localScale = Vector3.one * 175f; //visual indicator
 			UnityEngine.Object.Destroy(destroyed);
 			foreach (var r in naturesAxiom.GetComponentsInChildren<ParticleSystemRenderer>(true))
 			{

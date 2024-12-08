@@ -298,6 +298,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				if (__instance.health <= fractionOfHealth || damageInfo.damage >= __instance.health)
 				{
 					damageInfo.damageType = DamageType.VoidDeath;
+					if (!attackerBody) return;
 					EffectManager.SpawnEffect(
 						GetEffect<CyanDamageNumbers>().WaitForCompletion(),
 						new EffectData

@@ -44,7 +44,7 @@
 	  "NINES_KAMUNAGI_BODY_PRIMARY0_NAME": "Soei Musou: Orb",
 	  "NINES_KAMUNAGI_BODY_PRIMARY0_DESCRIPTION": "Fire a <color=#4d108f>shadow sphere</color> for <style=cIsDamage>290% damage</style> that <style=cIsDamage>explodes</style> on impact. Hold up to 4.",
 	  "NINES_KAMUNAGI_BODY_PRIMARY1_NAME": "Soei Musou: Jinsoku",
-	  "NINES_KAMUNAGI_BODY_PRIMARY1_DESCRIPTION": "Repeatedly fire tracking <color=#4d108f>energy bolts</color> for <style=cIsDamage>???% damage</style>. Continous fire will charge a <color=#4d108f>shadow sphere</color> that can be released for <style=cIsDamage>???% damage</style>.",
+	  "NINES_KAMUNAGI_BODY_PRIMARY1_DESCRIPTION": "Hold to repeatedly fire tracking <color=#4d108f>energy bolts</color> for <style=cIsDamage>???% damage</style>. Continous fire will charge a <color=#4d108f>shadow sphere</color> that can be released for <style=cIsDamage>???% damage</style>.",
 	  "NINES_KAMUNAGI_BODY_PRIMARY2_NAME": "Soei Musou: Seed",
 	  "NINES_KAMUNAGI_BODY_PRIMARY2_DESCRIPTION": "<style=cIsDamage>Tiriryarai</style>. Hold to sow <color=#4d108f>seeds of darkness</color>. Release to <color=#4d108f>harvest</color> for <style=cIsDamage>???% damage</style> plus an additional <style=cIsDamage>???% damage</style> per <color=#4d108f>seed</color>. ",
 	  "NINES_KAMUNAGI_BODY_PRIMARY3_NAME": "Soei Musou: Kage no Hono",

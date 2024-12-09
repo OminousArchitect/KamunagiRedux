@@ -9,13 +9,16 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-	public class MikazuchiState : RaycastedSpellState
+	public class MikazuchiState : BaseTwinState
 	{
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileCount = 3f;
-		public override float duration => 0.7f;
-		public override bool requireFullCharge => true;
-		public override float failedCastCooldown => 2f;
+		public float duration => 0.7f;
+		public RaycastHit lastHit;
+		public bool didHit;
+		public float indicatorScale => 2f;
+		internal GameObject? indicator;
+		private bool wasActive;
 
 		public override void OnEnter()
 		{
@@ -27,9 +30,41 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					muzzleTransform, true);
 		}
 
-		public override void Fire(Vector3 targetPosition)
+		public override void Update()
 		{
-			base.Fire(targetPosition);
+			if (!isAuthority) return;
+			didHit = inputBank.GetAimRaycast(float.PositiveInfinity, out lastHit);
+			
+			
+			if (didHit)
+			{
+				if (indicator == null || !indicator)
+				{
+					indicator = UnityEngine.Object.Instantiate(EntityStates.Huntress.ArrowRain.areaIndicatorPrefab);
+					indicator.transform.localScale = Vector3.one * indicatorScale;
+				}
+
+				indicator.transform.position = lastHit.point;
+				if (wasActive) return;
+				indicator.SetActive(true);
+				wasActive = true;
+				return;
+			}
+
+			if (indicator == null || !indicator || !wasActive) return;
+			indicator.SetActive(false);
+			wasActive = false;
+		}
+
+		public override void FixedUpdate()
+		{
+			base.FixedUpdate();
+			if (isAuthority && fixedAge >= duration)
+				outer.SetNextStateToMain();
+		}
+		
+		void Strike(Vector3 targetPosition)
+		{
 			var blastAttack = new BlastAttack
 			{
 				attacker = gameObject,
@@ -67,22 +102,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				);
 			}
 		}
-
-		public override void FixedUpdate()
-		{
-			base.FixedUpdate();
-			if (!(fixedAge < duration) || IsKeyDownAuthority()) return;
-			skillLocator.utility.AddOneStock();
-			outer.SetNextStateToMain();
-		}
-
+		
 		public override void OnExit()
 		{
 			base.OnExit();
+			if (!isAuthority) return;
 			if (chargeEffectInstance != null)
 				chargeEffectInstance.ReturnToPool();
+			if (indicator == null || !indicator) return;
+			Destroy(indicator);
+			
+			if (didHit && (fixedAge >= duration))
+			{
+				Strike(lastHit.point);
+			}
 		}
-
+		
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
@@ -115,7 +150,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY0_DESCRIPTION";
 			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:Mikazuchi"));
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 9f;
+			skill.baseRechargeInterval = 2f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = false;
@@ -196,7 +231,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var projectile = (await LoadAsset<GameObject>("RoR2/DLC1/VoidBarnacle/VoidBarnacleBullet.prefab")!).InstantiateClone("MikazuchiLightningOrbProjectile");
 			var controller = projectile.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
-			controller.procCoefficient = 1f;
+			controller.procCoefficient = 0.8f;
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Shock5s;
 			var lightningImpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightningImpact.impactEffect = await GetEffect<MikazuchiLightningStrike>();
@@ -206,7 +241,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
 			lightpact.blastDamageCoefficient = 1f;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
-			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
+			projectile.GetComponent<ProjectileController>().procCoefficient = 0.6f;
 			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 145f;
 			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
 			var target = projectile.GetComponent<ProjectileDirectionalTargetFinder>();

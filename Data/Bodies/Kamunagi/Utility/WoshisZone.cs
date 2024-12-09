@@ -18,14 +18,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			base.OnEnter();
 			if (!NetworkServer.active) return;
-			if (twinBehaviour.activeBuffWard)
-			{
-				NetworkServer.Destroy(twinBehaviour.activeBuffWard);
-			}
 
 			var ward = Object.Instantiate(Concentric.GetNetworkedObject<WoshisZone>().WaitForCompletion(), position, Quaternion.identity);
 			ward.GetComponent<TeamFilter>().teamIndex = TeamIndex.Monster;
-			twinBehaviour.activeBuffWard = ward;
 			NetworkServer.Spawn(ward);
 		}
 
@@ -43,9 +38,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	}
 	public class WoshisZoneState : IndicatorSpellState
 	{
-		public override float duration => 0.45f;
+		public override float duration => 90f;
 		public override float failedCastCooldown => 0f;
-		public override float indicatorScale => 10f;
+		public override float indicatorScale => 11f;
 		public override int meterGain => 0;
 
 		public override void Fire(Vector3 targetPosition)
@@ -93,7 +88,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			Object.Destroy(woshisWard.GetComponent<NetworkedBodyAttachment>());
 			woshisWard.GetComponentInChildren<MeshRenderer>().material = woshisEnergy;
 			var ward = woshisWard.GetComponent<BuffWard>();
-			ward.radius = 10f;
+			ward.radius = 11f;
 			ward.buffDef = await this.GetBuffDef();
 			woshisWard.AddComponent<DestroyOnTimer>().duration = 8f;
 

@@ -13,7 +13,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 	public class TwinBehaviour : MonoBehaviour
 	{
 		private bool _muzzleToggle;
-		public GameObject activeBuffWard;
 		public bool componentAddedToMaster;
 		public CharacterBody body;
 		public ExtraSkillLocator extraLocator;

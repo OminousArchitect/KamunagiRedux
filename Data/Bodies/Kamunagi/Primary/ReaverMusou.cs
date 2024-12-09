@@ -14,7 +14,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	internal class ReaverMusouState : BaseTwinState
 	{
 		public override int meterGain => 0;
-		private float fireRate = 0.3f;
 		private const float fizzle = 0.3f;
 		private float stopwatch;
 		private float duration;
@@ -22,7 +21,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			duration = 0.5f / attackSpeedStat;
+			duration = 0.25f / attackSpeedStat;
 		}
 
 		void SowSeeds()
@@ -114,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		public override void OnExit()
 		{
-			if (fixedAge <= fizzle) return;
+			//if (fixedAge <= fizzle) return;
 			HarvestSeeds();
 			base.OnExit();
 		}
@@ -132,7 +131,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY2_DESCRIPTION";
 			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 1f;
+			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.cancelSprintingOnActivation = false;

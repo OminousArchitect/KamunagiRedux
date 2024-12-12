@@ -48,7 +48,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				ProjectileManager.instance.FireProjectile(new FireProjectileInfo()
 				{
 					crit = RollCrit(),
-					damageTypeOverride = DamageTypeCombo.Generic,
+					damageTypeOverride = DamageTypeCombo.GenericPrimary,
 					damageColorIndex = DamageColorIndex.Default,
 					damage = trackingDamage * damageStat,
 					force = 120,
@@ -66,7 +66,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			{
 				crit = RollCrit(),
 				damage = characterBody.damage * ballDamageCoefficient,
-				damageTypeOverride = DamageTypeCombo.Generic,
+				damageTypeOverride = DamageTypeCombo.GenericPrimary,
 				damageColorIndex = DamageColorIndex.Default,
 				force = 100 * ballDamageCoefficient,
 				owner = gameObject,

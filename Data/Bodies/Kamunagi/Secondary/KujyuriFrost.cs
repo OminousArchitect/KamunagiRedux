@@ -125,7 +125,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	                        baseDamage = characterBody.damage * 1f,
 	                        baseForce = 0,
 	                        crit = false,
-	                        damageType = DamageType.Freeze2s,
+	                        damageType = DamageTypeCombo.GenericSecondary | DamageType.Freeze2s,
 	                        falloffModel = BlastAttack.FalloffModel.None,
 	                        procCoefficient = 1,
 	                        radius = 13f,
@@ -206,7 +206,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var pdzef = proj.AddComponent<ProjectileDotZoneEndEffect>();
 			pdzef.effect = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniImpactVFXFrozen.prefab");
 			dotZone.onEnd.AddListener(pdzef.OnDestroy);
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Freeze2s;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary | DamageType.Freeze2s;
 			UnityEngine.Object.Destroy(proj.GetComponent<AkGameObj>());
 
 			var hitboxResize = Vector3.one * 2.9f;

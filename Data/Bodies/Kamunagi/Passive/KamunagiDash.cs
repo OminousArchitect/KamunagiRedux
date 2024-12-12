@@ -38,7 +38,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			{
 				crit = false,
 				damage = this.characterBody.damage * 0.5f,
-				damageTypeOverride = DamageType.Generic,
+				damageTypeOverride = DamageTypeCombo.GenericPrimary,
 				damageColorIndex = DamageColorIndex.Void,
 				force = 10,
 				owner = base.gameObject,
@@ -201,13 +201,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj =
-				(await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphere.prefab"))!.InstantiateClone(
-					"TwinsVacuumSphere", true);
+			var proj = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphere.prefab"))!.InstantiateClone("TwinsVacuumSphere", true);
 			var vacuumSimple = proj.GetComponent<ProjectileSimple>();
 			vacuumSimple.desiredForwardSpeed = 0f;
 			vacuumSimple.lifetime = 1f;
-			proj.GetComponent<TetherVfxOrigin>().tetherPrefab = await GetGenericObject<TetherVFX>();
+			var fuck = proj.GetComponent<TetherVfxOrigin>().tetherPrefab;
+			fuck.GetComponent<Renderer>().enabled = false;
+			
 			UnityEngine.Object.Destroy(proj.transform.GetChild(0).gameObject);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			proj.GetComponent<RadialForce>().radius = 30f;

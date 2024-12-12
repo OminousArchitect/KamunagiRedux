@@ -117,7 +117,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			bullet.radius = 0.2f;
 			bullet.procCoefficient = 0.35f;
 			bullet.smartCollision = true;
-			bullet.damageType = DamageType.Generic;
+			bullet.damageType = DamageTypeCombo.GenericSpecial;
 			bullet.AddModdedDamageType(KamunagiOfChainsPlugin.SobuGekishoha);
 			bullet.Fire();
 		}

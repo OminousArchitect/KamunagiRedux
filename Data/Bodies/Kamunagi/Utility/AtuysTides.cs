@@ -30,7 +30,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			base.FixedUpdate();
 			if (!isAuthority) return;
-			const float duration = 2f;
+			const float duration = 1.4f;
 			if (fixedAge >= duration || projectilesFired >= totalProjectileCount)
 			{
 				outer.SetNextStateToMain();
@@ -118,7 +118,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var impact = tidalProjectile.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = await GetEffect<AtuysTidesImpact>();
 			impact.falloffModel = BlastAttack.FalloffModel.None;
-			tidalProjectile.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
+			tidalProjectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericUtility | DamageType.SlowOnHit;
 			return tidalProjectile;
 		}
 

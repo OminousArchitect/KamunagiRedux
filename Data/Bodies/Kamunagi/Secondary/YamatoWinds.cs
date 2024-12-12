@@ -63,7 +63,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			{
 				crit = RollCrit(),
 				damage = characterBody.damage * damageCoefficient,
-				damageTypeOverride = DamageType.Generic,
+				damageTypeOverride = DamageTypeCombo.GenericSecondary,
 				damageColorIndex = DamageColorIndex.Default,
 				force = 500,
 				owner = gameObject,

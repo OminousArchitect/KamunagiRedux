@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="BepInEx.Core" Version="5.4.19" />
-        <PackageReference Include="RiskOfRain2.GameLibs" Version="1.3.5-r.1" />
+        <PackageReference Include="RiskOfRain2.GameLibs" Version="1.3.6-r.0" />
         <PackageReference Include="RiskofThunder-R2API_RecalculateStats" Version="1.4.0" />
         <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
         <PackageReference Include="KingEnderBrine-ExtraSkillSlots" Version="1.6.1" />

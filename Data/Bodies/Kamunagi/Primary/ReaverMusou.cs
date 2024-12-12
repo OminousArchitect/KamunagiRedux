@@ -274,7 +274,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify | DamageTypeCombo.GenericPrimary;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
@@ -389,7 +389,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
@@ -406,7 +406,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}

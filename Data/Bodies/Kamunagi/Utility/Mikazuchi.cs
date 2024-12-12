@@ -71,7 +71,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				baseDamage = damageStat * 9f,
 				baseForce = 1800,
 				crit = RollCrit(),
-				damageType = DamageType.Shock5s,
+				damageType = DamageTypeCombo.GenericUtility | DamageType.Shock5s,
 				falloffModel = BlastAttack.FalloffModel.None,
 				procCoefficient = 1,
 				radius = 3f,
@@ -232,7 +232,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var controller = projectile.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.procCoefficient = 0.8f;
-			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Shock5s;
+			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericUtility | DamageType.Shock5s;
 			var lightningImpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightningImpact.impactEffect = await GetEffect<MikazuchiLightningStrike>();
 			lightningImpact.childrenProjectilePrefab = await GetProjectile<MikazuchiLightningSeeker>();

@@ -18,10 +18,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public float airstrikeRadius = 20f;
 		public static string fireAirstrikeSoundString = "Play_seeker_skill1_fire_orb";
 		public static GameObject star;
-
+		public static GameObject line;
+		
 		public override void OnEnter()
 		{
 			projectilePrefab = star;
+			arcVisualizerPrefab = line;
 			base.OnEnter();
 			base.characterBody.SetSpreadBloom(0.4f);
 			airstrikeRadius = 20f;
@@ -30,7 +32,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			endpointVisualizerPrefab = EntityStates.Huntress.ArrowRain.areaIndicatorPrefab;
 			damageCoefficient = 9f;
 			baseMinimumDuration = 1f;
-			
+
 			if (NetworkServer.active && healthComponent.alive)
 			{
 				DamageInfo damageInfo = new DamageInfo();
@@ -51,6 +53,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+		}
+
+		public override void Update()
+		{
+			base.Update();
 		}
 
 		public override void OnExit()
@@ -90,6 +97,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			await base.Initialize();
 			HeavenStarfallState.star = await this.GetProjectile();
+			HeavenStarfallState.line = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/BasicThrowableVisualizer.prefab");
 		}
 		
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(HeavenStarfallState) };

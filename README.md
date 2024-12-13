@@ -7,7 +7,6 @@ I'm explaining some stuff here
 ## Primaries
 <details>
 <summary> Click to Reveal/Hide </summary>
-[https://imgur.com/jC3KJcd](https://i.imgur.com/jC3KJcd.png)
 </details>
 
 ## Secondaries

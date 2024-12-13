@@ -7,7 +7,7 @@ I'm explaining some stuff here
 ## Primaries
 <details>
 <summary> Click to Reveal/Hide </summary>
-https://raw.githubusercontent.com/OminousArchitect/KamunagiRedux/Concentric_Renaming/.github/images/fire.png
+![fire](https://github.com/user-attachments/assets/0fc6c9a3-c764-43d8-b6e1-610548958139)
 </details>
 
 ## Secondaries

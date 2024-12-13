@@ -1,8 +1,38 @@
 ## Preview
 
 
-## Introduction
+## Overview
+I'm explaining some stuff here
 
+## Primaries
+<details>
+<summary> Click to Reveal/Hide </summary>
+
+</details>
+
+## Secondaries
+<details>
+<summary> Click to Reveal/Hide </summary>
+This is some text
+</details>
+
+## Utilities
+<details>
+<summary> Click to Reveal/Hide </summary>
+This is some text
+</details>
+
+## Final Strikes
+<details>
+<summary> Click to Reveal/Hide </summary>
+This is some text
+</details>
+
+## Divine Skills
+<details>
+<summary> Click to Reveal/Hide </summary>
+This is some text
+</details>
 
 ## Credits
 - me, for envisioning this project and bringing it to fruition. I concepted all the skill ideas, made (or edited) all of the VFX, worked in Unity animator controller hell, and wrote all the Secondaries, Utilities, The Great Sealing, Light of Nature's Axiom, and Soei Musou: Kage no Hono.
@@ -30,15 +60,6 @@ Thanks to these people for answering my questions in the modcord, mod would be l
 
 - and **most of all**, to Tsubasa, for introducing me to Utawarerumono.
 
-## Misc Dev Notes
-
-
-## Primaries
-<details>
-<summary> Uhh </summary>
-This is some text
-</details>
-
 ## Known Issues
 -- All feedback is welcome! Feel free to mention me in the RoR2 Modding Discord @Unit_9_Type_S
 - Jump pads will lock your movement to zero if you use Dark Ascension without touching the ground after using them
@@ -46,7 +67,7 @@ This is some text
 
 ## Future Plans
 - Fix bugs
-- That's it. I spent a really long time making this I already did the plans
+- That's it. I spent a really long time making this, I already did the plans
 - Maybe item displays after I do a line of coke
 
 ## Changelog

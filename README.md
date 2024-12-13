@@ -4,10 +4,30 @@
 ## Overview
 I'm explaining some stuff here
 
-## Primaries
+## Soei Musou Techniques (Primaries)
 <details>
 <summary> Click to Reveal/Hide </summary>
-https://imgur.com/jC3KJcd
+
+## Seed
+image here
+
+-text here
+
+## Orb
+image here
+
+-text here
+
+## Kage no Hono
+image here
+
+-text here
+
+## Jinsoku
+image here
+
+-text here
+
 </details>
 
 ## Secondaries

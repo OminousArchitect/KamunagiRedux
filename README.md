@@ -34,6 +34,10 @@ Thanks to these people for answering my questions in the modcord, mod would be l
 
 
 ## Primaries
+<details>
+<summary> Uhh </summary>
+This is some text
+</details>
 
 ## Known Issues
 -- All feedback is welcome! Feel free to mention me in the RoR2 Modding Discord @Unit_9_Type_S

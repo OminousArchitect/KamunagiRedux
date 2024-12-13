@@ -7,7 +7,7 @@ I'm explaining some stuff here
 ## Primaries
 <details>
 <summary> Click to Reveal/Hide </summary>
-
+![orb](https://github.com/user-attachments/assets/6bda995e-4a15-46a1-b3c1-b77626d4174e)
 </details>
 
 ## Secondaries

@@ -286,7 +286,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				(await LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricWormSeekerProjectile.prefab")!
 				).InstantiateClone("MikazuchiLightningSeekerProjectile", true);
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
-
+			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericUtility;
 			projectile.GetComponent<ProjectileImpactExplosion>().impactEffect =
 				await GetEffect<MikazuchiStakeNova>();
 

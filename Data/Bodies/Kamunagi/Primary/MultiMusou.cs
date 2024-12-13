@@ -110,6 +110,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileSteerTowardTarget>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDirectionalTargetFinder>());
 			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(CurseFlames);
 			return proj;
 		}

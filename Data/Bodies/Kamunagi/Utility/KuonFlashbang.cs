@@ -54,7 +54,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				baseDamage = damageStat * 1.75f,
 				baseForce = 50f,
 				crit = false,
-				damageType = DamageType.Stun1s,
+				damageType = DamageType.Stun1s, //combo intentionally omitted
 				falloffModel = BlastAttack.FalloffModel.None,
 				procCoefficient = 1f,
 				radius = 8f,

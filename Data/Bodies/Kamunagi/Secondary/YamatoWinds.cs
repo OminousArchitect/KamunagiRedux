@@ -149,6 +149,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			windDamage.fireFrequency = 25f;
 			windDamage.resetFrequency = 10f;
 			windDamage.impactEffect = await GetEffect<WindHitEffect>();
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary;
 			var itjustworks = proj.AddComponent<WindBoomerangProjectileBehaviour>();
 			//haha hopefully
 			var windSounds = proj.GetComponent<ProjectileController>();

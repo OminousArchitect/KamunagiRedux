@@ -14,6 +14,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	internal class ReaverMusouState : BaseTwinState
 	{
 		public override int meterGain => 0;
+		private float fireRate = 0.3f;
 		private const float fizzle = 0.3f;
 		private float stopwatch;
 		private float duration;
@@ -21,7 +22,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			duration = 0.25f / attackSpeedStat;
+			duration = 0.5f / attackSpeedStat;
 		}
 
 		void SowSeeds()
@@ -113,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		public override void OnExit()
 		{
-			//if (fixedAge <= fizzle) return;
+			if (fixedAge <= fizzle) return;
 			HarvestSeeds();
 			base.OnExit();
 		}
@@ -274,7 +275,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify | DamageTypeCombo.GenericPrimary;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
@@ -389,7 +390,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}
@@ -406,7 +407,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
+			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
 			return proj;
 		}

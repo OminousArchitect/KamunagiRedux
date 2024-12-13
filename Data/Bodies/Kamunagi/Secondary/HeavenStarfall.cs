@@ -142,6 +142,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			proj.GetComponent<ProjectileImpactExplosion>().lifetime = 1.3f;
 			proj.GetComponent<ProjectileImpactExplosion>().impactEffect = await GetEffect<StarImpact>();
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary;
 			return proj;
 		}
 

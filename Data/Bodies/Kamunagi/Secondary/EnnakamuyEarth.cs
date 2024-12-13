@@ -83,6 +83,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
 			projectile.GetComponent<Rigidbody>().useGravity = true;
 			projectile.GetComponent<SphereCollider>().radius = 3.5f;
+			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary;
 			return projectile;
 		}
 
@@ -104,6 +105,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var projectile= (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab"))!.InstantiateClone("BoulderChild", true);
 			projectile.GetComponent<ProjectileImpactExplosion>().falloffModel = BlastAttack.FalloffModel.None;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary;
 			return projectile;
 		}
 

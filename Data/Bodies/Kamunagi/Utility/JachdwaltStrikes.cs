@@ -252,6 +252,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 							{
 								DamageInfo damageInfo = new DamageInfo();
 								damageInfo.damage = 1.3f * damageStat;
+								damageInfo.damageType = DamageTypeCombo.GenericUtility;
 								damageInfo.attacker = base.gameObject;
 								damageInfo.procCoefficient = procCoefficient;
 								damageInfo.position = hurtBox2.transform.position;

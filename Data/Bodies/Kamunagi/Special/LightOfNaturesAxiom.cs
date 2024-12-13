@@ -352,7 +352,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			var voidFog = (await LoadAsset<GameObject>("RoR2/Base/Common/VoidFogMildEffect.prefab"));
 			var effect =
-				voidFog.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false); //revisit this
+				voidFog.transform.GetChild(0).gameObject!.InstantiateClone("CurseParticles", false); //revisit this //it was revisted
 			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
 			var ps = effect.GetComponentInChildren<ParticleSystem>();
 			var main = ps.main;

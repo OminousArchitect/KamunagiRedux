@@ -156,7 +156,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			luckyTidalProjectile.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<AtuysTides>();
 			luckyTidalProjectile.GetComponent<ProjectileController>().startSound = "Play_miniMushroom_spore_shoot";
 			luckyTidalProjectile.GetComponent<Rigidbody>().useGravity = false;
-			luckyTidalProjectile.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
+			luckyTidalProjectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericUtility | DamageType.SlowOnHit;
 			return luckyTidalProjectile;
 		}
 	}

@@ -7,7 +7,7 @@ I'm explaining some stuff here
 ## Primaries
 <details>
 <summary> Click to Reveal/Hide </summary>
-	![fire](https://github.com/user-attachments/assets/2b353b3b-75c4-46e9-923f-f275793dd99b)
+https://imgur.com/jC3KJcd
 </details>
 
 ## Secondaries
@@ -36,8 +36,8 @@ This is some text
 
 ## Credits
 - me, for envisioning this project and bringing it to fruition. I concepted all the skill ideas, made (or edited) all of the VFX, worked in Unity animator controller hell, and wrote all the Secondaries, Utilities, The Great Sealing, Light of Nature's Axiom, and Soei Musou: Kage no Hono.
-- Bubbet for co-developing this entire mod with me and making ConcentricContent. Additional contributions include the zeal bar, the health overlay on Mashiro's Blessing, multiplayer compatability and networking, actually making the soundtrack replacement work, helping port the project to SotS, and fixing 10 trillion errors in EffectManager.
-  He also wrote Woshis' Miasma, Atuy's Sweeping Tides, both passives, and ***all*** of the Divine Skills.
+- Bubbet for co-developing this entire mod with me and making ConcentricContent. Additional contributions include the zeal bar, the health overlay on Mashiro's Blessing, multiplayer compatability and networking, actually making the soundtrack replacement work, helping port the project to SotS, and fixing 10 trillion errors in EffectManager. 
+He also wrote Woshis' Miasma, Atuy's Sweeping Tides, both passives, and ***all*** of the Divine Skills.
 
 - Model by bee9k
 - Animations by _ahvi

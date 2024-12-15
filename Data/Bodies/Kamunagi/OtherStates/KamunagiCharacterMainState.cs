@@ -134,7 +134,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			{
 				if (hasInputBank)
 				{
-					if ((characterMotor as IPhysMotor).velocity.y <= -14f)
+					if ((characterMotor as IPhysMotor).velocity.y <= -12f)
 					{
 						chainsPrimed = true;
 						if (inputBank.jump.justPressed && passiveSkill.ExecuteIfReady()) //ascension threshold

@@ -14,15 +14,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 {
 	public class KamunagiChannelDashState : KamunagiHoverState
 	{
-		public float duration = 0.8f;
+		public float duration = 0.6f;
 		private Vector3 origin;
 		protected float ascendSpeedMult;
 		private Vector3 thePosition;
 		public static GameObject projectilePrefab;
+		private TwinBehaviour behaviour;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
+			behaviour = characterBody.GetComponent<TwinBehaviour>();
+			duration = behaviour.chargeDuration;
+			
 			origin = this.transform.position;
 			thePosition = characterBody.footPosition + Vector3.up * 0.15f;
 			characterBody.SetBuffCount(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 1);
@@ -64,7 +68,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 			if (fixedAge < duration && inputBank.jump.down) return;
 			characterBody.isSprinting = true;
-			ascendSpeedMult = Util.Remap(fixedAge, 0, duration, 0.4f, 1.5f);
+			ascendSpeedMult = Util.Remap(fixedAge, 0, duration, behaviour.minDistance, behaviour.maxDistance);
 
 			outer.SetNextState(new KamunagiDashState
 			{
@@ -90,10 +94,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		private Vector3 flyVector;
 		public Vector3 effectPosition;
 		public Vector3 rayDir;
-		private float duration = 1.4f;
+		private float duration = 1.3f;
 		public static AnimationCurve flyCurve;
 		public bool wasEdown;
-		
 		public static GameObject blinkPrefab;
 		public static GameObject muzzlePrefab;
 
@@ -101,6 +104,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		{
 			base.OnEnter();
 			//Debug.Log($"{speedMult} remapped");
+			duration = twinBehaviour.flyDuration;
+			
 			PlayAnimation("Saraana", "FlyUp");
 			PlayAnimation("Ururuu", "FlyUp");
 			CreateBlinkEffect(effectPosition);
@@ -205,9 +210,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			var vacuumSimple = proj.GetComponent<ProjectileSimple>();
 			vacuumSimple.desiredForwardSpeed = 0f;
 			vacuumSimple.lifetime = 1f;
-			var fuck = proj.GetComponent<TetherVfxOrigin>().tetherPrefab;
-			fuck.GetComponent<Renderer>().enabled = false;
-			
+			UnityEngine.Object.Destroy(proj.GetComponent<TetherVfxOrigin>());
 			UnityEngine.Object.Destroy(proj.transform.GetChild(0).gameObject);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			proj.GetComponent<RadialForce>().radius = 30f;

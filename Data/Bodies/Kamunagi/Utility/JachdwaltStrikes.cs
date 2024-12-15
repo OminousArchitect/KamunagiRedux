@@ -73,6 +73,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				}
 			}
 		}
+
+		public override void OnExit()
+		{
+			base.OnExit();
+			activatorSkillSlot.rechargeStopwatch = activatorSkillSlot.finalRechargeInterval - 3f;
+		}
 	}
 
 	class JachdwaltInitEvis : BaseTwinState

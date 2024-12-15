@@ -7,6 +7,7 @@ using RoR2;
 using RoR2.Networking;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi
 {
@@ -24,9 +25,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public MasterTwinBehaviour masterBehaviour;
 		public float firingDelay = 0.15f;
 		public float radius = 1.25f;
-		//public float runtimeNumber = 9f;
-		//public float runtimeNumber2 = 7.5f;
 		
+		public float chargeDuration = 0.6f;
+		public float flyDuration = 1.3f;
+		public float minDistance = 0.4f;
+		public float maxDistance = 1.5f;
+
 		public int zealMeter
 		{
 			get => _zealMeter;

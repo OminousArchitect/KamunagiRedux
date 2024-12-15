@@ -122,6 +122,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 				chainsSpawned = false;
 			}
+
+			if (!characterMotor.isGrounded && (characterMotor as IPhysMotor).velocity.y <= -12f)
+			{
+				chainsPrimed = true;
+				if (inputBank.interact.justPressed)
+				{
+					passiveSkill.ExecuteIfReady();
+					chainsPrimed = false;
+				}
+			}
 		}
 
 		public override void ProcessJump()
@@ -134,7 +144,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			{
 				if (hasInputBank)
 				{
-					if ((characterMotor as IPhysMotor).velocity.y <= -12f)
+					/*if ((characterMotor as IPhysMotor).velocity.y <= -12f)
 					{
 						chainsPrimed = true;
 						if (inputBank.jump.justPressed && passiveSkill.ExecuteIfReady()) //ascension threshold
@@ -142,7 +152,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 							chainsPrimed = false;
 							return;
 						}
-					}
+					}*/
 
 					if (inputBank.jump.down && (characterMotor as IPhysMotor).velocity.y <= 0)
 						hoverStateMachine.SetInterruptState(new KamunagiHoverState(), InterruptPriority.Any);
@@ -182,7 +192,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		{
 			base.FixedUpdate();
 
-			if (isGrounded || !IsKeyDownAuthority())
+			if (isGrounded || !IsButtonDownAuthority())
 			{
 				outer.SetNextStateToMain();
 				return;
@@ -203,7 +213,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 		public int meterGain => 0;
 
-		public bool IsKeyDownAuthority() => inputBank.jump.down;
+		public virtual bool IsButtonDownAuthority() => inputBank.jump.down;
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}

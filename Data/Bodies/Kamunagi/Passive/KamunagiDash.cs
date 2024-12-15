@@ -26,7 +26,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			base.OnEnter();
 			behaviour = characterBody.GetComponent<TwinBehaviour>();
 			duration = behaviour.chargeDuration;
-			
+
 			origin = this.transform.position;
 			thePosition = characterBody.footPosition + Vector3.up * 0.15f;
 			characterBody.SetBuffCount(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 1);
@@ -60,13 +60,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		public override void FixedUpdate()
 		{
-			base.FixedUpdate();
 
 			if (!isAuthority) return;
 			characterMotor.Motor.SetPosition(this.origin);
 			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 
-			if (fixedAge < duration && inputBank.jump.down) return;
+			if (fixedAge < duration && inputBank.interact.down) return;
 			characterBody.isSprinting = true;
 			ascendSpeedMult = Util.Remap(fixedAge, 0, duration, behaviour.minDistance, behaviour.maxDistance);
 
@@ -74,6 +73,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			{
 				flyRay = GetAimRay(), speedMult = ascendSpeedMult, effectPosition = thePosition
 			});
+			
+			base.FixedUpdate();
 		}
 
 		public override void OnExit()
@@ -84,6 +85,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
+
+		public override bool IsButtonDownAuthority() => inputBank.interact.down;
 	}
 
 	class KamunagiDashState : BaseTwinState
@@ -109,14 +112,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			PlayAnimation("Saraana", "FlyUp");
 			PlayAnimation("Ururuu", "FlyUp");
 			CreateBlinkEffect(effectPosition);
-			EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, "MuzzleRight",
-				false);
-			EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, "MuzzleLeft",
-				false);
+			EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, "MuzzleRight", false);
+			EffectManager.SimpleMuzzleFlash(muzzlePrefab, base.gameObject, "MuzzleLeft", false);
 			if (!isAuthority) return;
 			characterMotor.Motor.ForceUnground();
 			characterBody.AddTimedBuffAuthority(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 0.5f);
-			wasEdown = inputBank.interact.down;
+			wasEdown = inputBank.jump.down;
 			//log.LogDebug("dash is entering");
 		}
 
@@ -144,11 +145,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			}
 
 			characterBody.isSprinting = true; //magic
-			flyVector = wasEdown ? -flyRay.direction * speedMult : flyRay.direction * speedMult;
-
+			//flyVector = wasEdown ? -flyRay.direction * speedMult : flyRay.direction * speedMult;
+			flyVector = flyRay.direction * speedMult;
+			
 			//log.LogDebug("flyVector: " + flyVector);
-			characterMotor.rootMotion +=
-				flyVector * (moveSpeedStat * flyCurve.Evaluate(fixedAge / duration) * Time.deltaTime);
+			characterMotor.rootMotion += flyVector * (moveSpeedStat * flyCurve.Evaluate(fixedAge / duration) * Time.deltaTime);
 
 			//log.LogDebug("rootMotion: " + characterMotor.rootMotion);
 

@@ -24,9 +24,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override void OnEnter()
 		{
 			base.OnEnter();
+			log.LogDebug("entering channeldash");
 			behaviour = characterBody.GetComponent<TwinBehaviour>();
 			duration = behaviour.chargeDuration;
-
 			origin = this.transform.position;
 			thePosition = characterBody.footPosition + Vector3.up * 0.15f;
 			characterBody.SetBuffCount(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 1);
@@ -60,7 +60,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		public override void FixedUpdate()
 		{
-
+			base.FixedUpdate();
+			
 			if (!isAuthority) return;
 			characterMotor.Motor.SetPosition(this.origin);
 			(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
@@ -73,13 +74,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			{
 				flyRay = GetAimRay(), speedMult = ascendSpeedMult, effectPosition = thePosition
 			});
-			
-			base.FixedUpdate();
 		}
 
 		public override void OnExit()
 		{
-			//log.LogDebug("exiting channeldash");
+			log.LogDebug("exiting channeldash");
 			characterBody.SetBuffCount(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 0);
 			base.OnExit();
 		}

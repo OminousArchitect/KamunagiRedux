@@ -124,8 +124,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		{
 			var model = await this.GetModel();
 			var displayModel = model.InstantiateClone("KamunagiDisplay", false);
-			displayModel.GetComponent<Animator>().runtimeAnimatorController =
-				await LoadAsset<RuntimeAnimatorController>("kamunagiassets:animHenryMenu");
+			displayModel.GetComponent<Animator>().runtimeAnimatorController = await LoadAsset<RuntimeAnimatorController>("kamunagiassets:animHenryMenu");
+			displayModel.AddComponent<LobbySound>();
 			return displayModel;
 		}
 

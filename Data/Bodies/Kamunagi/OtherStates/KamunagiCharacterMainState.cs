@@ -126,9 +126,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			if (!characterMotor.isGrounded && (characterMotor as IPhysMotor).velocity.y <= -12f)
 			{
 				chainsPrimed = true;
-				if (inputBank.interact.justPressed)
+				if (inputBank.interact.justPressed && passiveSkill.ExecuteIfReady())
 				{
-					passiveSkill.ExecuteIfReady();
 					chainsPrimed = false;
 				}
 			}
@@ -144,16 +143,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			{
 				if (hasInputBank)
 				{
-					/*if ((characterMotor as IPhysMotor).velocity.y <= -12f)
-					{
-						chainsPrimed = true;
-						if (inputBank.jump.justPressed && passiveSkill.ExecuteIfReady()) //ascension threshold
-						{
-							chainsPrimed = false;
-							return;
-						}
-					}*/
-
 					if (inputBank.jump.down && (characterMotor as IPhysMotor).velocity.y <= 0)
 						hoverStateMachine.SetInterruptState(new KamunagiHoverState(), InterruptPriority.Any);
 				}

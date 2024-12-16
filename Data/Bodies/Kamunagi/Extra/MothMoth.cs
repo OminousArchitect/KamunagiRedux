@@ -27,6 +27,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				NetworkServer.Spawn(ward);
 			}
 			EffectManager.SpawnEffect(effect, new EffectData { origin = characterBody.corePosition, scale = characterBody.bestFitRadius }, true);
+			AkSoundEngine.PostEvent(898105266, base.gameObject);
 		}
 
 		public override void FixedUpdate()

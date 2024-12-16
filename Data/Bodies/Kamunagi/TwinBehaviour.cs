@@ -68,6 +68,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				origin = ururuu,
 				scale = 1f
 			}, transmit: true);
+			AkSoundEngine.PostEvent(451970663, base.gameObject);
 		}
 
 		private void UnsetOverrides()
@@ -91,6 +92,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				origin = saraana,
 				scale = 1
 			}, transmit: true);
+			AkSoundEngine.PostEvent(282403184, base.gameObject);
 		}
 
 		public string twinMuzzle

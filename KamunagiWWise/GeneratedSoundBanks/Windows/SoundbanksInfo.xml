@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{D60C6070-3D57-5D7A-CFF7-45FF792AD84B}">
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{8F3EDC78-DEA2-8408-C6C1-A77AF578A1C2}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -22,6 +22,7 @@
 				<Bus Id="3803692087" Name="Master Audio Bus"/>
 			</Busses>
 			<GameParameters>
+				<GameParameter Id="3673881719" Name="Volume_SFX"/>
 				<GameParameter Id="3729143042" Name="Volume_MSX"/>
 			</GameParameters>
 			<StateGroups>
@@ -33,27 +34,47 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{655AB27F-1557-8447-6C4B-CDC334BE80E6}">
+		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{D627AD61-9F9C-929F-972E-5C168913F232}">
 			<ShortName>KamunagiMusic</ShortName>
 			<Path>KamunagiMusic.bnk</Path>
 			<Media>
 				<File Id="280942812" Language="SFX" Streaming="true" Location="Memory">
 					<ShortName>Senran.wav</ShortName>
 					<Path>Media/280942812.wem</Path>
-					<CachePath>SFX/Senran_11703E61.wem</CachePath>
-					<PrefetchSize>22094</PrefetchSize>
+					<CachePath>SFX/Senran_FBC78EF0.wem</CachePath>
+					<PrefetchSize>17736</PrefetchSize>
+				</File>
+				<File Id="430001093" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>VoicelineOne.wav</ShortName>
+					<CachePath>SFX/VoicelineOne_818F3B66.wem</CachePath>
 				</File>
 				<File Id="496611040" Language="SFX" Streaming="true" Location="Memory">
 					<ShortName>Ikusamanui.wav</ShortName>
 					<Path>Media/496611040.wem</Path>
-					<CachePath>SFX/Ikusamanui_11703E61.wem</CachePath>
-					<PrefetchSize>10038</PrefetchSize>
+					<CachePath>SFX/Ikusamanui_FBC78EF0.wem</CachePath>
+					<PrefetchSize>17736</PrefetchSize>
+				</File>
+				<File Id="575401655" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>VoicelineTwo.wav</ShortName>
+					<CachePath>SFX/VoicelineTwo_818F3B66.wem</CachePath>
 				</File>
 				<File Id="576479314" Language="SFX" Streaming="true" Location="Memory">
 					<ShortName>Ranse no Tourai.wav</ShortName>
 					<Path>Media/576479314.wem</Path>
-					<CachePath>SFX/Ranse no Tourai_11703E61.wem</CachePath>
-					<PrefetchSize>18114</PrefetchSize>
+					<CachePath>SFX/Ranse no Tourai_FBC78EF0.wem</CachePath>
+					<PrefetchSize>17736</PrefetchSize>
+				</File>
+				<File Id="597159081" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Mothmoth.wav</ShortName>
+					<CachePath>SFX/Mothmoth_818F3B66.wem</CachePath>
+				</File>
+				<File Id="739567481" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Overzeal1.wav</ShortName>
+					<CachePath>SFX/Overzeal1_818F3B66.wem</CachePath>
+				</File>
+				<File Id="788292748" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Overzeal2.wav</ShortName>
+					<CachePath>SFX/Overzeal2_818F3B66.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -77,6 +98,27 @@
 						</SwitchContainer>
 					</SwitchContainers>
 				</Event>
+				<Event Id="2023966543" Name="Play_LobbySound">
+					<MediaRefs>
+						<MediaRef Id="739567481"/>
+						<MediaRef Id="788292748"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="898105266" Name="Play_Mothmoth">
+					<MediaRefs>
+						<MediaRef Id="597159081"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="451970663" Name="Play_SwapVoice">
+					<MediaRefs>
+						<MediaRef Id="430001093"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="282403184" Name="Play_UnswapVoice">
+					<MediaRefs>
+						<MediaRef Id="575401655"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 			<GameParameters>
 				<GameParameter Id="3729143042" Name="Volume_MSX"/>
@@ -91,5 +133,5 @@
 			</StateGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{820A91D1-123A-CC0F-7B5D-2C5E948A2CA6}</FileHash>
+	<FileHash>{22ECD35A-C9AB-8B03-71ED-05FA07FBA5B3}</FileHash>
 </SoundBanksInfo>

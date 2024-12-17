@@ -1,9 +1,16 @@
 Event	ID	Name			Wwise Object Path	Notes
 	282403184	Play_UnswapVoice			\Default Work Unit\Play_UnswapVoice	
+	352455643	Play_WindEnd			\Default Work Unit\Play_WindEnd	
+	441572235	Play_Water			\Default Work Unit\Play_Water	
 	451970663	Play_SwapVoice			\Default Work Unit\Play_SwapVoice	
+	701316761	Play_WindShoot			\Default Work Unit\Play_WindShoot	
 	898105266	Play_Mothmoth			\Default Work Unit\Play_Mothmoth	
+	1404898110	Play_NSMloop			\Default Work Unit\Play_NSMloop	
+	1891151654	Play_SobuGekishohaLoop			\Default Work Unit\Play_SobuGekishohaLoop	
 	2023966543	Play_LobbySound			\Default Work Unit\Play_LobbySound	
+	2555745400	Play_NSMstart			\Default Work Unit\Play_NSMstart	
 	4103318377	Play_KamunagiBossMusic			\Default Work Unit\Play_KamunagiBossMusic	
+	4125280571	Play_SobuGekishohaEnd			\Default Work Unit\Play_SobuGekishohaEnd	
 
 State Group	ID	Name			Wwise Object Path	Notes
 	1533728782	KamunagiMusicGroup			\Default Work Unit\KamunagiMusicGroup	
@@ -13,17 +20,26 @@ State	ID	Name	State Group			Notes
 	1852808225	Playing	KamunagiMusicGroup			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
+	3673881719	Volume_SFX			\Default Work Unit\Volume_SFX	
 	3729143042	Volume_MSX			\Default Work Unit\Volume_MSX	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	73915129	NightshadeMantleInit	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\NightshadeMantleInit_1BE40209.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\NightshadeMantleInit		180852
 	280942812	Senran	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Senran_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran		17736
+	292741856	SobuGekishohaEnd	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\SobuGekishohaAudio2_66262574.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\SobuGekishohaEnd		305464
 	430001093	VoicelineOne	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\VoicelineOne_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\VoicelineOne		938080
 	496611040	Ikusamanui	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ikusamanui_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ikusamanui\Ikusamanui		17736
 	575401655	VoicelineTwo	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\VoicelineTwo_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\VoicelineTwo		467040
 	576479314	Ranse no Tourai	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Ranse no Tourai_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Ranse no Tourai\Ranse no Tourai		17736
 	597159081	Mothmoth	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Mothmoth_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\Mothmoth		503904
+	610643974	WindEnd	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\WindSounds2_E4F0EB88.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\WindEnd		212440
+	666654968	WaterSounds2	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\WaterSounds2_3B81CA1A.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\WaterTides\WaterSounds2		95804
 	739567481	Overzeal1	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Overzeal1_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\LobbySound\Overzeal1		655456
 	788292748	Overzeal2	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Overzeal2_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\LobbySound\Overzeal2		831584
+	842126853	WaterSounds	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\WaterSounds_C30FBB6B.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\WaterTides\WaterSounds		102680
+	1006807881	NightshadeMantleOut	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\NightshadeMantle_A383E86F.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\NightshadeMantleOut		772124
+	1020800187	SobuGekishohaLoop	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\SobuGekishohaAudio_AF628278.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\SobuGekishohaLoop		608412
+	1049138817	WindShoot	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\WindSounds_AAF878C0.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixer\WindShoot		150264
 
 Streamed Audio	ID	Name	Audio source file	Generated audio file	Wwise Object Path	Notes
 	280942812	Senran	E:\RoR2 Modding\Non-League Champions\Kamunagi of Chains\BubbetRedux\KamunagiOfChains\KamunagiWWise\.cache\Windows\SFX\Senran_FBC78EF0.wem	280942812.wem	\Interactive Music Hierarchy\Default Work Unit\KamunagiBossMusic\Playing\Senran\Senran	

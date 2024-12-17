@@ -34,15 +34,23 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{D627AD61-9F9C-929F-972E-5C168913F232}">
+		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{A2F04774-D4BB-19F7-DD9C-C94C2967A48D}">
 			<ShortName>KamunagiMusic</ShortName>
 			<Path>KamunagiMusic.bnk</Path>
 			<Media>
+				<File Id="73915129" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NightshadeMantleInit.wav</ShortName>
+					<CachePath>SFX/NightshadeMantleInit_1BE40209.wem</CachePath>
+				</File>
 				<File Id="280942812" Language="SFX" Streaming="true" Location="Memory">
 					<ShortName>Senran.wav</ShortName>
 					<Path>Media/280942812.wem</Path>
 					<CachePath>SFX/Senran_FBC78EF0.wem</CachePath>
 					<PrefetchSize>17736</PrefetchSize>
+				</File>
+				<File Id="292741856" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SobuGekishohaAudio2.wav</ShortName>
+					<CachePath>SFX/SobuGekishohaAudio2_66262574.wem</CachePath>
 				</File>
 				<File Id="430001093" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>VoicelineOne.wav</ShortName>
@@ -68,6 +76,14 @@
 					<ShortName>Mothmoth.wav</ShortName>
 					<CachePath>SFX/Mothmoth_818F3B66.wem</CachePath>
 				</File>
+				<File Id="610643974" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>WindSounds2.wav</ShortName>
+					<CachePath>SFX/WindSounds2_E4F0EB88.wem</CachePath>
+				</File>
+				<File Id="666654968" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>WaterSounds2.wav</ShortName>
+					<CachePath>SFX/WaterSounds2_3B81CA1A.wem</CachePath>
+				</File>
 				<File Id="739567481" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Overzeal1.wav</ShortName>
 					<CachePath>SFX/Overzeal1_818F3B66.wem</CachePath>
@@ -75,6 +91,22 @@
 				<File Id="788292748" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Overzeal2.wav</ShortName>
 					<CachePath>SFX/Overzeal2_818F3B66.wem</CachePath>
+				</File>
+				<File Id="842126853" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>WaterSounds.wav</ShortName>
+					<CachePath>SFX/WaterSounds_C30FBB6B.wem</CachePath>
+				</File>
+				<File Id="1006807881" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NightshadeMantle.wav</ShortName>
+					<CachePath>SFX/NightshadeMantle_A383E86F.wem</CachePath>
+				</File>
+				<File Id="1020800187" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SobuGekishohaAudio.wav</ShortName>
+					<CachePath>SFX/SobuGekishohaAudio_AF628278.wem</CachePath>
+				</File>
+				<File Id="1049138817" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>WindSounds.wav</ShortName>
+					<CachePath>SFX/WindSounds_AAF878C0.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -109,6 +141,26 @@
 						<MediaRef Id="597159081"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="1404898110" Name="Play_NSMloop">
+					<MediaRefs>
+						<MediaRef Id="1006807881"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2555745400" Name="Play_NSMstart">
+					<MediaRefs>
+						<MediaRef Id="73915129"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4125280571" Name="Play_SobuGekishohaEnd">
+					<MediaRefs>
+						<MediaRef Id="292741856"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1891151654" Name="Play_SobuGekishohaLoop">
+					<MediaRefs>
+						<MediaRef Id="1020800187"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="451970663" Name="Play_SwapVoice">
 					<MediaRefs>
 						<MediaRef Id="430001093"/>
@@ -119,8 +171,25 @@
 						<MediaRef Id="575401655"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="441572235" Name="Play_Water">
+					<MediaRefs>
+						<MediaRef Id="666654968"/>
+						<MediaRef Id="842126853"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="352455643" Name="Play_WindEnd">
+					<MediaRefs>
+						<MediaRef Id="610643974"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="701316761" Name="Play_WindShoot">
+					<MediaRefs>
+						<MediaRef Id="1049138817"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 			<GameParameters>
+				<GameParameter Id="3673881719" Name="Volume_SFX"/>
 				<GameParameter Id="3729143042" Name="Volume_MSX"/>
 			</GameParameters>
 			<StateGroups>
@@ -133,5 +202,5 @@
 			</StateGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{22ECD35A-C9AB-8B03-71ED-05FA07FBA5B3}</FileHash>
+	<FileHash>{6A7F71B9-6A92-0FDF-9C0E-D83F01818800}</FileHash>
 </SoundBanksInfo>

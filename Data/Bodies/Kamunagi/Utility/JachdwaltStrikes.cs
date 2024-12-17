@@ -52,6 +52,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				return true;
 			};
 			bullet.Fire();
+			AkSoundEngine.PostEvent(701316761, base.gameObject);
 		}
 
 		public override void FixedUpdate()
@@ -77,7 +78,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override void OnExit()
 		{
 			base.OnExit();
-			activatorSkillSlot.rechargeStopwatch = activatorSkillSlot.finalRechargeInterval - 3f;
+			if (!hitSomething)
+			{
+				activatorSkillSlot.rechargeStopwatch = activatorSkillSlot.finalRechargeInterval - 3f;
+			}
 		}
 	}
 
@@ -199,7 +203,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				base.OnEnter();
 				blinkPrefab = Concentric.GetEffect<CherryBlossoms>().WaitForCompletion();
 				CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
-				Util.PlayAttackSpeedSound(beginSoundString, base.gameObject, 1.2f);
+				//Util.PlayAttackSpeedSound(beginSoundString, base.gameObject, 1.2f);
 				crit = Util.CheckRoll(critStat, base.characterBody.master);
 				modelTransform = GetModelTransform();
 				if (NetworkServer.active)
@@ -292,7 +296,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			
 			public override void OnExit()
 			{
-				Util.PlaySound(endSoundString, base.gameObject);
+				//Util.PlaySound(endSoundString, base.gameObject);
 				CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
 				modelTransform = GetModelTransform();
 				if (modelTransform)
@@ -324,7 +328,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						lingeringInvincibilityDuration);
 				}
 
-				Util.PlaySound(endSoundString, base.gameObject);
+				//Util.PlaySound(endSoundString, base.gameObject);
+				AkSoundEngine.PostEvent(352455643, base.gameObject);
 				base.OnExit();
 			}
 		}

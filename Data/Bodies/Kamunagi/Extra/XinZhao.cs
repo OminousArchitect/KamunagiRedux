@@ -23,6 +23,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			base.OnEnter();
 			PlayAnimation("Saraana Override", "Saraana NSM");
 			PlayAnimation("Ururuu Override", "Ururuu NSM");
+			AkSoundEngine.PostEvent(2555745400, base.gameObject);
 			enemyHurtBoxes = new SphereSearch
 				{
 					origin = characterBody.corePosition, radius = 30, mask = LayerIndex.entityPrecise.mask
@@ -87,6 +88,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			NetworkServer.Spawn(UnityEngine.Object.Instantiate(Concentric.GetNetworkedObject<XinZhao>().WaitForCompletion(),
 				forceFieldPosition,
 				Quaternion.identity));
+			AkSoundEngine.PostEvent(1404898110, base.gameObject);
 			foreach (var (position, healthComponent) in hurtBoxes)
 			{
 				if (healthComponent == this.healthComponent || !healthComponent.body) continue;

@@ -13,7 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 {
 	public class SobuGekishohaState : BaseTwinState
 	{
-		private float duration = 5;
+		private float duration = 3.3f;
 		private float stopwatch;
 		private float damageCoefficient = 5.7f;
 		private Transform centerFarMuzzle;
@@ -23,13 +23,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private CameraTargetParams.AimRequest request;
 		private TemporaryOverlayInstance overlay;
 		private CharacterModel charModel;
+		public Animator animator;
+		private uint sound;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			StartAimMode(duration + 1);
-			Util.PlaySound(EntityStates.VoidRaidCrab.SpinBeamAttack.enterSoundString, gameObject);
+			PlayAnimation("Saraana Override", "EnterLaser");
+			PlayAnimation("Ururuu Override", "EnterLaser");
+			sound = AkSoundEngine.PostEvent(1891151654, base.gameObject);
 			characterMotor.useGravity = false;
+			animator = GetModelAnimator();
+			//animator.SetBool("inLaser", true);
 			centerFarMuzzle = FindModelChild("MuzzleCenterFar");
 			charModel = GetModelTransform().GetComponent<CharacterModel>();
 
@@ -131,9 +137,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			{
 				request.Dispose();
 			}
-
+			AkSoundEngine.StopPlayingID(sound);
+			AkSoundEngine.PostEvent(4125280571, base.gameObject);
 			characterBody.RemoveBuff(Concentric.GetBuffDef<SobuGekishoha>().WaitForCompletion());
-			Util.PlaySound(EntityStates.VoidRaidCrab.SpinBeamWindDown.enterSoundString, gameObject);
+			//animator.SetBool("inLaser", false);
 			characterMotor.useGravity = true;
 			if (tracerInstance)
 			{

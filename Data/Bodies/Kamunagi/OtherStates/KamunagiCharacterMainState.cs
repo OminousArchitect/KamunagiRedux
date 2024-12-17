@@ -123,7 +123,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 				chainsSpawned = false;
 			}
 
-			if (!characterMotor.isGrounded && (characterMotor as IPhysMotor).velocity.y <= -12f)
+			if (!characterMotor.isGrounded && (characterMotor as IPhysMotor).velocity.y <= -10f)
 			{
 				chainsPrimed = true;
 				if (inputBank.interact.justPressed && passiveSkill.ExecuteIfReady())

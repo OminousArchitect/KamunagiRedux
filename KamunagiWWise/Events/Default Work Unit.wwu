@@ -14,6 +14,127 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_SwapVoice" ID="{087D2B63-6921-4073-BEB4-C20C742FAB21}">
+					<ChildrenList>
+						<Action Name="" ID="{FD96E99D-261D-4D2E-9316-F9B6F832E39D}" ShortID="700255348">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="VoicelineOne" ID="{45B12569-E31D-46D8-A5E7-4F407A770177}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_UnswapVoice" ID="{E99C50E6-A9AA-49FD-93AC-73A1C2FFAE74}">
+					<ChildrenList>
+						<Action Name="" ID="{BD2A7F68-449D-43AB-9192-AB5305EB55C0}" ShortID="933640144">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="VoicelineTwo" ID="{5F6EFA79-67FA-4918-A49F-6BFD9FD547D7}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Mothmoth" ID="{D8830D51-7350-4CFD-88AF-9301AA632714}">
+					<ChildrenList>
+						<Action Name="" ID="{A316A088-D39C-46F1-ADD7-F9E3ADE8DC21}" ShortID="647931031">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Mothmoth" ID="{B0E59B8D-CD0F-4CA9-94BE-D825E75E19B8}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_LobbySound" ID="{CCCA8FCD-7C88-400B-9749-C702CF6ACC99}">
+					<ChildrenList>
+						<Action Name="" ID="{59D700F1-2F27-4D05-911E-436140E2F8F6}" ShortID="320214805">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="LobbySound" ID="{0D4F49B6-BFC9-4FE8-A9DD-BB2832385CA3}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_SobuGekishohaLoop" ID="{4CCFA0FB-27D3-436A-BF61-597F31456B6D}">
+					<ChildrenList>
+						<Action Name="" ID="{DA32E300-0EDD-447F-8A90-C58DBC3CD6DF}" ShortID="975356385">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="SobuGekishohaLoop" ID="{609DC6A6-E02F-415F-96E2-1E9BB2D40BF3}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_SobuGekishohaEnd" ID="{09B887B9-ACBA-4E0E-A052-DADBCE1C01BD}">
+					<ChildrenList>
+						<Action Name="" ID="{09CB76AE-4733-4AE1-9988-4A5310CBC4E1}" ShortID="910858512">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="SobuGekishohaEnd" ID="{E98B0B99-0565-467F-B70B-42D2AE10F392}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_NSMstart" ID="{EAD3A705-14F3-4240-9E22-29E67D45240E}">
+					<ChildrenList>
+						<Action Name="" ID="{30A73A1D-3C2C-4855-B973-64861384D91C}" ShortID="157986258">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="NightshadeMantleInit" ID="{50319F9F-F6E5-4672-924E-E8E485FAAB19}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_NSMloop" ID="{9411CF2E-DA63-4BE7-9821-576910ED3D51}">
+					<ChildrenList>
+						<Action Name="" ID="{7E48915C-7038-469E-99A0-5C21408FB008}" ShortID="556668142">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="NightshadeMantleOut" ID="{D2DB976C-4463-48EE-A489-F4ED0FC51339}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_WindShoot" ID="{FB72F14F-4224-469D-9197-99E089E85B78}">
+					<ChildrenList>
+						<Action Name="" ID="{2B2A292E-6DA4-4684-B66A-C082BCB19968}" ShortID="776323498">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="WindShoot" ID="{C1C6FAF6-9910-4FDC-933E-4DDC7D8D3BBB}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_WindEnd" ID="{E5F26B84-13B1-42EE-A2D4-F96A77071E5C}">
+					<ChildrenList>
+						<Action Name="" ID="{BC4CCE7D-7C57-4873-A331-F1D98F79CF19}" ShortID="799830545">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="WindEnd" ID="{354E4F81-17EF-43E7-8AE9-0BAF5B6914A7}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Water" ID="{75731D33-569E-408A-BC0E-4DC662CA4F20}">
+					<ChildrenList>
+						<Action Name="" ID="{CC4AEC87-ED5C-4BAB-848F-176E53E7AED1}" ShortID="659895199">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="WaterTides" ID="{48FCFDC4-D03B-4EF0-8A94-E0CF9C703650}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

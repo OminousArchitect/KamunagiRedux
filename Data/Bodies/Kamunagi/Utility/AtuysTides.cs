@@ -111,7 +111,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					"TidalProjectile", true);
 			var projectileController = tidalProjectile.GetComponent<ProjectileController>();
 			projectileController.ghostPrefab = await this.GetProjectileGhost();
-			projectileController.startSound = "Play_miniMushroom_spore_shoot";
+			projectileController.startSound = "Play_TidalProjectileStart";
 			projectileController.procCoefficient = 0.9f;
 			tidalProjectile.GetComponent<Rigidbody>().useGravity = false;
 			tidalProjectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
@@ -154,7 +154,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			gImpact.childrenDamageCoefficient = 0.9f;
 			gImpact.childrenProjectilePrefab = await GetProjectile<AtuysTidesEruption>();
 			luckyTidalProjectile.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<AtuysTides>();
-			luckyTidalProjectile.GetComponent<ProjectileController>().startSound = "Play_miniMushroom_spore_shoot";
+			luckyTidalProjectile.GetComponent<ProjectileController>().startSound = "Play_TidalProjectileStart";
 			luckyTidalProjectile.GetComponent<Rigidbody>().useGravity = false;
 			luckyTidalProjectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericUtility | DamageType.SlowOnHit;
 			return luckyTidalProjectile;
@@ -180,6 +180,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			{
 				switch (r.name)
 				{
+					case "Omni, Directional":
+						r.enabled = false;
+						break;
 					case "Billboard, Big Splash":
 						//r.material.SetTexture("_RemapTex", Load<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning2.png"));
 						r.enabled = false;
@@ -227,7 +230,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 						break;
 				}
 			}
-			tidalEruptionEffect.EffectWithSound("Play_clayGrenadier_attack1_explode");
+			tidalEruptionEffect.EffectWithSound("Play_TidalImpact");
 			return tidalEruptionEffect;
 		}
 
@@ -247,6 +250,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			geyserImpact.falloffModel = BlastAttack.FalloffModel.None;
 			geyserImpact.blastDamageCoefficient = 2.1f;
 			tidalEruptionProjectile.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
+			tidalEruptionProjectile.GetComponent<ProjectileController>().startSound = "";
 			return tidalEruptionProjectile;
 		}
 	}

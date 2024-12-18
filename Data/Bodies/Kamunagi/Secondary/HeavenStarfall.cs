@@ -53,6 +53,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+			if (IsKeyDownAuthority() && fixedAge >= 0.1f)
+				outer.SetNextStateToMain();
 		}
 
 		public override void Update()

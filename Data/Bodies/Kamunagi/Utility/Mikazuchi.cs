@@ -9,16 +9,16 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-	public class MikazuchiState : BaseTwinState
+	public class MikazuchiState : RaycastedSpellState
 	{
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileCount = 3f;
-		public float duration => 0.7f;
-		public RaycastHit lastHit;
-		public bool didHit;
-		public float indicatorScale => 2f;
-		internal GameObject? indicator;
-		private bool wasActive;
+		public override float duration => 0.5f;
+		public override bool requireFullCharge => true;
+		public override float failedCastCooldown => 2f;
+		public override int meterGain => 0;
+		public override int meterGainOnExit => canceledEarly ? 0 : 10;
+		public bool canceledEarly;
 
 		public override void OnEnter()
 		{
@@ -30,48 +30,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					muzzleTransform, true);
 		}
 
-		public override void Update()
+		public override void Fire(Vector3 targetPosition)
 		{
-			if (!isAuthority) return;
-			didHit = inputBank.GetAimRaycast(float.PositiveInfinity, out lastHit);
-			
-			
-			if (didHit)
-			{
-				if (indicator == null || !indicator)
-				{
-					indicator = UnityEngine.Object.Instantiate(EntityStates.Huntress.ArrowRain.areaIndicatorPrefab);
-					indicator.transform.localScale = Vector3.one * indicatorScale;
-				}
-
-				indicator.transform.position = lastHit.point;
-				if (wasActive) return;
-				indicator.SetActive(true);
-				wasActive = true;
-				return;
-			}
-
-			if (indicator == null || !indicator || !wasActive) return;
-			indicator.SetActive(false);
-			wasActive = false;
-		}
-
-		public override void FixedUpdate()
-		{
-			base.FixedUpdate();
-			if (isAuthority && fixedAge >= duration)
-				outer.SetNextStateToMain();
-		}
-		
-		void Strike(Vector3 targetPosition)
-		{
+			base.Fire(targetPosition);
 			var blastAttack = new BlastAttack
 			{
 				attacker = gameObject,
 				baseDamage = damageStat * 9f,
 				baseForce = 1800,
 				crit = RollCrit(),
-				damageType = DamageTypeCombo.GenericUtility | DamageType.Shock5s,
+				damageType = DamageType.Shock5s,
 				falloffModel = BlastAttack.FalloffModel.None,
 				procCoefficient = 1,
 				radius = 3f,
@@ -102,22 +70,26 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				);
 			}
 		}
-		
+
+		public override void FixedUpdate()
+		{
+			base.FixedUpdate();
+			if (fixedAge < duration && !IsKeyDownAuthority())
+			{
+				log.LogDebug("canceled Early");
+				canceledEarly = true;
+				skillLocator.utility.AddOneStock();
+				outer.SetNextStateToMain();
+			}
+		}
+
 		public override void OnExit()
 		{
 			base.OnExit();
-			if (!isAuthority) return;
 			if (chargeEffectInstance != null)
 				chargeEffectInstance.ReturnToPool();
-			if (indicator == null || !indicator) return;
-			Destroy(indicator);
-			
-			if (didHit && (fixedAge >= duration))
-			{
-				Strike(lastHit.point);
-			}
 		}
-		
+
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
@@ -150,11 +122,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "UTILITY0_DESCRIPTION";
 			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:Mikazuchi"));
 			skill.activationStateMachineName = "Weapon";
-			skill.baseRechargeInterval = 2f;
+			skill.baseRechargeInterval = 9f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.isCombatSkill = false;
-			skill.cancelSprintingOnActivation = false;
+			skill.cancelSprintingOnActivation = true;
 			skill.keywordTokens = new[]
 			{
 				"KEYWORD_SHOCKING",
@@ -232,7 +204,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var controller = projectile.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.procCoefficient = 0.8f;
-			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericUtility | DamageType.Shock5s;
+			controller.flightSoundLoop = null;
+			projectile.GetComponent<ProjectileDamage>().damageType = DamageType.Shock5s;
 			var lightningImpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightningImpact.impactEffect = await GetEffect<MikazuchiLightningStrike>();
 			lightningImpact.childrenProjectilePrefab = await GetProjectile<MikazuchiLightningSeeker>();
@@ -240,8 +213,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var lightpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
 			lightpact.blastDamageCoefficient = 1f;
-			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
-			projectile.GetComponent<ProjectileController>().procCoefficient = 0.6f;
 			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 145f;
 			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
 			var target = projectile.GetComponent<ProjectileDirectionalTargetFinder>();
@@ -286,7 +257,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				(await LoadAsset<GameObject>("addressable:RoR2/Base/ElectricWorm/ElectricWormSeekerProjectile.prefab")!
 				).InstantiateClone("MikazuchiLightningSeekerProjectile", true);
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
-			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericUtility;
+
 			projectile.GetComponent<ProjectileImpactExplosion>().impactEffect =
 				await GetEffect<MikazuchiStakeNova>();
 

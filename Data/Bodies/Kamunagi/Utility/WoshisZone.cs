@@ -43,8 +43,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override float indicatorScale => 11f;
 		public override int meterGain => 0;
 
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			AkSoundEngine.PostEvent(116743480, base.gameObject);
+		}
+
 		public override void Fire(Vector3 targetPosition)
 		{
+			AkSoundEngine.PostEvent(2076907168, base.gameObject);
 			outer.SetNextState(new SpawnWoshisWard() { position = targetPosition });
 		}
 

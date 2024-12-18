@@ -12,14 +12,12 @@ using UnityEngine.Events;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
-	public class ExperimentalWallState : BaseTwinState
+	public class KujyuriFrostPillarState : BaseTwinState
 	{
 		public float maxDistance = 600f;
         public float maxSlopeAngle = 100f;
         public float baseDuration = 0.5f;
         public float duration;
-        public string prepWallSoundString = "Play_mage_shift_start";
-        public string fireSoundString = "Play_mage_shift_stop";
         public bool goodPlacement;
         public RoR2.UI.CrosshairUtils.OverrideRequest crosshairOverrideRequest;
         public static GameObject indicatorPrefab;
@@ -27,6 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
         public GameObject badCrosshairPrefab =  EntityStates.Mage.Weapon.PrepWall.badCrosshairPrefab;
         public GameObject indicatorPrefabInstance; //declared in the entitystate, intialized in the Concentric class
         public static GameObject muzzleFlash;
+        public static GameObject iceBlast;
         private float damageCoefficient = 1f;
         private bool shouldInvert;
 
@@ -35,7 +34,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             base.OnEnter();
             duration = baseDuration / attackSpeedStat;
             characterBody.SetAimTimer(duration + 2f);
-            Util.PlaySound(prepWallSoundString, gameObject);
             indicatorPrefabInstance = UnityEngine.Object.Instantiate(indicatorPrefab);
             UpdateAreaIndicator();
         }
@@ -99,8 +97,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
             {
                 if (goodPlacement)
                 {
-                    Util.PlaySound(fireSoundString, gameObject);
-                    if (indicatorPrefabInstance && base.isAuthority)
+	                if (indicatorPrefabInstance && base.isAuthority)
                     {
 	                    var forward = indicatorPrefabInstance.transform.forward;
                         forward.y = 0f;
@@ -133,6 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	                        attackerFiltering = AttackerFiltering.NeverHitSelf,
 	                        teamIndex = teamComponent.teamIndex
                         };
+                        EffectManager.SpawnEffect(iceBlast, new EffectData { rotation = Quaternion.identity, origin = position}, true);
                         blastAttack.Fire();
                     }
                 }
@@ -156,7 +154,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			ExperimentalWallState.indicatorPrefab = await this.GetGenericObject();
+			KujyuriFrostPillarState.indicatorPrefab = await this.GetGenericObject();
+			KujyuriFrostPillarState.iceBlast = await LoadAsset<GameObject>("RoR2/Base/EliteIce/AffixWhiteExplosion.prefab");
 		}
 		
 		async Task<GameObject> IGenericObject.BuildObject()
@@ -172,7 +171,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			ExperimentalWallState.muzzleFlash = await this.GetEffect();
+			KujyuriFrostPillarState.muzzleFlash = await this.GetEffect();
 		}
 
 		async Task<SkillDef> ISkill.BuildObject()
@@ -275,12 +274,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				}
 			}
 			effect.GetComponentInChildren<Light>().color = Color.cyan;
-			effect.EffectWithSound("Play_mage_m2_iceSpear_charge");
+			effect.EffectWithSound("");
 			effect.SetActive(false);
 			return effect;
 		}
 
-		public IEnumerable<Type> GetEntityStates() => new []{typeof(ExperimentalWallState)};
+		public IEnumerable<Type> GetEntityStates() => new []{typeof(KujyuriFrostPillarState)};
 	}
 
 	public class ProjectileDotZoneEndEffect : MonoBehaviour

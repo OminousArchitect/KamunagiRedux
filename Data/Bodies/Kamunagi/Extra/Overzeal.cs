@@ -68,7 +68,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			first.GetComponent<ParticleSystemRenderer>().sharedMaterials = new[] { something, edited };
 			UnityEngine.Object.Destroy(effect.transform.GetChild(2).gameObject);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(3).gameObject);
-			//effect.EffectWithSound("");
+			effect.EffectWithSound("");
 			effect.GetComponent<EffectComponent>().positionAtReferencedTransform = false;
 			return effect;
 		}

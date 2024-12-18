@@ -124,12 +124,45 @@
 						</Action>
 					</ChildrenList>
 				</Event>
-				<Event Name="Play_Water" ID="{75731D33-569E-408A-BC0E-4DC662CA4F20}">
+				<Event Name="Play_TidalProjectileStart" ID="{75731D33-569E-408A-BC0E-4DC662CA4F20}">
 					<ChildrenList>
 						<Action Name="" ID="{CC4AEC87-ED5C-4BAB-848F-176E53E7AED1}" ShortID="659895199">
 							<ReferenceList>
 								<Reference Name="Target">
 									<ObjectRef Name="WaterTides" ID="{48FCFDC4-D03B-4EF0-8A94-E0CF9C703650}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_TidalImpact" ID="{2AC4A359-D29D-4AFC-992A-6B5E62AD59B7}">
+					<ChildrenList>
+						<Action Name="" ID="{23A2DFF9-8840-41A8-9FC3-0172578777F0}" ShortID="643261507">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="TidalImpact" ID="{AD34B989-9144-4B0D-89F9-50012EF7D674}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_WoshisAim" ID="{EFE6CA4B-E673-43AA-9DFA-94F7662C2065}">
+					<ChildrenList>
+						<Action Name="" ID="{035439B5-CAB5-4C62-8D0A-8FC55D5C17A5}" ShortID="522853214">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="WoshisAim" ID="{1F141FA4-F0A9-4C89-926A-353C7CCAC8E5}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_WoshisDeploy" ID="{6142E1F3-CE44-4788-BC70-93FA3EE5DC29}">
+					<ChildrenList>
+						<Action Name="" ID="{770A008E-FC12-46CE-9E5B-AB7077A89A4C}" ShortID="712070001">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="WoshisDeploy" ID="{F96A0A94-5B03-4445-9C0A-DDE4347F83A6}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>

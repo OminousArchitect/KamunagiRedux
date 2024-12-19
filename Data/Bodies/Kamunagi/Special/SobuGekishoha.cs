@@ -25,6 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private CharacterModel charModel;
 		public Animator animator;
 		private uint sound;
+		private int bulletCount;
 
 		public override void OnEnter()
 		{
@@ -126,6 +127,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			bullet.damageType = DamageTypeCombo.GenericSpecial;
 			bullet.AddModdedDamageType(KamunagiOfChainsPlugin.SobuGekishoha);
 			bullet.Fire();
+			//bulletCount++;
 		}
 
 		public static GameObject hitEffectPrefab;

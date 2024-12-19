@@ -86,7 +86,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					damageInfo.attacker,
 					NaturesAxiom.CurseIndex, 
 					2.4f,
-					0.8f
+					0.65f
 				);
 			}
 		}

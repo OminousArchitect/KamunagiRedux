@@ -93,7 +93,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			base.OnExit();
 			DoChildFx(characterBody.corePosition);
-			AkSoundEngine.PostEvent(1579094162, base.gameObject);
+			//AkSoundEngine.PostEvent(1579094162, base.gameObject);
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			SmallHop(characterMotor, 3f);
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)

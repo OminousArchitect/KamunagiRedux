@@ -12,6 +12,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		private float stopwatch;
 		private float bufferTime = 0.85f;
+		public override int meterGain => 0;
 
 		public (Vector3, HealthComponent)[]? enemyHurtBoxes;
 		// Collect hurtboxes under authority

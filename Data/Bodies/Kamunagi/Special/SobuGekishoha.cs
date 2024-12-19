@@ -139,6 +139,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			}
 			AkSoundEngine.StopPlayingID(sound);
 			AkSoundEngine.PostEvent(4125280571, base.gameObject);
+			PlayAnimation("Saraana Override", "EnterLaser");
+			PlayAnimation("Ururuu Override", "EnterLaser");
 			characterBody.RemoveBuff(Concentric.GetBuffDef<SobuGekishoha>().WaitForCompletion());
 			//animator.SetBool("inLaser", false);
 			characterMotor.useGravity = true;

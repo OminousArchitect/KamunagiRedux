@@ -13,21 +13,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileCount = 3f;
-		public override float duration => 0.5f;
+		public override float duration => 0.64f;
 		public override bool requireFullCharge => true;
 		public override float failedCastCooldown => 2f;
 		public override int meterGain => 0;
-		public override int meterGainOnExit => canceledEarly ? 0 : 10;
-		public bool canceledEarly;
+
+		private uint soundID;
+		//public override int meterGainOnExit => canceledEarly ? 0 : 10;
+		//public bool canceledEarly;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
 			if (!muzzleTransform) return;
-			chargeEffectInstance =
-				EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<Mikazuchi>().WaitForCompletion(),
-					muzzleTransform, true);
+			chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<Mikazuchi>().WaitForCompletion(), muzzleTransform, true);
+			soundID = AkSoundEngine.PostEvent(2520832860, base.gameObject);
 		}
 
 		public override void Fire(Vector3 targetPosition)
@@ -76,9 +77,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			base.FixedUpdate();
 			if (fixedAge < duration && !IsKeyDownAuthority())
 			{
-				log.LogDebug("canceled Early");
-				canceledEarly = true;
-				skillLocator.utility.AddOneStock();
+				if (isAuthority && skillLocator.utility.stock == 0)
+				{
+					skillLocator.utility.AddOneStock();
+				}
 				outer.SetNextStateToMain();
 			}
 		}
@@ -88,6 +90,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			base.OnExit();
 			if (chargeEffectInstance != null)
 				chargeEffectInstance.ReturnToPool();
+			AkSoundEngine.StopPlayingID(2520832860);
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;

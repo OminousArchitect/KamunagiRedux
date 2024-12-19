@@ -188,7 +188,7 @@
 							<PropertyList>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>6</Value>
+										<Value>4</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -219,6 +219,13 @@
 							</ActiveSourceList>
 						</Sound>
 						<Sound Name="SobuGekishohaEnd" ID="{E98B0B99-0565-467F-B70B-42D2AE10F392}" ShortID="76067576">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>6</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
@@ -230,6 +237,7 @@
 							<ChildrenList>
 								<AudioFileSource Name="SobuGekishohaAudio2" ID="{E6370574-5F4D-4737-B033-5652E90BF48B}">
 									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.121696570644719"/>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
 										<Property Name="TrimBegin" Type="Real64" Value="3.50821838134431"/>
 									</PropertyList>
@@ -248,7 +256,7 @@
 							<PropertyList>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>17</Value>
+										<Value>18</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -283,7 +291,7 @@
 							<PropertyList>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>19</Value>
+										<Value>21</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -332,7 +340,8 @@
 							<ChildrenList>
 								<AudioFileSource Name="WindSounds" ID="{A62FEFB4-4D14-4B5F-A188-7302EAFD646E}">
 									<PropertyList>
-										<Property Name="FadeOutDuration" Type="Real64" Value="0.250521810699588"/>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.464381893004115"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.391058436213991"/>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
 										<Property Name="TrimBegin" Type="Real64" Value="5.47481810699589"/>
 										<Property Name="TrimEnd" Type="Real64" Value="6.25693497942387"/>
@@ -353,7 +362,7 @@
 								<Property Name="OverridePositioning" Type="bool" Value="True"/>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>25</Value>
+										<Value>18</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -368,6 +377,7 @@
 							<ChildrenList>
 								<AudioFileSource Name="WindSounds2" ID="{F3CD7190-E157-4249-B9D9-69E7F1A86436}">
 									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.146646913580248"/>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
 										<Property Name="TrimBegin" Type="Real64" Value="6.25082469135802"/>
 										<Property Name="TrimEnd" Type="Real64" Value="7.35678683127572"/>
@@ -474,7 +484,7 @@
 							<PropertyList>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>14</Value>
+										<Value>15</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -544,7 +554,7 @@
 							<PropertyList>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>20</Value>
+										<Value>29</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -573,6 +583,184 @@
 							</ChildrenList>
 							<ActiveSourceList>
 								<ActiveSource Name="RekkaSohazen" ID="{0C34381B-84AB-4663-8D33-C56D3232D0A3}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Mikazuchi" ID="{5534E582-7361-4146-A8BF-F2DAC2B0EE9E}" ShortID="267115042">
+							<PropertyList>
+								<Property Name="OverridePriority" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>13</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Mikazuchi" ID="{D84014D3-C5F2-429D-A562-4B0170837AB1}">
+									<PropertyList>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Mikazuchi.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="105269101"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Mikazuchi" ID="{D84014D3-C5F2-429D-A562-4B0170837AB1}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Flashbang" ID="{99986540-162F-4B4E-8B5F-BB2282732FFB}" ShortID="652535991">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>15</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Flashbang" ID="{99F7EB94-3FA1-4257-B74A-9D4D68CAF4B0}">
+									<PropertyList>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.127104526748971"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.437359670781893"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.16495802469136"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>Flashbang.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="963862255"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Flashbang" ID="{99F7EB94-3FA1-4257-B74A-9D4D68CAF4B0}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="GreatSealing" ID="{66B50EA8-2C08-4605-B72C-CA70766B8D48}" ShortID="16910298">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>8</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="GreatSealing" ID="{6E5769EE-7258-4913-A66A-80166288471D}">
+									<PropertyList>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.197811796982167"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.407703703703703"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>GreatSealing.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="678889388"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="GreatSealing" ID="{6E5769EE-7258-4913-A66A-80166288471D}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="SealSound1" ID="{34383095-0FB4-4F6E-857C-B81FBDF65F71}" ShortID="124778728">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>20</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="SealSound1" ID="{1DE54EBD-9FF8-4A22-A8CB-EF4F9BCCF327}">
+									<PropertyList>
+										<Property Name="FadeInDuration" Type="Real64" Value="0.195529218106996"/>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.775374485596708"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="1.03495637860082"/>
+										<Property Name="TrimEnd" Type="Real64" Value="2.36994897119342"/>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-7</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>SealSound1.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1032513625"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="SealSound1" ID="{1DE54EBD-9FF8-4A22-A8CB-EF4F9BCCF327}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="SealSound2" ID="{9418F5D8-6878-4988-8DA0-8AB5B2B9A36D}" ShortID="999316006">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>13</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5D4B042-26C9-43A1-983F-6CD6D8A7A780}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{F3DCD1AC-60B7-45F9-8886-FECB430B3BED}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="SealSound2" ID="{5539D5A8-09C7-41A5-8335-A2422269D942}">
+									<PropertyList>
+										<Property Name="FadeOutDuration" Type="Real64" Value="0.401733882030178"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="1.82325377229081"/>
+										<Property Name="TrimEnd" Type="Real64" Value="2.44748641975309"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>SealSound2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="396702099"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="SealSound2" ID="{5539D5A8-09C7-41A5-8335-A2422269D942}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

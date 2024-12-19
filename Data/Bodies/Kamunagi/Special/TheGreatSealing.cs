@@ -16,6 +16,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		public static GameObject muzzleEffect;
 		public override float duration => 10f;
 		public override float failedCastCooldown => 1f;
+		private uint soundID;
 
 		public override void Fire(Vector3 targetPosition)
 		{
@@ -36,6 +37,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			base.OnEnter();
 			var muzzleTransform = FindModelChild("MuzzleCenter");
 			if (!muzzleTransform) return;
+			soundID = AkSoundEngine.PostEvent(1275107278, base.gameObject);
 			chargeEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect, muzzleTransform,
 				true, new EffectData() { rootObject = muzzleTransform.gameObject, scale = 0.1f });
 		}
@@ -44,6 +46,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			base.OnExit();
 			if (chargeEffectInstance != null) chargeEffectInstance.ReturnToPool();
+			//AkSoundEngine.StopPlayingID(soundID);
 			EffectManager.SimpleMuzzleFlash(Concentric.GetEffect<SealingMuzzleFlash>().WaitForCompletion(), gameObject, "MuzzleCenter", false);
 		}
 	}
@@ -319,7 +322,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			var numbers = effect.transform.GetChild(9).gameObject;
 			var pRender = numbers.GetComponent<ParticleSystemRenderer>();
 			pRender.material.SetColor("_TintColor", new Color(0f, 1f, 0.98f));
-			effect.EffectWithSound("Play_nullifier_death_vortex_explode");
+			effect.EffectWithSound("Play_Seal_Execute"); //execute sound
 			return effect;
 		}
 	}
@@ -420,7 +423,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			blastIndicator.transform.localScale = Vector3.one * 1.15f; //blast indicator
 			blastIndicator.transform.localPosition = new Vector3(0, 0.25f, 0);
 
-			effect.EffectWithSound("Play_item_void_bleedOnHit_explo");
+			effect.EffectWithSound("Play_Seal_Detonate"); //detonation sound
 			return effect;
 		}
 	}

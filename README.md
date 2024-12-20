@@ -14,6 +14,8 @@ The Kamunagi of Chains are a caster character designed such that you can spec in
 <details>
 <summary> Click to Expand </summary>
 
+Additional information may be added here in the future as necessary. Check back for updates
+
 ## Passives
 passive description goes here
 ## Soei Musou Techniques (Primaries)
@@ -39,20 +41,14 @@ passive description goes here
 <summary> Click to Reveal/Hide </summary>
 
 ## ![earth](https://github.com/user-attachments/assets/2cd6d29d-b304-4cb6-beb9-2b5bbfdb5338)
-- Very high knockback
 
 ## ![fire](https://github.com/user-attachments/assets/8814be69-d192-4c5b-b8fb-3e6b0781fc27)
-- this is some text
 
 ## ![frost](https://github.com/user-attachments/assets/7d16ad41-5151-44fb-9aa2-e75fed4d4f59)
-- Pulses 3 times before disappearing
 
 ## ![winds](https://github.com/user-attachments/assets/02b1acbf-0a74-4f35-aa32-d0a2bbed2838)
-- this is some text
 
 ## ![star](https://github.com/user-attachments/assets/98bff5c7-cb16-4d7c-8625-53366ee57bf2)
-- this is some text
-
 
 </details>
 
@@ -61,22 +57,20 @@ passive description goes here
 <summary> Click to Reveal/Hide </summary>
 
 ## ![lightning](https://github.com/user-attachments/assets/fcd65f1e-b7a3-4fbc-b4ea-5cea9619307b)
-- this is some text
 
 ## ![woshis](https://github.com/user-attachments/assets/823cb23c-2434-422f-b7c3-71bbb630f890)
-- this is some text
-
+- Miasma lasts 8 seconds
+- Souls last 15 seconds
 ## ![water](https://github.com/user-attachments/assets/3145dd35-0812-462f-a2e6-0e9f590a30f5)
-- this is some text
 
 ## ![windstrikes](https://github.com/user-attachments/assets/ee195883-b0b7-4055-8846-16f2f19f4b06)
-- this is some text
-
+- Goes on a reduced cooldown if you hit nothing
+- Goes on full cooldown if you hit an enemy
 ## ![flashbang](https://github.com/user-attachments/assets/ea708ea6-0c8a-4ef7-bf6e-98d4f9e7f8b0)
-- this is some text
-
+- Uses the nodemap to teleport you, so if it can't find any nodes (i.e no places where enemies would spawn) it will fallback on just making you invulnerable briefly and not teleporting you.
+- Picks a random ground position when used on the ground
+- Picks a random air position when used in the air
 ## ![veil](https://github.com/user-attachments/assets/bcb96350-25d0-4094-9b40-2d5c5e33c7a6)
-- this is some text
 
 </details>
 
@@ -85,19 +79,12 @@ passive description goes here
 <summary> Click to Reveal/Hide </summary>
 
 ## ![sealing](https://github.com/user-attachments/assets/99faae5e-5d87-4e64-9d9b-50b6c0bc4fb8)
-- this is some text
-
-some more text
 
 ## ![laser](https://github.com/user-attachments/assets/326536e9-1657-48b3-91b9-7d2c29dc0374)
-- this is some text
-
-some more text
-
+- Requires 3 charges
+- You take 80% reduced damage while channeling
 ## ![axiom](https://github.com/user-attachments/assets/3fd1d72a-7fdf-439a-b7c3-ad284979dfa3)
-- this is some text
-
-some more text
+- Requires 5 charges
 </details>
 
 ## Divine Skills
@@ -105,34 +92,16 @@ some more text
 <summary> Click to Reveal/Hide </summary>
 
 ## ![mothmoth](https://github.com/user-attachments/assets/0db0ca76-1021-4868-a4a2-f66e69bf5ced)
-- this is some text
-
-some more text
-
+- Mothmoth disappears after 10 seconds 
 ## ![mantle](https://github.com/user-attachments/assets/c91b4c1b-52a3-472e-8d06-43e3f8362e73)
-- this is some text
-
-some more text
-
+- Completely impassable from the outside
 ## ![tatari](https://github.com/user-attachments/assets/542ef5e7-86f1-4bb5-991f-5fe7674389c6)
-- this is some text
-
-some more text
-
+- Chance to inflict a debuff on enemies scales with missing health, i.e. at 60% missing health it has a 60% chance to inflict a random debuff
 ## ![spirit](https://github.com/user-attachments/assets/f75eefde-2e16-4f56-91b3-e9c2003188d2)
-- this is some text
-
-some more text
-
+- Can only have 1 active spirit at a time
 ## ![prayer](https://github.com/user-attachments/assets/3a75afea-2893-44ab-8eb2-05a0e4c48f66)
-- this is some text
-
-some more text
 
 ## ![kuko](https://github.com/user-attachments/assets/c15eb809-be03-4bcd-99ab-40855653b2b2)
-- this is some text
-
-some more text
 </details>
 </details>
 
@@ -171,6 +140,7 @@ Thanks to these people for answering my questions in the modcord, this mod would
 -- All feedback is welcome! Feel free to mention me in the RoR2 Modding Discord @Unit_9_Type_S
 - Jump pads will lock your movement to zero if you use Dark Ascension without touching the ground after using them
 - Clay templar tar blast will permanently force you in a direction until you land
+- In multiplayer, clients can have an unlimited number of Nugwisomkami, this issue has been quite difficult to trace and I'm not sure if it'll be fixed, please summon responsibly, or don't >:)
 
 ## Misc. Dev Comments
 The Kamunagi are somewhat lacking in animations for a couple reasons

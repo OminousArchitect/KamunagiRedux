@@ -57,7 +57,7 @@
 	  "NINES_KAMUNAGI_BODY_SECONDARY3_NAME": "Frost of Kujyuri",
 	  "NINES_KAMUNAGI_BODY_SECONDARY3_DESCRIPTION": "<style=cIsUtility>Freezing</style>. Summon a pillar of ice to periodically damage nearby enemies for <style=cIsDamage>100% damage</style>.",
 	  "NINES_KAMUNAGI_BODY_SECONDARY2_NAME": "Winds of Izuruha",
-	  "NINES_KAMUNAGI_BODY_SECONDARY2_DESCRIPTION": "<color=#0b9c2d>Wind God's Perfect Defense</color>. Fire a slicing blade of wind that strikes enemies for <style=cIsDamage>250% damage</style> or fully charge to <style=cIsUtility>decrease all your cooldowns</style> by <style=cIsUtility>2s</style> and gain a speed boost.",
+	  "NINES_KAMUNAGI_BODY_SECONDARY2_DESCRIPTION": "<color=#0b9c2d>Wind God's Perfect Defense</color>. Fire a slicing blade of wind that rapidly strikes enemies for <style=cIsDamage>250% damage</style> or fully charge to <style=cIsUtility>decrease all your cooldowns</style> by <style=cIsUtility>2.5s</style> and gain a speed boost.",
 	  "NINES_KAMUNAGI_BODY_SECONDARY4_NAME": "Star of Kotuahamuru",
 	  "NINES_KAMUNAGI_BODY_SECONDARY4_DESCRIPTION": "<style=cIsDamage>Tiriryarai</style>. <style=cIsHealth>10% HP</style>. Call down a star from the heavens that deals <style=cIsDamage>950% damage</style>.",
 	  

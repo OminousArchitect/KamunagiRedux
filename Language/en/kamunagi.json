@@ -22,7 +22,7 @@
 	  "NINES_KAMUNAGI_BODY_MASTERY_SKIN_NAME": "Alternate",
 
 	  "NINES_KAMUNAGI_BODY_TWINSBLESSING_KEYWORD": "<style=cKeywordName><color=#00BDFF>Atuykarounkami's Blessings</color></style><style=cSub>On impact, create a <style=cIsDamage>tidal blast</style> on nearby surface that deals <style=cIsDamage>210% damage</style>",
-	  "NINES_KAMUNAGI_BODY_TWINSCURSE1_KEYWORD": "<style=cKeywordName><color=#711fa3>Hex</color></style><style=cSub>Deal an additional <style=cIsDamage>780% damage</style> over time.",
+	  "NINES_KAMUNAGI_BODY_TWINSCURSE1_KEYWORD": "<style=cKeywordName><color=#711fa3>Hex</color></style><style=cSub>Deal an additional <style=cIsDamage>600% damage</style> over time.",
 	  "NINES_KAMUNAGI_BODY_TWINSCURSE2_KEYWORD": "<style=cKeywordName><color=#711fa3>Hex</color></style><style=cSub>Deal an additional <style=cIsDamage>60% damage</style> over time.",
 	  "NINES_KAMUNAGI_BODY_TWINSCURSE3_KEYWORD": "<style=cKeywordName><color=#711fa3>Shadow Vulnerability</color></style><style=cSub>Increase <color=#711fa3>Hex</color> duration and <style=cIsDamage>additively</style> increase <color=#711fa3>Hex</color> damage with each stack.",
 	  "NINES_KAMUNAGI_BODY_TWINSRAYCAST_KEYWORD": "<style=cKeywordName><style=cIsDamage>Tiriryarai</style></style><style=cSub>Skill activates at your <style=cIsUtility>crosshair's location</style> with <style=cIsUtility>no travel time</style>.",
@@ -59,7 +59,7 @@
 	  "NINES_KAMUNAGI_BODY_SECONDARY2_NAME": "Winds of Izuruha",
 	  "NINES_KAMUNAGI_BODY_SECONDARY2_DESCRIPTION": "<color=#0b9c2d>Wind God's Perfect Defense</color>. Fire a slicing blade of wind that strikes enemies for <style=cIsDamage>250% damage</style> or fully charge to <style=cIsUtility>decrease all your cooldowns</style> by <style=cIsUtility>2s</style> and gain a speed boost.",
 	  "NINES_KAMUNAGI_BODY_SECONDARY4_NAME": "Star of Kotuahamuru",
-	  "NINES_KAMUNAGI_BODY_SECONDARY4_DESCRIPTION": "<style=cIsDamage>Tiriryarai</style>. <style=cIsHealth>10% HP</style>. Call down a star from the heavens to strike enemies for <style=cIsDamage>950% damage</style>",
+	  "NINES_KAMUNAGI_BODY_SECONDARY4_DESCRIPTION": "<style=cIsDamage>Tiriryarai</style>. <style=cIsHealth>10% HP</style>. Call down a star from the heavens that deals <style=cIsDamage>950% damage</style>.",
 	  
 	  "NINES_KAMUNAGI_BODY_UTILITY0_NAME": "Mikazuchi's Fury",
 	  "NINES_KAMUNAGI_BODY_UTILITY0_DESCRIPTION": "<style=cIsDamage>Tiriryarai</style>. Strike an enemy with lightning for <style=cIsDamage>900% damage</style> and additionally create <style=cIsDamage>3</style> aftershocks that seek enemies for <style=cIsDamage>750% damage</style>.",
@@ -71,7 +71,7 @@
 	  "NINES_KAMUNAGI_BODY_UTILITY3_DESCRIPTION": "Produce a <style=cIsUtility>miasma</style> at the targeted area. Enemies that die inside the <style=cIsUtility>miasma</style> have their souls <style=cIsUtility>bound to you</style> temporarily.",
 
 	  "NINES_KAMUNAGI_BODY_SPECIAL0_NAME": "Sobu Gekishoha",
-	  "NINES_KAMUNAGI_BODY_SPECIAL0_DESCRIPTION": "Unleash a <color=#4d108f>great roar of darkness</color> for <style=cIsDamage>570% damage</style> each tick. Surviving enemies are <style=cIsDamage>marked for death</style>.",
+	  "NINES_KAMUNAGI_BODY_SPECIAL0_DESCRIPTION": "Unleash a <color=#4d108f>great roar of darkness</color> for <style=cIsDamage>12,500% total damage</style>. Surviving enemies are <style=cIsDamage>marked for death</style>.",
 	  "NINES_KAMUNAGI_BODY_SPECIAL1_NAME": "The Great Sealing",
 	  "NINES_KAMUNAGI_BODY_SPECIAL1_DESCRIPTION": "Mark an area to be sealed after <style=cIsUtility>2.5s</style>. Once primed, the seal activates, dealing <style=cIsDamage>650% damage</style>. <style=cIsHealth>ALL living things</style> below <style=cIsHealth>20% health</style> are <style=cIsDamage>executed</style>.",
 	  "NINES_KAMUNAGI_BODY_SPECIAL2_NAME": "Light of Nature's Axiom",

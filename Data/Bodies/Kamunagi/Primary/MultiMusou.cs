@@ -86,7 +86,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					damageInfo.attacker,
 					NaturesAxiom.CurseIndex, 
 					2.4f,
-					0.65f
+					0.5f
 				);
 			}
 		}
@@ -109,6 +109,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			proj.GetComponent<ProjectileSimple>().desiredForwardSpeed = 150f;
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileSteerTowardTarget>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDirectionalTargetFinder>());
+			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileTargetComponent>());
 			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
 			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary;
 			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(CurseFlames);

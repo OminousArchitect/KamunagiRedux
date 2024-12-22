@@ -17,16 +17,13 @@ using Object = UnityEngine.Object;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi
 {
-	public class KamunagiAsset : Concentric, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin, IMaster, IEffect
+	public class KamunagiAsset : Concentric, IBody, IBodyDisplay, ISurvivor, IModel, IEntityStates, ISkin, IMaster,
+		IEffect
 	{
 		public const string tokenPrefix = "NINES_KAMUNAGI_BODY_";
 
 		IEnumerable<Type> IEntityStates.GetEntityStates() =>
-			new[]
-			{
-				typeof(VoidDeathState),
-				typeof(KamunagiCharacterMainState)
-			};
+			new[] { typeof(VoidDeathState), typeof(KamunagiCharacterMainState) };
 
 		async Task<SkinDef> ISkin.BuildObject()
 		{
@@ -39,7 +36,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				skinDef.name = "KamunagiDefaultSkinDef";
 				skinDef.nameToken = tokenPrefix + "DEFAULT_SKIN_NAME";
 				skinDef.icon = icon;
-				
+
 				skinDef.rootObject = model;
 				var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
 				var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
@@ -117,6 +114,45 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			// this might be why the client player was dying for hosts
 			modelHurtBoxGroup.mainHurtBox = mainHurtBoxComponent;
 
+			#region itemdisplays
+
+			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
+			idrs.keyAssetRuleGroups = (await LoadAsset<GameObject>("RoR2/Base/Commando/CommandoBody.prefab")).GetComponent<ModelLocator>().modelTransform.GetComponent<CharacterModel>().itemDisplayRuleSet.keyAssetRuleGroups;
+
+			var keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset");
+			var fireDisplay = idrs.FindDisplayRuleGroup(keyAsset);
+			var fireRules = new ItemDisplayRule[fireDisplay.rules.Length];
+			Array.Copy(fireDisplay.rules, fireRules, fireDisplay.rules.Length);
+			fireDisplay.rules = fireRules;
+			fireDisplay.rules[0].childName = "S Hair";
+			fireDisplay.rules[0].localPos = new Vector3(0.37824F, 0.18649F, 0.31578F);
+			fireDisplay.rules[0].localAngles = new Vector3(290.8627F, 338.1044F, 46.19113F);
+			fireDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			fireDisplay.rules[1].childName = "U Hair";
+			fireDisplay.rules[1].localPos = new Vector3(-0.34832F, 0.26794F, 0.14957F);
+			fireDisplay.rules[1].localAngles = new Vector3(52.33278F, 60.16898F, 218.7332F);
+			fireDisplay.rules[1].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = fireRules });
+
+			keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset");
+			var lightningDisplay = idrs.FindDisplayRuleGroup(keyAsset);
+			var lightningRules = new ItemDisplayRule[lightningDisplay.rules.Length];
+			Array.Copy(lightningDisplay.rules, lightningRules, lightningDisplay.rules.Length);
+			lightningDisplay.rules = lightningRules;
+			lightningDisplay.rules[0].childName = "Muzzle";
+			lightningDisplay.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			lightningDisplay.rules[0].localAngles = new Vector3(0F, 0F, 0F);
+			lightningDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			lightningDisplay.rules[1].childName = "Muzzle";
+			lightningDisplay.rules[1].localPos = new Vector3(0.04168F, 0.95129F, 0.15072F);
+			lightningDisplay.rules[1].localAngles = new Vector3(335.6771F, 357.8F, 180F);
+			lightningDisplay.rules[1].localScale = new Vector3(-0.40586F, 0.40586F, 0.40586F);
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = lightningRules });
+
+			characterModel.itemDisplayRuleSet = idrs;
+
+			#endregion
+
 			return model;
 		}
 
@@ -124,7 +160,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		{
 			var model = await this.GetModel();
 			var displayModel = model.InstantiateClone("KamunagiDisplay", false);
-			displayModel.GetComponent<Animator>().runtimeAnimatorController = await LoadAsset<RuntimeAnimatorController>("kamunagiassets:animHenryMenu");
+			displayModel.GetComponent<Animator>().runtimeAnimatorController =
+				await LoadAsset<RuntimeAnimatorController>("kamunagiassets:animHenryMenu");
 			displayModel.AddComponent<LobbySound>();
 			return displayModel;
 		}
@@ -134,11 +171,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var model = await this.GetModel();
 			var bodyPrefab = (await LoadAsset<GameObject>("legacy:Prefabs/CharacterBodies/MageBody"))!
 				.InstantiateClone("NinesKamunagiBody");
-			
+
 			var bodyComponent = bodyPrefab.GetComponent<CharacterBody>();
 			var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
 			var twinBehaviour = bodyPrefab.AddComponent<TwinBehaviour>();
-			
+
 			//bodyHealthComponent.body = bodyComponent; this isn't actually set in the commando prefab
 
 			bodyComponent.preferredPodPrefab = null;
@@ -146,7 +183,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			bodyComponent.subtitleNameToken = tokenPrefix + "SUBTITLE";
 			bodyComponent.bodyColor = Colors.twinsLightColor;
 			bodyComponent.portraitIcon = await LoadAsset<Texture>("kamunagiassets:Twins");
-			bodyComponent._defaultCrosshairPrefab = await LoadAsset<GameObject>("RoR2/Base/Croco/CrocoCrosshair.prefab");
+			bodyComponent._defaultCrosshairPrefab =
+				await LoadAsset<GameObject>("RoR2/Base/Croco/CrocoCrosshair.prefab");
 
 			bodyComponent.baseMaxHealth = 150f;
 			bodyComponent.baseRegen = 1.5f;
@@ -165,7 +203,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 			bodyComponent.levelMoveSpeed = 0f;
 			bodyComponent.levelJumpPower = 0f;
-			
+
 			bodyComponent.levelAttackSpeed = 0f;
 			bodyComponent.levelCrit = 0f;
 
@@ -192,11 +230,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			//bodyHealthComponent.modelLocator = bodyModelLocator; this isnt even serialized by unity, so its not set in the prefab either
 
 			#region OhNoBro
+
 			/*var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
 			var kamRuleset = model.GetComponent<CharacterModel>().itemDisplayRuleSet;
 			kamRuleset.keyAssetRuleGroups = idrs.keyAssetRuleGroups;*/
+
 			#endregion
-			
+
 			#endregion
 
 			#region Setup StateMachines
@@ -301,7 +341,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			SetStateOnHurt timesweeper = bodyPrefab.GetComponent<SetStateOnHurt>();
 			timesweeper.targetStateMachine = bodyStateMachine;
 			timesweeper.idleStateMachine = new[] { weaponStateMachine, hoverStateMachine, spellStateMachine };
-			
+
 			skillLocator.passiveSkill = new SkillLocator.PassiveSkill
 			{
 				enabled = true,

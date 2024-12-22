@@ -1,5 +1,6 @@
 using EntityStates;
 using ExtraSkillSlots;
+using HG;
 using Kamunagi;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Secondary;
@@ -117,7 +118,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			#region itemdisplays
 
 			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-			idrs.keyAssetRuleGroups = (await LoadAsset<GameObject>("RoR2/Base/Commando/CommandoBody.prefab")).GetComponent<ModelLocator>().modelTransform.GetComponent<CharacterModel>().itemDisplayRuleSet.keyAssetRuleGroups;
+			idrs.keyAssetRuleGroups = ArrayUtils.Clone((await LoadAsset<GameObject>("RoR2/Base/Commando/CommandoBody.prefab")).GetComponent<ModelLocator>().modelTransform.GetComponent<CharacterModel>().itemDisplayRuleSet.keyAssetRuleGroups);
 
 			var keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset");
 			var fireDisplay = idrs.FindDisplayRuleGroup(keyAsset);

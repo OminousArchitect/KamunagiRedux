@@ -34,7 +34,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
 			}
-			Util.PlaySound("Play_child_attack2_teleport", gameObject);
+			AkSoundEngine.PostEvent(1579094162, base.gameObject);
 
 			NodeGraph airNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Air);
 			NodeGraph groundNodes = SceneInfo.instance.GetNodeGraph(MapNodeGroup.GraphType.Ground);
@@ -76,7 +76,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			{
 				teleportPosition = characterBody.corePosition;
 			}
-			Util.PlaySound("Play_child_attack2_reappear", base.gameObject);
 			TeleportHelper.TeleportBody(base.characterBody, teleportPosition);
 			outer.SetNextStateToMain();
 		}
@@ -94,6 +93,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			base.OnExit();
 			DoChildFx(characterBody.corePosition);
+			//AkSoundEngine.PostEvent(1579094162, base.gameObject);
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
 			SmallHop(characterMotor, 3f);
 			if (charModel != null && charModel && hurtBoxGroup != null && hurtBoxGroup)

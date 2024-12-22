@@ -95,8 +95,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			}
 			else if (fixedAge >= boomerangTimer)
 			{
-				skillLocator.DeductCooldownFromAllSkillsAuthority(2f);
-				characterBody.AddTimedBuffAuthority(RoR2Content.Buffs.CloakSpeed.buffIndex, 1.5f);
+				skillLocator.DeductCooldownFromAllSkillsAuthority(2.5f);
+				characterBody.AddTimedBuffAuthority(RoR2Content.Buffs.CloakSpeed.buffIndex, 3f);
 			}
 		}
 

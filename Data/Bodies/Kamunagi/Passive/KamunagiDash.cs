@@ -98,7 +98,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public Vector3 rayDir;
 		private float duration = 1.3f;
 		public static AnimationCurve flyCurve;
-		public bool wasEdown;
+		public bool wasJumpDown;
 		public static GameObject blinkPrefab;
 		public static GameObject muzzlePrefab;
 
@@ -116,7 +116,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			if (!isAuthority) return;
 			characterMotor.Motor.ForceUnground();
 			characterBody.AddTimedBuffAuthority(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 0.5f);
-			wasEdown = inputBank.jump.down;
+			wasJumpDown = inputBank.jump.down;
 			//log.LogDebug("dash is entering");
 		}
 
@@ -144,8 +144,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			}
 
 			characterBody.isSprinting = true; //magic
-			//flyVector = wasEdown ? -flyRay.direction * speedMult : flyRay.direction * speedMult;
-			flyVector = flyRay.direction * speedMult;
+			flyVector = wasJumpDown ? -flyRay.direction * speedMult : flyRay.direction * speedMult;
+			//flyVector = flyRay.direction * speedMult;
 			
 			//log.LogDebug("flyVector: " + flyVector);
 			characterMotor.rootMotion += flyVector * (moveSpeedStat * flyCurve.Evaluate(fixedAge / duration) * Time.deltaTime);

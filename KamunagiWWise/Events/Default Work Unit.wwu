@@ -168,6 +168,61 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_MikaCharge" ID="{F278DD28-5997-4E30-BC67-DE0EBB827F5D}">
+					<ChildrenList>
+						<Action Name="" ID="{4DC387A7-11E8-4FFD-ADEF-1338D028EF3E}" ShortID="23780716">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Mikazuchi" ID="{5534E582-7361-4146-A8BF-F2DAC2B0EE9E}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Flashbang" ID="{173C7DD9-7D4F-44B9-8F59-E25473468D64}">
+					<ChildrenList>
+						<Action Name="" ID="{C4AA9156-BD0D-4EE6-B608-B13CED6E28BC}" ShortID="225594645">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Flashbang" ID="{99986540-162F-4B4E-8B5F-BB2282732FFB}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_GreatSealing" ID="{6C2580F8-FDCC-4D03-9A91-387D883612AB}">
+					<ChildrenList>
+						<Action Name="" ID="{275B39B9-CF05-4AAF-826C-95CF20DA066E}" ShortID="409021055">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="GreatSealing" ID="{66B50EA8-2C08-4605-B72C-CA70766B8D48}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Seal_Detonate" ID="{AB1010F8-A56A-4191-89DB-F5FB02E0BF36}">
+					<ChildrenList>
+						<Action Name="" ID="{22EC7C99-D09A-4D2A-975E-87E577EB84F3}" ShortID="211406404">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="SealSound1" ID="{34383095-0FB4-4F6E-857C-B81FBDF65F71}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Seal_Execute" ID="{FEB4B93F-87AB-4914-9DFE-2AA829C611B6}">
+					<ChildrenList>
+						<Action Name="" ID="{D34ED140-4D0D-4BE3-86FC-287677657DCF}" ShortID="397675262">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="SealSound2" ID="{9418F5D8-6878-4988-8DA0-8AB5B2B9A36D}" WorkUnitID="{9203C22A-3696-4902-9D8C-48001B1A111E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

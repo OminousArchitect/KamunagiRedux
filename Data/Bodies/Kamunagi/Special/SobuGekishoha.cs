@@ -25,6 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private CharacterModel charModel;
 		public Animator animator;
 		private uint sound;
+		private int bulletCount;
 
 		public override void OnEnter()
 		{
@@ -126,6 +127,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			bullet.damageType = DamageTypeCombo.GenericSpecial;
 			bullet.AddModdedDamageType(KamunagiOfChainsPlugin.SobuGekishoha);
 			bullet.Fire();
+			//bulletCount++;
 		}
 
 		public static GameObject hitEffectPrefab;
@@ -139,6 +141,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			}
 			AkSoundEngine.StopPlayingID(sound);
 			AkSoundEngine.PostEvent(4125280571, base.gameObject);
+			PlayAnimation("Saraana Override", "EnterLaser");
+			PlayAnimation("Ururuu Override", "EnterLaser");
 			characterBody.RemoveBuff(Concentric.GetBuffDef<SobuGekishoha>().WaitForCompletion());
 			//animator.SetBool("inLaser", false);
 			characterMotor.useGravity = true;

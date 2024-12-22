@@ -30,7 +30,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			maxDistance = 1000f;
 			rayRadius = 0.2f;
 			endpointVisualizerPrefab = EntityStates.Huntress.ArrowRain.areaIndicatorPrefab;
-			damageCoefficient = 9f;
+			damageCoefficient = 9.5f;
 			baseMinimumDuration = 1f;
 
 			if (NetworkServer.active && healthComponent.alive)

@@ -34,7 +34,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{8DC468AE-5171-308E-D75F-59E244FCE783}">
+		<SoundBank Id="3067910497" Type="User" Language="SFX" Hash="{22775995-9E1A-81E7-2402-CAAFECCB15EF}">
 			<ShortName>KamunagiMusic</ShortName>
 			<Path>KamunagiMusic.bnk</Path>
 			<Media>
@@ -42,9 +42,13 @@
 					<ShortName>NightshadeMantleInit.wav</ShortName>
 					<CachePath>SFX/NightshadeMantleInit_1BE40209.wem</CachePath>
 				</File>
+				<File Id="105269101" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Mikazuchi.wav</ShortName>
+					<CachePath>SFX/Mikazuchi_818F3B66.wem</CachePath>
+				</File>
 				<File Id="161137622" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>RekkaSohazen.wav</ShortName>
-					<CachePath>SFX/RekkaSohazen_EBC368C4.wem</CachePath>
+					<CachePath>SFX/RekkaSohazen_38FB93A2.wem</CachePath>
 				</File>
 				<File Id="280942812" Language="SFX" Streaming="true" Location="Memory">
 					<ShortName>Senran.wav</ShortName>
@@ -54,7 +58,11 @@
 				</File>
 				<File Id="292741856" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>SobuGekishohaAudio2.wav</ShortName>
-					<CachePath>SFX/SobuGekishohaAudio2_66262574.wem</CachePath>
+					<CachePath>SFX/SobuGekishohaAudio2_A92C6004.wem</CachePath>
+				</File>
+				<File Id="396702099" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SealSound2.wav</ShortName>
+					<CachePath>SFX/SealSound2_0E530007.wem</CachePath>
 				</File>
 				<File Id="430001093" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>VoicelineOne.wav</ShortName>
@@ -82,11 +90,15 @@
 				</File>
 				<File Id="610643974" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>WindSounds2.wav</ShortName>
-					<CachePath>SFX/WindSounds2_1124784E.wem</CachePath>
+					<CachePath>SFX/WindSounds2_299704B2.wem</CachePath>
 				</File>
 				<File Id="666654968" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>WaterSounds2.wav</ShortName>
 					<CachePath>SFX/WaterSounds2_6C06157F.wem</CachePath>
+				</File>
+				<File Id="678889388" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>GreatSealing.wav</ShortName>
+					<CachePath>SFX/GreatSealing_78E6A095.wem</CachePath>
 				</File>
 				<File Id="739567481" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Overzeal1.wav</ShortName>
@@ -106,7 +118,11 @@
 				</File>
 				<File Id="911472914" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>RekkaSohazen2.wav</ShortName>
-					<CachePath>SFX/RekkaSohazen2_8E29210E.wem</CachePath>
+					<CachePath>SFX/RekkaSohazen2_FCFD848B.wem</CachePath>
+				</File>
+				<File Id="963862255" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Flashbang.wav</ShortName>
+					<CachePath>SFX/Flashbang_8751009D.wem</CachePath>
 				</File>
 				<File Id="1006807881" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>NightshadeMantle.wav</ShortName>
@@ -116,12 +132,26 @@
 					<ShortName>SobuGekishohaAudio.wav</ShortName>
 					<CachePath>SFX/SobuGekishohaAudio_AF628278.wem</CachePath>
 				</File>
+				<File Id="1032513625" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SealSound1.wav</ShortName>
+					<CachePath>SFX/SealSound1_6EF4AB5A.wem</CachePath>
+				</File>
 				<File Id="1049138817" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>WindSounds.wav</ShortName>
-					<CachePath>SFX/WindSounds_432B4C4E.wem</CachePath>
+					<CachePath>SFX/WindSounds_0938C370.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
+				<Event Id="1579094162" Name="Play_Flashbang">
+					<MediaRefs>
+						<MediaRef Id="963862255"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1275107278" Name="Play_GreatSealing">
+					<MediaRefs>
+						<MediaRef Id="678889388"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="4103318377" Name="Play_KamunagiBossMusic">
 					<SwitchContainers>
 						<SwitchContainer>
@@ -148,6 +178,11 @@
 						<MediaRef Id="788292748"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="2520832860" Name="Play_MikaCharge">
+					<MediaRefs>
+						<MediaRef Id="105269101"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="898105266" Name="Play_Mothmoth">
 					<MediaRefs>
 						<MediaRef Id="597159081"/>
@@ -161,6 +196,16 @@
 				<Event Id="2555745400" Name="Play_NSMstart">
 					<MediaRefs>
 						<MediaRef Id="73915129"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2243496508" Name="Play_Seal_Detonate">
+					<MediaRefs>
+						<MediaRef Id="1032513625"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="285463361" Name="Play_Seal_Execute">
+					<MediaRefs>
+						<MediaRef Id="396702099"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="4125280571" Name="Play_SobuGekishohaEnd">
@@ -229,5 +274,5 @@
 			</StateGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{AA524F3C-42DF-011C-5A94-22AA1E139DBD}</FileHash>
+	<FileHash>{C8120C49-8082-677D-1243-C786084636AE}</FileHash>
 </SoundBanksInfo>

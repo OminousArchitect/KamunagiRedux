@@ -43,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				damageType = DamageType.Shock5s,
 				falloffModel = BlastAttack.FalloffModel.None,
 				procCoefficient = 1,
-				radius = 3f,
+				radius = 6f,
 				position = targetPosition,
 				attackerFiltering = AttackerFiltering.NeverHitSelf,
 				teamIndex = teamComponent.teamIndex

@@ -58,8 +58,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 	}
 	internal class DenebokshiriBrimstoneState : BaseTwinState
 	{
-		private float remapMin = 1.5f;
-		private float remapMax = 2.5f;
+		private float remapMin = 1f;
+		private float remapMax = 2f;
 		private float maxChargeTime = 2f;
 		private float damageCoefficient;
 

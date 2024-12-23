@@ -116,42 +116,44 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			modelHurtBoxGroup.mainHurtBox = mainHurtBoxComponent;
 
 			#region itemdisplays
-
 			var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
 			idrs.keyAssetRuleGroups = ArrayUtils.Clone((await LoadAsset<GameObject>("RoR2/Base/Commando/CommandoBody.prefab")).GetComponent<ModelLocator>().modelTransform.GetComponent<CharacterModel>().itemDisplayRuleSet.keyAssetRuleGroups);
 
-			var keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteFire/EliteFireEquipment.asset");
-			var fireDisplay = idrs.FindDisplayRuleGroup(keyAsset);
-			var fireRules = new ItemDisplayRule[fireDisplay.rules.Length];
-			Array.Copy(fireDisplay.rules, fireRules, fireDisplay.rules.Length);
-			fireDisplay.rules = fireRules;
-			fireDisplay.rules[0].childName = "S Hair";
-			fireDisplay.rules[0].localPos = new Vector3(0.37824F, 0.18649F, 0.31578F);
-			fireDisplay.rules[0].localAngles = new Vector3(290.8627F, 338.1044F, 46.19113F);
-			fireDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
-			fireDisplay.rules[1].childName = "U Hair";
-			fireDisplay.rules[1].localPos = new Vector3(-0.34832F, 0.26794F, 0.14957F);
-			fireDisplay.rules[1].localAngles = new Vector3(52.33278F, 60.16898F, 218.7332F);
-			fireDisplay.rules[1].localScale = new Vector3(0.3F, 0.3F, 0.3F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = fireRules });
+			var keyAsset = await LoadAsset<ItemDef>("RoR2/Base/AlienHead/AlienHead.asset");
+			var alien = idrs.FindDisplayRuleGroup(keyAsset);
+			var alienRules = new ItemDisplayRule[alien.rules.Length];
+			Array.Copy(alien.rules, alienRules, alien.rules.Length);
+			alien.rules = alienRules;
+			alien.rules[0].childName = "S Hair";
+			alien.rules[0].localPos = new Vector3(0.37824F, 0.18649F, 0.31578F);
+			alien.rules[0].localAngles = new Vector3(290.8627F, 338.1044F, 46.19113F);
+			alien.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = alienRules });
 
-			keyAsset = await LoadAsset<EquipmentDef>("RoR2/Base/EliteLightning/EliteLightningEquipment.asset");
-			var lightningDisplay = idrs.FindDisplayRuleGroup(keyAsset);
-			var lightningRules = new ItemDisplayRule[lightningDisplay.rules.Length];
-			Array.Copy(lightningDisplay.rules, lightningRules, lightningDisplay.rules.Length);
-			lightningDisplay.rules = lightningRules;
-			lightningDisplay.rules[0].childName = "Muzzle";
-			lightningDisplay.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			lightningDisplay.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			lightningDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
-			lightningDisplay.rules[1].childName = "Muzzle";
-			lightningDisplay.rules[1].localPos = new Vector3(0.04168F, 0.95129F, 0.15072F);
-			lightningDisplay.rules[1].localAngles = new Vector3(335.6771F, 357.8F, 180F);
-			lightningDisplay.rules[1].localScale = new Vector3(-0.40586F, 0.40586F, 0.40586F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = lightningRules });
-
+			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/ExplodeOnDeathVoid/ExplodeOnDeathVoid.asset");
+			var vflameRules = idrs.FindDisplayRuleGroup(keyAsset);
+			var voidflame = new ItemDisplayRule[vflameRules.rules.Length];
+			Array.Copy(vflameRules.rules, voidflame, vflameRules.rules.Length);
+			vflameRules.rules = voidflame;
+			vflameRules.rules[0].childName = "MuzzleCenter";
+			vflameRules.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			vflameRules.rules[0].localAngles = new Vector3(0F, 0F, 0F);
+			vflameRules.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = voidflame });
+			
 			characterModel.itemDisplayRuleSet = idrs;
-
+			
+			
+			/*equipAsset = await LoadAsset<EquipmentDef>("path");
+			var iDisplay = idrs.FindDisplayRuleGroup(equipAsset);
+			var iRules = new ItemDisplayRule[iDisplay.rules.Length];
+			Array.Copy(iDisplay.rules, iRules, iDisplay.rules.Length);
+			iDisplay.rules = iRules;
+			iDisplay.rules[0].childName = "MuzzleCenter";
+			iDisplay.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			iDisplay.rules[0].localAngles = new Vector3(0F, 0F, 0F);
+			iDisplay.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
+			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = iRules });*/
 			#endregion
 
 			return model;

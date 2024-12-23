@@ -18,7 +18,7 @@ Additional information may be added here in the future as necessary. Check back 
 
 ## Passives
 passive description goes here
-## Soei Musou Techniques (Primaries)
+## Soei Musou Arts (Primaries)
 <details>
 <summary> Click to Reveal/Hide </summary>
 
@@ -108,7 +108,7 @@ passive description goes here
 ## Credits
 - me, for envisioning this project and bringing it to fruition. I concepted all the skill ideas, made (or edited) all of the VFX, did all the SFX, worked in Unity animator controller hell, wrote all of the Secondaries, most of the Utilities, The Great Sealing, Light of Nature's Axiom, and Soei Musou: Hono Gekko.
 - Bubbet for co-developing this entire mod with me and making ConcentricContent. Additional contributions include the zeal bar, 
-the health overlay on Mashiro's Blessing, multiplayer compatability and networking, actually making the soundtrack replacement code work, helping port the project to SotS, and fixing 10 trillion errors in EffectManager. 
+the health overlay on Mashiro's Blessing, multiplayer compatability and networking, actually making the soundtrack replacement code work, item display code, helping port the project to SotS, and fixing 10 trillion errors in EffectManager. 
 He also wrote Woshis' Miasma, Atuy's Sweeping Tides, Soei Musou: Seed, both passives, and ***all*** of the Divine Skills.
 
 - bee9k for the model

@@ -356,7 +356,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			deskPlant.rules[0].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = deskPlantRules });
 			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/CaptainDefenseMatrix/CaptainDefenseMatrix.asset");
+			/*keyAsset = await LoadAsset<ItemDef>("RoR2/Base/CaptainDefenseMatrix/CaptainDefenseMatrix.asset"); //huh
 			var microbots = idrs.FindDisplayRuleGroup(keyAsset);
 			var microbotsRules = new ItemDisplayRule[microbots.rules.Length];
 			Array.Copy(microbots.rules, microbotsRules, microbots.rules.Length);
@@ -365,7 +365,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			microbots.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			microbots.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			microbots.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = microbotsRules });
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = microbotsRules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/CritDamage/CritDamage.asset");
 			var laserScope = idrs.FindDisplayRuleGroup(keyAsset);
@@ -389,7 +389,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			icbm.rules[0].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = icbmRules });
 			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/DroneWeapons/DroneWeapons.asset");
+			/*keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/DroneWeapons/DroneWeapons.asset"); //huh
 			var droneParts = idrs.FindDisplayRuleGroup(keyAsset);
 			var dronePartsRules = new ItemDisplayRule[droneParts.rules.Length];
 			Array.Copy(droneParts.rules, dronePartsRules, droneParts.rules.Length);
@@ -398,7 +398,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			droneParts.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			droneParts.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			droneParts.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = dronePartsRules });
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = dronePartsRules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/PermanentDebuffOnHit/PermanentDebuffOnHit.asset");
 			var scorpion = idrs.FindDisplayRuleGroup(keyAsset);
@@ -522,7 +522,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			firePerf.rules[0].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = firePerfRules });
 			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/LightningStrikeOnHit/LightningStrikeOnHit.asset");
+			/*keyAsset = await LoadAsset<ItemDef>("RoR2/Base/LightningStrikeOnHit/LightningStrikeOnHit.asset"); //huh
 			var chargedPerf = idrs.FindDisplayRuleGroup(keyAsset);
 			var chargedPerfRules = new ItemDisplayRule[chargedPerf.rules.Length];
 			Array.Copy(chargedPerf.rules, chargedPerfRules, chargedPerf.rules.Length);
@@ -531,7 +531,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			chargedPerf.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			chargedPerf.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			chargedPerf.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = chargedPerfRules });
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = chargedPerfRules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BleedOnHitAndExplode/BleedOnHitAndExplode.asset");
 			var shatterspleen = idrs.FindDisplayRuleGroup(keyAsset);
@@ -555,7 +555,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			miredUrn.rules[0].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = miredUrnRules });
 			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/RoboBallBuddy/RoboBallBuddy.asset");
+			/*keyAsset = await LoadAsset<ItemDef>("RoR2/Base/RoboBallBuddy/RoboBallBuddy.asset"); //huh
 			var empathyCores = idrs.FindDisplayRuleGroup(keyAsset);
 			var empathyCoresRules = new ItemDisplayRule[empathyCores.rules.Length];
 			Array.Copy(empathyCores.rules, empathyCoresRules, empathyCores.rules.Length);
@@ -564,7 +564,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			empathyCores.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			empathyCores.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			empathyCores.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = empathyCoresRules });
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = empathyCoresRules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ParentEgg/ParentEgg.asset");
 			var planula = idrs.FindDisplayRuleGroup(keyAsset);
@@ -865,7 +865,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			item11.rules[0].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item11Rules });
 			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/NegateAttack/NegateAttack.asset");
+			/*keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/NegateAttack/NegateAttack.asset"); //huh
 			var item12 = idrs.FindDisplayRuleGroup(keyAsset);
 			var item12Rules = new ItemDisplayRule[item12.rules.Length];
 			Array.Copy(item12.rules, item12Rules, item12.rules.Length);
@@ -874,7 +874,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			item12.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			item12.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			item12.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item12Rules });
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item12Rules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/OnLevelUpFreeUnlock/OnLevelUpFreeUnlock.asset");
 			var item13 = idrs.FindDisplayRuleGroup(keyAsset);
@@ -1011,10 +1011,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			HUD.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			HUD.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			HUD.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			HUD.rules[1].childName = "MuzzleCenter";
-			HUD.rules[1].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			HUD.rules[1].localAngles = new Vector3(0F, 0F, 0F);
-			HUD.rules[1].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = HUDRules });
 			
 			equipAsset = await LoadAsset<EquipmentDef>("RoR2/Base/GainArmor/GainArmor.asset");
@@ -1028,7 +1024,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			elephant.rules[0].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = elephantRules });
 			
-			equipAsset = await LoadAsset<EquipmentDef>("RoR2/DLC1/GummyClone/GummyClone.asset");
+			/*equipAsset = await LoadAsset<EquipmentDef>("RoR2/DLC1/GummyClone/GummyClone.asset"); //huh
 			var gooboo = idrs.FindDisplayRuleGroup(equipAsset);
 			var goobooRules = new ItemDisplayRule[gooboo.rules.Length];
 			Array.Copy(gooboo.rules, goobooRules, gooboo.rules.Length);
@@ -1037,7 +1033,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			gooboo.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			gooboo.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			gooboo.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = goobooRules });
+			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = goobooRules });*/
 			
 			equipAsset = await LoadAsset<EquipmentDef>("RoR2/DLC2/HealAndRevive/HealAndRevive.asset");
 			var lifeSeed = idrs.FindDisplayRuleGroup(equipAsset);
@@ -1283,14 +1279,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			model.GetComponent<CharacterModel>().body = bodyComponent;
 			bodyModelLocator.modelTransform = model.transform;
 			//bodyHealthComponent.modelLocator = bodyModelLocator; this isnt even serialized by unity, so its not set in the prefab either
-
-			#region OhNoBro
-
-			/*var idrs = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-			var kamRuleset = model.GetComponent<CharacterModel>().itemDisplayRuleSet;
-			kamRuleset.keyAssetRuleGroups = idrs.keyAssetRuleGroups;*/
-
-			#endregion
 
 			#endregion
 

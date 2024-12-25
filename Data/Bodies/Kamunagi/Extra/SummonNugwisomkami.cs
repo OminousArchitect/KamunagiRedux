@@ -131,7 +131,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var deadSpirits = twinBehaviour.masterBehaviour.NugwisoSpiritDefs
 				.Where(x => x.Value != null && x.Value && x.Value.lostBodyToDeath).Select(x => x.Value!).ToArray();
 
-			if (possibleSpirits.Length == 0 && deadSpirits.Length == 0)
+			if (possibleSpirits.Length == 0 && deadSpirits.Length == 0 || !NetworkServer.active)
 			{
 				outer.SetNextStateToMain();
 				return;

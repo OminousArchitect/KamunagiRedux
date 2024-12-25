@@ -98,21 +98,33 @@ passive description goes here
 ## ![tatari](https://github.com/user-attachments/assets/542ef5e7-86f1-4bb5-991f-5fe7674389c6)
 - Chance to inflict a debuff on enemies scales with missing health, i.e. at 60% missing health it has a 60% chance to inflict a random debuff
 ## ![spirit](https://github.com/user-attachments/assets/f75eefde-2e16-4f56-91b3-e9c2003188d2)
+- The Nugwisomkami of War exceeds in dealing damage and gains barrier on successive kills. This spirit is always **Perfected** or **Voidtouched.**
+- The Nugwisomkami of Mischief has moderate damage output and high survivability. It teleports away to heal itself and cloaks on low health. This spirit is always **Overloading** or **Blazing.**
+- The Nugwisomkami of Decay debuffs enemies with Weak, Slow, or Disabled Healing. It is the tankiest of the three and siphons health from nearby enemies. This spirit is always **Malachite** or **Celestine.** 
 - Can only have 1 active spirit at a time
-## ![prayer](https://github.com/user-attachments/assets/3a75afea-2893-44ab-8eb2-05a0e4c48f66)
-
+- Using the ability again with an active spirit will re-roll another one.
+- Spirits are summoned at ambient monster level
+- Decay and Mischief use Lesser Wisp AI and get confused sometimes, i.e. coming too close to the ground and then going braindead. I'm not sure what causes this.
+## ![prayer](https://github.com/user-attachments/assets/daa29165-830c-48d6-886c-c7981f9848ad)
+- Lord Mashiro 'permanently' takes 10% of your maximum health as an offering upon completion of a successful prayer.
+- This penalty is cleared on stage change or on successful reincarnation.
 ## ![kuko](https://github.com/user-attachments/assets/c15eb809-be03-4bcd-99ab-40855653b2b2)
+- You can choose to forego a Divine Skill completely in favor of switching skillsets at will, for an even wider array of ability combinations
+- All of your cooldowns reset when switching
+
+This ability may or may not see a rework in the future, based on feedback.
 </details>
 </details>
 
 ## Credits
-- me, for envisioning this project and bringing it to fruition. I concepted all the skill ideas, made (or edited) all of the VFX, did all the SFX, worked in Unity animator controller hell, wrote all of the Secondaries, most of the Utilities, The Great Sealing, Light of Nature's Axiom, and Soei Musou: Hono Gekko.
+- me (Nines), for envisioning this project and bringing it to fruition. I concepted all the skill ideas, made all of the VFX, set up all the SFX, worked in Unity animator controller hell, wrote all of the Secondaries, most of the Utilities, The Great Sealing, Light of Nature's Axiom, and Soei Musou: Hono Gekko.
 - Bubbet for co-developing this entire mod with me and making ConcentricContent. Additional contributions include the zeal bar, 
 the health overlay on Mashiro's Blessing, multiplayer compatability and networking, actually making the soundtrack replacement code work, item display code, helping port the project to SotS, and fixing 10 trillion errors in EffectManager. 
 He also wrote Woshis' Miasma, Atuy's Sweeping Tides, Soei Musou: Seed, both passives, and ***all*** of the Divine Skills.
 
 - bee9k for the model
 - _ahvi for the animations
+- sounds and music taken from Utawarerumono: Mask of Truth
 - Violet Chaolan for giving me guidance on Wwise and helping with the soundtracks
 - previous code contributions for Sobu Gekishoha, Soei Musou: Jinsoku, and passive skill swapping by Dragonyck
 - dgosling for providing me with the swirling chains visual effect <3
@@ -135,13 +147,11 @@ Thanks to these people for answering my questions in the modcord, this mod would
 
 
 - and **most of all**, to Tsubasa, for introducing me to Utawarerumono.
-
 ## Known Issues
 -- All feedback is welcome! Feel free to mention me in the RoR2 Modding Discord @Unit_9_Type_S
 - Jump pads will lock your movement to zero if you use Dark Ascension without touching the ground after using them
 - Clay templar tar blast will permanently force you in a direction until you land
-- In multiplayer, clients can have an unlimited number of Nugwisomkami, this issue has been quite difficult to trace and I'm not sure if it'll be fixed, please summon responsibly, or don't >:)
-
+- In multiplayer, Summon Nugwisomkami is kind of broken for people who aren't the host so I recommend against taking it
 ## Misc. Dev Comments
 The Kamunagi are somewhat lacking in animations for a couple reasons
 - Working with two skeletons is pretty difficult not to mention tedious
@@ -149,6 +159,8 @@ The Kamunagi are somewhat lacking in animations for a couple reasons
 - You're intended to be flying a lot of the time and making animations that work both on the ground and in the air is very tricky
 - [I'm not asking someone to animate this shit](https://streamable.com/8hklxg)
 - Animations are also expensive
+
+The animations they do have are based off of their moveset from Utawarerumono ZAN 2
 
 ## Future Plans
 - Fix bugs

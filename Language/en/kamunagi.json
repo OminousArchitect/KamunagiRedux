@@ -88,7 +88,7 @@
 	  "NINES_KAMUNAGI_BODY_EXTRA5_NAME": "Summon: Nugwisomkami",
 	  "NINES_KAMUNAGI_BODY_EXTRA5_DESCRIPTION": "Summon a primeval spirit of <style=cIsDamage>War</style>, <style=cIsHealing>Decay</style>, or <style=cIsHealth>Mischief</style> to attack your enemies.",
 	  "NINES_KAMUNAGI_BODY_EXTRA6_NAME": "Mashiro's Blessing",
-	  "NINES_KAMUNAGI_BODY_EXTRA6_DESCRIPTION": "Offer <style=cIsHealth>25% of your life force</style> in a prayer to <style=cIsDamage>Lord Mashiro</style>. Once finished, you are granted a <style=cIsDamage>blessing</style> for the next <style=cIsUtility>30 seconds</style>. If you <style=cIsHealth>perish</style> while under the effect of a <style=cIsDamage>blessing</style>, you are <style=cIsDamage>reincarnated</style>. <style=cIsUtility>Taking damage will interrupt the prayer</style>.",
+	  "NINES_KAMUNAGI_BODY_EXTRA6_DESCRIPTION": "Offer <style=cIsHealth>25% of your life force</style> in a prayer to <style=cIsDamage>Lord Mashiro</style>. Once finished, you are granted a <style=cIsDamage>blessing</style> for the next <style=cIsUtility>15 seconds</style>. If you <style=cIsHealth>perish</style> while under the effect of a <style=cIsDamage>blessing</style>, you are <style=cIsDamage>reincarnated</style>. <style=cIsUtility>Taking damage will interrupt the prayer</style>.",
 	  "NINES_KAMUNAGI_BODY_EXTRA7_NAME": "Summon: Tatari",
 	  "NINES_KAMUNAGI_BODY_EXTRA7_DESCRIPTION": "Summon a <style=cIsDamage>profane coagulation</style> that stuns enemies and <style=cIsUtility>inflicts debuffs</style> the <style=cIsHealth>closer it gets to death</style>.",
 	  "NINES_KAMUNAGI_BODY_EXTRA8_NAME": "Kuko Stimulant",

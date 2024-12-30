@@ -22,11 +22,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			{
 				crit = RollCrit(),
 				damage = damageStat * 1f,
-				force = 2750,
+				force = 0,
 				owner = gameObject,
 				position = aimRay.origin + (aimRay.direction * 2),
 				projectilePrefab = Concentric.GetProjectile<EnnakamuyEarth>().WaitForCompletion(),
-				rotation = Quaternion.LookRotation(aimRay.direction)
+				rotation = Quaternion.LookRotation(aimRay.direction),
+				speedOverride = 105f
 			});
 		}
 
@@ -80,10 +81,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			boulderImpact.childrenProjectilePrefab = await GetProjectile<EnnakamuyEarthChild>();
 			boulderImpact.blastDamageCoefficient = 4.6f;
 			boulderImpact.childrenDamageCoefficient = 0.3f;
+			boulderImpact.blastProcCoefficient = 1.3f;
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
-			projectile.GetComponent<Rigidbody>().useGravity = true;
+			projectile.GetComponent<Rigidbody>().useGravity = false;
 			projectile.GetComponent<SphereCollider>().radius = 3.5f;
-			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary;
+			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary | DamageType.Stun1s;
 			return projectile;
 		}
 
@@ -106,6 +108,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			projectile.GetComponent<ProjectileImpactExplosion>().falloffModel = BlastAttack.FalloffModel.None;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary;
+			projectile.GetComponent<ProjectileImpactExplosion>().bonusBlastForce = Vector3.zero;
 			return projectile;
 		}
 

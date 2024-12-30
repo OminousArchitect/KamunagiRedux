@@ -124,10 +124,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var behemothRules = new ItemDisplayRule[behemoth.rules.Length];
 			Array.Copy(behemoth.rules, behemothRules, behemoth.rules.Length);
 			behemoth.rules = behemothRules;
-			behemoth.rules[0].childName = "MuzzleCenter";
-			behemoth.rules[0].localPos = new Vector3(0.37824F, 0.18649F, 0.31578F);
-			behemoth.rules[0].localAngles = new Vector3(290.8627F, 338.1044F, 46.19113F);
-			behemoth.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			behemoth.rules[0].childName = "U_Chest";
+			behemoth.rules[0].localPos = new Vector3(-0.026F, 0.176F, -0.202F);
+			behemoth.rules[0].localAngles = new Vector3(344.46F, 153.99F, 330.8F);
+			behemoth.rules[0].localScale = new Vector3(0.07F, 0.07F, 0.07F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = behemothRules });
 
 			//Red Items
@@ -136,10 +136,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var daggerRules = new ItemDisplayRule[dagger.rules.Length];
 			Array.Copy(dagger.rules, daggerRules, dagger.rules.Length);
 			dagger.rules = daggerRules;
-			dagger.rules[0].childName = "S root";
-			dagger.rules[0].localPos = new Vector3(0.06302F, 0.70348F, 0.73627F);
-			dagger.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			dagger.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			dagger.rules[0].childName = "S_Head";
+			dagger.rules[0].localPos = new Vector3(0.072F, 0.182F, -0.1F);
+			dagger.rules[0].localAngles = new Vector3(278F, 201.02F, 38.57F);
+			dagger.rules[0].localScale = new Vector3(0.8F, 0.8F, 0.8F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = daggerRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/Icicle/Icicle.asset");
@@ -148,9 +148,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(frostR.rules, frostRRules, frostR.rules.Length);
 			frostR.rules = frostRRules;
 			frostR.rules[0].childName = "MuzzleCenter";
-			frostR.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			frostR.rules[0].localPos = new Vector3(-0.083F, -0.215F, -0.201F);
 			frostR.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			frostR.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			frostR.rules[0].localScale = new Vector3(1.3F, 1.3F, 1.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = frostRRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/GhostOnKill/GhostOnKill.asset");
@@ -158,10 +158,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var HMaskRules = new ItemDisplayRule[HMask.rules.Length];
 			Array.Copy(HMask.rules, HMaskRules, HMask.rules.Length);
 			HMask.rules = HMaskRules;
-			HMask.rules[0].childName = "MuzzleCenter";
-			HMask.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			HMask.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			HMask.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			HMask.rules[0].childName = "U_Head";
+			HMask.rules[0].localPos = new Vector3(-0.082F, 0.149F, 0.141F);
+			HMask.rules[0].localAngles = new Vector3(10.97F, 303.42F, 353.94F);
+			HMask.rules[0].localScale = new Vector3(0.8F, 0.9F, 0.8F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = HMaskRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/FallBoots/FallBoots.asset");
@@ -169,14 +169,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var fallBootsRules = new ItemDisplayRule[fallBoots.rules.Length];
 			Array.Copy(fallBoots.rules, fallBootsRules, fallBoots.rules.Length);
 			fallBoots.rules = fallBootsRules;
-			fallBoots.rules[0].childName = "MuzzleCenter";
-			fallBoots.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			fallBoots.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			fallBoots.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			fallBoots.rules[1].childName = "MuzzleCenter";
-			fallBoots.rules[1].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			fallBoots.rules[1].localAngles = new Vector3(0F, 0F, 0F);
-			fallBoots.rules[1].localScale = new Vector3(1F, 1F, 1F);
+			fallBoots.rules[0].childName = "S_Ankle";
+			fallBoots.rules[0].localPos = new Vector3(-0.003F, -0.019F, 0.024F);
+			fallBoots.rules[0].localAngles = new Vector3(303.33F, 359.95F, 359.52F);
+			fallBoots.rules[0].localScale = new Vector3(0.4F, 0.4F, 0.4F);
+			fallBoots.rules[1].childName = "U_Ankle";
+			fallBoots.rules[1].localPos = new Vector3(0.015F, -0.019F, 0.023F);
+			fallBoots.rules[1].localAngles = new Vector3(302.29F, 0.03F, 0.74F);
+			fallBoots.rules[1].localScale = new Vector3(0.4F, 0.4F, 0.4F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = fallBootsRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/NovaOnHeal/NovaOnHeal.asset");
@@ -184,14 +184,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var healHornsRules = new ItemDisplayRule[healHorns.rules.Length];
 			Array.Copy(healHorns.rules, healHornsRules, healHorns.rules.Length);
 			healHorns.rules = healHornsRules;
-			healHorns.rules[0].childName = "MuzzleCenter";
-			healHorns.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			healHorns.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			healHorns.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			healHorns.rules[1].childName = "MuzzleCenter";
-			healHorns.rules[1].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			healHorns.rules[1].localAngles = new Vector3(0F, 0F, 0F);
-			healHorns.rules[1].localScale = new Vector3(1F, 1F, 1F);
+			healHorns.rules[0].childName = "S_Wrist";
+			healHorns.rules[0].localPos = new Vector3(0.008F, 0.001F, -0.013F);
+			healHorns.rules[0].localAngles = new Vector3(276.71F, 29.95F, 117.67F);
+			healHorns.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
+			healHorns.rules[1].childName = "U_Wrist";
+			healHorns.rules[1].localPos = new Vector3(0.013F, 0.014F, -0.011F);
+			healHorns.rules[1].localAngles = new Vector3(323.72F, 116.43F, 23.79F);
+			healHorns.rules[1].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = healHornsRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ShockNearby/ShockNearby.asset");
@@ -199,10 +199,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var teslaRules = new ItemDisplayRule[tesla.rules.Length];
 			Array.Copy(tesla.rules, teslaRules, tesla.rules.Length);
 			tesla.rules = teslaRules;
-			tesla.rules[0].childName = "MuzzleCenter";
-			tesla.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			tesla.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			tesla.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			tesla.rules[0].childName = "U_Earring";
+			tesla.rules[0].localPos = new Vector3(-0.002F, 0.071F, 0.004F);
+			tesla.rules[0].localAngles = new Vector3(84.23F, 201.46F, 89.88F);
+			tesla.rules[0].localScale = new Vector3(0.13F, 0.06F, 0.13F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = teslaRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/Clover/Clover.asset");
@@ -210,10 +210,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var cloverRules = new ItemDisplayRule[clover.rules.Length];
 			Array.Copy(clover.rules, cloverRules, clover.rules.Length);
 			clover.rules = cloverRules;
-			clover.rules[0].childName = "MuzzleCenter";
-			clover.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			clover.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			clover.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			clover.rules[0].childName = "S_Head";
+			clover.rules[0].localPos = new Vector3(-0.13F, 0.371F, 0.069F);
+			clover.rules[0].localAngles = new Vector3(47.48F, 312.88F, 10.66F);
+			clover.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = cloverRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BounceNearby/BounceNearby.asset");
@@ -221,10 +221,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var meatHookRules = new ItemDisplayRule[meatHook.rules.Length];
 			Array.Copy(meatHook.rules, meatHookRules, meatHook.rules.Length);
 			meatHook.rules = meatHookRules;
-			meatHook.rules[0].childName = "MuzzleCenter";
-			meatHook.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			meatHook.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			meatHook.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			meatHook.rules[0].childName = "U Bone";
+			meatHook.rules[0].localPos = new Vector3(-0.006F, 0.473F, -0.057F);
+			meatHook.rules[0].localAngles = new Vector3(356.37F, 1.36F, 42.8F);
+			meatHook.rules[0].localScale = new Vector3(0.7F, 0.6F, 0.6F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = meatHookRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/AlienHead/AlienHead.asset");
@@ -232,10 +232,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var alienRules = new ItemDisplayRule[alien.rules.Length];
 			Array.Copy(alien.rules, alienRules, alien.rules.Length);
 			alien.rules = alienRules;
-			alien.rules[0].childName = "MuzzleCenter";
-			alien.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			alien.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			alien.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			alien.rules[0].childName = "S_Sash";
+			alien.rules[0].localPos = new Vector3(-0.016F, 0.003F, 0.008F);
+			alien.rules[0].localAngles = new Vector3(77.09F, 259.49F, 158.23F);
+			alien.rules[0].localScale = new Vector3(0.8F, 0.8F, 0.8F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = alienRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/Talisman/Talisman.asset");
@@ -244,35 +244,24 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(soulbound.rules, soulboundRules, soulbound.rules.Length);
 			soulbound.rules = soulboundRules;
 			soulbound.rules[0].childName = "MuzzleCenter";
-			soulbound.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			soulbound.rules[0].localPos = new Vector3(1.948F, 0.776F, -0.181F);
 			soulbound.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			soulbound.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			soulbound.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = soulboundRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ExtraLife/ExtraLife.asset");
-			var dios = idrs.FindDisplayRuleGroup(keyAsset);
-			var diosRules = new ItemDisplayRule[dios.rules.Length];
-			Array.Copy(dios.rules, diosRules, dios.rules.Length);
-			dios.rules = diosRules;
-			dios.rules[0].childName = "MuzzleCenter";
-			dios.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			dios.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			dios.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = diosRules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/UtilitySkillMagazine/UtilitySkillMagazine.asset");
 			var hardlight = idrs.FindDisplayRuleGroup(keyAsset);
 			var hardlightRules = new ItemDisplayRule[hardlight.rules.Length];
 			Array.Copy(hardlight.rules, hardlightRules, hardlight.rules.Length);
 			hardlight.rules = hardlightRules;
-			hardlight.rules[0].childName = "MuzzleCenter";
-			hardlight.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			hardlight.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			hardlight.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			hardlight.rules[1].childName = "MuzzleCenter";
-			hardlight.rules[1].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			hardlight.rules[1].localAngles = new Vector3(0F, 0F, 0F);
-			hardlight.rules[1].localScale = new Vector3(1F, 1F, 1F);
+			hardlight.rules[0].childName = "U_Ankle";
+			hardlight.rules[0].localPos = new Vector3(0.007F, 0.078F, -0.055F);
+			hardlight.rules[0].localAngles = new Vector3(58.56F, 180F, 180F);
+			hardlight.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
+			hardlight.rules[1].childName = "S_Ankle";
+			hardlight.rules[1].localPos = new Vector3(-0.007F, 0.078F, -0.054F);
+			hardlight.rules[1].localAngles = new Vector3(57.34F, 180F, 180F);
+			hardlight.rules[1].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = hardlightRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/HeadHunter/HeadHunter.asset");
@@ -280,10 +269,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var vulturesRules = new ItemDisplayRule[vultures.rules.Length];
 			Array.Copy(vultures.rules, vulturesRules, vultures.rules.Length);
 			vultures.rules = vulturesRules;
-			vultures.rules[0].childName = "MuzzleCenter";
-			vultures.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			vultures.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			vultures.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			vultures.rules[0].childName = "U_Head";
+			vultures.rules[0].localPos = new Vector3(0.008F, 0.287F, 0.002F);
+			vultures.rules[0].localAngles = new Vector3(350.78F, 354.05F, 0.53F);
+			vultures.rules[0].localScale = new Vector3(0.65F, 0.28F, 0.25F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = vulturesRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/KillEliteFrenzy/KillEliteFrenzy.asset");
@@ -291,10 +280,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var brainstalksRules = new ItemDisplayRule[brainstalks.rules.Length];
 			Array.Copy(brainstalks.rules, brainstalksRules, brainstalks.rules.Length);
 			brainstalks.rules = brainstalksRules;
-			brainstalks.rules[0].childName = "MuzzleCenter";
-			brainstalks.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			brainstalks.rules[0].childName = "S_Head";
+			brainstalks.rules[0].localPos = new Vector3(0.016F, 0.334F, 0.015F);
 			brainstalks.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			brainstalks.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			brainstalks.rules[0].localScale = new Vector3(0.3F, 0.2F, 0.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = brainstalksRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/IncreaseHealing/IncreaseHealing.asset");
@@ -302,36 +291,25 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var rejuvRackRules = new ItemDisplayRule[rejuvRack.rules.Length];
 			Array.Copy(rejuvRack.rules, rejuvRackRules, rejuvRack.rules.Length);
 			rejuvRack.rules = rejuvRackRules;
-			rejuvRack.rules[0].childName = "MuzzleCenter";
-			rejuvRack.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			rejuvRack.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			rejuvRack.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			rejuvRack.rules[1].childName = "MuzzleCenter";
-			rejuvRack.rules[1].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			rejuvRack.rules[1].localAngles = new Vector3(0F, 0F, 0F);
-			rejuvRack.rules[1].localScale = new Vector3(1F, 1F, 1F);
+			rejuvRack.rules[0].childName = "U_Head";
+			rejuvRack.rules[0].localPos = new Vector3(-0.1F, 0.207F, -0.01F);
+			rejuvRack.rules[0].localAngles = new Vector3(0F, 270F, 0F);
+			rejuvRack.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
+			rejuvRack.rules[1].childName = "S_Head";
+			rejuvRack.rules[1].localPos = new Vector3(0.101F, 0.229F, 0F);
+			rejuvRack.rules[1].localAngles = new Vector3(0F, 90F, 0F);
+			rejuvRack.rules[1].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = rejuvRackRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BarrierOnOverHeal/BarrierOnOverHeal.asset");
-			var aegis = idrs.FindDisplayRuleGroup(keyAsset);
-			var aegisRules = new ItemDisplayRule[aegis.rules.Length];
-			Array.Copy(aegis.rules, aegisRules, aegis.rules.Length);
-			aegis.rules = aegisRules;
-			aegis.rules[0].childName = "MuzzleCenter";
-			aegis.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			aegis.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			aegis.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = aegisRules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ArmorReductionOnHit/ArmorReductionOnHit.asset");
 			var justice = idrs.FindDisplayRuleGroup(keyAsset);
 			var justiceRules = new ItemDisplayRule[justice.rules.Length];
 			Array.Copy(justice.rules, justiceRules, justice.rules.Length);
 			justice.rules = justiceRules;
-			justice.rules[0].childName = "MuzzleCenter";
-			justice.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			justice.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			justice.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			justice.rules[0].childName = "S_Chest";
+			justice.rules[0].localPos = new Vector3(-0.098F, 0.15F, -0.235F);
+			justice.rules[0].localAngles = new Vector3(303.12F, 308.61F, 43.52F);
+			justice.rules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = justiceRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/LaserTurbine/LaserTurbine.asset");
@@ -340,9 +318,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(laserDisc.rules, laserDiscRules, laserDisc.rules.Length);
 			laserDisc.rules = laserDiscRules;
 			laserDisc.rules[0].childName = "MuzzleCenter";
-			laserDisc.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			laserDisc.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			laserDisc.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			laserDisc.rules[0].localPos = new Vector3(-1.988F, 0.218F, -0.914F);
+			laserDisc.rules[0].localAngles = new Vector3(270F, 180F, 0F);
+			laserDisc.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = laserDiscRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/Plant/Plant.asset");
@@ -350,10 +328,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var deskPlantRules = new ItemDisplayRule[deskPlant.rules.Length];
 			Array.Copy(deskPlant.rules, deskPlantRules, deskPlant.rules.Length);
 			deskPlant.rules = deskPlantRules;
-			deskPlant.rules[0].childName = "MuzzleCenter";
-			deskPlant.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			deskPlant.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			deskPlant.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			deskPlant.rules[0].childName = "S_Earring";
+			deskPlant.rules[0].localPos = new Vector3(0.008F, 0.086F, -0.003F);
+			deskPlant.rules[0].localAngles = new Vector3(86.52F, 220.08F, 96.7F);
+			deskPlant.rules[0].localScale = new Vector3(0.03F, 0.03F, 0.03F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = deskPlantRules });
 			
 			/*keyAsset = await LoadAsset<ItemDef>("RoR2/Base/CaptainDefenseMatrix/CaptainDefenseMatrix.asset"); //huh
@@ -364,31 +342,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			microbots.rules[0].childName = "MuzzleCenter";
 			microbots.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			microbots.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			microbots.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			microbots.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = microbotsRules });*/
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/CritDamage/CritDamage.asset");
-			var laserScope = idrs.FindDisplayRuleGroup(keyAsset);
-			var laserScopeRules = new ItemDisplayRule[laserScope.rules.Length];
-			Array.Copy(laserScope.rules, laserScopeRules, laserScope.rules.Length);
-			laserScope.rules = laserScopeRules;
-			laserScope.rules[0].childName = "MuzzleCenter";
-			laserScope.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			laserScope.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			laserScope.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = laserScopeRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/MoreMissile/MoreMissile.asset");
-			var icbm = idrs.FindDisplayRuleGroup(keyAsset);
-			var icbmRules = new ItemDisplayRule[icbm.rules.Length];
-			Array.Copy(icbm.rules, icbmRules, icbm.rules.Length);
-			icbm.rules = icbmRules;
-			icbm.rules[0].childName = "MuzzleCenter";
-			icbm.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			icbm.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			icbm.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = icbmRules });
-			
+
 			/*keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/DroneWeapons/DroneWeapons.asset"); //huh
 			var droneParts = idrs.FindDisplayRuleGroup(keyAsset);
 			var dronePartsRules = new ItemDisplayRule[droneParts.rules.Length];
@@ -397,7 +353,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			droneParts.rules[0].childName = "MuzzleCenter";
 			droneParts.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			droneParts.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			droneParts.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			droneParts.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = dronePartsRules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/PermanentDebuffOnHit/PermanentDebuffOnHit.asset");
@@ -405,10 +361,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var scorpionRules = new ItemDisplayRule[scorpion.rules.Length];
 			Array.Copy(scorpion.rules, scorpionRules, scorpion.rules.Length);
 			scorpion.rules = scorpionRules;
-			scorpion.rules[0].childName = "MuzzleCenter";
-			scorpion.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			scorpion.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			scorpion.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			scorpion.rules[0].childName = "S_Head";
+			scorpion.rules[0].localPos = new Vector3(0.004F, 0.395F, 0.08F);
+			scorpion.rules[0].localAngles = new Vector3(62.02F, 176.75F, 353F);
+			scorpion.rules[0].localScale = new Vector3(0.8F, 0.8F, 0.8F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = scorpionRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/ImmuneToDebuff/ImmuneToDebuff.asset");
@@ -416,10 +372,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var raincoatRules = new ItemDisplayRule[raincoat.rules.Length];
 			Array.Copy(raincoat.rules, raincoatRules, raincoat.rules.Length);
 			raincoat.rules = raincoatRules;
-			raincoat.rules[0].childName = "MuzzleCenter";
-			raincoat.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			raincoat.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			raincoat.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			raincoat.rules[0].childName = "U_Sash";
+			raincoat.rules[0].localPos = new Vector3(0.018F, 0.256F, -0.032F);
+			raincoat.rules[0].localAngles = new Vector3(14.63F, 111.91F, 183.53F);
+			raincoat.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = raincoatRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/RandomEquipmentTrigger/RandomEquipmentTrigger.asset");
@@ -427,10 +383,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var bottleChaosRules = new ItemDisplayRule[bottleChaos.rules.Length];
 			Array.Copy(bottleChaos.rules, bottleChaosRules, bottleChaos.rules.Length);
 			bottleChaos.rules = bottleChaosRules;
-			bottleChaos.rules[0].childName = "MuzzleCenter";
-			bottleChaos.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			bottleChaos.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			bottleChaos.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			bottleChaos.rules[0].childName = "S_Waist";
+			bottleChaos.rules[0].localPos = new Vector3(0.373F, -0.019F, -0.006F);
+			bottleChaos.rules[0].localAngles = new Vector3(350.01F, 86.66F, 355.27F);
+			bottleChaos.rules[0].localScale = new Vector3(0.3F, 0.4F, 0.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = bottleChaosRules });
 			
 			//Yellow items
@@ -439,32 +395,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var knurlRules = new ItemDisplayRule[knurl.rules.Length];
 			Array.Copy(knurl.rules, knurlRules, knurl.rules.Length);
 			knurl.rules = knurlRules;
-			knurl.rules[0].childName = "MuzzleCenter";
-			knurl.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			knurl.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			knurl.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			knurl.rules[0].childName = "S_Chest";
+			knurl.rules[0].localPos = new Vector3(0.011F, 0.283F, 0.148F);
+			knurl.rules[0].localAngles = new Vector3(304.76F, 189.53F, 353.8F);
+			knurl.rules[0].localScale = new Vector3(0.02F, 0.02F, 0.03F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = knurlRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BeetleGland/BeetleGland.asset");
-			var gland = idrs.FindDisplayRuleGroup(keyAsset);
-			var glandRules = new ItemDisplayRule[gland.rules.Length];
-			Array.Copy(gland.rules, glandRules, gland.rules.Length);
-			gland.rules = glandRules;
-			gland.rules[0].childName = "MuzzleCenter";
-			gland.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			gland.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			gland.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = glandRules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/TitanGoldDuringTP/TitanGoldDuringTP.asset");
 			var goldSeed = idrs.FindDisplayRuleGroup(keyAsset);
 			var goldSeedRules = new ItemDisplayRule[goldSeed.rules.Length];
 			Array.Copy(goldSeed.rules, goldSeedRules, goldSeed.rules.Length);
 			goldSeed.rules = goldSeedRules;
-			goldSeed.rules[0].childName = "MuzzleCenter";
-			goldSeed.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			goldSeed.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			goldSeed.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			goldSeed.rules[0].childName = "U_Chest";
+			goldSeed.rules[0].localPos = new Vector3(0.002F, 0.196F, 0.195F);
+			goldSeed.rules[0].localAngles = new Vector3(22.31F, 0.03F, 0.03F);
+			goldSeed.rules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = goldSeedRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/SprintWisp/SprintWisp.asset");
@@ -472,10 +417,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var sprintWispRules = new ItemDisplayRule[sprintWisp.rules.Length];
 			Array.Copy(sprintWisp.rules, sprintWispRules, sprintWisp.rules.Length);
 			sprintWisp.rules = sprintWispRules;
-			sprintWisp.rules[0].childName = "MuzzleCenter";
-			sprintWisp.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			sprintWisp.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			sprintWisp.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			sprintWisp.rules[0].childName = "S_Head";
+			sprintWisp.rules[0].localPos = new Vector3(0.014F, 0.104F, 0.23F);
+			sprintWisp.rules[0].localAngles = new Vector3(7.23F, 3.25F, 357.1F);
+			sprintWisp.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = sprintWispRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/Pearl/Pearl.asset");
@@ -484,9 +429,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(pearl.rules, pearlRules, pearl.rules.Length);
 			pearl.rules = pearlRules;
 			pearl.rules[0].childName = "MuzzleCenter";
-			pearl.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			pearl.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			pearl.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			pearl.rules[0].localPos = new Vector3(-0.127F, 0.122F, -0.979F);
+			pearl.rules[0].localAngles = new Vector3(90F, 0F, 0F);
+			pearl.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = pearlRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ShinyPearl/ShinyPearl.asset");
@@ -495,9 +440,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(perfectPearl.rules, perfectPearlRules, perfectPearl.rules.Length);
 			perfectPearl.rules = perfectPearlRules;
 			perfectPearl.rules[0].childName = "MuzzleCenter";
-			perfectPearl.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			perfectPearl.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			perfectPearl.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			perfectPearl.rules[0].localPos = new Vector3(-0.101F, -0.376F, -0.884F);
+			perfectPearl.rules[0].localAngles = new Vector3(0F, 86.65F, 0F);
+			perfectPearl.rules[0].localScale = new Vector3(0.4F, 0.4F, 0.4F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = perfectPearlRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/NovaOnLowHealth/NovaOnLowHealth.asset");
@@ -505,10 +450,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var loopRules = new ItemDisplayRule[genesisLoop.rules.Length];
 			Array.Copy(genesisLoop.rules, loopRules, genesisLoop.rules.Length);
 			genesisLoop.rules = loopRules;
-			genesisLoop.rules[0].childName = "MuzzleCenter";
-			genesisLoop.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			genesisLoop.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			genesisLoop.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			genesisLoop.rules[0].childName = "S_Wrist";
+			genesisLoop.rules[0].localPos = new Vector3(0.073F, -0.028F, 0.013F);
+			genesisLoop.rules[0].localAngles = new Vector3(341.74F, 252.79F, 346.09F);
+			genesisLoop.rules[0].localScale = new Vector3(0.09F, 0.05F, 0.09F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = loopRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/FireballsOnHit/FireballsOnHit.asset");
@@ -516,10 +461,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var firePerfRules = new ItemDisplayRule[firePerf.rules.Length];
 			Array.Copy(firePerf.rules, firePerfRules, firePerf.rules.Length);
 			firePerf.rules = firePerfRules;
-			firePerf.rules[0].childName = "MuzzleCenter";
-			firePerf.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			firePerf.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			firePerf.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			firePerf.rules[0].childName = "U_Wrist";
+			firePerf.rules[0].localPos = new Vector3(0.019F, 0.112F, -0.051F);
+			firePerf.rules[0].localAngles = new Vector3(282.81F, 103.62F, 165.26F);
+			firePerf.rules[0].localScale = new Vector3(0.02F, 0.02F, 0.02F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = firePerfRules });
 			
 			/*keyAsset = await LoadAsset<ItemDef>("RoR2/Base/LightningStrikeOnHit/LightningStrikeOnHit.asset"); //huh
@@ -530,29 +475,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			chargedPerf.rules[0].childName = "MuzzleCenter";
 			chargedPerf.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			chargedPerf.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			chargedPerf.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			chargedPerf.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = chargedPerfRules });*/
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BleedOnHitAndExplode/BleedOnHitAndExplode.asset");
-			var shatterspleen = idrs.FindDisplayRuleGroup(keyAsset);
-			var shatterspleenRules = new ItemDisplayRule[shatterspleen.rules.Length];
-			Array.Copy(shatterspleen.rules, shatterspleenRules, shatterspleen.rules.Length);
-			shatterspleen.rules = shatterspleenRules;
-			shatterspleen.rules[0].childName = "MuzzleCenter";
-			shatterspleen.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			shatterspleen.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			shatterspleen.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = shatterspleenRules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/SiphonOnLowHealth/SiphonOnLowHealth.asset");
 			var miredUrn = idrs.FindDisplayRuleGroup(keyAsset);
 			var miredUrnRules = new ItemDisplayRule[miredUrn.rules.Length];
 			Array.Copy(miredUrn.rules, miredUrnRules, miredUrn.rules.Length);
 			miredUrn.rules = miredUrnRules;
-			miredUrn.rules[0].childName = "MuzzleCenter";
-			miredUrn.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			miredUrn.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			miredUrn.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			miredUrn.rules[0].childName = "U_Waist";
+			miredUrn.rules[0].localPos = new Vector3(0.454F, 0.004F, 0.037F);
+			miredUrn.rules[0].localAngles = new Vector3(350.72F, 86.19F, 359.55F);
+			miredUrn.rules[0].localScale = new Vector3(0.1F, 0.12F, 0.1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = miredUrnRules });
 			
 			/*keyAsset = await LoadAsset<ItemDef>("RoR2/Base/RoboBallBuddy/RoboBallBuddy.asset"); //huh
@@ -563,7 +497,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			empathyCores.rules[0].childName = "MuzzleCenter";
 			empathyCores.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			empathyCores.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			empathyCores.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			empathyCores.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = empathyCoresRules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ParentEgg/ParentEgg.asset");
@@ -571,10 +505,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var planulaRules = new ItemDisplayRule[planula.rules.Length];
 			Array.Copy(planula.rules, planulaRules, planula.rules.Length);
 			planula.rules = planulaRules;
-			planula.rules[0].childName = "MuzzleCenter";
-			planula.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			planula.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			planula.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			planula.rules[0].childName = "U_Sash";
+			planula.rules[0].localPos = new Vector3(-0.059F, 0.09F, 0.016F);
+			planula.rules[0].localAngles = new Vector3(359.48F, 292.14F, 183.36F);
+			planula.rules[0].localScale = new Vector3(0.07F, 0.07F, 0.07F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = planulaRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/MinorConstructOnKill/MinorConstructOnKill.asset");
@@ -583,9 +517,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(XiBossItem.rules, XiBossItemRules, XiBossItem.rules.Length);
 			XiBossItem.rules = XiBossItemRules;
 			XiBossItem.rules[0].childName = "MuzzleCenter";
-			XiBossItem.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			XiBossItem.rules[0].localPos = new Vector3(1.82F, 0.488F, -1.47F);
 			XiBossItem.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			XiBossItem.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			XiBossItem.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = XiBossItemRules });
 			
 			//Void Items
@@ -594,10 +528,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var benthicBloomRules = new ItemDisplayRule[benthicBloom.rules.Length];
 			Array.Copy(benthicBloom.rules, benthicBloomRules, benthicBloom.rules.Length);
 			benthicBloom.rules = benthicBloomRules;
-			benthicBloom.rules[0].childName = "MuzzleCenter";
-			benthicBloom.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			benthicBloom.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			benthicBloom.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			benthicBloom.rules[0].childName = "S_Head";
+			benthicBloom.rules[0].localPos = new Vector3(-0.127F, 0.368F, 0.067F);
+			benthicBloom.rules[0].localAngles = new Vector3(47.48F, 312.88F, 10F);
+			benthicBloom.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = benthicBloomRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/TreasureCacheVoid/TreasureCacheVoid.asset");
@@ -605,10 +539,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var keyVoidRules = new ItemDisplayRule[keyVoid.rules.Length];
 			Array.Copy(keyVoid.rules, keyVoidRules, keyVoid.rules.Length);
 			keyVoid.rules = keyVoidRules;
-			keyVoid.rules[0].childName = "MuzzleCenter";
-			keyVoid.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			keyVoid.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			keyVoid.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			keyVoid.rules[0].childName = "U_Sash";
+			keyVoid.rules[0].localPos = new Vector3(-0.031F, 0.203F, -0.047F);
+			keyVoid.rules[0].localAngles = new Vector3(70.1F, 290.95F, 179.09F);
+			keyVoid.rules[0].localScale = new Vector3(0.8F, 0.8F, 0.8F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = keyVoidRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/CritGlassesVoid/CritGlassesVoid.asset");
@@ -616,10 +550,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var seerLensRules = new ItemDisplayRule[seerLens.rules.Length];
 			Array.Copy(seerLens.rules, seerLensRules, seerLens.rules.Length);
 			seerLens.rules = seerLensRules;
-			seerLens.rules[0].childName = "MuzzleCenter";
-			seerLens.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			seerLens.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			seerLens.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			seerLens.rules[0].childName = "U_Head";
+			seerLens.rules[0].localPos = new Vector3(0.006F, 0.111F, 0.185F);
+			seerLens.rules[0].localAngles = new Vector3(13.9F, 0F, 0F);
+			seerLens.rules[0].localScale = new Vector3(0.4F, 0.35F, 0.4F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = seerLensRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/EquipmentMagazineVoid/EquipmentMagazineVoid.asset");
@@ -627,10 +561,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var lysateCellRules = new ItemDisplayRule[lysateCell.rules.Length];
 			Array.Copy(lysateCell.rules, lysateCellRules, lysateCell.rules.Length);
 			lysateCell.rules = lysateCellRules;
-			lysateCell.rules[0].childName = "MuzzleCenter";
-			lysateCell.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			lysateCell.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			lysateCell.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			lysateCell.rules[0].childName = "S_Sash";
+			lysateCell.rules[0].localPos = new Vector3(0.036F, -0.263F, -0.05F);
+			lysateCell.rules[0].localAngles = new Vector3(353.65F, 202.47F, 163.09F);
+			lysateCell.rules[0].localScale = new Vector3(0.2F, 0.12F, 0.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = lysateCellRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/BleedOnHitVoid/BleedOnHitVoid.asset");
@@ -638,10 +572,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var needletickRules = new ItemDisplayRule[needletick.rules.Length];
 			Array.Copy(needletick.rules, needletickRules, needletick.rules.Length);
 			needletick.rules = needletickRules;
-			needletick.rules[0].childName = "MuzzleCenter";
-			needletick.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			needletick.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			needletick.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			needletick.rules[0].childName = "U_Head";
+			needletick.rules[0].localPos = new Vector3(-0.002F, 0.451F, -0.02F);
+			needletick.rules[0].localAngles = new Vector3(297.4F, 180F, 180F);
+			needletick.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = needletickRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/VoidMegaCrabItem.asset");
@@ -649,10 +583,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var zoeaRules = new ItemDisplayRule[zoea.rules.Length];
 			Array.Copy(zoea.rules, zoeaRules, zoea.rules.Length);
 			zoea.rules = zoeaRules;
-			zoea.rules[0].childName = "MuzzleCenter";
-			zoea.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			zoea.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			zoea.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			zoea.rules[0].childName = "U_Head";
+			zoea.rules[0].localPos = new Vector3(0.13F, 0.428F, 0.021F);
+			zoea.rules[0].localAngles = new Vector3(62.68F, 274.17F, 273.71F);
+			zoea.rules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = zoeaRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/MissileVoid/MissileVoid.asset");
@@ -660,54 +594,32 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var plimpRules = new ItemDisplayRule[plimp.rules.Length];
 			Array.Copy(plimp.rules, plimpRules, plimp.rules.Length);
 			plimp.rules = plimpRules;
-			plimp.rules[0].childName = "MuzzleCenter";
-			plimp.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			plimp.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			plimp.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			plimp.rules[0].childName = "S_Head";
+			plimp.rules[0].localPos = new Vector3(0.154F, -0.135F, -0.039F);
+			plimp.rules[0].localAngles = new Vector3(18.95F, 5.67F, 267.98F);
+			plimp.rules[0].localScale = new Vector3(0.08F, 0.08F, 0.08F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = plimpRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/ExtraLifeVoid/ExtraLifeVoid.asset");
-			var dioVoid = idrs.FindDisplayRuleGroup(keyAsset);
-			var dioVoidRules = new ItemDisplayRule[dioVoid.rules.Length];
-			Array.Copy(dioVoid.rules, dioVoidRules, dioVoid.rules.Length);
-			dioVoid.rules = dioVoidRules;
-			dioVoid.rules[0].childName = "MuzzleCenter";
-			dioVoid.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			dioVoid.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			dioVoid.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = dioVoidRules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/ChainLightningVoid/ChainLightningVoid.asset");
 			var lightningVoid = idrs.FindDisplayRuleGroup(keyAsset);
 			var lightningVoidRules = new ItemDisplayRule[lightningVoid.rules.Length];
 			Array.Copy(lightningVoid.rules, lightningVoidRules, lightningVoid.rules.Length);
 			lightningVoid.rules = lightningVoidRules;
-			lightningVoid.rules[0].childName = "MuzzleCenter";
-			lightningVoid.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			lightningVoid.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			lightningVoid.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			lightningVoid.rules[0].childName = "S_Waist";
+			lightningVoid.rules[0].localPos = new Vector3(-0.212F, 0.27F, 0.139F);
+			lightningVoid.rules[0].localAngles = new Vector3(342.02F, 316.62F, 325.25F);
+			lightningVoid.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = lightningVoidRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/BearVoid/BearVoid.asset");
-			var bearVoid = idrs.FindDisplayRuleGroup(keyAsset);
-			var bearVoidRules = new ItemDisplayRule[bearVoid.rules.Length];
-			Array.Copy(bearVoid.rules, bearVoidRules, bearVoid.rules.Length);
-			bearVoid.rules = bearVoidRules;
-			bearVoid.rules[0].childName = "MuzzleCenter";
-			bearVoid.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			bearVoid.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			bearVoid.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = bearVoidRules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/ElementalRingVoid/ElementalRingVoid.asset");
 			var ringVoid = idrs.FindDisplayRuleGroup(keyAsset);
 			var ringVoidRules = new ItemDisplayRule[ringVoid.rules.Length];
 			Array.Copy(ringVoid.rules, ringVoidRules, ringVoid.rules.Length);
 			ringVoid.rules = ringVoidRules;
-			ringVoid.rules[0].childName = "MuzzleCenter";
-			ringVoid.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			ringVoid.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			ringVoid.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			ringVoid.rules[0].childName = "S_RingF";
+			ringVoid.rules[0].localPos = new Vector3(-0.001F, 0.007F, 0.008F);
+			ringVoid.rules[0].localAngles = new Vector3(84.96F, 128.64F, 124.49F);
+			ringVoid.rules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = ringVoidRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/SlowOnHitVoid/SlowOnHitVoid.asset");
@@ -715,10 +627,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var tentaRules = new ItemDisplayRule[tenta.rules.Length];
 			Array.Copy(tenta.rules, tentaRules, tenta.rules.Length);
 			tenta.rules = tentaRules;
-			tenta.rules[0].childName = "MuzzleCenter";
-			tenta.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			tenta.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			tenta.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			tenta.rules[0].childName = "S_Wrist2";
+			tenta.rules[0].localPos = new Vector3(0.131F, 0.051F, 0.095F);
+			tenta.rules[0].localAngles = new Vector3(282.84F, 42.74F, 318.45F);
+			tenta.rules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = tentaRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/ExplodeOnDeathVoid/ExplodeOnDeathVoid.asset");
@@ -726,10 +638,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var voidsentRules = new ItemDisplayRule[voidsent.rules.Length];
 			Array.Copy(voidsent.rules, voidsentRules, voidsent.rules.Length);
 			voidsent.rules = voidsentRules;
-			voidsent.rules[0].childName = "MuzzleCenter";
-			voidsent.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			voidsent.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			voidsent.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			voidsent.rules[0].childName = "S_Waist";
+			voidsent.rules[0].localPos = new Vector3(-0.338F, 0.12F, 0.096F);
+			voidsent.rules[0].localAngles = new Vector3(20.87F, 153.34F, 4.25F);
+			voidsent.rules[0].localScale = new Vector3(0.08F, 0.08F, 0.08F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = voidsentRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/MushroomVoid/MushroomVoid.asset");
@@ -737,10 +649,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var sprintHealRules = new ItemDisplayRule[sprintHeal.rules.Length];
 			Array.Copy(sprintHeal.rules, sprintHealRules, sprintHeal.rules.Length);
 			sprintHeal.rules = sprintHealRules;
-			sprintHeal.rules[0].childName = "MuzzleCenter";
-			sprintHeal.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			sprintHeal.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			sprintHeal.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			sprintHeal.rules[0].childName = "S_Head";
+			sprintHeal.rules[0].localPos = new Vector3(0.003F, 0.397F, -0.06F);
+			sprintHeal.rules[0].localAngles = new Vector3(14.59F, 140.66F, 355.08F);
+			sprintHeal.rules[0].localScale = new Vector3(0.07F, 0.07F, 0.07F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = sprintHealRules });
 			
 			//Seekers Items
@@ -749,10 +661,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var statsRules = new ItemDisplayRule[stats.rules.Length];
 			Array.Copy(stats.rules, statsRules, stats.rules.Length);
 			stats.rules = statsRules;
-			stats.rules[0].childName = "MuzzleCenter";
-			stats.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			stats.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			stats.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			stats.rules[0].childName = "S_Head";
+			stats.rules[0].localPos = new Vector3(0.006F, 0.256F, 0.164F);
+			stats.rules[0].localAngles = new Vector3(37.43F, 171.25F, 352.64F);
+			stats.rules[0].localScale = new Vector3(0.6F, 0.6F, 0.6F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = statsRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/DelayedDamage/DelayedDamage.asset");
@@ -760,10 +672,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var deathsDanceRules = new ItemDisplayRule[deathsDance.rules.Length];
 			Array.Copy(deathsDance.rules, deathsDanceRules, deathsDance.rules.Length);
 			deathsDance.rules = deathsDanceRules;
-			deathsDance.rules[0].childName = "MuzzleCenter";
-			deathsDance.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			deathsDance.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			deathsDance.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			deathsDance.rules[0].childName = "U_Chest";
+			deathsDance.rules[0].localPos = new Vector3(0.004F, 0.218F, 0.192F);
+			deathsDance.rules[0].localAngles = new Vector3(331.93F, 0F, 0F);
+			deathsDance.rules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = deathsDanceRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/ExtraShrineItem/ExtraShrineItem.asset");
@@ -771,43 +683,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var chanceDollRules = new ItemDisplayRule[chanceDoll.rules.Length];
 			Array.Copy(chanceDoll.rules, chanceDollRules, chanceDoll.rules.Length);
 			chanceDoll.rules = chanceDollRules;
-			chanceDoll.rules[0].childName = "MuzzleCenter";
-			chanceDoll.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			chanceDoll.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			chanceDoll.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			chanceDoll.rules[0].childName = "U_Waist";
+			chanceDoll.rules[0].localPos = new Vector3(-0.435F, 0.128F, 0.058F);
+			chanceDoll.rules[0].localAngles = new Vector3(351.14F, 263.84F, 20.24F);
+			chanceDoll.rules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = chanceDollRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/ExtraStatsOnLevelUp/ExtraStatsOnLevelUp.asset");
-			var beads = idrs.FindDisplayRuleGroup(keyAsset);
-			var beadsRules = new ItemDisplayRule[beads.rules.Length];
-			Array.Copy(beads.rules, beadsRules, beads.rules.Length);
-			beads.rules = beadsRules;
-			beads.rules[0].childName = "MuzzleCenter";
-			beads.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			beads.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			beads.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = beadsRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/GoldOnStageStart/GoldOnStageStart.asset");
-			var item5 = idrs.FindDisplayRuleGroup(keyAsset);
-			var item5Rules = new ItemDisplayRule[item5.rules.Length];
-			Array.Copy(item5.rules, item5Rules, item5.rules.Length);
-			item5.rules = item5Rules;
-			item5.rules[0].childName = "MuzzleCenter";
-			item5.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item5.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item5.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item5Rules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/IncreaseDamageOnMultiKill/IncreaseDamageOnMultiKill.asset");
 			var item6 = idrs.FindDisplayRuleGroup(keyAsset);
 			var item6Rules = new ItemDisplayRule[item6.rules.Length];
 			Array.Copy(item6.rules, item6Rules, item6.rules.Length);
 			item6.rules = item6Rules;
-			item6.rules[0].childName = "MuzzleCenter";
-			item6.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item6.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item6.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item6.rules[0].childName = "S_Wrist";
+			item6.rules[0].localPos = new Vector3(-0.016F, 0.105F, -0.029F);
+			item6.rules[0].localAngles = new Vector3(275.22F, 0F, 180F);
+			item6.rules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item6Rules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/IncreasePrimaryDamage/IncreasePrimaryDamage.asset");
@@ -815,10 +705,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var item7Rules = new ItemDisplayRule[item7.rules.Length];
 			Array.Copy(item7.rules, item7Rules, item7.rules.Length);
 			item7.rules = item7Rules;
-			item7.rules[0].childName = "MuzzleCenter";
-			item7.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item7.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item7.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item7.rules[0].childName = "U_Wrist2";
+			item7.rules[0].localPos = new Vector3(-0.001F, -0.001F, -0.06F);
+			item7.rules[0].localAngles = new Vector3(6.87F, 181.72F, 75.01F);
+			item7.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item7Rules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/KnockBackHitEnemies/KnockBackHitEnemies.asset");
@@ -826,10 +716,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var item8Rules = new ItemDisplayRule[item8.rules.Length];
 			Array.Copy(item8.rules, item8Rules, item8.rules.Length);
 			item8.rules = item8Rules;
-			item8.rules[0].childName = "MuzzleCenter";
-			item8.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item8.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item8.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item8.rules[0].childName = "U_Chest";
+			item8.rules[0].localPos = new Vector3(-0.008F, 0.241F, -0.078F);
+			item8.rules[0].localAngles = new Vector3(357.09F, 0F, 0F);
+			item8.rules[0].localScale = new Vector3(0.7F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item8Rules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/LowerHealthHigherDamage/LowerHealthHigherDamage.asset");
@@ -837,10 +727,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var item9Rules = new ItemDisplayRule[item9.rules.Length];
 			Array.Copy(item9.rules, item9Rules, item9.rules.Length);
 			item9.rules = item9Rules;
-			item9.rules[0].childName = "MuzzleCenter";
-			item9.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item9.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item9.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item9.rules[0].childName = "S_Waist";
+			item9.rules[0].localPos = new Vector3(0.385F, 0.158F, 0.085F);
+			item9.rules[0].localAngles = new Vector3(11.21F, 232.1F, 353.99F);
+			item9.rules[0].localScale = new Vector3(0.9F, 0.9F, 0.9F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item9Rules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/LowerPricedChests/LowerPricedChests.asset");
@@ -849,9 +739,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(item10.rules, item10Rules, item10.rules.Length);
 			item10.rules = item10Rules;
 			item10.rules[0].childName = "MuzzleCenter";
-			item10.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item10.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item10.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item10.rules[0].localPos = new Vector3(0.909F, 1.414F, 0.328F);
+			item10.rules[0].localAngles = new Vector3(270F, 0F, 0F);
+			item10.rules[0].localScale = new Vector3(0.6F, 0.6F, 0.6F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item10Rules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/MeteorAttackOnHighDamage/MeteorAttackOnHighDamage.asset");
@@ -859,10 +749,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var item11Rules = new ItemDisplayRule[item11.rules.Length];
 			Array.Copy(item11.rules, item11Rules, item11.rules.Length);
 			item11.rules = item11Rules;
-			item11.rules[0].childName = "MuzzleCenter";
-			item11.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item11.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item11.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item11.rules[0].childName = "U_Head";
+			item11.rules[0].localPos = new Vector3(-0.135F, 0.399F, 0.009F);
+			item11.rules[0].localAngles = new Vector3(358.08F, 3.69F, 26.84F);
+			item11.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item11Rules });
 			
 			/*keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/NegateAttack/NegateAttack.asset"); //huh
@@ -873,7 +763,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			item12.rules[0].childName = "MuzzleCenter";
 			item12.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			item12.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item12.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item12.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item12Rules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/OnLevelUpFreeUnlock/OnLevelUpFreeUnlock.asset");
@@ -881,10 +771,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var item13Rules = new ItemDisplayRule[item13.rules.Length];
 			Array.Copy(item13.rules, item13Rules, item13.rules.Length);
 			item13.rules = item13Rules;
-			item13.rules[0].childName = "MuzzleCenter";
-			item13.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item13.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item13.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item13.rules[0].childName = "S_Waist";
+			item13.rules[0].localPos = new Vector3(-0.184F, 0.19F, 0.212F);
+			item13.rules[0].localAngles = new Vector3(336.37F, 325.4F, 13.21F);
+			item13.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
+			item13.rules[1].childName = "MuzzleCenter";
+			item13.rules[1].localPos = new Vector3(1.193F, 0.785F, 0.238F);
+			item13.rules[1].localAngles = new Vector3(0F, 15.58F, 0F);
+			item13.rules[1].localScale = new Vector3(1F, 1F, 1F);
+			
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item13Rules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/ResetChests/ResetChests.asset");
@@ -892,32 +787,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var item14Rules = new ItemDisplayRule[item14.rules.Length];
 			Array.Copy(item14.rules, item14Rules, item14.rules.Length);
 			item14.rules = item14Rules;
-			item14.rules[0].childName = "MuzzleCenter";
-			item14.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item14.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item14.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item14.rules[0].childName = "U_Waist";
+			item14.rules[0].localPos = new Vector3(-0.339F, 0.208F, 0.179F);
+			item14.rules[0].localAngles = new Vector3(349.19F, 285.08F, 8.76F);
+			item14.rules[0].localScale = new Vector3(1.2F, 1.2F, 1.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item14Rules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/StunAndPierce/StunAndPierce.asset");
-			var item15 = idrs.FindDisplayRuleGroup(keyAsset);
-			var item15Rules = new ItemDisplayRule[item15.rules.Length];
-			Array.Copy(item15.rules, item15Rules, item15.rules.Length);
-			item15.rules = item15Rules;
-			item15.rules[0].childName = "MuzzleCenter";
-			item15.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item15.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item15.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item15Rules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/TeleportOnLowHealth/TeleportOnLowHealth.asset");
 			var item16 = idrs.FindDisplayRuleGroup(keyAsset);
 			var item16Rules = new ItemDisplayRule[item16.rules.Length];
 			Array.Copy(item16.rules, item16Rules, item16.rules.Length);
 			item16.rules = item16Rules;
-			item16.rules[0].childName = "MuzzleCenter";
-			item16.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item16.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item16.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item16.rules[0].childName = "S_Chest";
+			item16.rules[0].localPos = new Vector3(0.008F, 0.17F, 0.22F);
+			item16.rules[0].localAngles = new Vector3(329.03F, 0F, 0F);
+			item16.rules[0].localScale = new Vector3(0.7F, 0.7F, 0.7F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item16Rules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/TriggerEnemyDebuffs/TriggerEnemyDebuffs.asset");
@@ -925,10 +809,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var item17Rules = new ItemDisplayRule[item17.rules.Length];
 			Array.Copy(item17.rules, item17Rules, item17.rules.Length);
 			item17.rules = item17Rules;
-			item17.rules[0].childName = "MuzzleCenter";
-			item17.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			item17.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			item17.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			item17.rules[0].childName = "S_Sash";
+			item17.rules[0].localPos = new Vector3(0.011F, -0.152F, -0.01F);
+			item17.rules[0].localAngles = new Vector3(345.24F, 195.12F, 264.67F);
+			item17.rules[0].localScale = new Vector3(0.9F, 0.9F, 0.9F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item17Rules });
 			
 			//"Followers" & Equipment
@@ -938,9 +822,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(convergence.rules, convergenceRules, convergence.rules.Length);
 			convergence.rules = convergenceRules;
 			convergence.rules[0].childName = "MuzzleCenter";
-			convergence.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			convergence.rules[0].localPos = new Vector3(1.492F, 0.821F, 0.016F);
 			convergence.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			convergence.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			convergence.rules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = convergenceRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/RandomlyLunar/RandomlyLunar.asset");
@@ -949,8 +833,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(euology.rules, euologyRules, euology.rules.Length);
 			euology.rules = euologyRules;
 			euology.rules[0].childName = "MuzzleCenter";
-			euology.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			euology.rules[0].localAngles = new Vector3(0F, 0F, 0F);
+			euology.rules[0].localPos = new Vector3(-1.817F, 0.635F, -0.271F);
+			euology.rules[0].localAngles = new Vector3(281.03F, 0F, 0F);
 			euology.rules[0].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = euologyRules });
 			
@@ -960,31 +844,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(essence.rules, essenceRules, essence.rules.Length);
 			essence.rules = essenceRules;
 			essence.rules[0].childName = "MuzzleCenter";
-			essence.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			essence.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			essence.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			essence.rules[0].localPos = new Vector3(-2.107F, 0.514F, -1.816F);
+			essence.rules[0].localAngles = new Vector3(270F, 0F, 0F);
+			essence.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = essenceRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/OnLevelUpFreeUnlock/OnLevelUpFreeUnlock.asset");
-			var solitude = idrs.FindDisplayRuleGroup(keyAsset);
-			var solitudeRules = new ItemDisplayRule[solitude.rules.Length];
-			Array.Copy(solitude.rules, solitudeRules, solitude.rules.Length);
-			solitude.rules = solitudeRules;
-			solitude.rules[0].childName = "MuzzleCenter";
-			solitude.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			solitude.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			solitude.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = solitudeRules });
-			
+
 			var equipAsset = await LoadAsset<EquipmentDef>("RoR2/Base/Blackhole/Blackhole.asset");
 			var cube = idrs.FindDisplayRuleGroup(equipAsset);
 			var cubeRules = new ItemDisplayRule[cube.rules.Length];
 			Array.Copy(cube.rules, cubeRules, cube.rules.Length);
 			cube.rules = cubeRules;
 			cube.rules[0].childName = "MuzzleCenter";
-			cube.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			cube.rules[0].localPos = new Vector3(-0.132F, 0.694F, -1.665F);
 			cube.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			cube.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			cube.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = cubeRules });
 			
 			equipAsset = await LoadAsset<EquipmentDef>("RoR2/DLC1/BossHunter/BossHunter.asset");
@@ -992,14 +865,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var pirateGunRules = new ItemDisplayRule[pirateGun.rules.Length];
 			Array.Copy(pirateGun.rules, pirateGunRules, pirateGun.rules.Length);
 			pirateGun.rules = pirateGunRules;
-			pirateGun.rules[0].childName = "MuzzleCenter";
-			pirateGun.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			pirateGun.rules[0].childName = "MuzzleRear";
+			pirateGun.rules[0].localPos = new Vector3(-0.07F, 1.423F, 1.981F);
 			pirateGun.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			pirateGun.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			pirateGun.rules[1].childName = "MuzzleCenter";
-			pirateGun.rules[1].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			pirateGun.rules[1].localAngles = new Vector3(0F, 0F, 0F);
-			pirateGun.rules[1].localScale = new Vector3(1F, 1F, 1F);
+			pirateGun.rules[0].childName = "MuzzleCenter";
+			pirateGun.rules[0].localPos = new Vector3(-0.007F, 0.43F, 0.247F);
+			pirateGun.rules[0].localAngles = new Vector3(90F, 0F, 0F);
+			pirateGun.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = pirateGunRules });
 			
 			equipAsset = await LoadAsset<EquipmentDef>("RoR2/Base/CritOnUse/CritOnUse.asset");
@@ -1007,10 +880,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var HUDRules = new ItemDisplayRule[HUD.rules.Length];
 			Array.Copy(HUD.rules, HUDRules, HUD.rules.Length);
 			HUD.rules = HUDRules;
-			HUD.rules[0].childName = "MuzzleCenter";
-			HUD.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			HUD.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			HUD.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			HUD.rules[0].childName = "U_Head";
+			HUD.rules[0].localPos = new Vector3(0.014F, 0.069F, 0.334F);
+			HUD.rules[0].localAngles = new Vector3(0F, 3.36F, 0F);
+			HUD.rules[0].localScale = new Vector3(0.3F, 0.3F, 0.3F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = HUDRules });
 			
 			equipAsset = await LoadAsset<EquipmentDef>("RoR2/Base/GainArmor/GainArmor.asset");
@@ -1018,10 +891,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var elephantRules = new ItemDisplayRule[elephant.rules.Length];
 			Array.Copy(elephant.rules, elephantRules, elephant.rules.Length);
 			elephant.rules = elephantRules;
-			elephant.rules[0].childName = "MuzzleCenter";
-			elephant.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			elephant.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			elephant.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			elephant.rules[0].childName = "U_Waist";
+			elephant.rules[0].localPos = new Vector3(0.332F, 0.153F, 0.164F);
+			elephant.rules[0].localAngles = new Vector3(327.83F, 313.11F, 33.21F);
+			elephant.rules[0].localScale = new Vector3(0.6F, 0.6F, 0.5F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = elephantRules });
 			
 			/*equipAsset = await LoadAsset<EquipmentDef>("RoR2/DLC1/GummyClone/GummyClone.asset"); //huh
@@ -1032,27 +905,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			gooboo.rules[0].childName = "MuzzleCenter";
 			gooboo.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			gooboo.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			gooboo.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			gooboo.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = goobooRules });*/
-			
-			equipAsset = await LoadAsset<EquipmentDef>("RoR2/DLC2/HealAndRevive/HealAndRevive.asset");
-			var lifeSeed = idrs.FindDisplayRuleGroup(equipAsset);
-			var lifeSeedRules = new ItemDisplayRule[lifeSeed.rules.Length];
-			Array.Copy(lifeSeed.rules, lifeSeedRules, lifeSeed.rules.Length);
-			lifeSeed.rules = lifeSeedRules;
-			lifeSeed.rules[0].childName = "MuzzleCenter";
-			lifeSeed.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			lifeSeed.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			lifeSeed.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = lifeSeedRules });
-			
+
 			equipAsset = await LoadAsset<EquipmentDef>("RoR2/DLC1/LunarPortalOnUse/LunarPortalOnUse.asset");
 			var littleGuy = idrs.FindDisplayRuleGroup(equipAsset);
 			var littleGuyRules = new ItemDisplayRule[littleGuy.rules.Length];
 			Array.Copy(littleGuy.rules, littleGuyRules, littleGuy.rules.Length);
 			littleGuy.rules = littleGuyRules;
 			littleGuy.rules[0].childName = "MuzzleCenter";
-			littleGuy.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			littleGuy.rules[0].localPos = new Vector3(-1.954F, 0.779F, -0.239F);
 			littleGuy.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			littleGuy.rules[0].localScale = new Vector3(1F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = littleGuyRules });
@@ -1063,9 +925,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(meteor.rules, meteorRules, meteor.rules.Length);
 			meteor.rules = meteorRules;
 			meteor.rules[0].childName = "MuzzleCenter";
-			meteor.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			meteor.rules[0].localPos = new Vector3(-0.116F, 0.759F, -2.009F);
 			meteor.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			meteor.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			meteor.rules[0].localScale = new Vector3(0.7F, 0.7F, 0.7F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = meteorRules });
 			
 			equipAsset = await LoadAsset<EquipmentDef>("RoR2/Base/Saw/Saw.asset");
@@ -1074,13 +936,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(saw.rules, sawRules, saw.rules.Length);
 			saw.rules = sawRules;
 			saw.rules[0].childName = "MuzzleCenter";
-			saw.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			saw.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			saw.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			saw.rules[0].localPos = new Vector3(-1.458F, 0.448F, 0.109F);
+			saw.rules[0].localAngles = new Vector3(90F, 0F, 0F);
+			saw.rules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = sawRules });
 
-			//Other Items That Would Look Good
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BarrierOnKill/BarrierOnKill.asset");
+			//Other Items That Would Look Good 
+			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BarrierOnKill/BarrierOnKill.asset"); //left off here
 			var topaz = idrs.FindDisplayRuleGroup(keyAsset);
 			var topazRules = new ItemDisplayRule[topaz.rules.Length];
 			Array.Copy(topaz.rules, topazRules, topaz.rules.Length);
@@ -1088,7 +950,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			topaz.rules[0].childName = "MuzzleCenter";
 			topaz.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			topaz.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			topaz.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			topaz.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = topazRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/NearbyDamageBonus/NearbyDamageBonus.asset");
@@ -1096,10 +958,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var crystalRules = new ItemDisplayRule[crystal.rules.Length];
 			Array.Copy(crystal.rules, crystalRules, crystal.rules.Length);
 			crystal.rules = crystalRules;
-			crystal.rules[0].childName = "MuzzleCenter";
-			crystal.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			crystal.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			crystal.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			crystal.rules[0].childName = "U_Chest";
+			crystal.rules[0].localPos = new Vector3(0.007F, 0.285F, 0.155F);
+			crystal.rules[0].localAngles = new Vector3(339.89F, 359.62F, 0.96F);
+			crystal.rules[0].localScale = new Vector3(0.04F, 0.04F, 0.04F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = crystalRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/Mushroom/Mushroom.asset");
@@ -1107,32 +969,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var bungusRules = new ItemDisplayRule[bungus.rules.Length];
 			Array.Copy(bungus.rules, bungusRules, bungus.rules.Length);
 			bungus.rules = bungusRules;
-			bungus.rules[0].childName = "MuzzleCenter";
-			bungus.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			bungus.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			bungus.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			bungus.rules[0].childName = "S_Head";
+			bungus.rules[0].localPos = new Vector3(0.004F, 0.42F, -0.06F);
+			bungus.rules[0].localAngles = new Vector3(14.59F, 140.66F, 355.08F);
+			bungus.rules[0].localScale = new Vector3(0.07F, 0.07F, 0.07F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = bungusRules });
-			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC1/OutOfCombatArmor/OutOfCombatArmor.asset");
-			var opal = idrs.FindDisplayRuleGroup(keyAsset);
-			var opalRules = new ItemDisplayRule[opal.rules.Length];
-			Array.Copy(opal.rules, opalRules, opal.rules.Length);
-			opal.rules = opalRules;
-			opal.rules[0].childName = "MuzzleCenter";
-			opal.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			opal.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			opal.rules[0].localScale = new Vector3(1F, 1F, 1F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = opalRules });
-			
+
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ExplodeOnDeath/ExplodeOnDeath.asset");
 			var willowisp = idrs.FindDisplayRuleGroup(keyAsset);
 			var willowispRules = new ItemDisplayRule[willowisp.rules.Length];
 			Array.Copy(willowisp.rules, willowispRules, willowisp.rules.Length);
 			willowisp.rules = willowispRules;
-			willowisp.rules[0].childName = "MuzzleCenter";
-			willowisp.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			willowisp.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			willowisp.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			willowisp.rules[0].childName = "S_Waist";
+			willowisp.rules[0].localPos = new Vector3(-0.338F, 0.12F, 0.096F);
+			willowisp.rules[0].localAngles = new Vector3(20.87F, 153.34F, 4.25F);
+			willowisp.rules[0].localScale = new Vector3(0.08F, 0.08F, 0.08F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = willowispRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/Feather/Feather.asset");
@@ -1140,10 +991,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var hopooRules = new ItemDisplayRule[hopoo.rules.Length];
 			Array.Copy(hopoo.rules, hopooRules, hopoo.rules.Length);
 			hopoo.rules = hopooRules;
-			hopoo.rules[0].childName = "MuzzleCenter";
-			hopoo.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
+			hopoo.rules[0].childName = "U_Head";
+			hopoo.rules[0].localPos = new Vector3(-0.026F, 0.308F, -0.124F);
 			hopoo.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			hopoo.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			hopoo.rules[0].localScale = new Vector3(0.04F, 0.04F, 0.04F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = hopooRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ElementalRings/FireRing.asset");
@@ -1151,10 +1002,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var fireRingRules = new ItemDisplayRule[fireRing.rules.Length];
 			Array.Copy(fireRing.rules, fireRingRules, fireRing.rules.Length);
 			fireRing.rules = fireRingRules;
-			fireRing.rules[0].childName = "MuzzleCenter";
-			fireRing.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			fireRing.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			fireRing.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			fireRing.rules[0].childName = "S_RingF";
+			fireRing.rules[0].localPos = new Vector3(-0.001F, 0.007F, 0.008F);
+			fireRing.rules[0].localAngles = new Vector3(84.96F, 128.64F, 124.49F);
+			fireRing.rules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = fireRingRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/ElementalRings/IceRing.asset");
@@ -1162,10 +1013,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var iceRingRules = new ItemDisplayRule[iceRing.rules.Length];
 			Array.Copy(iceRing.rules, iceRingRules, iceRing.rules.Length);
 			iceRing.rules = iceRingRules;
-			iceRing.rules[0].childName = "MuzzleCenter";
-			iceRing.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			iceRing.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			iceRing.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			iceRing.rules[0].childName = "U_RingF";
+			iceRing.rules[0].localPos = new Vector3(-0.001F, 0.007F, 0.008F);
+			iceRing.rules[0].localAngles = new Vector3(84.96F, 128.64F, 124.49F);
+			iceRing.rules[0].localScale = new Vector3(0.2F, 0.2F, 0.2F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = iceRingRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/TPHealingNova/TPHealingNova.asset");
@@ -1173,10 +1024,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var daisyRules = new ItemDisplayRule[daisy.rules.Length];
 			Array.Copy(daisy.rules, daisyRules, daisy.rules.Length);
 			daisy.rules = daisyRules;
-			daisy.rules[0].childName = "MuzzleCenter";
-			daisy.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			daisy.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			daisy.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			daisy.rules[0].childName = "U_Head";
+			daisy.rules[0].localPos = new Vector3(-0.05F, 0.381F, -0.125F);
+			daisy.rules[0].localAngles = new Vector3(309.68F, 210.35F, 168.94F);
+			daisy.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = daisyRules });
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BonusGoldPackOnKill/BonusGoldPackOnKill.asset");
@@ -1184,10 +1035,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var tomeRules = new ItemDisplayRule[tome.rules.Length];
 			Array.Copy(tome.rules, tomeRules, tome.rules.Length);
 			tome.rules = tomeRules;
-			tome.rules[0].childName = "MuzzleCenter";
-			tome.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			tome.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			tome.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			tome.rules[0].childName = "U_Waist";
+			tome.rules[0].localPos = new Vector3(-0.391F, 0.098F, 0.059F);
+			tome.rules[0].localAngles = new Vector3(351.82F, 262.43F, 19.8F);
+			tome.rules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = tomeRules });
 
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/DeathMark/DeathMark.asset");
@@ -1195,10 +1046,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var markRules = new ItemDisplayRule[mark.rules.Length];
 			Array.Copy(mark.rules, markRules, mark.rules.Length);
 			mark.rules = markRules;
-			mark.rules[0].childName = "MuzzleCenter";
-			mark.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
-			mark.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			mark.rules[0].localScale = new Vector3(1F, 1F, 1F);
+			mark.rules[0].childName = "U_Wrist2";
+			mark.rules[0].localPos = new Vector3(-0.018F, 0.102F, -0.032F);
+			mark.rules[0].localAngles = new Vector3(81.25F, 100.57F, 99.54F);
+			mark.rules[0].localScale = new Vector3(0.02F, 0.02F, 0.02F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = markRules });
 			
 			characterModel.itemDisplayRuleSet = idrs;

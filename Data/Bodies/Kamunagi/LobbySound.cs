@@ -6,7 +6,7 @@ namespace KamunagiOfChains.Data.Bodies
 	{
 		private void OnEnable()
 		{
-			//AkSoundEngine.PostEvent(2023966543, base.gameObject);
+			AkSoundEngine.PostEvent(2023966543, base.gameObject);
 		}
 
 		private void OnDisable()

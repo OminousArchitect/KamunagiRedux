@@ -94,12 +94,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			if (currentStage == meridianDef || currentStage == sulfurPoolsDef) return;
+			if (currentStage == sulfurPoolsDef) return;
 			if (!chainsSpawned && passiveSkill.IsReady())
 			{
 				if (chainsLeftInstance == null || !chainsLeftInstance)
 					chainsLeftInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, UBone,
-					data: new EffectData() { rootObject = UBone.gameObject, });
+						data: new EffectData() { rootObject = UBone.gameObject, });
 				if (chainsRightInstance == null || !chainsRightInstance)
 					chainsRightInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(chainsEffect, SBone,
 						data: new EffectData() { rootObject = SBone.gameObject });

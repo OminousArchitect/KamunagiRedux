@@ -94,7 +94,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			if (currentStage == sulfurPoolsDef) return;
 			if (!chainsSpawned && passiveSkill.IsReady())
 			{
 				if (chainsLeftInstance == null || !chainsLeftInstance)

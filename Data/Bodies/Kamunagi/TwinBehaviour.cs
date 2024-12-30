@@ -31,6 +31,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public float minDistance = 0.4f;
 		public float maxDistance = 1.5f;
 
+		public GameObject magicBall;
+
 		public int zealMeter
 		{
 			get => _zealMeter;

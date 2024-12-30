@@ -855,9 +855,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(cube.rules, cubeRules, cube.rules.Length);
 			cube.rules = cubeRules;
 			cube.rules[0].childName = "MuzzleCenter";
-			cube.rules[0].localPos = new Vector3(-0.132F, 0.694F, -1.665F);
+			cube.rules[0].localPos = new Vector3(-0.078F, 0.694F, -1.665F);
 			cube.rules[0].localAngles = new Vector3(0F, 0F, 0F);
-			cube.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
+			cube.rules[0].localScale = new Vector3(0.7F, 0.7F, 0.7F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = cubeRules });
 			
 			equipAsset = await LoadAsset<EquipmentDef>("RoR2/DLC1/BossHunter/BossHunter.asset");

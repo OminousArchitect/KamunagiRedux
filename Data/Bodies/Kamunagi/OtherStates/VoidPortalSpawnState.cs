@@ -2,7 +2,6 @@
 using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
-using Console = System.Console;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {

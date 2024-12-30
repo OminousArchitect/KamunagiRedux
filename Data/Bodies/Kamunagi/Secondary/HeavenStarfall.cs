@@ -9,7 +9,6 @@ using RoR2.Skills;
 using ThreeEyedGames;
 using UnityEngine;
 using UnityEngine.Networking;
-using Console = System.Console;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {

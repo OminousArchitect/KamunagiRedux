@@ -21,7 +21,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			ProjectileManager.instance.FireProjectile(new FireProjectileInfo
 			{
 				crit = RollCrit(),
-				damage = damageStat * 1f,
+				damage = damageStat,
 				force = 0,
 				owner = gameObject,
 				position = aimRay.origin + (aimRay.direction * 2),
@@ -74,7 +74,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			projectile.transform.localScale = Vector3.one * 0.3f;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
-			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 88f;
 			var boulderImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			boulderImpact.bonusBlastForce = Vector3.zero; //new Vector3(20, 20, 20);
 			boulderImpact.blastRadius = 5f;
@@ -84,7 +83,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			boulderImpact.blastProcCoefficient = 1.3f;
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
 			projectile.GetComponent<Rigidbody>().useGravity = false;
-			projectile.GetComponent<SphereCollider>().radius = 3.5f;
+			projectile.GetComponent<SphereCollider>().radius = 4f;
 			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary | DamageType.Stun1s;
 			return projectile;
 		}

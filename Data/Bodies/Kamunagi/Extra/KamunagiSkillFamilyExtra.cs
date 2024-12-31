@@ -9,8 +9,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[]
 		{
 			GetAsset<MothMoth>(), GetAsset<XinZhao>(), GetAsset<SummonTatari>(), 
-			GetAsset<SummonNugwisomkami>(), GetAsset<MashiroBlessing>(), GetAsset<Overzeal>(), 
-			GetAsset<KuonFlashbang>(), GetAsset<HonokasVeil>(), GetAsset<MagicBallSkill>()
+			GetAsset<SummonNugwisomkami>(), GetAsset<MashiroBlessing>(), GetAsset<Overzeal>(),
+			GetAsset<MagicBallSkill>(),
+			GetAsset<KuonFlashbang>(), GetAsset<HonokasVeil>() 
 		};
 
 		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaExtra" ? "NINES_SARAANA_EXTRA" : "NINES_URURUU_EXTRA";

@@ -144,7 +144,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	}
 
 	[HarmonyPatch]
-	public class MashiroBlessing : Concentric, ISkill, IBuff, IOverlay
+	public class MashiroBlessing : Concentric, ISkill, IBuff, IOverlay, IMaterial
 	{
 		public static DamageColorIndex damageColorIndex;
 
@@ -193,7 +193,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		Task<Material> IOverlay.BuildObject()
 		{
-			return LoadAsset<Material>("RoR2/DLC1/EliteVoid/matEliteVoidOverlay.mat")!;
+			return this.GetMaterial();
+		}
+
+		async Task<Material> IMaterial.BuildObject()
+		{
+			var material = new Material(await LoadAsset<Material>("RoR2/DLC1/EliteVoid/matEliteVoidOverlay.mat"));
+			material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampParentTeleport.png"));
+			material.SetFloat("_AlphaBias", 0.611f);
+			return material;
 		}
 
 		bool IOverlay.CheckEnabled(CharacterModel model)

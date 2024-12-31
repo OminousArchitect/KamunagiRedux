@@ -93,8 +93,8 @@
 	  "NINES_KAMUNAGI_BODY_EXTRA7_DESCRIPTION": "Summon a <style=cIsDamage>profane coagulation</style> that stuns enemies and <style=cIsUtility>inflicts debuffs</style> the <style=cIsHealth>closer it gets to death</style>.",
 	  "NINES_KAMUNAGI_BODY_EXTRA8_NAME": "Kuko Stimulant",
 	  "NINES_KAMUNAGI_BODY_EXTRA8_DESCRIPTION":"Consume a kuko fruit to <style=cIsDamage>instantly</style> gain maximum <color=#EDA717>Zeal</color>.",
-	  "NINES_KAMUNAGI_BODY_EXTRA9_NAME": "Ball Teleport",
-	  "NINES_KAMUNAGI_BODY_EXTRA9_DESCRIPTION": "",
+	  "NINES_KAMUNAGI_BODY_EXTRA9_NAME": "Atuykarounkami's Passage",
+	  "NINES_KAMUNAGI_BODY_EXTRA9_DESCRIPTION": "Hold to launch a water-aspected energy bolt. Release to <style=cIsUtility>teleport to the bolt's location</style>.",
 	  
 	  "WOSHISGHOST_NAME": "never trust the yaoi artist"
   }

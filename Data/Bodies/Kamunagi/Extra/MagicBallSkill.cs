@@ -46,6 +46,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				if (twinBehaviour.magicBall && twinBehaviour.magicBall != null)
 				{
+					position = twinBehaviour.magicBall.transform.position;
 					outer.SetNextState(new MagicBallTeleportState()
 					{
 						ballPosition = position
@@ -60,10 +61,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		public override void OnExit()
 		{
-			if (NetworkServer.active && twinBehaviour.magicBall && twinBehaviour.magicBall != null) //it's called we do a little avoiding networking for now
-			{
-				position = twinBehaviour.magicBall.transform.position;
-			}
 			log.LogDebug("Exit");
 			base.OnExit();
 		}
@@ -79,11 +76,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		private CharacterModel charModel;
 		private HurtBoxGroup hurtBoxGroup;
 		public Vector3 ballPosition;
+		private Vector3 currentPosition;
+		private static Vector3 storedPosition;
+		private float duration;
+		private bool blinked;
 
-		private float stopwatch;
-		public float speedCoefficient = 25f;
-		private bool doNothing;
-		
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -97,32 +94,48 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 					charModel.invisibilityCount++;
 					hurtBoxGroup.hurtBoxesDeactivatorCounter++;
 				}
+				CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
+			}
+			if (isAuthority)
+			{
+				currentPosition = characterBody.corePosition;
+				storedPosition = ballPosition;
+				duration = (currentPosition - storedPosition).magnitude;
+				duration = Util.Remap(duration, 0f, 100f, 0.2f, 0.6f);
+				characterDirection.forward = storedPosition;
+			}
+			if (twinBehaviour.magicBall && twinBehaviour.magicBall != null)
+			{
+				DoViendExplosion(twinBehaviour.magicBall.transform.position);
+				EntityState.Destroy(twinBehaviour.magicBall);
 			}
 		}
 
+		private void SetPosition(Vector3 newPosition)
+		{
+			if (characterMotor)
+			{
+				characterMotor.Motor.SetPositionAndRotation(newPosition, Quaternion.identity, true);
+			}
+		}
+		
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			stopwatch += Time.fixedDeltaTime;
-			if (twinBehaviour.magicBall == null)
-			{
-				outer.SetNextStateToMain();
-			}
+
 			if (base.characterMotor && base.characterDirection)
 			{
-				CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
 				(characterMotor as IPhysMotor).velocityAuthority = Vector3.zero;
 
-				if (twinBehaviour.magicBall && twinBehaviour.magicBall != null)
+				if (!blinked)
 				{
-					base.characterMotor.rootMotion += ballPosition * (moveSpeedStat * speedCoefficient * GetDeltaTime());
-					DoViendExplosion(twinBehaviour.magicBall.transform.position);
-					EntityState.Destroy(twinBehaviour.magicBall);
+					SetPosition(Vector3.Lerp(currentPosition, storedPosition, base.fixedAge / this.duration));
 				}
 			}
 			
-			if (stopwatch >= 0.3f && base.isAuthority)
+			if (fixedAge >= duration && base.isAuthority)
 			{
+				blinked = true;
 				outer.SetNextStateToMain();
 			}
 		}
@@ -184,16 +197,30 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			effectData.origin = origin;
 			EffectManager.SpawnEffect(viendPrefab, effectData, transmit: true);
 		}
+
+		public override void OnSerialize(NetworkWriter writer)
+		{
+			base.OnSerialize(writer);
+			writer.Write(ballPosition);
+			writer.Write(currentPosition);
+		}
+
+		public override void OnDeserialize(NetworkReader reader)
+		{
+			base.OnDeserialize(reader);
+			ballPosition = reader.ReadVector3();
+			currentPosition = reader.ReadVector3();
+		}
 	}
 	
-	public class MagicBallSkill : Concentric, ISkill, IProjectile, IProjectileGhost
+	public class MagicBallSkill : Concentric, ISkill, IProjectile, IProjectileGhost, IEffect
 	{
 		public override async Task Initialize()
 		{
 			await base.Initialize();
 			ShootMagicBallState.viendFlash  = await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab");
-			
-			MagicBallTeleportState.viendPrefab = await LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterExplosion.prefab");
+
+			MagicBallTeleportState.viendPrefab = await this.GetEffect();
 			MagicBallTeleportState.blinkPrefab = await LoadAsset<GameObject>("RoR2/Base/Huntress/HuntressBlinkEffect.prefab");
 		}
 
@@ -203,7 +230,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Primary 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA9_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA9_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:notype"));
+			skill.icon= (await LoadAsset<Sprite>("kamunagiassets2:WaterSeal"));
 			skill.activationStateMachineName = "Weapon";
 			skill.mustKeyPress = true;
 			skill.isCombatSkill = false;
@@ -220,15 +247,53 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = (await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterBigProjectile.prefab")!).InstantiateClone("TwinsBallBlinkProjectile", true);
+			var proj = (await GetProjectile<AltMusouChargeBall>())!.InstantiateClone("TwinsMagicBall", true);
 			proj.AddComponent<TeleportToBall>();
+			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+			var impact = proj.GetComponent<ProjectileImpactExplosion>();
+			impact.impactEffect = await this.GetEffect();
 			return proj;
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			var ghost = (await GetProjectileGhost<SoeiMusou>())!.InstantiateClone("TwinsBallBlinkGhost", false);
+			var musouInstance = new Material(await LoadAsset<Material>("addressable:RoR2/Base/Brother/matBrotherPreBossSphere.mat"));
+			musouInstance.SetTexture("_RemapTex", await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonPreBoss.png"));
+			musouInstance.SetColor("_TintColor", new Color32(0, 79, 255, 255));
+			
+			var ghost = (await GetProjectileGhost<AltMusouChargeBall>())!.InstantiateClone("TwinsMagicBallGhost", false);
+			ghost.transform.localScale = Vector3.one * 0.5f;
+			var coolSphere = ghost.GetComponent<MeshRenderer>();
+			coolSphere.materials = new[] { musouInstance };
+			UnityEngine.Object.Destroy(ghost.GetComponent<ObjectScaleCurve>());
 			return ghost;
+		}
+
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			Material newMat = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorBlasterSphereAreaIndicator.mat"));
+			newMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning.png"));
+			Material newMat2 = new Material(await LoadAsset<Material>("RoR2/DLC1/Common/Void/matOmniHitspark2Void.mat"));
+			newMat2.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampLightning2.png"));
+			
+			var effect = (await LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidSurvivorMegaBlasterExplosion.prefab"))!.InstantiateClone("MagicBallImpact", false);
+			var recolor = effect.transform.GetChild(2).gameObject;
+			recolor.GetComponent<ParticleSystemRenderer>().material = newMat;
+			var core = effect.transform.GetChild(6).gameObject;
+			foreach (ParticleSystemRenderer r in core.GetComponentsInChildren<ParticleSystemRenderer>())
+			{
+				switch (r.name)
+				{
+					case "ScaledHitsparks 1":
+					case "ScaledHitsparks 2":
+						r.material = newMat2;
+						break;
+				}
+			}
+			effect.GetComponentInChildren<Light>().color = Colors.oceanColor;
+			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
+			UnityEngine.Object.Destroy(effect.transform.GetChild(1).gameObject);
+			return effect;
 		}
 	}
 	[RequireComponent(typeof(ProjectileController))]

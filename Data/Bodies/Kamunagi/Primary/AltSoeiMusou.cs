@@ -193,10 +193,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 					"addressable:RoR2/Base/title/PostProcessing/ppLocalBrotherImpact.asset");
 			altPP.sharedProfile = altPP.profile;
 
-			var musouInstance =
-				new Material(await LoadAsset<Material>("addressable:RoR2/Base/Brother/matBrotherPreBossSphere.mat"));
-			musouInstance.SetTexture("_RemapTex",
-				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonPreBoss.png"));
+			var musouInstance = new Material(await LoadAsset<Material>("addressable:RoR2/Base/Brother/matBrotherPreBossSphere.mat"));
+			musouInstance.SetTexture("_RemapTex", await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampMoonPreBoss.png"));
 			musouInstance.SetColor("_TintColor", Colors.twinsLightColor);
 			var coolSphere = effect.GetComponent<MeshRenderer>();
 			coolSphere.materials = new[] { musouInstance };

@@ -209,24 +209,4 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		public int Priority => 1;
 	}
-	
-	public class VoidTome : Concentric, IItem
-	{
-		async Task<ItemDef> IItem.BuildObject()
-		{
-			var item = ScriptableObject.CreateInstance<ItemDef>();
-			item.name = "NINES_VOIDTOME_NAME";
-			item.nameToken = "NINES_VOIDTOME_NAME";
-			item.pickupToken = "NINES_VOIDTOME_PICKUP";
-			item.descriptionToken = "NINES_VOIDTOME_DESC";
-			item.loreToken = "NINES_VOIDTOME_LORE";
-			item.tier = ItemTier.VoidTier2;
-			item.deprecatedTier = ItemTier.VoidTier2;
-			item.pickupIconSprite = await LoadAsset<Sprite>("RoR2/Base/BonusGoldPackOnKill/texTomeIcon.png");
-			item.pickupModelPrefab = await LoadAsset<GameObject>("RoR2/Base/BonusGoldPackOnKill/PickupTome.prefab");
-			item.canRemove = true;
-			item.hidden = false;
-			return item;
-		}
-	}
 }

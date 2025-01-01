@@ -99,6 +99,10 @@
 	  "NINES_VOIDTOME_NAME": "Woshis' Grimoire",
 	  "NINES_VOIDTOME_PICKUP": "pickup text",
 	  "NINES_VOIDTOME_DESC": "description",
+
+	  "NINES_RAZORHIVE_NAME": "Razor Hive",
+	  "NINES_RAZORHIVE_PICKUP": "pickup text",
+	  "NINES_RAZORHIVE_DESC": "description",
 	  
 	  "WOSHISGHOST_NAME": "never trust the yaoi artist"
   }

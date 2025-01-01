@@ -169,16 +169,7 @@ namespace KamunagiOfChains
 				if (_contentPack.IsFaulted)
 					throw _contentPack.Exception!;
 
-				var content = _contentPack.Result;
-				var provider = ScriptableObject.CreateInstance<ItemRelationshipProvider>();
-				provider.relationships = new[]
-				{
-					new ItemDef.Pair() { itemDef1 = LoadAsset<ItemDef>("RoR2/Base/BonusGoldPackOnKill/BonusGoldPackOnKill.asset").WaitForCompletion(), itemDef2 = Concentric.GetItemDef<VoidTome>().WaitForCompletion() }
-				};
-				provider.relationshipType = LoadAsset<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset")
-					.WaitForCompletion();
-				content.itemRelationshipProviders.Add(new[] { provider });
-				ContentPack.Copy(content, args.output);
+				ContentPack.Copy(_contentPack.Result, args.output);
 				//Log.LogError(ContentPack.identifier);
 				args.ReportProgress(1f);
 				yield break;

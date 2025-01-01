@@ -173,7 +173,7 @@ namespace KamunagiOfChains
 				var provider = ScriptableObject.CreateInstance<ItemRelationshipProvider>();
 				provider.relationships = new[]
 				{
-					new ItemDef.Pair() { itemDef1 = RoR2Content.Items.BonusGoldPackOnKill, itemDef2 = Concentric.GetItemDef<VoidTome>().WaitForCompletion() }
+					new ItemDef.Pair() { itemDef1 = LoadAsset<ItemDef>("RoR2/Base/BonusGoldPackOnKill/BonusGoldPackOnKill.asset").WaitForCompletion(), itemDef2 = Concentric.GetItemDef<VoidTome>().WaitForCompletion() }
 				};
 				provider.relationshipType = LoadAsset<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset")
 					.WaitForCompletion();

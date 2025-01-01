@@ -347,7 +347,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			{
 				startSound = "",
 				stopSound = "",
-				overlayMaterial = null, //todo can't be null
+				overlayMaterial = await GetMaterial<AxiomBurn>(),
 				particleEffectPrefab = await GetEffect<RazorHive>()
 			};
 		}
@@ -358,8 +358,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var gameject = await LoadAsset<GameObject>("kamunagiassets:VoidBeesEffect");
-			var effect = gameject.transform.Find("DamageOverTimeShadow/Moths").gameObject;
+			var effect = await LoadAsset<GameObject>("kamunagiassets:Moths");
 			var ps = effect.GetComponent<ParticleSystem>();
 			KamunagiBurnEffectControllerHelper helper = effect.AddComponent<KamunagiBurnEffectControllerHelper>();
 			helper.burnParticleSystem = ps;
@@ -392,7 +391,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			buff.buffColor = Color.magenta;
 			buff.canStack = true;
 			buff.isDebuff = true;
-			buff.isHidden = false;
+			buff.isHidden = true;
 			return buff;
 		}
 
@@ -422,8 +421,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					kamunagiEffectController.effectParams = KamunagiBurnEffectController.voidBeesEffect;
 					kamunagiEffectController.target = modelLocator.modelTransform.gameObject;
 					log.LogDebug("added Kamunagi Controller");
-				}
-			);
+				});
 		}
 		
 		[HarmonyPostfix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]

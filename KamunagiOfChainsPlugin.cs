@@ -62,7 +62,6 @@ namespace KamunagiOfChains
 		public static DamageAPI.ModdedDamageType Uitsalnemetia;
 		public static DamageAPI.ModdedDamageType CurseFlames;
 		public static DamageAPI.ModdedDamageType SobuGekishoha;
-		public static ItemDef razorWire;
 
 		public void Awake()
 		{
@@ -96,7 +95,6 @@ namespace KamunagiOfChains
 			SobuGekishoha = DamageAPI.ReserveDamageType();
 
 			log.LogDebug("Loading Concentric Bundle");
-			razorWire = RoR2Content.Items.Thorns;
 
 			var assetsPath = System.IO.Path.Join(pluginPath, "Assets");
 			var bundlePaths = Directory.EnumerateFiles(assetsPath).Where(x => !x.EndsWith("manifest")).ToArray();
@@ -172,19 +170,34 @@ namespace KamunagiOfChains
 				if (_contentPack.IsFaulted)
 					throw _contentPack.Exception!;
 
+				ContentPack.Copy(_contentPack.Result, args.output);
+				//Log.LogError(ContentPack.identifier);
+				args.ReportProgress(1f);
+				yield break;
+				
+				/*var handle1 = Addressables.LoadAssetAsync<ItemDef>("RoR2/Base/Thorns/Thorns.asset");
+				var handle3 = Addressables.LoadAssetAsync<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset");
+				var toBeConverted = handle1.WaitForCompletion();
+				var conversionProduct = Concentric.GetItemDef<RazorHive>().WaitForCompletion();
+				var relationshipType = handle3.WaitForCompletion();
+				
+				while (!_contentPack.IsCompleted)
+					yield return null;
+				if (_contentPack.IsFaulted)
+					throw _contentPack.Exception!;
+
 				var content = _contentPack.Result;
 				var provider = ScriptableObject.CreateInstance<ItemRelationshipProvider>();
 				provider.relationships = new[]
 				{
-					new ItemDef.Pair() { itemDef1 = razorWire, itemDef2 = Concentric.GetItemDef<RazorHive>().WaitForCompletion() }
+					new ItemDef.Pair() { itemDef1 = toBeConverted, itemDef2 = conversionProduct }
 				};
-				provider.relationshipType = LoadAsset<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset")
-					.WaitForCompletion();
+				provider.relationshipType = relationshipType;
 				content.itemRelationshipProviders.Add(new[] { provider });
 				ContentPack.Copy(content, args.output);
 				//Log.LogError(ContentPack.identifier);
 				args.ReportProgress(1f);
-				yield break;
+				yield break;*/
 			}
 
 			public IEnumerator FinalizeAsync(RoR2.ContentManagement.FinalizeAsyncArgs args)

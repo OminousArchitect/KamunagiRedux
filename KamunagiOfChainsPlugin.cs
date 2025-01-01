@@ -167,7 +167,13 @@ namespace KamunagiOfChains
 				if (_contentPack.IsFaulted)
 					throw _contentPack.Exception!;
 
-				ContentPack.Copy(_contentPack.Result, args.output);
+				var content = _contentPack.Result;
+				content.itemRelationshipProviders.Add(new []{new ItemRelationshipProvider() {relationshipType = LoadAsset<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset").WaitForCompletion(), relationships = new []{new ItemDef.Pair()
+					{
+						itemDef1 = item that gets converted,
+						itemDef2 = what it turns into
+					}}});
+				ContentPack.Copy(content, args.output);
 				//Log.LogError(ContentPack.identifier);
 				args.ReportProgress(1f);
 				yield break;

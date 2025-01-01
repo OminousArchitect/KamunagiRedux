@@ -7,6 +7,8 @@ using BepInEx;
 using BepInEx.Logging;
 using ExtraSkillSlots;
 using HarmonyLib;
+using KamunagiOfChains.Data.Bodies;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using R2API;
 using R2API.Utils;
 using RoR2;
@@ -171,7 +173,7 @@ namespace KamunagiOfChains
 				var provider = ScriptableObject.CreateInstance<ItemRelationshipProvider>();
 				provider.relationships = new[]
 				{
-					new ItemDef.Pair() { itemDef1 = item that gets converted, itemDef2 = what it turns into }
+					new ItemDef.Pair() { itemDef1 = RoR2Content.Items.BonusGoldPackOnKill, itemDef2 = Concentric.GetItemDef<VoidTome>().WaitForCompletion() }
 				};
 				provider.relationshipType = LoadAsset<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset")
 					.WaitForCompletion();

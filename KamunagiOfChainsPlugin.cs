@@ -8,6 +8,7 @@ using BepInEx.Logging;
 using ExtraSkillSlots;
 using HarmonyLib;
 using KamunagiOfChains.Data.Bodies;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using R2API;
 using R2API.Utils;
@@ -61,6 +62,7 @@ namespace KamunagiOfChains
 		public static DamageAPI.ModdedDamageType Uitsalnemetia;
 		public static DamageAPI.ModdedDamageType CurseFlames;
 		public static DamageAPI.ModdedDamageType SobuGekishoha;
+		public static ItemDef razorWire;
 
 		public void Awake()
 		{
@@ -94,6 +96,7 @@ namespace KamunagiOfChains
 			SobuGekishoha = DamageAPI.ReserveDamageType();
 
 			log.LogDebug("Loading Concentric Bundle");
+			razorWire = RoR2Content.Items.Thorns;
 
 			var assetsPath = System.IO.Path.Join(pluginPath, "Assets");
 			var bundlePaths = Directory.EnumerateFiles(assetsPath).Where(x => !x.EndsWith("manifest")).ToArray();
@@ -169,7 +172,16 @@ namespace KamunagiOfChains
 				if (_contentPack.IsFaulted)
 					throw _contentPack.Exception!;
 
-				ContentPack.Copy(_contentPack.Result, args.output);
+				var content = _contentPack.Result;
+				var provider = ScriptableObject.CreateInstance<ItemRelationshipProvider>();
+				provider.relationships = new[]
+				{
+					new ItemDef.Pair() { itemDef1 = razorWire, itemDef2 = Concentric.GetItemDef<RazorHive>().WaitForCompletion() }
+				};
+				provider.relationshipType = LoadAsset<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset")
+					.WaitForCompletion();
+				content.itemRelationshipProviders.Add(new[] { provider });
+				ContentPack.Copy(content, args.output);
 				//Log.LogError(ContentPack.identifier);
 				args.ReportProgress(1f);
 				yield break;

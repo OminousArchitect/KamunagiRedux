@@ -27,7 +27,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			maxChargeTime *= attackSpeedStat;
+			float reduced = 3f * (attackSpeedStat - 1);
+			maxChargeTime = 3 - reduced;
+			projectileFireFrequency /= attackSpeedStat;
+			
 			muzzleTransform = FindModelChild("MuzzleCenter");
 			if (muzzleTransform)
 			{

@@ -24,7 +24,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			log.LogDebug("entering channeldash");
+			//log.LogDebug("entering channeldash");
 			behaviour = characterBody.GetComponent<TwinBehaviour>();
 			duration = behaviour.chargeDuration;
 			origin = this.transform.position;
@@ -78,7 +78,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		public override void OnExit()
 		{
-			log.LogDebug("exiting channeldash");
+			//log.LogDebug("exiting channeldash");
 			characterBody.SetBuffCount(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 0);
 			base.OnExit();
 		}

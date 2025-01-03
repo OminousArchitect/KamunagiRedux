@@ -95,14 +95,6 @@
 	  "NINES_KAMUNAGI_BODY_EXTRA8_DESCRIPTION":"Consume a kuko fruit to <style=cIsDamage>instantly</style> gain maximum <color=#EDA717>Zeal</color>.",
 	  "NINES_KAMUNAGI_BODY_EXTRA9_NAME": "Atuykarounkami's Passage",
 	  "NINES_KAMUNAGI_BODY_EXTRA9_DESCRIPTION": "Hold to launch a water-aspected energy bolt. Release to <style=cIsUtility>teleport to the bolt's location</style>.",
-
-	  "NINES_VOIDTOME_NAME": "Woshis' Grimoire",
-	  "NINES_VOIDTOME_PICKUP": "pickup text",
-	  "NINES_VOIDTOME_DESC": "description",
-
-	  "NINES_RAZORHIVE_NAME": "Razor Hive",
-	  "NINES_RAZORHIVE_PICKUP": "pickup text",
-	  "NINES_RAZORHIVE_DESC": "description",
 	  
 	  "WOSHISGHOST_NAME": "never trust the yaoi artist"
   }

@@ -171,33 +171,7 @@ namespace KamunagiOfChains
 					throw _contentPack.Exception!;
 
 				ContentPack.Copy(_contentPack.Result, args.output);
-				//Log.LogError(ContentPack.identifier);
 				args.ReportProgress(1f);
-				yield break;
-				
-				/*var handle1 = Addressables.LoadAssetAsync<ItemDef>("RoR2/Base/Thorns/Thorns.asset");
-				var handle3 = Addressables.LoadAssetAsync<ItemRelationshipType>("RoR2/DLC1/Common/ContagiousItem.asset");
-				var toBeConverted = handle1.WaitForCompletion();
-				var conversionProduct = Concentric.GetItemDef<RazorHive>().WaitForCompletion();
-				var relationshipType = handle3.WaitForCompletion();
-				
-				while (!_contentPack.IsCompleted)
-					yield return null;
-				if (_contentPack.IsFaulted)
-					throw _contentPack.Exception!;
-
-				var content = _contentPack.Result;
-				var provider = ScriptableObject.CreateInstance<ItemRelationshipProvider>();
-				provider.relationships = new[]
-				{
-					new ItemDef.Pair() { itemDef1 = toBeConverted, itemDef2 = conversionProduct }
-				};
-				provider.relationshipType = relationshipType;
-				content.itemRelationshipProviders.Add(new[] { provider });
-				ContentPack.Copy(content, args.output);
-				//Log.LogError(ContentPack.identifier);
-				args.ReportProgress(1f);
-				yield break;*/
 			}
 
 			public IEnumerator FinalizeAsync(RoR2.ContentManagement.FinalizeAsyncArgs args)

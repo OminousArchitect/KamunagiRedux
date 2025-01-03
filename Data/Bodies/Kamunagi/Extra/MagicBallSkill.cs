@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -59,12 +60,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			}
 		}
 
-		public override void OnExit()
-		{
-			log.LogDebug("Exit");
-			base.OnExit();
-		}
-
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}
 
@@ -80,11 +75,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		private static Vector3 storedPosition;
 		private float duration;
 		private bool blinked;
+		private EffectManagerHelper? waterFx;
+		private Transform vfxTransform;
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			modelTransform = GetModelTransform();
+			vfxTransform = FindModelChild("MuzzleCenter");
 			if (modelTransform)
 			{
 				charModel = modelTransform.GetComponent<CharacterModel>();
@@ -130,6 +128,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				if (!blinked)
 				{
 					SetPosition(Vector3.Lerp(currentPosition, storedPosition, base.fixedAge / this.duration));
+					if (!waterFx)
+					{
+						waterFx = EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<WaterPassageEffect>().WaitForCompletion(), vfxTransform, true,
+							new EffectData() { rootObject = vfxTransform.gameObject });
+					}
 				}
 			}
 			
@@ -178,6 +181,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			if (base.characterMotor)
 			{
 				base.characterMotor.disableAirControlUntilCollision = false; //Huntress blink uses this idk if we need it
+			}
+
+			if (waterFx != null)
+			{
+				waterFx.ReturnToPool();
 			}
 			base.OnExit();
 		}
@@ -296,6 +304,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			return effect;
 		}
 	}
+
+	public class WaterPassageEffect : Concentric, IEffect
+	{
+		async Task<GameObject> IEffect.BuildObject()
+		{
+			var effect = (await GetProjectileGhost<AtuysTides>()).InstantiateClone("AtuyGodPassageEffect", false);
+			UnityEngine.Object.Destroy(effect.GetComponent<ProjectileGhostController>());
+			return effect;
+		}
+	}
+	
 	[RequireComponent(typeof(ProjectileController))]
 	public class TeleportToBall : MonoBehaviour
 	{

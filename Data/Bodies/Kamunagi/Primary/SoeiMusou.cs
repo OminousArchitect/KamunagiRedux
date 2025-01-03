@@ -109,7 +109,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				await LoadAsset<Texture2D>("addressable:RoR2/Base/Common/ColorRamps/texRampIce.png"));
 			cloudRemap.SetColor("_TintColor", Colors.twinsTintColor);
 			cloudRemap.SetFloat("_AlphaBoost", 3.88f);
-
+			
+			ghost.transform.localScale = Vector3.one * 0.6f;
 			var scale = ghost.AddComponent<ObjectScaleCurve>();
 			scale.useOverallCurveOnly = true;
 			scale.timeMax = 0.12f;

@@ -343,116 +343,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				overlayMaterial = await GetMaterial<AxiomBurn>(),
 				particleEffectPrefab = await GetEffect<CurseParticles>()
 			};
-			KamunagiBurnEffectController.voidBeesEffect = new KamunagiBurnEffectController.KamunagiEffectParams
-			{
-				startSound = "",
-				stopSound = "",
-				overlayMaterial = await GetMaterial<AxiomBurn>(),
-				particleEffectPrefab = await GetEffect<RazorHive>()
-			};
-		}
-	}
-	
-	[HarmonyPatch]
-	public class RazorHive : Concentric, IItem, IBuff, IEffect
-	{
-		async Task<GameObject> IEffect.BuildObject()
-		{
-			var effect = await LoadAsset<GameObject>("kamunagiassets:Moths");
-			var ps = effect.GetComponent<ParticleSystem>();
-			KamunagiBurnEffectControllerHelper helper = effect.AddComponent<KamunagiBurnEffectControllerHelper>();
-			helper.burnParticleSystem = ps;
-			effect.GetOrAddComponent<VFXAttributes>().DoNotPool = false;
-			return effect;
-		}
-		
-		async Task<ItemDef> IItem.BuildObject()
-		{
-			var item = ScriptableObject.CreateInstance<ItemDef>();
-			item.name = "NINES_RAZORHIVE_NAME";
-			item.nameToken = "NINES_RAZORHIVE_NAME";
-			item.pickupToken = "NINES_RAZORHIVE_PICKUP";
-			item.descriptionToken = "NINES_RAZORHIVE_DESC";
-			item.loreToken = "NINES_RAZORHIVE_LORE";
-			item.tier = ItemTier.VoidTier2;
-			item.deprecatedTier = ItemTier.VoidTier2;
-			item.pickupIconSprite = await LoadAsset<Sprite>("kamunagiassets2:Razorhive");
-			item.pickupModelPrefab = await LoadAsset<GameObject>("RoR2/Base/Thorns/PickupRazorwire.prefab");
-			item.canRemove = true;
-			item.hidden = false;
-			return item;
-		}
-
-		async Task<BuffDef> IBuff.BuildObject()
-		{
-			var buff = ScriptableObject.CreateInstance<BuffDef>();
-			buff.name = "VoidBeesDebuff";
-			buff.iconSprite = (await LoadAsset<Sprite>("RoR2/Base/Grandparent/texBuffOverheat.tif"));
-			buff.buffColor = Color.magenta;
-			buff.canStack = true;
-			buff.isDebuff = true;
-			buff.isHidden = true;
-			return buff;
-		}
-
-		public static DotController.DotIndex VoidBees;
-
-		public override async Task Initialize()
-		{
-			VoidBees = DotAPI.RegisterDotDef(
-				new DotController.DotDef
-				{
-					interval = 0.25f,
-					damageCoefficient = 1f,
-					damageColorIndex = DamageColorIndex.Void,
-					associatedBuff = await GetBuffDef<RazorHive>()
-				}, (self, stack) =>
-				{
-					if (stack.dotIndex != VoidBees) return;
-					var pos = self.victimBody.corePosition;
-					//Debug.Log("A stack was added");
-				}, self =>
-				{
-					if (!self || !self.victimObject) return;
-					var modelLocator = self.victimObject.GetComponent<ModelLocator>();
-					if (!modelLocator || !modelLocator.modelTransform) return;
-					if (self.GetComponent<KamunagiBurnEffectController>()) return;
-					var kamunagiEffectController = self.gameObject.AddComponent<KamunagiBurnEffectController>();
-					kamunagiEffectController.effectParams = KamunagiBurnEffectController.voidBeesEffect;
-					kamunagiEffectController.target = modelLocator.modelTransform.gameObject;
-					log.LogDebug("added Kamunagi Controller");
-				});
-		}
-		
-		[HarmonyPostfix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
-		private static void RazorWireDamage(HealthComponent __instance, DamageInfo damageInfo)
-		{
-			var hiveCount = __instance.body.inventory.GetItemCount(Concentric.GetItemDef<RazorHive>().WaitForCompletion());
-			int a = 3 + 3 * (hiveCount - 1);
-			if (hiveCount > 0 && !damageInfo.procChainMask.HasProc(ProcType.Thorns))
-			{
-				bool flag7 = __instance.itemCounts.invadingDoppelganger > 0;
-				float radius = 25f + 10f * (float)(hiveCount - 1);
-				bool isCrit = __instance.body.RollCrit();
-				
-				TeamIndex teamIndex2 = __instance.body.teamComponent.teamIndex;
-				HurtBox[] victims = new SphereSearch
-				{
-					origin = damageInfo.position,
-					radius = radius,
-					mask = LayerIndex.entityPrecise.mask,
-					queryTriggerInteraction = QueryTriggerInteraction.UseGlobal
-				}.RefreshCandidates().FilterCandidatesByHurtBoxTeam(TeamMask.GetEnemyTeams(teamIndex2)).OrderCandidatesByDistance().FilterCandidatesByDistinctHurtBoxEntities().GetHurtBoxes();
-				for (int v = 0; v < Mathf.Min(a, victims.Length); v++)
-				{
-					DotController.InflictDot(
-						victims[v].healthComponent.body.gameObject,
-						__instance.body.gameObject,
-						RazorHive.VoidBees,
-						3f
-					);
-				}
-			}
 		}
 	}
 
@@ -491,7 +381,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		private int soundID;
 		public KamunagiEffectParams effectParams = defaultEffect;
 		public static KamunagiEffectParams defaultEffect;
-		public static KamunagiEffectParams voidBeesEffect;
 
 		private void Start()
 		{

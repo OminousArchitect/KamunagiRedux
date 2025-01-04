@@ -95,10 +95,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var impBoss = await LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab")!;
-			var dustCenter = impBoss.transform.Find("ModelBase/mdlImpBoss/DustCenter");
+			var impBoss = (await LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab"));
+			var mdlImpBoss = impBoss.GetComponent<ModelLocator>().modelTransform.gameObject;
+			var dustCenter = mdlImpBoss.transform.GetChild(0).gameObject;
 
-			var effect = dustCenter.gameObject!.InstantiateClone("VeilParticles", false);
+			var effect = dustCenter.InstantiateClone("VeilParticles", false);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
 			var distortion = effect.AddComponent<ParticleSystem>();
 			var coreR = effect.GetComponent<ParticleSystemRenderer>();
@@ -129,7 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			//sparkleSize.sizeMultiplier = 0.75f;
 			sparkleSize.xMultiplier = 1.3f;
 			effect.transform.localScale = Vector3.one * 1.5f;
-			effect.GetOrAddComponent<EffectComponent>().applyScale = true;
+			effect.GetOrAddComponent<EffectComponent>().applyScale = false;
 			effect.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
 			var spikyImpStuff = effect.transform.Find("LocalRing").gameObject;
 			if (spikyImpStuff)

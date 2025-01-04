@@ -3,7 +3,7 @@ This is 50% my vision of what a more mechanically diverse and nearly "perfect" A
 
 and 50% a love letter to ~~one~~ two of my favorite characters from my favorite video game ever made: Utawarerumono.
 
-The Kamunagi of Chains are a caster character designed such that you can spec into survivability, raw dps, mobility, or summoning an army, but usually not all of those at once.
+The Kamunagi of Chains are a caster character designed such that you can spec into a variety of roles based on the skills you equip. 
 
 ## ft. Mothmoth with a little more chitin
 ![uhhhh1](https://github.com/user-attachments/assets/271c0769-a60c-45d3-a7e6-9a427265ee65)
@@ -17,7 +17,12 @@ The Kamunagi of Chains are a caster character designed such that you can spec in
 Additional information may be added here in the future as necessary. Check back for updates
 
 ## Passives
-passive description goes here
+![passive0](https://github.com/user-attachments/assets/3db50524-1890-4d21-8f78-e013c433fbd5)
+- Non-primary skills give 10 Zeal. Winds of Izuruha gives 5 Zeal and starts with two charges.
+
+![passive1](https://github.com/user-attachments/assets/cfa4ad0f-359b-4c1e-aaf4-8ba01c74e94b)
+- The chains appear and disappear when the dash is off/on cooldown.
+
 ## Soei Musou Arts (Primaries)
 <details>
 <summary> Click to Reveal/Hide </summary>
@@ -33,7 +38,7 @@ passive description goes here
 - This ability is not influenced by attack speed.
 
 ## ![jinsoku](https://github.com/user-attachments/assets/04ed9011-04c2-416f-bd0a-ba12bb01ee32)
-- This ability is not influenced by attack speed.
+- Bolt firing speed and sphere charge time are both influenced by attack speed.
 </details>
 
 ## Secondaries
@@ -57,12 +62,12 @@ passive description goes here
 <summary> Click to Reveal/Hide </summary>
 
 ## ![lightning](https://github.com/user-attachments/assets/fcd65f1e-b7a3-4fbc-b4ea-5cea9619307b)
-
+- Needs to be fully channeled to fire
+- Refunds if not fully channeled
 ## ![woshis](https://github.com/user-attachments/assets/823cb23c-2434-422f-b7c3-71bbb630f890)
 - Miasma lasts 8 seconds
 - Souls last 15 seconds
 ## ![water](https://github.com/user-attachments/assets/3145dd35-0812-462f-a2e6-0e9f590a30f5)
-
 ## ![windstrikes](https://github.com/user-attachments/assets/ee195883-b0b7-4055-8846-16f2f19f4b06)
 - Goes on a reduced cooldown if you hit nothing
 - Goes on full cooldown if you hit an enemy
@@ -108,11 +113,13 @@ passive description goes here
 ## ![prayer](https://github.com/user-attachments/assets/daa29165-830c-48d6-886c-c7981f9848ad)
 - Lord Mashiro 'permanently' takes 10% of your maximum health as an offering upon completion of a successful prayer.
 - This penalty is cleared on stage change or on successful reincarnation.
+- You can only pray while out of combat
 ## ![kuko](https://github.com/user-attachments/assets/c15eb809-be03-4bcd-99ab-40855653b2b2)
 - You can choose to forego a Divine Skill completely in favor of switching skillsets at will, for an even wider array of ability combinations
 - All of your cooldowns reset when switching
-
+  
 This ability may or may not see a rework in the future, based on feedback.
+## ![atuyGod](https://github.com/user-attachments/assets/e97f4447-47d0-43dc-9439-711cce3b4e32)
 </details>
 </details>
 
@@ -124,10 +131,10 @@ He also wrote Woshis' Miasma, Atuy's Sweeping Tides, Soei Musou: Seed, both pass
 
 - bee9k for the model
 - _ahvi for the animations
-- sounds and music taken from Utawarerumono: Mask of Truth
 - Violet Chaolan for giving me guidance on Wwise and helping with the soundtracks
+- dgosling for providing me with the swirling chains visual effect and fixing the shader to work with Prime Meridian and Sulfur Pools postprocessing <3
 - previous code contributions for Sobu Gekishoha, Soei Musou: Jinsoku, and passive skill swapping by Dragonyck
-- dgosling for providing me with the swirling chains visual effect <3
+- sounds and music taken from Utawarerumono: Mask of Truth
 
 Thanks to these people for answering my questions in the modcord, this mod would be less polished without them
 - HIFU
@@ -149,13 +156,21 @@ Thanks to these people for answering my questions in the modcord, this mod would
 - and **most of all**, to Tsubasa, for introducing me to Utawarerumono.
 ## Known Issues
 -- All feedback is welcome! Feel free to mention me in the RoR2 Modding Discord @Unit_9_Type_S
-- Jump pads will lock your movement to zero if you use Dark Ascension without touching the ground after using them
-- Clay templar tar blast will permanently force you in a direction until you land
-- In multiplayer, Summon Nugwisomkami is kind of broken for people who aren't the host so I recommend against taking it
+
+- Jump pads will lock your movement to zero if you use Proxy Apotheosis without touching the ground after using them
+- Clay templar tar blast tends to permanently force you in a direction until you land(?)
+- Summon Nugwisomkami has some difficult networking issues to trace, so it's disabled for people who aren't the host
+- The particle FX for Honoka's Veil are broken somehow. I presume this is another "Gearbox removed grandparent boulder" situation. I'll fix it at some point
 ## Misc. Dev Comments
+The Kamunagi have item displays too, but only as many as I felt like doing/ thought wouldn't look out of place. Most reds, yellows, void items, and items that "follow" you are done. I also did most of the Seeker's items too.
+
+The mobility skills are available in either the Divine Skill slot or the Utility skill slot, to maximize available skill combinations. 
+
+Comes with 3 custom soundtracks that play during the teleporter event on Titanic Plains, Sundered Grove, and Siren's Call.
+
 The Kamunagi are somewhat lacking in animations for a couple reasons
 - Working with two skeletons is pretty difficult not to mention tedious
-- With Artificer as my precedent, she doesn't really have cast anims with a lot of motion either so *shrug*
+- Using Artificer as my precedent, she doesn't really have cast anims with a lot of motion either so *shrug*
 - You're intended to be flying a lot of the time and making animations that work both on the ground and in the air is very tricky
 - [I'm not asking someone to animate this shit](https://streamable.com/8hklxg)
 - Animations are also expensive
@@ -164,8 +179,8 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 
 ## Future Plans
 - Fix bugs
+- maybe make Mashiro's Blessing a shareable buff
 - That's it. I spent a really long time making this, I already did the plans
-- Maybe item displays after I do a line of coke
 
 ## Changelog
 -Initial Release 

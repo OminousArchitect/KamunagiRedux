@@ -1239,7 +1239,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			skillLocator.passiveSkill = new SkillLocator.PassiveSkill
 			{
 				enabled = true,
-				icon = await LoadAsset<Sprite>("kamunagiassets:TwinsPassive"),
+				icon = await LoadAsset<Sprite>("kamunagiassets2:passive1"),
 				skillDescriptionToken = tokenPrefix + "PASSIVE_DESCRIPTION",
 				skillNameToken = tokenPrefix + "PASSIVE_NAME"
 			};

@@ -123,6 +123,18 @@ This ability may or may not see a rework in the future, based on feedback.
 </details>
 </details>
 
+
+## Default Recommended Loadout
+<details>
+<summary> Click to Reveal/Hide </summary>
+
+__If you're someone who gets choice paralysis I think this is the most beginner-friendly loadout__
+
+![image](https://github.com/user-attachments/assets/4289ded4-8c8b-4f43-ab06-58e600bb37cd)
+![image2](https://github.com/user-attachments/assets/f2ce08a3-a8f0-4ace-baa8-be06e440830e)
+
+</details>
+
 ## Credits
 - me (Nines), for envisioning this project and bringing it to fruition. I concepted all the skill ideas, made all of the VFX, set up all the SFX, worked in Unity animator controller hell, wrote all of the Secondaries, most of the Utilities, The Great Sealing, Light of Nature's Axiom, and Soei Musou: Hono Gekko.
 - Bubbet for co-developing this entire mod with me and making ConcentricContent. Additional contributions include the zeal bar, 
@@ -160,6 +172,7 @@ Thanks to these people for answering my questions in the modcord, this mod would
 - Jump pads will lock your movement to zero if you use Proxy Apotheosis without touching the ground after using them
 - Clay templar tar blast tends to permanently force you in a direction until you land(?)
 - Summon Nugwisomkami has some difficult networking issues to trace, so it's disabled for people who aren't the host
+- Brimstone of Denebokshiri has a hard dependency on DamageType API v1.1.1, using later versions will 
 - The particle FX for Honoka's Veil are broken somehow. I presume this is another "Gearbox removed grandparent boulder" situation. I'll fix it at some point
 ## Misc. Dev Comments
 The Kamunagi have item displays too, but only as many as I felt like doing/ thought wouldn't look out of place. Most reds, yellows, void items, and items that "follow" you are done. I also did most of the Seeker's items too.
@@ -183,4 +196,24 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 - That's it. I spent a really long time making this, I already did the plans
 
 ## Changelog
+`1.0.4`
+- Added recommended loadout to the readme
+- Temporarily disabled soundtracks. I am REALLY sorry if I blew your eardrums out with static, this worked completely fine for me when I tested it, but of course everything has to break as soon as you upload it :,)
+
+`1.0.3`
+- Fixed sounds for Atuykarounkami's Passage
+- Fixed attack speed scaling for Soei Musou: Jinsoku
+
+`1.0.2`
+- Fixed issue where only direct downloads worked and downloading through mod managers didn't properly organize the directories, causing the mod to fail to load.
+
+`1.0.1`
+
+- Missed some dependencies oops
+- Lobby sound was disabled for debugging, I re-enabled it
+- Readme spelling errors
+
+
+`1.0.0`
+
 -Initial Release 

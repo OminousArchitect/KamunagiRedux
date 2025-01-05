@@ -38,6 +38,7 @@ namespace KamunagiOfChains
 	[BepInDependency(DotAPI.PluginGUID)]
 	[BepInDependency(DamageAPI.PluginGUID)]
 	[BepInDependency(ExtraSkillSlotsPlugin.GUID)]
+	[BepInDependency(ConcentricContentPlugin.Guid)]
 	[NetworkCompatibility]
 	[BepInPlugin(Guid, Name, Version)]
 	[HarmonyPatch]

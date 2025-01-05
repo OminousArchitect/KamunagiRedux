@@ -137,8 +137,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			minisunController.ghostPrefab = await this.GetProjectileGhost();
 			minisunController.flightSoundLoop = null;
 			minisunController.startSound = "Play_fireballsOnHit_impact";
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Denebokshiri);
-			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary;
+			var ballDamage = proj.GetComponent<ProjectileDamage>();
+			ballDamage.damageType = DamageTypeCombo.GenericSecondary;
+			ballDamage.damageType.AddModdedDamageType(Denebokshiri);
 			var minisunSimple = proj.AddComponent<ProjectileSimple>();
 			minisunSimple.desiredForwardSpeed = 20f;
 			minisunSimple.lifetime = 5f;

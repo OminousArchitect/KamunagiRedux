@@ -275,8 +275,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
+			var projectileDamage = proj.GetComponent<ProjectileDamage>();
+			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
 			return proj;
 		}
 
@@ -390,8 +391,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
+			var projectileDamage = proj.GetComponent<ProjectileDamage>();
+			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
 			return proj;
 		}
 	}
@@ -407,8 +409,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
-			proj.GetComponent<ProjectileDamage>().damageType = DamageType.Nullify;
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(TwinsReaver);
+			var projectileDamage = proj.GetComponent<ProjectileDamage>();
+			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
 			return proj;
 		}
 	}

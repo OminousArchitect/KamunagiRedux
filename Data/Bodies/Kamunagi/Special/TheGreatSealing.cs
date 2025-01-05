@@ -191,8 +191,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sealingImpact.impactEffect = await GetEffect<ExplodingObelisk>();
 			sealingImpact.blastDamageCoefficient = 1f;  
 			sealingImpact.blastProcCoefficient = 1f;
-			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSpecial;
-			projectile.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(Uitsalnemetia);
+			var projectileDamage = projectile.GetComponent<ProjectileDamage>();
+			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
 			return projectile;
 		}
 

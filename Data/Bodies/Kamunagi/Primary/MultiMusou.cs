@@ -111,8 +111,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDirectionalTargetFinder>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileTargetComponent>());
 			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
-			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary;
-			proj.AddComponent<DamageAPI.ModdedDamageTypeHolderComponent>().Add(CurseFlames);
+			var projectileDamage = proj.GetComponent<ProjectileDamage>();
+			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
+			
 			return proj;
 		}
 

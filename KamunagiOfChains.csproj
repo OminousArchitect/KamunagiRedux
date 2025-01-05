@@ -18,7 +18,7 @@
         <PackageReference Include="RiskofThunder-R2API_Colors" Version="1.0.1" />
         <PackageReference Include="RiskofThunder-R2API_Prefab" Version="1.0.4" />
         <PackageReference Include="RiskofThunder-R2API_ContentManagement" Version="1.0.5" />
-        <PackageReference Include="RiskofThunder-R2API_DamageType" Version="1.1.1" />
+        <PackageReference Include="RiskofThunder-R2API_DamageType" Version="1.1.4" />
         <PackageReference Include="RiskofThunder-R2API_Deployable" Version="1.0.1" />
         <PackageReference Include="RiskofThunder-R2API_Dot" Version="1.0.2" />
         <PackageReference Include="RiskofThunder-R2API_Items" Version="1.0.3" />

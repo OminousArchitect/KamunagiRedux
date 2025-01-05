@@ -20,7 +20,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			AkSoundEngine.PostEvent("Play_voidman_m2_shoot", gameObject);
+			AkSoundEngine.PostEvent("Play_huntress_m2_throw", gameObject);
 			EffectManager.SimpleMuzzleFlash(viendFlash, gameObject, twinMuzzle, false);
 			if (isAuthority)
 			{
@@ -301,6 +301,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			effect.GetComponentInChildren<Light>().color = Colors.oceanColor;
 			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
 			UnityEngine.Object.Destroy(effect.transform.GetChild(1).gameObject);
+			effect.EffectWithSound("Play_TidalImpact");
 			return effect;
 		}
 	}

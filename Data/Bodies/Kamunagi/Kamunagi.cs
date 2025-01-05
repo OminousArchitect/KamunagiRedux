@@ -942,7 +942,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = sawRules });
 
 			//Other Items That Would Look Good 
-			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BarrierOnKill/BarrierOnKill.asset"); //left off here
+			/*keyAsset = await LoadAsset<ItemDef>("RoR2/Base/BarrierOnKill/BarrierOnKill.asset"); //left off here
 			var topaz = idrs.FindDisplayRuleGroup(keyAsset);
 			var topazRules = new ItemDisplayRule[topaz.rules.Length];
 			Array.Copy(topaz.rules, topazRules, topaz.rules.Length);
@@ -951,7 +951,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			topaz.rules[0].localPos = new Vector3(0.06302F, -0.31085F, 0.46304F);
 			topaz.rules[0].localAngles = new Vector3(0F, 0F, 0F);
 			topaz.rules[0].localScale = new Vector3(0.5F, 0.5F, 0.5F);
-			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = topazRules });
+			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = topazRules });*/
 			
 			keyAsset = await LoadAsset<ItemDef>("RoR2/Base/NearbyDamageBonus/NearbyDamageBonus.asset");
 			var crystal = idrs.FindDisplayRuleGroup(keyAsset);

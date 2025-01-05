@@ -75,7 +75,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			currentStage = SceneCatalog.GetSceneDefForCurrentScene();
 		}
 
-		public override void OnExit() {
+		public override void OnExit()
+		{
 			base.OnExit();
 			chainsPrimed = false;
 			if (chainsLeftInstance != null || chainsLeftInstance)
@@ -145,6 +146,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 					if (inputBank.jump.down && (characterMotor as IPhysMotor).velocity.y <= 0)
 						hoverStateMachine.SetInterruptState(new KamunagiHoverState(), InterruptPriority.Any);
 				}
+
 				base.ProcessJump();
 			}
 		}
@@ -152,11 +154,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 	public class KamunagiHoverState : BaseState, IZealState
 	{
-		public float hoverVelocity = 0.02f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
+		public float
+			hoverVelocity =
+				0.02f; //below negative increases downard velocity, so increase towards positive numbers to hover longer
+
 		public float hoverAcceleration = 80;
 		public static GameObject muzzleEffect;
 		private EffectManagerHelper muzzleInstanceLeft;
 		private EffectManagerHelper muzzleInstanceRight;
+		private UserProfile user;
+		private bool exiting;
 
 		public override void OnEnter()
 		{
@@ -167,6 +174,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			muzzleInstanceRight =
 				EffectManagerKamunagi.GetAndActivatePooledEffect(muzzleEffect,
 					new EffectData() { rootObject = FindModelChild("MuzzleRight").gameObject });
+			user = NetworkUser.readOnlyLocalPlayersList[0].localUser.userProfile;
 		}
 
 		public override void OnExit()
@@ -180,13 +188,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		{
 			base.FixedUpdate();
 
-			if (isGrounded || !IsButtonDownAuthority())
+			if (!isAuthority) return;
+
+			if (user.toggleArtificerHover && IsButtonDownAuthority() && fixedAge > 0.2f)
+			{
+				exiting = true;
+				return;
+			}
+
+			if (isGrounded || exiting && !IsButtonDownAuthority() || !user.toggleArtificerHover && !IsButtonDownAuthority())
 			{
 				outer.SetNextStateToMain();
 				return;
 			}
 
-			if (!isAuthority) return;
 			var motor = characterMotor as IPhysMotor;
 			motor.velocityAuthority = new Vector3(
 				motor.velocityAuthority.x,
@@ -214,7 +229,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 			KamunagiHoverState.muzzleEffect = await this.GetEffect();
 			KamunagiCharacterMainState.chainsEffect = await GetEffect<KamunagiAsset>();
 			KamunagiCharacterMainState.meridianDef = await LoadAsset<SceneDef>("RoR2/DLC2/meridian/meridian.asset");
-			KamunagiCharacterMainState.sulfurPoolsDef = await LoadAsset<SceneDef>("RoR2/DLC1/sulfurpools/sulfurpools.asset");
+			KamunagiCharacterMainState.sulfurPoolsDef =
+				await LoadAsset<SceneDef>("RoR2/DLC1/sulfurpools/sulfurpools.asset");
 		}
 
 		public IEnumerable<Type> GetEntityStates() => new[] { typeof(KamunagiHoverState) };
@@ -223,7 +239,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		{
 			var hoverFlames = (await GetEffect<ShadowflameMuzzle>())!.InstantiateClone("TwinsHoverFlames", false);
 			UnityEngine.Object.Destroy(hoverFlames.GetComponent<EffectComponent>());
-			var doubleHoverFx= (await LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab"))!.InstantiateClone("TwinsPinkHandEnergy", false);
+			var doubleHoverFx =
+				(await LoadAsset<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab"))!.InstantiateClone(
+					"TwinsPinkHandEnergy", false);
 			hoverFlames.transform.SetParent(doubleHoverFx.transform);
 			doubleHoverFx.AddComponent<ModelAttachedEffect>();
 			UnityEngine.Object.Destroy(doubleHoverFx.GetComponent<ProjectileGhostController>());

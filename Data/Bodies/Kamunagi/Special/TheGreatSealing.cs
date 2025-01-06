@@ -193,7 +193,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sealingImpact.blastProcCoefficient = 1f;
 			var projectileDamage = projectile.GetComponent<ProjectileDamage>();
 			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
-			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
+			projectileDamage.damageType.AddModdedDamageType(Uitsalnemetia);
 			return projectile;
 		}
 

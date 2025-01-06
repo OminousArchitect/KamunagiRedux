@@ -113,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
 			var projectileDamage = proj.GetComponent<ProjectileDamage>();
 			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
-			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
+			projectileDamage.damageType.AddModdedDamageType(CurseFlames);
 			
 			return proj;
 		}

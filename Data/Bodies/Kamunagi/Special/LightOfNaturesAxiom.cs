@@ -612,7 +612,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				ServerFixedUpdate();
 			}
 
-			bool wtf = isLocalPlayerDamaged;
+			bool localPlayerDamaged = isLocalPlayerDamaged;
 			isLocalPlayerDamaged = false;
 			foreach (HurtBox hurtBox in cycleTargets)
 			{
@@ -637,7 +637,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				}
 			}
 
-			if (isLocalPlayerDamaged && !wtf)
+			if (isLocalPlayerDamaged && !localPlayerDamaged)
 			{
 				//Util.PlaySound(damageLoopDef.startSoundName, base.gameObject);
 
@@ -645,7 +645,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				return;
 			}
 
-			if (!isLocalPlayerDamaged && wtf)
+			if (!isLocalPlayerDamaged && localPlayerDamaged)
 			{
 				//Util.PlaySound(damageLoopDef.stopSoundName, base.gameObject);
 

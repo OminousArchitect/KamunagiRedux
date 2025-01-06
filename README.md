@@ -169,10 +169,10 @@ Thanks to these people for answering my questions in the modcord, this mod would
 ## Known Issues
 -- All feedback is welcome! Feel free to mention me in the RoR2 Modding Discord @Unit_9_Type_S
 
+- When rebinding skills, make sure to navigate with controller if you're using controller or navigate with k&m if you're using k&m, clicking with the mouse and rebinding with a controller input doesn't work. This is a vanilla problem and also extends to ExtraSkillSlots.
 - Jump pads will lock your movement to zero if you use Proxy Apotheosis without touching the ground after using them
 - Clay templar tar blast tends to permanently force you in a direction until you land(?)
 - Summon Nugwisomkami has some difficult networking issues to trace, so it's disabled for people who aren't the host
-- Brimstone of Denebokshiri has a hard dependency on DamageType API v1.1.1, using later versions will 
 - The particle FX for Honoka's Veil are broken somehow. I presume this is another "Gearbox removed grandparent boulder" situation. I'll fix it at some point
 ## Misc. Dev Comments
 The Kamunagi have item displays too, but only as many as I felt like doing/ thought wouldn't look out of place. Most reds, yellows, void items, and items that "follow" you are done. I also did most of the Seeker's items too.
@@ -196,6 +196,11 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 - That's it. I spent a really long time making this, I already did the plans
 
 ## Changelog
+`1.0.5`
+- Added hover toggle
+- Fixed Denebokshiri Brimstone not actually igniting enemies
+- Fixed soundtrack blowing your eardrums off. Again super sorry about that :/
+
 `1.0.4`
 - Added recommended loadout to the readme
 - Temporarily disabled soundtracks. I am REALLY sorry if I blew your eardrums out with static, this worked completely fine for me when I tested it, but of course everything has to break as soon as you upload it :,)

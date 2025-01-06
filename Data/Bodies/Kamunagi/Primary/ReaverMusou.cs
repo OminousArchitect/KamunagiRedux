@@ -277,7 +277,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformationRadius = 7.5f;
 			var projectileDamage = proj.GetComponent<ProjectileDamage>();
 			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
-			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
+			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
 			return proj;
 		}
 
@@ -393,7 +393,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformationRadius = 12f;
 			var projectileDamage = proj.GetComponent<ProjectileDamage>();
 			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
-			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
+			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
 			return proj;
 		}
 	}
@@ -411,7 +411,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformationRadius = 12f;
 			var projectileDamage = proj.GetComponent<ProjectileDamage>();
 			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
-			projectileDamage.damageType.AddModdedDamageType(Denebokshiri);
+			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
 			return proj;
 		}
 	}

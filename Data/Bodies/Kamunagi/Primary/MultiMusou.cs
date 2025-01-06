@@ -112,7 +112,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileTargetComponent>());
 			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
 			var projectileDamage = proj.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericPrimary
+			projectileDamage.damageType = DamageTypeCombo.GenericPrimary;
 			projectileDamage.damageType.AddModdedDamageType(CurseFlames);
 			return proj;
 		}

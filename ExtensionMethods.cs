@@ -88,7 +88,7 @@ namespace KamunagiOfChains
 			return source.Task;
 		}
 
-		public static DamageTypeCombo AddModdedDamageType(this DamageTypeCombo combo, DamageAPI.ModdedDamageType moddedType)
+		public static DamageTypeCombo AddModdedDamageType(ref this DamageTypeCombo combo, DamageAPI.ModdedDamageType moddedType)
 		{
 			DamageAPI.AddModdedDamageType(ref combo, moddedType);
 			return combo;

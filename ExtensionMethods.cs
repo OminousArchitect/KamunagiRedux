@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
 using Newtonsoft.Json.Utilities;
+using R2API;
 using Rewired.UI.ControlMapper;
 using RoR2;
 using RoR2.Navigation;
+using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -84,6 +86,12 @@ namespace KamunagiOfChains
 				source.SetResult((T)handle.asset);
 			};
 			return source.Task;
+		}
+
+		public static DamageTypeCombo AddModdedDamageType(this DamageTypeCombo combo, DamageAPI.ModdedDamageType moddedType)
+		{
+			DamageAPI.AddModdedDamageType(ref combo, moddedType);
+			return combo;
 		}
 
 		public static T WaitForCompletion<T>(this Task<T> task)

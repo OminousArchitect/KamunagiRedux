@@ -192,7 +192,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			sealingImpact.blastDamageCoefficient = 1f;  
 			sealingImpact.blastProcCoefficient = 1f;
 			var projectileDamage = projectile.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType = DamageTypeCombo.GenericSpecial;
 			projectileDamage.damageType.AddModdedDamageType(Uitsalnemetia);
 			return projectile;
 		}

@@ -276,7 +276,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
 			var projectileDamage = proj.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
 			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
 			return proj;
 		}
@@ -392,7 +392,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
 			var projectileDamage = proj.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
 			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
 			return proj;
 		}
@@ -410,7 +410,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
 			var projectileDamage = proj.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericSecondary;
+			projectileDamage.damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
 			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
 			return proj;
 		}

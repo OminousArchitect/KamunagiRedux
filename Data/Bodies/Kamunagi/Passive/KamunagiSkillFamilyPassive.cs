@@ -6,5 +6,7 @@
 		{
 			GetAsset<KamunagiDash>()
 		};
+
+		public bool HiddenFromCharacterSelect => GetSkillAssets().Count() == 1;
 	}
 }

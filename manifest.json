@@ -1,0 +1,17 @@
+{
+    "name": "KamunagiOfChains",
+    "version_number": "1.0.8",
+    "author": "NewlyHatchedDisciple",
+    "website_url": "https://github.com/OminousArchitect/KamunagiRedux/tree/Concentric_Renaming",
+    "description": "Adds the Kamunagi of Chains from Utawarerumono as a playable survivor, multiplayer compatible!",
+    "dependencies": [ 
+	  "KingEnderBrine-ExtraSkillSlots-1.6.1",
+	  "RiskofThunder-R2API_Colors-1.0.1",
+	  "RiskofThunder-R2API_DamageType-1.1.1",
+	  "RiskofThunder-R2API_Deployable-1.0.1", 
+	  "RiskofThunder-R2API_Dot-1.0.2",
+	  "RiskofThunder-R2API_Prefab-1.0.4",
+	  "RiskofThunder-R2API_RecalculateStats-1.4.0",
+	  "NewlyHatchedDisciple-ConcentricContent-1.0.0"
+	]
+}

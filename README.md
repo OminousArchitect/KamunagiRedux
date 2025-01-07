@@ -22,6 +22,7 @@ Additional information may be added here in the future as necessary. Check back 
 
 ![passive1](https://github.com/user-attachments/assets/cfa4ad0f-359b-4c1e-aaf4-8ba01c74e94b)
 - The chains appear and disappear when the dash is off/on cooldown.
+- You receieve 80% reduced damage while channeling
 
 ## Soei Musou Arts (Primaries)
 <details>
@@ -87,7 +88,7 @@ Additional information may be added here in the future as necessary. Check back 
 
 ## ![laser](https://github.com/user-attachments/assets/326536e9-1657-48b3-91b9-7d2c29dc0374)
 - Requires 3 charges
-- You take 80% reduced damage while channeling
+- You receieve 80% reduced damage while channeling
 ## ![axiom](https://github.com/user-attachments/assets/3fd1d72a-7fdf-439a-b7c3-ad284979dfa3)
 - Requires 5 charges
 </details>
@@ -196,6 +197,12 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 - That's it. I spent a really long time making this, I already did the plans
 
 ## Changelog
+`1.0.7 and 1.0.8`
+- Man we still broke all the damagetypes, learning experience! Should be good now
+
+`1.0.6`
+- Bubbet broke the extension method kekw, now Denebokshiri is really fixed and so are the other DoT effects
+
 `1.0.5`
 - Added hover toggle
 - Fixed Denebokshiri Brimstone not actually igniting enemies

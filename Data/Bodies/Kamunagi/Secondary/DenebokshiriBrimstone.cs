@@ -143,7 +143,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			minisunController.flightSoundLoop = null;
 			minisunController.startSound = "Play_fireballsOnHit_impact";
 			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary
-					.AddModdedDamageType(Denebokshiri);
+					.AddModdedDamageTypeChainable(Denebokshiri);
 			var minisunSimple = proj.AddComponent<ProjectileSimple>();
 			minisunSimple.desiredForwardSpeed = 20f;
 			minisunSimple.lifetime = 5f;

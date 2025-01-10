@@ -13,7 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	public class MultiMusouState : BaseTwinState
 	{
 		public override int meterGain => 0;
-		
+
 		private float timeBetweenShots;
 		public static GameObject? missilePrefab;
 		public static GameObject? muzzleFlash;
@@ -41,16 +41,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				}
 			}
 		}
-		
+
 		void MissileBarrage()
 		{
 			int missiles = 4;
-			
+
 			Vector3 vector = inputBank ? inputBank.aimDirection : transform.forward;
 			float intervalDegrees = 180f / missiles;
 			float d = twinBehaviour.radius + characterBody.radius * 1f;
 			Quaternion rotation = Util.QuaternionSafeLookRotation(vector);
-			Vector3 b = Quaternion.AngleAxis((remainingMissilesToFire - 1) * intervalDegrees - intervalDegrees * (missiles - 1) / 2f, vector) * Vector3.up * (d - 0.5f);
+			Vector3 b = Quaternion.AngleAxis(
+				            (remainingMissilesToFire - 1) * intervalDegrees - intervalDegrees * (missiles - 1) / 2f,
+				            vector) *
+			            Vector3.up * (d - 0.5f);
 			Vector3 position = characterBody.aimOrigin + b;
 			FireProjectileInfo fireProjectileInfo = new FireProjectileInfo
 			{
@@ -80,27 +83,29 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			if (damageInfo.HasModdedDamageType(CurseFlames))
 			{
 				var attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
-				
+
 				DotController.InflictDot(
 					__instance.gameObject,
 					damageInfo.attacker,
-					NaturesAxiom.CurseIndex, 
+					NaturesAxiom.CurseIndex,
 					2.4f,
 					0.5f
 				);
 			}
 		}
-		
+
 		public override async Task Initialize()
 		{
 			await base.Initialize();
 			MultiMusouState.missilePrefab = await this.GetProjectile();
-			MultiMusouState.muzzleFlash = await (LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab"))!;
+			MultiMusouState.muzzleFlash =
+				await (LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab"))!;
 		}
-		
+
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = (await LoadAsset<GameObject>("RoR2/Base/EliteLunar/LunarMissileProjectile.prefab"))!.InstantiateClone("MultiMusouProjectile", true);
+			var proj = (await LoadAsset<GameObject>("RoR2/Base/EliteLunar/LunarMissileProjectile.prefab"))!
+				.InstantiateClone("MultiMusouProjectile", true);
 			UnityEngine.Object.Destroy(proj.GetComponent<BoxCollider>());
 			proj.AddComponent<SphereCollider>().radius = 0.75f;
 			var controller = proj.GetComponent<ProjectileController>();
@@ -111,15 +116,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDirectionalTargetFinder>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileTargetComponent>());
 			proj.GetComponent<ProjectileSingleTargetImpact>().impactEffect = await this.GetEffect();
-			var projectileDamage = proj.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericPrimary;
-			projectileDamage.damageType.AddModdedDamageType(CurseFlames);
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary
+				.AddModdedDamageTypeChainable(CurseFlames);
 			return proj;
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			Material fireMat = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matFireStaticBlueLarge.mat"));
+			Material fireMat =
+				new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matFireStaticBlueLarge.mat"));
 			fireMat.name = "MusouFire";
 			fireMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/texRampDeathBomb.png"));
 			fireMat.SetFloat("_SrcBlend", 1f);
@@ -128,8 +133,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			fireMat.SetFloat("_AlphaBoost", 3.7f);
 			fireMat.SetFloat("_DistortionStrength", 0.82f);
 			fireMat.SetColor("_TintColor", new Color32(193, 0, 255, 255));
-			
-			var ghost = (await LoadAsset<GameObject>("RoR2/Base/bazaar/Bazaar_Light.prefab"))!.transform.Find("FireLODLevel/BlueFire").gameObject!.InstantiateClone("MultiMusouGhost", false);
+
+			var ghost = (await LoadAsset<GameObject>("RoR2/Base/bazaar/Bazaar_Light.prefab"))!.transform
+				.Find("FireLODLevel/BlueFire").gameObject!.InstantiateClone("MultiMusouGhost", false);
 			ghost.GetComponent<ParticleSystemRenderer>().material = fireMat;
 			ghost.AddComponent<ProjectileGhostController>();
 			var l = ghost.AddComponent<Light>();
@@ -143,15 +149,19 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			Material puffMat = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matOmniExplosion1.mat"));
 			puffMat.name = "MusouPuff";
-			puffMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampNullifierOffset.png"));
-			
-			var effect = (await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniExplosionVFXQuick.prefab"))!.InstantiateClone("DarkFlameImpact", false);
+			puffMat.SetTexture("_RemapTex",
+				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampNullifierOffset.png"));
+
+			var effect =
+				(await LoadAsset<GameObject>("RoR2/Base/Common/VFX/OmniExplosionVFXQuick.prefab"))!.InstantiateClone(
+					"DarkFlameImpact", false);
 			var spark = effect.transform.GetChild(0).gameObject; //hitspark
-			spark.GetComponent<ParticleSystemRenderer>().material = await LoadAsset<Material>("RoR2/DLC1/Common/Void/matOmniHitspark1Void.mat");
-			
+			spark.GetComponent<ParticleSystemRenderer>().material =
+				await LoadAsset<Material>("RoR2/DLC1/Common/Void/matOmniHitspark1Void.mat");
+
 			var puff = effect.transform.GetChild(9).gameObject; //flame impact
 			puff.GetComponent<ParticleSystemRenderer>().material = puffMat;
-			
+
 			var light = effect.transform.GetChild(11).gameObject;
 			light.GetComponent<Light>().color = Colors.twinsLightColor;
 			return effect;
@@ -163,7 +173,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.skillName = "Primary 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY3_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = false;

@@ -27,7 +27,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		void SowSeeds()
 		{
-			
 			var aimRay = GetAimRay();
 			var testForTarget = new BulletAttack()
 			{
@@ -58,7 +57,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				}
 			};
 			testForTarget.Fire();
-			EffectManager.SimpleMuzzleFlash(Concentric.GetEffect<ReaverMusou>().WaitForCompletion(), gameObject, twinMuzzle, false);
+			EffectManager.SimpleMuzzleFlash(Concentric.GetEffect<ReaverMusou>().WaitForCompletion(), gameObject,
+				twinMuzzle, false);
 		}
 
 		void HarvestSeeds()
@@ -94,12 +94,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			};
 			testForTarget.Fire();
 		}
-		
+
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			stopwatch += Time.deltaTime;
-			
+
 			if (stopwatch >= duration && isAuthority)
 			{
 				SowSeeds();
@@ -130,7 +130,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.skillName = "Primary 2";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY2_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY2_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
 			skill.activationStateMachineName = "Weapon";
 			skill.baseRechargeInterval = 0f;
 			skill.beginSkillCooldownOnSkillEnd = true;
@@ -144,7 +144,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect= (await LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierExplosion.prefab"))!.InstantiateClone("ReaverMusouMuzzleFlash", false);
+			var effect =
+				(await LoadAsset<GameObject>("RoR2/Base/Nullifier/NullifierExplosion.prefab"))!.InstantiateClone(
+					"ReaverMusouMuzzleFlash", false);
 			UnityEngine.Object.Destroy(effect.GetComponent<ShakeEmitter>());
 			//UnityEngine.Object.Destroy(effect.GetComponent<Rigidbody>());
 			effect.transform.GetChild(1).gameObject.SetActive(false);
@@ -164,7 +166,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckProjectile.prefab"))!.InstantiateClone("TwinsReaverProjectile", true);
+			var proj =
+				(await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckProjectile.prefab"))!
+				.InstantiateClone("TwinsReaverProjectile", true);
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.lifetime = 12f;
 			var controller = proj.GetComponent<ProjectileController>();
@@ -178,17 +182,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			Material seedMaterial = new Material( await LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierPortal.mat"));
+			Material seedMaterial =
+				new Material(await LoadAsset<Material>("RoR2/Base/Nullifier/matNullifierPortal.mat"));
 			seedMaterial.SetFloat("_AlphaBoost", 1f);
 			seedMaterial.SetFloat("_AlphaBias", 0.28f);
 			seedMaterial.SetFloat("_Boost", 10f);
 			seedMaterial.SetTexture("_MainTex", await LoadAsset<Texture2D>("RoR2/Base/Common/texCloudColor2.png"));
-			seedMaterial.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
+			seedMaterial.SetTexture("_RemapTex",
+				await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampVoidRaidPlanet2.png"));
 			seedMaterial.SetFloat("_SrcBlendFloat", 10f);
 			seedMaterial.SetFloat("_DstBlendFloat", 1f);
-			
-			var ghost = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckGhost.prefab"))!.InstantiateClone("TwinsReaverGhost", false);
-			var flicker = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombletsGhost.prefab")).transform.GetChild(1).gameObject!.InstantiateClone("FlickerTwins", false);
+
+			var ghost = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabWhiteCannonStuckGhost.prefab"))!
+				.InstantiateClone("TwinsReaverGhost", false);
+			var flicker =
+				(await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabDeathBombletsGhost.prefab")).transform
+				.GetChild(1).gameObject!.InstantiateClone("FlickerTwins", false);
 			var lightC = flicker.GetComponent<Light>();
 			lightC.color = new Color(0.4333f, 0.0726f, 0.8925f);
 			lightC.range = 10f;
@@ -212,7 +221,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 	{
 		async Task<GameObject> IEffect.BuildObject()
 		{
-			var effect= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegacrabAntimatterExplosion.prefab"))!.InstantiateClone("TwinsReaverExplosion", false);
+			var effect =
+				(await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/VoidMegacrabAntimatterExplosion.prefab"))!
+				.InstantiateClone("TwinsReaverExplosion", false);
 			effect.transform.localScale = Vector3.one * 5f;
 			effect.GetComponent<EffectComponent>().applyScale = false;
 			var discBillboard = effect.transform.GetChild(6).gameObject;
@@ -225,23 +236,29 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			foreach (var particleSystemRenderer in effect.GetComponentsInChildren<ParticleSystemRenderer>())
 			{
 				switch (particleSystemRenderer.name)
-				{  //particleSystemRenderer.material.SetTexture("_RemapText",LoadAsset<Texture2D>(""));
+				{
+					//particleSystemRenderer.material.SetTexture("_RemapText",LoadAsset<Texture2D>(""));
 					case "Billboard, Long":
-						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/VoidRaidCrab/texRampVoidRaidCrabTripleBeam.png"));
+						particleSystemRenderer.material.SetTexture("_RemapTex",
+							await LoadAsset<Texture2D>("RoR2/DLC1/VoidRaidCrab/texRampVoidRaidCrabTripleBeam.png"));
 						break;
 					case "Billboard, Short":
-						particleSystemRenderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/DLC1/VoidRaidCrab/texRampVoidRaidCrabTripleBeam.png"));
+						particleSystemRenderer.material.SetTexture("_RemapTex",
+							await LoadAsset<Texture2D>("RoR2/DLC1/VoidRaidCrab/texRampVoidRaidCrabTripleBeam.png"));
 						particleSystemRenderer.material.SetFloat("_Boost", 2f);
 						break;
 					case "Mesh, Donut":
-						particleSystemRenderer.material.SetTexture("_RemapTex",await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+						particleSystemRenderer.material.SetTexture("_RemapTex",
+							await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 						break;
 					case "Mesh, Sphere":
-						particleSystemRenderer.material.SetTexture("_RemapTex",await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampVoidRing.png"));
+						particleSystemRenderer.material.SetTexture("_RemapTex",
+							await LoadAsset<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampVoidRing.png"));
 						break;
 					case "Trails":
 						particleSystemRenderer.trailMaterial.SetColor("_TintColor", new Color(0.35f, 0.17f, 0.93f));
-						particleSystemRenderer.trailMaterial.SetTexture("_RemapTex",await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
+						particleSystemRenderer.trailMaterial.SetTexture("_RemapTex",
+							await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampAncientWisp.png"));
 						particleSystemRenderer.trailMaterial.SetFloat("_NormalStrength", 1.41f);
 						break;
 					case "MeshIndicator":
@@ -249,6 +266,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 						break;
 				}
 			}
+
 			Light light = effect.AddComponent<Light>();
 			light.range = 10f;
 			light.intensity = 60f;
@@ -259,13 +277,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			return effect;
 		}
 	}
-	
+
 	[HarmonyPatch]
 	internal class PrimedStickyBomb : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("TwinsPrimedReaverProjectile", true);
+			var proj =
+				(await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!
+				.InstantiateClone("TwinsPrimedReaverProjectile", true);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = await GetEffect<ReaverExplosion>();
@@ -273,28 +293,32 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			impact.falloffModel = BlastAttack.FalloffModel.None;
 			impact.blastDamageCoefficient = 2.5f;
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
-			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
+			crabController.whiteToBlackTransformedProjectile =
+				await GetProjectile<Recursion1Projectile>(); //this is so the bombs can blow up each other as well as blow up from
 			crabController.whiteToBlackTransformationRadius = 7.5f;
-			var projectileDamage = proj.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
-			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify
+				.AddModdedDamageTypeChainable(TwinsReaver);
 			return proj;
 		}
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			Material primed = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOpaque.mat"));
+			Material primed =
+				new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOpaque.mat"));
 			primed.SetColor("_Color", new Color(1f, 0f, 0.66f));
-			primed.SetTexture("_EmissionTex", await LoadAsset<Texture2D>("RoR2/Base/skymeadow/texSkymeadowPreview.png"));
+			primed.SetTexture("_EmissionTex",
+				await LoadAsset<Texture2D>("RoR2/Base/skymeadow/texSkymeadowPreview.png"));
 			primed.SetFloat("_EmissionPower", 2f);
 			primed.SetFloat("_HeightStrength", 10f);
 			primed.SetFloat("_HeightBias", 0.11f);
 
-			Material primedOutline = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOverlay.mat"));
+			Material primedOutline =
+				new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOverlay.mat"));
 			primedOutline.SetColor("_TintColor", new Color(0.29f, 0f, 1f));
 			primedOutline.SetFloat("_Boost", 12.15f);
-			
-			var ghost = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckGhost.prefab"))!.InstantiateClone("TwinsPrimedReaverGhost", false);
+
+			var ghost = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckGhost.prefab"))!
+				.InstantiateClone("TwinsPrimedReaverGhost", false);
 			ghost.transform.localScale = Vector3.one * 0.5f;
 			var scaler = ghost.transform.GetChild(0).gameObject;
 			var sphere = ghost.transform.Find("Scaler/VoidMegacrabBlackSphere").gameObject;
@@ -315,6 +339,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			l.color = Colors.twinsLightColor;
 			return ghost;
 		}
+
 		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
 		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
 		{
@@ -327,12 +352,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			}
 		}
 	}
-	
+
 	internal class StickyBombDetonator : Concentric, IProjectile, IProjectileGhost
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj= (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonProjectile.prefab"))!.InstantiateClone("TwinsDetonatorProjectile", true);
+			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonProjectile.prefab"))!
+				.InstantiateClone("TwinsDetonatorProjectile", true);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			var simple = proj.GetComponent<ProjectileSimple>();
 			simple.desiredForwardSpeed = 0f;
@@ -346,8 +372,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			impact.blastRadius = 5f;
 			impact.destroyOnEnemy = false;
 			impact.destroyOnWorld = false;
-			impact.impactEffect = await GetEffect<ReaverExplosion>(); 
-			var crabController = proj.GetComponent<MegacrabProjectileController>(); //this is where the transformation happens
+			impact.impactEffect = await GetEffect<ReaverExplosion>();
+			var crabController =
+				proj.GetComponent<MegacrabProjectileController>(); //this is where the transformation happens
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<PrimedStickyBomb>();
 			crabController.whiteToBlackTransformationRadius = 13f;
 			return proj;
@@ -355,18 +382,22 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 
 		async Task<GameObject> IProjectileGhost.BuildObject()
 		{
-			Material primed = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOpaque.mat"));
+			Material primed =
+				new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOpaque.mat"));
 			primed.SetColor("_Color", new Color(1f, 0f, 0.66f));
-			primed.SetTexture("_EmissionTex", await LoadAsset<Texture2D>("RoR2/Base/skymeadow/texSkymeadowPreview.png"));
+			primed.SetTexture("_EmissionTex",
+				await LoadAsset<Texture2D>("RoR2/Base/skymeadow/texSkymeadowPreview.png"));
 			primed.SetFloat("_EmissionPower", 2f);
 			primed.SetFloat("_HeightStrength", 10f);
 			primed.SetFloat("_HeightBias", 0.11f);
 
-			Material primedOutline = new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOverlay.mat"));
+			Material primedOutline =
+				new Material(await LoadAsset<Material>("RoR2/DLC1/VoidMegaCrab/matVoidCrabMatterOverlay.mat"));
 			primedOutline.SetColor("_TintColor", new Color(0.29f, 0f, 1f));
 			primedOutline.SetFloat("_Boost", 12.15f);
-			
-			var ghost = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonGhost.prefab"))!.InstantiateClone("TwinsDetonatorGhost", false);
+
+			var ghost = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonGhost.prefab"))!
+				.InstantiateClone("TwinsDetonatorGhost", false);
 			Light light = ghost.GetComponentInChildren<Light>();
 			light.range = 10f;
 			light.intensity = 60f;
@@ -379,39 +410,43 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			return ghost;
 		}
 	}
-	
-	internal class Recursion1Projectile : Concentric, IProjectile 
+
+	internal class Recursion1Projectile : Concentric, IProjectile
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("Recursion1Projectile", true);
+			var proj =
+				(await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!
+				.InstantiateClone("Recursion1Projectile", true);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<PrimedStickyBomb>();
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = await GetEffect<ReaverExplosion>();
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = await GetProjectile<Recursion2Projectile>();
 			crabController.whiteToBlackTransformationRadius = 12f;
-			var projectileDamage = proj.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
-			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
+			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify
+				.AddModdedDamageTypeChainable(TwinsReaver);
 			return proj;
 		}
 	}
 
-	internal class Recursion2Projectile : Concentric, IProjectile //this handles up to 3 recursive explosions, thats enough I guess. Vanilla component infinitely recurses and I couldn't manage that without stackoverflow because I'm 
+	internal class
+		Recursion2Projectile : Concentric,
+			IProjectile //this handles up to 3 recursive explosions, thats enough I guess. Vanilla component infinitely recurses and I couldn't manage that without stackoverflow because I'm 
 	{
 		async Task<GameObject> IProjectile.BuildObject()
 		{
-			var proj = (await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!.InstantiateClone("Recursion2Projectile", true);
+			var proj =
+				(await LoadAsset<GameObject>("RoR2/DLC1/VoidMegaCrab/MegaCrabBlackCannonStuckProjectile1.prefab"))!
+				.InstantiateClone("Recursion2Projectile", true);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<PrimedStickyBomb>();
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = await GetEffect<ReaverExplosion>();
 			var crabController = proj.GetComponent<MegacrabProjectileController>();
 			crabController.whiteToBlackTransformedProjectile = null; //have to null or else stack overflow
 			crabController.whiteToBlackTransformationRadius = 12f;
-			var projectileDamage = proj.GetComponent<ProjectileDamage>();
-			projectileDamage.damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify;
-			projectileDamage.damageType.AddModdedDamageType(TwinsReaver);
+			 proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericPrimary | DamageType.Nullify
+				 .AddModdedDamageTypeChainable(TwinsReaver);
 			return proj;
 		}
 	}

@@ -23,7 +23,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			base.OnEnter();
 			//bubbetMath no idea wtf is going on here
 			totalProjectileCount = Mathf.RoundToInt(10f/3f * characterBody.attackSpeed - 0.3f);
-			chanceToSweep = critStat * 0.85f;
+			chanceToSweep = critStat;
 		}
 
 		public override void FixedUpdate()

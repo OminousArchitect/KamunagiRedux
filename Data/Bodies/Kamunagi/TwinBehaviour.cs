@@ -1,4 +1,5 @@
-﻿using EntityStates;
+﻿using BepInEx.Configuration;
+using EntityStates;
 using ExtraSkillSlots;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Extra;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
@@ -20,7 +21,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public ModelLocator mdlL;
 		public ChildLocator childL;
 		private int _zealMeter;
-		public int maxZeal = 80;
+		public int maxZeal => configMaxZeal.Value;
+		
 		public bool alternateSkills;
 		public MasterTwinBehaviour masterBehaviour;
 		public float firingDelay = 0.15f;
@@ -30,6 +32,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		public float flyDuration = 1.3f;
 		public float minDistance = 0.4f;
 		public float maxDistance = 1.5f;
+
+		public static ConfigEntry<int> configMaxZeal = instance.Config.Bind("Zeal", "MaximumValue", 80, "Maximum Zeal amount.");
 
 		public GameObject magicBall;
 

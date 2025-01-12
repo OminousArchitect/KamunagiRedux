@@ -251,8 +251,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 				__instance.armor += 490f;
 			}
 		}
-		[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
-		private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
+		
+		//[HarmonyPrefix, HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamageProcess))]
+		/*private static void TakeDamageProcess(HealthComponent __instance, DamageInfo damageInfo)
 		{
 			if (damageInfo.HasModdedDamageType(KamunagiOfChainsPlugin.SobuGekishoha))
 			{
@@ -261,7 +262,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 					__instance.body.SetBuffCount(RoR2Content.Buffs.DeathMark.buffIndex, 1);
 				}
 			}
-		}
+		}*/
 	}
 
 	public class DarkSigil : Concentric, IEffect

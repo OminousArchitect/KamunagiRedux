@@ -1230,6 +1230,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			var family = await GetSkillFamily<KamunagiSkillFamilyPassive>();
 			passiveSkill.skillName = "AscensionPassive";
 			passiveSkill._skillFamily = family;
+			passiveSkill.hideInCharacterSelect = family.variants.Length == 1;
 
 			SetStateOnHurt timesweeper = bodyPrefab.GetComponent<SetStateOnHurt>();
 			timesweeper.targetStateMachine = bodyStateMachine;

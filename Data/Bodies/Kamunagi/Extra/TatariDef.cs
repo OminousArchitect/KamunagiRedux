@@ -111,7 +111,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				$"bdBleeding bdBlight bdOnFire bdFracture bdDisableAllSkills bdSuperBleed bdLunarSecondaryRoot bdlunarruin bdNullifyStack bdNullified bdOverheat bdPoisoned bdPulverizeBuildup bdLunarDetonationCharge bdSoulCost bdStrongerBurn " +
 				$"{(await GetBuffDef<NaturesAxiom>()).name} {(await GetBuffDef<AxiomBurn>()).name} {(await GetBuffDef<NaturesAxiom>()).name} {(await GetBuffDef<SobuGekishoha>()).name} {(await GetBuffDef<WoshisZone>()).name}" +
 				$"{(await GetBuffDef<MashiroBlessing>()).name}",
-				"description");
+				"List of debuffs the Tatari is disallowed from inflicting on enemies");
 
 			RoR2.GlobalEventManager.onServerDamageDealt += GlobalEventManagerOnonServerDamageDealt;
 			debuffBlacklist.SettingChanged += DebuffBlacklistOnSettingChanged;

@@ -1,4 +1,5 @@
 ﻿using AK.Wwise;
+using BepInEx.Configuration;
 using HarmonyLib;
 using RoR2;
 using RoR2.WwiseUtils;
@@ -10,6 +11,8 @@ namespace KamunagiOfChains.Data
 	[HarmonyPatch]
 	public class BossMusic : Concentric, IMusicTrack //
 	{
+		public static ConfigEntry<bool> enableMusic = instance.Config.Bind("Music", "Enable Custom Tracks", true, "Whether or not play original Utawarerumono music during the teleporter event. Currently only plays on Titanic Plains, Siren's Call, and Sundered Grove.");
+
 		Task<MusicTrackDef> IMusicTrack.BuildObject()
 		{
 			var musicTrackDef = ScriptableObject.CreateInstance<MusicTrackDef>();
@@ -42,7 +45,7 @@ namespace KamunagiOfChains.Data
 			var isBossMusic = TeleporterInteraction.instance && !TeleporterInteraction.instance.isIdle;
 			if (SceneCatalog.mostRecentSceneDef == null) return;
 			var currentScene = SceneCatalog.mostRecentSceneDef.baseSceneName;
-			if (isBossMusic && (currentScene == "golemplains" || currentScene == "shipgraveyard" || currentScene == "rootjungle"))
+			if (enableMusic.Value && isBossMusic && (currentScene == "golemplains" || currentScene == "shipgraveyard" || currentScene == "rootjungle"))
 			{
 				newTrack = this.GetMusicTrackDef().WaitForCompletion();
 			}

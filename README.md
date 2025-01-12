@@ -198,9 +198,16 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 
 ## Changelog
 `1.1.0`
+
+General:
 - Maximum zeal is now configurable
-- Removed Death Mark from Sobu Gekishoha
+- You can now disable the teleporter soundtracks if you wish
+
+Balancing:
+- Removed Death Mark from Sobu Gekishoha, it's too strong
 - Atuy's Tides chance to fire a blessed projectile was previously 80% of crit chance because I was worried about it being op, it's been reverted back to 100% of crit chance now
+
+Bugfixing:
 - Fixed a bug where all other secondaries would scorch enemies
 
 `1.0.6 to 1.0.10`

@@ -197,11 +197,14 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 - That's it. I spent a really long time making this, I already did the plans
 
 ## Changelog
-`1.0.7 and 1.0.8`
-- Man we still broke all the damagetypes, learning experience! Should be good now
+`1.1.0`
+- Maximum zeal is now configurable
+- Removed Death Mark from Sobu Gekishoha
+- Atuy's Tides chance to fire a blessed projectile was previously 80% of crit chance because I was worried about it being op, it's been reverted back to 100% of crit chance now
+- Fixed a bug where all other secondaries would scorch enemies
 
-`1.0.6`
-- Bubbet broke the extension method kekw, now Denebokshiri is really fixed and so are the other DoT effects
+`1.0.6 to 1.0.10`
+- Several breaking changes to damageTypes until I figured out how to do what I was trying to do
 
 `1.0.5`
 - Added hover toggle

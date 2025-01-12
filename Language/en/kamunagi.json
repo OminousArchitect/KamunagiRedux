@@ -12,9 +12,9 @@
 	  "NINES_URURUU_EXTRA": "<color=#D0A1F8>Ururuu Divine Skill</color>",
 
 	  "NINES_KAMUNAGI_BODY_NAME": "Kamunagi Of Chains",
-	  "NINES_KAMUNAGI_BODY_DESCRIPTION": "Description<color=#CCD3E0>\n\n< ! > \n\n< ! > \n\n< ! > \n\n< ! > \n\n</color>",
+	  "NINES_KAMUNAGI_BODY_DESCRIPTION": "<color=#CCD3E0>\n\n< ! > \n\n< ! > \n\n< ! > \n\n< ! > \n\n</color>",
 	  "NINES_KAMUNAGI_BODY_SUBTITLE": "",
-	  "NINES_KAMUNAGI_BODY_LORE": "lorem ipsum",
+	  "NINES_KAMUNAGI_BODY_LORE": "",
 	  "NINES_KAMUNAGI_BODY_OUTRO_FLAVOR": "",
 	  "NINES_KAMUNAGI_BODY_OUTRO_FAILURE": "",
 
@@ -28,8 +28,8 @@
 	  "NINES_KAMUNAGI_BODY_TWINSRAYCAST_KEYWORD": "<style=cKeywordName><style=cIsDamage>Tiriryarai</style></style><style=cSub>Skill activates at your <style=cIsUtility>crosshair's location</style> with <style=cIsUtility>no travel time</style>.",
 	  "NINES_KAMUNAGI_BODY_TWINSWIND_KEYWORD": "<style=cKeywordName><color=#0b9c2d>Wind God's Perfect Defense</color></style><style=cSub>Block most attacks while channeling</style>.",
 	  
-	  "NINES_KAMUNAGI_BODY_OTHERPASSIVE_NAME": "Dark Ascension",
-	  "NINES_KAMUNAGI_BODY_OTHERPASSIVE_DESCRIPTION": "Charge a directional dash",
+	  "NINES_KAMUNAGI_BODY_OTHERPASSIVE_NAME": "Proxy Apotheosis",
+	  "NINES_KAMUNAGI_BODY_OTHERPASSIVE_DESCRIPTION": "",
 
 	  "NINES_KAMUNAGI_BODY_PASSIVE_NAME": "Ever Turning, Ever Swaying, Ever Drifting",
 	  "NINES_KAMUNAGI_BODY_PASSIVE_DESCRIPTION": "Ururuu and Saraana have independent loadouts and <style=cIsUtility>switch turns</style> upon reaching maximum <color=#EDA717>Zeal</color>.",

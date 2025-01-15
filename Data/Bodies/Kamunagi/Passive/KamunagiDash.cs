@@ -12,8 +12,9 @@ using Debug = UnityEngine.Debug;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 {
-	public class KamunagiChannelDashState : KamunagiHoverState
+	public class KamunagiChannelDashState : BaseTwinState
 	{
+		
 		public float duration = 0.6f;
 		private Vector3 origin;
 		protected float ascendSpeedMult;
@@ -84,8 +85,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
-
-		protected override bool IsButtonDownAuthority() => inputBank.interact.down;
+		
+		public override int meterGain => 0;
 	}
 
 	class KamunagiDashState : BaseTwinState

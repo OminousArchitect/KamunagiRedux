@@ -9,6 +9,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		private TwinBehaviour? _twinBehaviour;
 		public TwinBehaviour twinBehaviour => _twinBehaviour ??= characterBody.GetComponent<TwinBehaviour>();
 		public string twinMuzzle => twinBehaviour.twinMuzzle;
+		
+		public bool IsKeyDownAuthority()
+		{
+			return this.IsKeyDownAuthority(skillLocator, inputBank) || inputBank.interact.down;
+		}
 	}
 
 	public interface IZealState

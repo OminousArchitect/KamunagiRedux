@@ -43,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			if (!IsButtonDownAuthority())
+			if (!IsKeyDownAuthority())
 			{
 				if (twinBehaviour.magicBall && twinBehaviour.magicBall != null)
 				{
@@ -61,8 +61,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
-		
-		protected virtual bool IsButtonDownAuthority() => inputBank.interact.down;
 	}
 
 	public class MagicBallTeleportState : BaseTwinState

@@ -190,13 +190,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 			if (!isAuthority) return;
 
-			if (user.toggleArtificerHover && IsButtonDownAuthority() && fixedAge > 0.2f)
+			if (user.toggleArtificerHover && IsKeyDownAuthority() && fixedAge > 0.2f)
 			{
 				exiting = true;
 				return;
 			}
 
-			if (isGrounded || exiting && !IsButtonDownAuthority() || !user.toggleArtificerHover && !IsButtonDownAuthority())
+			if (isGrounded || exiting && !IsKeyDownAuthority() || !user.toggleArtificerHover && !IsKeyDownAuthority())
 			{
 				outer.SetNextStateToMain();
 				return;
@@ -216,7 +216,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 		public int meterGain => 0;
 
-		protected virtual bool IsButtonDownAuthority() => inputBank.jump.down;
+		private bool IsKeyDownAuthority() => inputBank.jump.down;
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}

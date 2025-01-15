@@ -247,7 +247,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.cancelSprintingOnActivation = true;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.dontAllowPastMaxStocks = true;
-			skill.baseRechargeInterval = 4f;
+			skill.baseRechargeInterval = 1f;
 			return skill;
 		}
 		

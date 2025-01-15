@@ -10,7 +10,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			GetAsset<MothMoth>(), GetAsset<XinZhao>(), GetAsset<SummonTatari>(), 
 			GetAsset<SummonNugwisomkami>(), GetAsset<MashiroBlessing>(), GetAsset<Overzeal>(),
-			GetAsset<WaterPassage>(),
 			GetAsset<KuonFlashbang>(), GetAsset<HonokasVeil>() 
 		};
 

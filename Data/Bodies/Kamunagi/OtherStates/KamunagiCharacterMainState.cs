@@ -216,7 +216,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 
 		public int meterGain => 0;
 
-		public virtual bool IsButtonDownAuthority() => inputBank.jump.down;
+		protected virtual bool IsButtonDownAuthority() => inputBank.jump.down;
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 	}

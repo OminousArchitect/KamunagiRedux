@@ -85,7 +85,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
 
-		public override bool IsButtonDownAuthority() => inputBank.interact.down;
+		protected override bool IsButtonDownAuthority() => inputBank.interact.down;
 	}
 
 	class KamunagiDashState : BaseTwinState

@@ -14,7 +14,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				GetAsset<JachdwaltStrikes>(),
 				GetAsset<KuonFlashbang>(), 
 				GetAsset<HonokasVeil>(),
-				GetAsset<MagicBallSkill>()
+				GetAsset<WaterPassage>()
 			};
 
 		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaUtility" ? "NINES_SARAANA_UTILITY" : "NINES_URURUU_UTILITY";

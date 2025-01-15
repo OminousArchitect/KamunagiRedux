@@ -33,7 +33,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 					owner = gameObject,
 					position = aimRay.origin,
 					rotation = Quaternion.LookRotation(aimRay.direction),
-					projectilePrefab = Concentric.GetProjectile<MagicBallSkill>().WaitForCompletion(),
+					projectilePrefab = Concentric.GetProjectile<WaterPassage>().WaitForCompletion(),
 					useSpeedOverride = true,
 					speedOverride = 105f
 				});
@@ -43,7 +43,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			if (!IsKeyDownAuthority())
+			if (!IsButtonDownAuthority())
 			{
 				if (twinBehaviour.magicBall && twinBehaviour.magicBall != null)
 				{
@@ -61,6 +61,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
+		
+		protected virtual bool IsButtonDownAuthority() => inputBank.interact.down;
 	}
 
 	public class MagicBallTeleportState : BaseTwinState
@@ -221,7 +223,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		}
 	}
 	
-	public class MagicBallSkill : Concentric, ISkill, IProjectile, IProjectileGhost, IEffect
+	public class WaterPassage : Concentric, ISkill, IProjectile, IProjectileGhost, IEffect
 	{
 		public override async Task Initialize()
 		{
@@ -235,7 +237,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
-			skill.skillName = "Primary 0";
+			skill.skillName = "Uhhh 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA9_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA9_DESCRIPTION";
 			skill.icon= (await LoadAsset<Sprite>("kamunagiassets2:WaterSeal"));

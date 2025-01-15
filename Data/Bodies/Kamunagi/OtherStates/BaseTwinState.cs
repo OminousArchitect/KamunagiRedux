@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using RoR2;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {
@@ -12,7 +13,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 		
 		public bool IsKeyDownAuthority()
 		{
-			return this.IsKeyDownAuthority(skillLocator, inputBank) || inputBank.interact.down;
+			var slot = skillLocator.FindSkillSlot(activatorSkillSlot);
+			return slot == SkillSlot.None ? inputBank.interact.down : this.IsKeyDownAuthority(skillLocator, inputBank);
 		}
 	}
 

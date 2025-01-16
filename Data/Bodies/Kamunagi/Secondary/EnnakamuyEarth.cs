@@ -76,11 +76,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			projectile.GetComponent<ProjectileController>().procCoefficient = 1f;
 			var boulderImpact = projectile.GetComponent<ProjectileImpactExplosion>();
 			boulderImpact.bonusBlastForce = Vector3.zero; //new Vector3(20, 20, 20);
-			boulderImpact.blastRadius = 5f;
+			boulderImpact.blastRadius = 5.5f;
 			boulderImpact.childrenProjectilePrefab = await GetProjectile<EnnakamuyEarthChild>();
 			boulderImpact.blastDamageCoefficient = 4.6f;
 			boulderImpact.childrenDamageCoefficient = 0.3f;
-			boulderImpact.blastProcCoefficient = 1.3f;
+			boulderImpact.blastProcCoefficient = 1.5f;
 			boulderImpact.falloffModel = BlastAttack.FalloffModel.None;
 			projectile.GetComponent<Rigidbody>().useGravity = false;
 			projectile.GetComponent<SphereCollider>().radius = 4f;
@@ -104,10 +104,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		async Task<GameObject> IProjectile.BuildObject()
 		{
 			var projectile= (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentMiniBoulder.prefab"))!.InstantiateClone("BoulderChild", true);
-			projectile.GetComponent<ProjectileImpactExplosion>().falloffModel = BlastAttack.FalloffModel.None;
+			var blast = projectile.GetComponent<ProjectileImpactExplosion>();
+			blast.falloffModel = BlastAttack.FalloffModel.None;
+			blast.blastRadius = 6f;
+			blast.bonusBlastForce = Vector3.zero;
+			blast.blastProcCoefficient = 1.5f;
 			projectile.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
-			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary;
-			projectile.GetComponent<ProjectileImpactExplosion>().bonusBlastForce = Vector3.zero;
+			projectile.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary | DamageType.Stun1s;
 			return projectile;
 		}
 

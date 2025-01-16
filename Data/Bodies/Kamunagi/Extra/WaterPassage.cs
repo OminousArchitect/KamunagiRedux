@@ -226,7 +226,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		public override async Task Initialize()
 		{
 			await base.Initialize();
-			ShootMagicBallState.viendFlash  = await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab");
+			ShootMagicBallState.viendFlash = await LoadAsset<GameObject>("addressable:RoR2/DLC1/VoidSurvivor/VoidSurvivorBeamMuzzleflash.prefab");
 
 			MagicBallTeleportState.viendPrefab = await this.GetEffect();
 			MagicBallTeleportState.blinkPrefab = await LoadAsset<GameObject>("RoR2/Base/Huntress/HuntressBlinkEffect.prefab");
@@ -238,7 +238,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillName = "Uhhh 0";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA9_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA9_DESCRIPTION";
-			skill.icon= (await LoadAsset<Sprite>("kamunagiassets2:WaterSeal"));
+			skill.icon= (await LoadAsset<Sprite>("kamunagiassets2:WaterPassage"));
 			skill.activationStateMachineName = "Weapon";
 			skill.mustKeyPress = true;
 			skill.isCombatSkill = false;

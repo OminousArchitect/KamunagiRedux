@@ -145,9 +145,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			}
 
 			characterBody.isSprinting = true; //magic
-			flyVector = wasJumpDown ? -flyRay.direction * speedMult : flyRay.direction * speedMult;
-			//flyVector = flyRay.direction * speedMult;
-			
+			flyVector = flyRay.direction * speedMult;
+
 			//log.LogDebug("flyVector: " + flyVector);
 			characterMotor.rootMotion += flyVector * (moveSpeedStat * flyCurve.Evaluate(fixedAge / duration) * Time.deltaTime);
 
@@ -190,16 +189,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			return variable;
 		}
 		
-		public Task<SkillDef> BuildObject()
+		async Task<SkillDef> ISkill.BuildObject()
 		{
 			var skill = ScriptableObject.CreateInstance<SkillDef>();
 			skill.activationStateMachineName = "Hover";
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets2:DarkAscension"));
 			skill.baseRechargeInterval = 5f;
 			skill.cancelSprintingOnActivation = false;
 			skill.skillName = "Other 1";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "OTHERPASSIVE_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "OTHERPASSIVE_DESCRIPTION";
-			return Task.FromResult(skill);
+			return skill;
 		}
 
 		public IEnumerable<Type> GetEntityStates() =>

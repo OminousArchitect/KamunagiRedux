@@ -197,6 +197,15 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 - That's it. I spent a really long time making this, I already did the plans
 
 ## Changelog
+`1.1.1`
+
+General:
+- Reworked the behaviour for Proxy Apotheosis to trigger, making it the skill feel more consistent. Made skill description more clear.
+- Changed Atuykarounkami's Passage to an alternate passive.
+
+Balance:
+- Buffed the blast radius and stun duration of Ennakamuy Earth. 
+
 `1.1.0`
 
 General:

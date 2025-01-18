@@ -77,6 +77,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		private bool blinked;
 		private EffectManagerHelper? waterFx;
 		private Transform vfxTransform;
+		public override int meterGain => 0;
 
 		public override void OnEnter()
 		{

@@ -20,10 +20,6 @@ Additional information may be added here in the future as necessary. Check back 
 ![passive0](https://github.com/user-attachments/assets/3db50524-1890-4d21-8f78-e013c433fbd5)
 - Non-primary skills give 10 Zeal. Winds of Izuruha gives 5 Zeal and starts with two charges.
 
-![passive1](https://github.com/user-attachments/assets/cfa4ad0f-359b-4c1e-aaf4-8ba01c74e94b)
-- The chains appear and disappear when the dash is off/on cooldown.
-- You receieve 80% reduced damage while channeling
-
 ## Soei Musou Arts (Primaries)
 <details>
 <summary> Click to Reveal/Hide </summary>
@@ -120,7 +116,6 @@ Additional information may be added here in the future as necessary. Check back 
 - All of your cooldowns reset when switching
   
 This ability may or may not see a rework in the future, based on feedback.
-## ![atuyGod](https://github.com/user-attachments/assets/e97f4447-47d0-43dc-9439-711cce3b4e32)
 </details>
 </details>
 
@@ -132,7 +127,7 @@ This ability may or may not see a rework in the future, based on feedback.
 __If you're someone who gets choice paralysis I think this is the most beginner-friendly loadout__
 
 ![image](https://github.com/user-attachments/assets/4289ded4-8c8b-4f43-ab06-58e600bb37cd)
-![image2](https://github.com/user-attachments/assets/f2ce08a3-a8f0-4ace-baa8-be06e440830e)
+![loadout](https://github.com/user-attachments/assets/f5e3e6a9-ed1f-40ca-a7a0-0813b75b3c2c)
 
 </details>
 
@@ -200,7 +195,8 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 `1.1.1`
 
 General:
-- Reworked the behaviour for Proxy Apotheosis to trigger, making it the skill feel more consistent. Made skill description more clear.
+- Reworked the behaviour for Proxy Apotheosis to trigger, making the skill feel more consistent. Made skill description more clear.
+  - You can now dash around corners now by enabling "Variable dash direction" in the config. It's disabled by default 
 - Changed Atuykarounkami's Passage to an alternate passive.
 
 Balance:

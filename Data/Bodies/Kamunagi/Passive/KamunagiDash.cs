@@ -1,4 +1,5 @@
-﻿using EntityStates;
+﻿using BepInEx.Configuration;
+using EntityStates;
 using EntityStates.Mage;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Special;
@@ -117,7 +118,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 			if (!isAuthority) return;
 			characterMotor.Motor.ForceUnground();
 			characterBody.AddTimedBuffAuthority(Concentric.GetBuffIndex<SobuGekishoha>().WaitForCompletion(), 0.5f);
-			wasJumpDown = inputBank.jump.down;
 			//log.LogDebug("dash is entering");
 		}
 
@@ -144,6 +144,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 				return;
 			}
 
+			if (KamunagiDash.fixedDashDir.Value)
+			{
+				flyRay = GetAimRay();
+			}
+			
 			characterBody.isSprinting = true; //magic
 			flyVector = flyRay.direction * speedMult;
 
@@ -165,6 +170,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 
 	public class KamunagiDash : Concentric, ISkill, IProjectile, IProjectileGhost, IEffect
 	{
+		public static ConfigEntry<bool> fixedDashDir = instance.Config.Bind("General", "Variable Boost Direction", false, "False: Proxy Apotheosis goes in a fixed direction just like Artificer Ion Surge. True: Proxy Apotheosis goes where you're looking, allowing you to dash around corners and such. Defaults to false.");
 		public override async Task Initialize()
 		{
 			await base.Initialize();

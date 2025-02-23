@@ -25,7 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			arcVisualizerPrefab = line;
 			base.OnEnter();
 			base.characterBody.SetSpreadBloom(0.4f);
-			airstrikeRadius = 20f;
+			airstrikeRadius = 27f;
 			maxDistance = 1000f;
 			rayRadius = 0.2f;
 			endpointVisualizerPrefab = EntityStates.Huntress.ArrowRain.areaIndicatorPrefab;
@@ -124,7 +124,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "SECONDARY4_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "SECONDARY4_DESCRIPTION";
 			skill.activationStateMachineName = "Spell";
-			skill.baseRechargeInterval = 8f;
+			skill.baseRechargeInterval = 7f;
 			skill.beginSkillCooldownOnSkillEnd = true;
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = true;

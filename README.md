@@ -16,9 +16,13 @@ The Kamunagi of Chains are a caster character designed such that you can spec in
 
 Additional information may be added here in the future as necessary. Check back for updates
 
-## Passives
+## Passive
 ![passive0](https://github.com/user-attachments/assets/3db50524-1890-4d21-8f78-e013c433fbd5)
 - Non-primary skills give 10 Zeal. Winds of Izuruha gives 5 Zeal and starts with two charges.
+
+## Airborne Skill
+![waterTele](https://github.com/user-attachments/assets/28ab522c-cfa4-4252-aea7-2c3519a7edce)
+![proxy](https://github.com/user-attachments/assets/0de94d3c-d3e6-4219-a499-efcb51c75c41)
 
 ## Soei Musou Arts (Primaries)
 <details>
@@ -141,7 +145,6 @@ He also wrote Woshis' Miasma, Atuy's Sweeping Tides, Soei Musou: Seed, both pass
 - _ahvi for the animations
 - Violet Chaolan for giving me guidance on Wwise and helping with the soundtracks
 - dgosling for providing me with the swirling chains visual effect and fixing the shader to work with Prime Meridian and Sulfur Pools postprocessing <3
-- previous code contributions for Sobu Gekishoha, Soei Musou: Jinsoku, and passive skill swapping by Dragonyck
 - sounds and music taken from Utawarerumono: Mask of Truth
 
 Thanks to these people for answering my questions in the modcord, this mod would be less polished without them
@@ -192,6 +195,22 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 - That's it. I spent a really long time making this, I already did the plans
 
 ## Changelog
+`1.1.2`
+
+General:
+- Added an aim indicator to Mikazuchi's Fury, there wasn't one originally because I was testing how raycasted spells feel. This one just feels bad without an indicator
+  - The "seeking speed" of the aftershocks has been increased moderately
+- Added a more detailed tooltip to Summon: Nugwisomkami
+
+Balance:
+- Decreased the cooldown of Soei Musou: Hono Gekko to 1.5s
+- Decreased the cooldown of Starfall of Kotuahamuru to 7s
+  - Increased blast radius of the star by 7
+- Summon: Nugwisomkami no longer increases Zeal, allowing you to cycle through them without switching the girls' turns prematurely
+
+Bugfixing:
+- Removed Atuykarounkami's Passage from the Utility section, it wasn't ever supposed to be in there.
+
 `1.1.1`
 
 General:

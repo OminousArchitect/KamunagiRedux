@@ -13,8 +13,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				GetAsset<AtuysTides>(), 
 				GetAsset<JachdwaltStrikes>(),
 				GetAsset<KuonFlashbang>(), 
-				GetAsset<HonokasVeil>(),
-				GetAsset<WaterPassage>()
+				GetAsset<HonokasVeil>()
 			};
 
 		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaUtility" ? "NINES_SARAANA_UTILITY" : "NINES_URURUU_UTILITY";

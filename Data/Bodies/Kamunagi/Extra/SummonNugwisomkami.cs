@@ -112,7 +112,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	public class SummonNugwisomkamiState : IndicatorSpellState
 	{
 		public override int meterGain => 0;
-		public override int meterGainOnExit => didSpawn ? 5 : 0;
+		public override int meterGainOnExit => didSpawn ? 0 : 0;
 
 		public static Dictionary<GameObject, List<string>> NugwisoEliteDefs;
 		private bool didSpawn;
@@ -218,6 +218,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.icon = (await LoadAsset<Sprite>("kamunagiassets2:Nugwisomkami"));
 			skill.baseRechargeInterval = 7f;
 			//skill.mustKeyPress = true; //this breaks things apparently
+			skill.keywordTokens = new[]
+			{
+				KamunagiAsset.tokenPrefix + "TWINSSPIRIT1_KEYWORD",
+				KamunagiAsset.tokenPrefix + "TWINSSPIRIT2_KEYWORD",
+				KamunagiAsset.tokenPrefix + "TWINSSPIRIT3_KEYWORD"
+			};
 			return skill;
 		}
 

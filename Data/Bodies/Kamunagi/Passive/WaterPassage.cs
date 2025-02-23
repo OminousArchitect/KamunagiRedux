@@ -258,7 +258,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		{
 			var proj = (await GetProjectile<AltMusouChargeBall>())!.InstantiateClone("TwinsMagicBall", true);
 			proj.AddComponent<TeleportToBall>();
-			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
+			proj.GetComponent<ProjectileController>().ghostPrefab = await GetProjectileGhost<AtuysTides>();
 			var impact = proj.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = await this.GetEffect();
 			return proj;

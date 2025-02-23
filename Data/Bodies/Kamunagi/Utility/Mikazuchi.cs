@@ -9,7 +9,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 {
-	public class MikazuchiState : RaycastedSpellState
+	public class MikazuchiState : IndicatorSpellState
 	{
 		public EffectManagerHelper? chargeEffectInstance;
 		public float projectileCount = 3f;
@@ -216,7 +216,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var lightpact = projectile.GetOrAddComponent<ProjectileImpactExplosion>();
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
 			lightpact.blastDamageCoefficient = 1f;
-			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 145f;
+			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 165f;
 			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
 			var target = projectile.GetComponent<ProjectileDirectionalTargetFinder>();
 			target.lookRange = 45f;

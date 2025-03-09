@@ -722,7 +722,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			item8.rules[0].localScale = new Vector3(0.7F, 1F, 1F);
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item8Rules });
 			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/LowerHealthHigherDamage/LowerHealthHigherDamage.asset");
+			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/AttackSpeedPerNearbyAllyOrEnemy/AttackSpeedPerNearbyAllyOrEnemy.asset");
 			var item9 = idrs.FindDisplayRuleGroup(keyAsset);
 			var item9Rules = new ItemDisplayRule[item9.rules.Length];
 			Array.Copy(item9.rules, item9Rules, item9.rules.Length);
@@ -782,7 +782,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			
 			idrs.SetDisplayRuleGroup(keyAsset, new DisplayRuleGroup { rules = item13Rules });
 			
-			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/ResetChests/ResetChests.asset");
+			keyAsset = await LoadAsset<ItemDef>("RoR2/DLC2/Items/ItemDropChanceOnKill/ItemDropChanceOnKill.asset");
 			var item14 = idrs.FindDisplayRuleGroup(keyAsset);
 			var item14Rules = new ItemDisplayRule[item14.rules.Length];
 			Array.Copy(item14.rules, item14Rules, item14.rules.Length);

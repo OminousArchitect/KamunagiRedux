@@ -240,7 +240,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA9_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA9_DESCRIPTION";
 			skill.icon= (await LoadAsset<Sprite>("kamunagiassets2:WaterPassage"));
-			skill.activationStateMachineName = "Weapon";
+			skill.activationStateMachineName = "Spell";
 			skill.mustKeyPress = true;
 			skill.isCombatSkill = false;
 			skill.hideStockCount = false;

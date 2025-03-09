@@ -124,14 +124,18 @@ This ability may or may not see a rework in the future, based on feedback.
 </details>
 
 
-## Default Recommended Loadout
+## Developer Recommended Loadouts
 <details>
 <summary> Click to Reveal/Hide </summary>
 
-__If you're someone who gets choice paralysis I think this is the most beginner-friendly loadout__
+*I will intermittently put skill combinations I think have the most synergy in this section.*
 
-![image](https://github.com/user-attachments/assets/4289ded4-8c8b-4f43-ab06-58e600bb37cd)
-![loadout](https://github.com/user-attachments/assets/f5e3e6a9-ed1f-40ca-a7a0-0813b75b3c2c)
+**I encourage you to experiment!**
+
+![kit1](https://github.com/user-attachments/assets/525427ec-3f5f-4b82-918f-0e58776dacbb)
+
+![kit2](https://github.com/user-attachments/assets/9a071f47-672f-4143-becb-3fde12fab23f)
+
 
 </details>
 
@@ -192,9 +196,16 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 ## Future Plans
 - Fix bugs
 - maybe make Mashiro's Blessing a shareable buff
+- fix the anti-synergy between Woshis' Miasma and Knockback Fin, probably with a rework
 - That's it. I spent a really long time making this, I already did the plans
 
 ## Changelog
+`1.1.3`
+- Fixed for newest update
+- Fixed Starfall of Kotuahamuru not giving Zeal
+- Fixed not being able to attack while casting Atuykarounkami's Passage
+- Doubled the size of Woshis' Miasma, as a temporary fix to this skill being garbage in combination with knockback fin/other player' skills that move enemies. Rework coming soonTM
+
 `1.1.2`
 
 General:

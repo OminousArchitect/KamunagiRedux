@@ -12,6 +12,15 @@ using UnityEngine.Networking;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 {
+	public class HeavenPreZealState : BaseTwinState
+	{
+		public override void FixedUpdate()
+		{
+			base.FixedUpdate();
+			if (fixedAge >= 0.15f && isAuthority)
+				outer.SetNextState(new HeavenStarfallState());
+		}
+	}
 	public class HeavenStarfallState : AimThrowableBase
 	{
 		public float airstrikeRadius = 20f;
@@ -101,7 +110,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			HeavenStarfallState.line = await LoadAsset<GameObject>("RoR2/Base/Common/VFX/BasicThrowableVisualizer.prefab");
 		}
 		
-		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(HeavenStarfallState) };
+		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(HeavenPreZealState), typeof(HeavenStarfallState) };
 
 		async Task<Material> IMaterial.BuildObject()
 		{

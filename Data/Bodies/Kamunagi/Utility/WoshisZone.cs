@@ -39,7 +39,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		public override float duration => 90f;
 		public override float failedCastCooldown => 0f;
-		public override float indicatorScale => 11f;
+		public override float indicatorScale => 22f;
 		public override int meterGain => 0;
 
 		public override void OnEnter()
@@ -94,7 +94,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			Object.Destroy(woshisWard.GetComponent<NetworkedBodyAttachment>());
 			woshisWard.GetComponentInChildren<MeshRenderer>().material = woshisEnergy;
 			var ward = woshisWard.GetComponent<BuffWard>();
-			ward.radius = 11f;
+			ward.radius = 22f;
 			ward.buffDef = await this.GetBuffDef();
 			woshisWard.AddComponent<DestroyOnTimer>().duration = 8f;
 

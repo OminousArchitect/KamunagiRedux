@@ -744,6 +744,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			bullseyeSearch.filterByDistinctEntity = true;
 			bullseyeSearch.sortMode = BullseyeSearch.SortMode.Distance;
 			bullseyeSearch.viewer = null;
+			bullseyeSearch.filterByLoS = false;
 			bullseyeSearch.RefreshCandidates();
 			dest.AddRange(bullseyeSearch.GetResults());
 		}

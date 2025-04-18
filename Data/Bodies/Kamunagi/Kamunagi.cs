@@ -1246,6 +1246,21 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 			#endregion
 
+			#region Setup Camera Params
+
+			var cameraTargetParams = bodyPrefab.GetComponent<CameraTargetParams>();
+			
+			CharacterCameraParams cameraParams = ScriptableObject.CreateInstance<CharacterCameraParams>();
+			cameraParams.name = "ccpKamunagi";
+			cameraParams.data.minPitch = -70;
+			cameraParams.data.maxPitch = 70;
+			cameraParams.data.wallCushion = 0.1f;
+			cameraParams.data.pivotVerticalOffset = 1.38f;
+			cameraParams.data.idealLocalCameraPos = new Vector3(0, 0, -9.5f);
+
+			cameraTargetParams.cameraParams = cameraParams;
+			#endregion
+			
 			return bodyPrefab;
 		}
 

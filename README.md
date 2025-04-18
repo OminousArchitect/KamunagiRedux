@@ -136,7 +136,9 @@ This ability may or may not see a rework in the future, based on feedback.
 
 ![kit2](https://github.com/user-attachments/assets/9a071f47-672f-4143-becb-3fde12fab23f)
 
+![kit3](https://github.com/user-attachments/assets/218463d9-aa55-4d7a-9457-8f1c43820e29)
 
+![kit4](https://github.com/user-attachments/assets/717ca6e4-9e9b-4e93-ba99-e23f2abe0cb1)
 </details>
 
 ## Credits
@@ -144,7 +146,7 @@ This ability may or may not see a rework in the future, based on feedback.
 - Bubbet for co-developing this entire mod with me and making ConcentricContent. Additional contributions include the zeal bar, 
 the health overlay on Mashiro's Blessing, multiplayer compatability and networking, actually making the soundtrack replacement code work, item display code, helping port the project to SotS, and fixing 10 trillion errors in EffectManager. 
 He also wrote Woshis' Miasma, Atuy's Sweeping Tides, Soei Musou: Seed, both passives, and ***all*** of the Divine Skills.
-
+- Dragonyck for code contributions to the pre-SotS version, provided framework for Sobu Gekishoha, Soei Musou: Jinsoku, and the first iteration of the passive skill swapping mechanic. He also made a few VFX which were later built upon to become The Great Sealing and Light of Nature's Axiom 
 - bee9k for the model
 - _ahvi for the animations
 - Violet Chaolan for giving me guidance on Wwise and helping with the soundtracks
@@ -204,6 +206,8 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 - Teleporter soundtracks now only play if at least one player is Kamunagi of Chains
 - Further decreased the brightness of Woshis' Miasma because it still burns your eyes out on some maps
 - Increased base movespeed by 1
+- Added two more loadouts to the Dev Recommendations
+- Moved camera position slightly further out
 
 `1.1.3`
 - Fixed for newest update

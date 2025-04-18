@@ -1094,7 +1094,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			bodyComponent.baseDamage = 12f;
 			bodyComponent.baseCrit = 1f;
 			bodyComponent.baseAttackSpeed = 1f;
-			bodyComponent.baseMoveSpeed = 7f;
+			bodyComponent.baseMoveSpeed = 8f;
 			bodyComponent.baseAcceleration = 80f;
 			bodyComponent.baseJumpPower = 15f;
 

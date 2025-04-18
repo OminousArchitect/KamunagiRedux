@@ -200,6 +200,11 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 - That's it. I spent a really long time making this, I already did the plans
 
 ## Changelog
+`1.1.4`
+- Teleporter soundtracks now only play if at least one player is Kamunagi of Chains
+- Further decreased the brightness of Woshis' Miasma because it still burns your eyes out on some maps
+- Increased base movespeed by 1
+
 `1.1.3`
 - Fixed for newest update
 - Fixed Starfall of Kotuahamuru not giving Zeal

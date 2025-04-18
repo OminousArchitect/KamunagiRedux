@@ -1,6 +1,7 @@
 ﻿using AK.Wwise;
 using BepInEx.Configuration;
 using HarmonyLib;
+using KamunagiOfChains.Data.Bodies.Kamunagi;
 using RoR2;
 using RoR2.WwiseUtils;
 using System.Diagnostics;
@@ -44,6 +45,8 @@ namespace KamunagiOfChains.Data
 			if (!musicController.enableMusicSystem) return;
 			var isBossMusic = TeleporterInteraction.instance && !TeleporterInteraction.instance.isIdle;
 			if (SceneCatalog.mostRecentSceneDef == null) return;
+			if (!PlayerCharacterMasterController.instances.Any(x => x.master.backupBodyIndex == GetBodyIndex<KamunagiAsset>().WaitForCompletion())) return;
+			
 			var currentScene = SceneCatalog.mostRecentSceneDef.baseSceneName;
 			if (enableMusic.Value && isBossMusic && (currentScene == "golemplains" || currentScene == "shipgraveyard" || currentScene == "rootjungle"))
 			{

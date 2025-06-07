@@ -22,7 +22,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			remainingMissilesToFire = 4;
+			remainingMissilesToFire = 5;
 		}
 
 		public override void FixedUpdate()
@@ -173,7 +173,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			skill.skillName = "Primary 3";
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "PRIMARY3_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "PRIMARY3_DESCRIPTION";
-			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:darkpng"));
+			skill.icon = (await LoadAsset<Sprite>("kamunagiassets:darktypeH"));
 			skill.activationStateMachineName = "Weapon";
 			skill.interruptPriority = InterruptPriority.Any;
 			skill.mustKeyPress = false;

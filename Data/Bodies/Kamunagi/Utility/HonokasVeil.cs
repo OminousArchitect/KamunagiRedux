@@ -1,4 +1,5 @@
 ﻿using EntityStates;
+using ExtraSkillSlots;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
 using RoR2;
@@ -12,10 +13,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 	{
 		public CharacterModel? charModel;
 		public HurtBoxGroup? hurtBoxGroup;
-		public EffectManagerHelper? veilEffect;
+		private EffectManagerHelper? veilEffectInstance;
 		public static GameObject? muzzleEffect;
+		public static GameObject? spikyStuff;
 		public override int meterGain => 0;
-
+		private ExtraInputBankTest extraInputs;
+		
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -36,7 +39,11 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				origin = Util.GetCorePosition(base.gameObject),
 				rotation = Util.QuaternionSafeLookRotation(base.characterDirection.forward)
 			}, false);
-			veilEffect = EffectManagerKamunagi.GetAndActivatePooledEffect(Concentric.GetEffect<HonokasVeil>().WaitForCompletion(), characterBody.coreTransform, true);
+			extraInputs = outer.GetComponent<ExtraInputBankTest>();
+
+			var muzzleTransform = FindModelChild("MuzzleCenter");
+			veilEffectInstance = EffectManagerKamunagi.GetAndActivatePooledEffect(spikyStuff, muzzleTransform, true,
+				new EffectData() { rootObject = muzzleTransform.gameObject });
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
 		}
 
@@ -44,17 +51,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			base.FixedUpdate();
 			if (!isAuthority) return;
-			if (!IsKeyDownAuthority() || fixedAge > 1.5f)
-			{
-				outer.SetNextStateToMain();
-			}
+			if (fixedAge > 1.3f && extraInputs.extraSkill4.justPressed) outer.SetNextStateToMain();
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
 			if (NetworkServer.active) characterBody.RemoveBuff(RoR2Content.Buffs.Cloak);
-			if (veilEffect != null) veilEffect.ReturnToPool();
+			if (veilEffectInstance != null) veilEffectInstance.ReturnToPool();
 			Util.PlaySound("Play_imp_attack_blink", gameObject);
 			EffectManager.SpawnEffect(muzzleEffect, new EffectData
 			{
@@ -73,6 +77,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		{
 			await base.Initialize();
 			HonokasVeilState.muzzleEffect = await LoadAsset<GameObject>("RoR2/DLC1/VoidSurvivor/VoidBlinkMuzzleflash.prefab");
+			HonokasVeilState.spikyStuff = await this.GetEffect();
 		}
 
 		async Task<SkillDef> ISkill.BuildObject()
@@ -98,9 +103,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var impBoss = (await LoadAsset<GameObject>("RoR2/Base/ImpBoss/ImpBossBody.prefab"));
 			var mdlImpBoss = impBoss.GetComponent<ModelLocator>().modelTransform.gameObject;
 			var dustCenter = mdlImpBoss.transform.GetChild(0).gameObject;
-
+			
 			var effect = dustCenter.InstantiateClone("VeilParticles", false);
-			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
+
 			var distortion = effect.AddComponent<ParticleSystem>();
 			var coreR = effect.GetComponent<ParticleSystemRenderer>();
 			Material decalMaterial = new Material(await LoadAsset<Material>("RoR2/Base/Common/VFX/matInverseDistortion.mat"));
@@ -109,7 +114,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			coreR.renderMode = ParticleSystemRenderMode.Billboard;
 			var coreM = distortion.main;
 			coreM.duration = 1f;
-			coreM.simulationSpeed = 1.1f;
+			coreM.simulationSpeed = 0.3f;
 			coreM.loop = true;
 			coreM.startLifetime = 0.13f;
 			coreM.startSpeed = 5f;
@@ -127,22 +132,24 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var sparkleSize = distortion.sizeOverLifetime;
 			sparkleSize.enabled = true;
 			sparkleSize.separateAxes = true;
-			//sparkleSize.sizeMultiplier = 0.75f;
-			sparkleSize.xMultiplier = 1.3f;
+			sparkleSize.sizeMultiplier = 3f;
+			sparkleSize.yMultiplier = 3f;
 			effect.transform.localScale = Vector3.one * 1.5f;
 			effect.GetOrAddComponent<EffectComponent>().applyScale = false;
 			effect.GetComponentInChildren<Light>().color = Colors.twinsLightColor;
-			var spikyImpStuff = effect.transform.Find("LocalRing").gameObject;
-			if (spikyImpStuff)
-			{
-				var pMain = spikyImpStuff.GetComponent<ParticleSystem>().main;
-				pMain.startColor = Colors.twinsLightColor;
-				var renderer = spikyImpStuff.GetComponent<ParticleSystemRenderer>();
-				renderer.material = new Material(renderer.material);
-				renderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("kamunagiassets:purpleramp"));
-				renderer.material.SetFloat("_AlphaBias", 0.1f);
-				renderer.material.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
-			}
+			
+			var localRing = effect.transform.GetChild(2).gameObject;
+			var pMain = localRing.GetComponent<ParticleSystem>().main;
+			pMain.startColor = Colors.twinsLightColor;
+			var renderer = localRing.GetComponent<ParticleSystemRenderer>();
+			renderer.material = new Material(renderer.material);
+			renderer.material.SetTexture("_RemapTex", await LoadAsset<Texture2D>("kamunagiassets:purpleramp"));
+			renderer.material.SetFloat("_AlphaBias", 0.1f);
+			renderer.material.SetColor("_TintColor", new Color(0.42f, 0f, 1f));
+			localRing.transform.localPosition = new Vector3(0f, -2.5f, 0);
+			localRing.transform.localScale = new Vector3(0.4f, 0.5f, 0.4f);
+			
+			UnityEngine.Object.Destroy(effect.transform.GetChild(0).gameObject);
 			return effect;
 		}
 	}

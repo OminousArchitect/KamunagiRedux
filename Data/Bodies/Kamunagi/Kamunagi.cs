@@ -936,7 +936,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 			Array.Copy(saw.rules, sawRules, saw.rules.Length);
 			saw.rules = sawRules;
 			saw.rules[0].childName = "MuzzleCenter";
-			saw.rules[0].localPos = new Vector3(-1.458F, 0.448F, 0.109F);
+			saw.rules[0].localPos = new Vector3(-2.065F, 0.448F, 0.109F);
 			saw.rules[0].localAngles = new Vector3(90F, 0F, 0F);
 			saw.rules[0].localScale = new Vector3(0.1F, 0.1F, 0.1F);
 			idrs.SetDisplayRuleGroup(equipAsset, new DisplayRuleGroup { rules = sawRules });

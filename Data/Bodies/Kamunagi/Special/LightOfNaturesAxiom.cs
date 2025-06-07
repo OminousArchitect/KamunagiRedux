@@ -739,7 +739,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 		{
 			bullseyeSearch.searchOrigin = transform.position;
 			bullseyeSearch.minAngleFilter = 0f;
-			bullseyeSearch.maxAngleFilter = 180f;
+			bullseyeSearch.maxAngleFilter = 360f; //todo not sure about this, was previously 180 and I don't notice a dif
 			bullseyeSearch.maxDistanceFilter = maxDistance;
 			bullseyeSearch.filterByDistinctEntity = true;
 			bullseyeSearch.sortMode = BullseyeSearch.SortMode.Distance;

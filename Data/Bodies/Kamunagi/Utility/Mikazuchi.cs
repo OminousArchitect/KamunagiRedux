@@ -1,5 +1,6 @@
 ﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
+using KamunagiOfChains.Data.Bodies.Kamunagi.Secondary;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -21,6 +22,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		private uint soundID;
 		//public override int meterGainOnExit => canceledEarly ? 0 : 10;
 		//public bool canceledEarly;
+		private bool premature;
 
 		public override void OnEnter()
 		{
@@ -80,9 +82,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				if (isAuthority && skillLocator.utility.stock == 0)
 				{
 					skillLocator.utility.AddOneStock();
+					premature = true;
 				}
-				outer.SetNextStateToMain();
 			}
+			if (fixedAge > duration && !premature) outer.SetNextState(new MikazuchiExitZealState());
 		}
 
 		public override void OnExit()
@@ -94,6 +97,16 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority() => InterruptPriority.Skill;
+	}
+	
+	public class MikazuchiExitZealState : BaseTwinState
+	{
+		public override void FixedUpdate()
+		{
+			base.FixedUpdate();
+			if (fixedAge >= 0.15f && isAuthority)
+				outer.SetNextStateToMain();
+		}
 	}
 
 	public class Mikazuchi : Concentric, IEffect, ISkill

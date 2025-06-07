@@ -5,6 +5,10 @@ and 50% a love letter to ~~one~~ two of my favorite characters from my favorite 
 
 The Kamunagi of Chains are a caster character designed such that you can spec into a variety of roles based on the skills you equip. 
 
+## Skill Hotswap information
+**NEW**! The Kamunagi should be completely compatible with Brynzananas' new Skill Hotswapper with the only minor issue being that changes to Ururuu's skillset are not reflected immediately and will only take effect the next time it is her turn.
+
+
 ## ft. Mothmoth with a little more chitin
 ![uhhhh1](https://github.com/user-attachments/assets/271c0769-a60c-45d3-a7e6-9a427265ee65)
 ![uhhhh2](https://github.com/user-attachments/assets/fcd86913-19af-401e-a31c-857314cdde1c)
@@ -28,7 +32,7 @@ Additional information may be added here in the future as necessary. Check back 
 <details>
 <summary> Click to Reveal/Hide </summary>
 
-## ![seed](https://github.com/user-attachments/assets/a40c41a2-5945-4d5f-8972-d3278aa8543a)
+## ![seed](https://github.com/user-attachments/assets/a40c41a2-5945-4d5f-8972-d3278aa8543a)4
 - Time to sow each seed is influenced by attack speed.
 
 ## ![orb](https://github.com/user-attachments/assets/079ae4f5-21ea-4299-8c98-7eaa7b0db1c5)
@@ -139,6 +143,13 @@ This ability may or may not see a rework in the future, based on feedback.
 ![kit3](https://github.com/user-attachments/assets/218463d9-aa55-4d7a-9457-8f1c43820e29)
 
 ![kit4](https://github.com/user-attachments/assets/717ca6e4-9e9b-4e93-ba99-e23f2abe0cb1)
+
+*Gooboo Jr not required. I just didn't feel like re-cropping the image
+
+![kit5](https://github.com/user-attachments/assets/8eca2527-83c6-4131-8709-56627818ce78)
+
+![kit6](https://github.com/user-attachments/assets/75587ea8-265d-4da8-a949-31c3ea4cbc9b)
+
 </details>
 
 ## Credits
@@ -178,7 +189,7 @@ Thanks to these people for answering my questions in the modcord, this mod would
 - Jump pads will lock your movement to zero if you use Proxy Apotheosis without touching the ground after using them
 - Clay templar tar blast tends to permanently force you in a direction until you land(?)
 - Summon Nugwisomkami has some difficult networking issues to trace, so it's disabled for people who aren't the host
-- The particle FX for Honoka's Veil are broken somehow. I presume this is another "Gearbox removed grandparent boulder" situation. I'll fix it at some point
+- ~~The particle FX for Honoka's Veil are broken somehow. I presume this is another "Gearbox removed grandparent boulder" situation. I'll fix it at some point~~ Fixed in 1.1.4
 ## Misc. Dev Comments
 The Kamunagi have item displays too, but only as many as I felt like doing/ thought wouldn't look out of place. Most reds, yellows, void items, and items that "follow" you are done. I also did most of the Seeker's items too.
 
@@ -203,11 +214,24 @@ The animations they do have are based off of their moveset from Utawarerumono ZA
 
 ## Changelog
 `1.1.4`
+
+General: 
 - Teleporter soundtracks now only play if at least one player is Kamunagi of Chains
-- Further decreased the brightness of Woshis' Miasma because it still burns your eyes out on some maps
-- Increased base movespeed by 1
-- Added two more loadouts to the Dev Recommendations
 - Moved camera position slightly further out
+- Added two more loadouts to the Dev Recommendations
+- Added letters to Primary icons to help distinguish them in lieu of Brynzananas new radial skillswap mod
+
+Balance:
+- Light of Nature's Axiom now damages enemies regardless of LoS, enemies will fear the true power of the shadows!
+- Increased Soei Musou: Hono Gekko shadowflame count to 5
+- Reworked Honoka's Veil to be active until you attack or sprint
+- Increased base movespeed by 1
+
+Bugfixing:
+- Further decreased the brightness of Woshis' Miasma because it still burns your eyes out on some maps
+- Fixed incorrect zeal gain on Mikazuchi's Fury
+- Updated the description of The Great Sealing to accurately reflect the execution threshold at 35%, not 20. Note this is not a buff and it has been 35% for the past several versions
+- Nightshade Mantle actually blocks beam attacks now lol oops
 
 `1.1.3`
 - Fixed for newest update

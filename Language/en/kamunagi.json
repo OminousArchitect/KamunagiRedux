@@ -12,7 +12,7 @@
 	  "NINES_URURUU_EXTRA": "<color=#D0A1F8>Ururuu Divine Skill</color>",
 
 	  "NINES_KAMUNAGI_BODY_NAME": "Kamunagi Of Chains",
-	  "NINES_KAMUNAGI_BODY_DESCRIPTION": "<color=#CCD3E0>\n\n< ! > \n\n< ! > \n\n< ! > \n\n< ! > \n\n</color>",
+	  "NINES_KAMUNAGI_BODY_DESCRIPTION": "<color=#CCD3E0>the Kamunagi of Chains are duo spellcasters with a wide array of skills at their disposal.\n\n- Ururuu (the fair-skinned one with black clothes) and Saraana (the tan-skinned one with white clothes) each have independent loadouts and an additional resource called <color=#EDA717>Zeal</color>.\n\n - Represented below the health bar, when the <color=#EDA717>Zeal</color> bar is full, the twins will switch turns. Non-primary skills each give <style=cIsDamage>10</style> <color=#EDA717>Zeal</color>, with the exception of the wind secondary, which gives <style=cIsDamage>5</style>.",
 	  "NINES_KAMUNAGI_BODY_SUBTITLE": "",
 	  "NINES_KAMUNAGI_BODY_LORE": "",
 	  "NINES_KAMUNAGI_BODY_OUTRO_FLAVOR": "",
@@ -37,7 +37,7 @@
 	  "NINES_KAMUNAGI_BODY_EXTRA9_DESCRIPTION": "Hold <style=cIsUtility>interact</style> in the air to launch a water-aspected energy bolt. Release to <style=cIsUtility>teleport to the bolt's location</style>.",
 
 	  "NINES_KAMUNAGI_BODY_PASSIVE_NAME": "Ever Turning, Ever Swaying, Ever Drifting",
-	  "NINES_KAMUNAGI_BODY_PASSIVE_DESCRIPTION": "Ururuu and Saraana have independent loadouts and <style=cIsUtility>switch turns</style> upon reaching maximum <color=#EDA717>Zeal</color>. Non-primary skills give 10 <color=#EDA717>Zeal</color>.",
+	  "NINES_KAMUNAGI_BODY_PASSIVE_DESCRIPTION": "Ururuu and Saraana have independent loadouts and <style=cIsUtility>switch turns</style> upon reaching maximum <color=#EDA717>Zeal</color>.",
 
 	  "NUGWISOMKAMI1_BODY_NAME": "Mischief",
 	  "NUGWISOMKAMI2_BODY_NAME": "War",
@@ -78,12 +78,12 @@
 	  "NINES_KAMUNAGI_BODY_SPECIAL0_NAME": "Sobu Gekishoha",
 	  "NINES_KAMUNAGI_BODY_SPECIAL0_DESCRIPTION": "Unleash a <color=#4d108f>great roar of darkness</color> for <style=cIsDamage>12,500% total damage</style>.",
 	  "NINES_KAMUNAGI_BODY_SPECIAL1_NAME": "The Great Sealing",
-	  "NINES_KAMUNAGI_BODY_SPECIAL1_DESCRIPTION": "Mark an area to be sealed after <style=cIsUtility>2.5s</style>. Once primed, the seal activates, dealing <style=cIsDamage>650% damage</style>. <style=cIsHealth>ALL living things</style> below <style=cIsHealth>20% health</style> are <style=cIsDamage>executed</style>.",
+	  "NINES_KAMUNAGI_BODY_SPECIAL1_DESCRIPTION": "Mark an area to be sealed after <style=cIsUtility>2.5s</style>. Once primed, the seal activates, dealing <style=cIsDamage>650% damage</style>. <style=cIsHealth>ALL living things</style> below <style=cIsHealth>35% health</style> are <style=cIsDamage>executed</style>.",
 	  "NINES_KAMUNAGI_BODY_SPECIAL2_NAME": "Light of Nature's Axiom",
 	  "NINES_KAMUNAGI_BODY_SPECIAL2_DESCRIPTION": "Manifest a <color=#4d108f>dark star</color> to continually <color=#711fa3>Hex</color> enemies each interval and apply <color=#711fa3>Shadow Vulnerability</color>.",
 
 	  "NINES_KAMUNAGI_BODY_EXTRA1_NAME": "Honoka's Veil",
-	  "NINES_KAMUNAGI_BODY_EXTRA1_DESCRIPTION": "<style=cIsUtility>Disappear</style> into the aether and become <style=cIsUtility>invulnerable</style> for a short time.",
+	  "NINES_KAMUNAGI_BODY_EXTRA1_DESCRIPTION": "<style=cIsUtility>Disappear</style> into the aether and become <style=cIsUtility>invulnerable</style>, but <style=cIsUtility>unable to attack or sprint</style>.",
 	  "NINES_KAMUNAGI_BODY_EXTRA2_NAME": "Kuon's Flashbang",
 	  "NINES_KAMUNAGI_BODY_EXTRA2_DESCRIPTION": "<style=cIsDamage>Stunning</style>. Deal <style=cIsDamage>175% damage</style>, briefly <style=cIsUtility>disappear</style>, and then <style=cIsUtility>reappear</style> in a nearby location.",
 	  "NINES_KAMUNAGI_BODY_EXTRA4_NAME": "Summon Shikigami: Mothmoth",

@@ -159,7 +159,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			forceField.GetComponent<TeamFilter>().teamIndex = TeamIndex.Player;
 			forceField.transform.Find("Collision").gameObject.AddComponent<RootMotionGoByeBye>();
 			forceField.transform.GetChild(1).gameObject.transform.localScale = Vector3.one * 0.5f;
-			forceField.GetComponentInChildren<MeshCollider>().gameObject.layer = 3;
+			forceField.GetComponentInChildren<MeshCollider>().gameObject.layer = RoR2.LayerIndex.world.intVal;
 			forceField.transform.localScale = Vector3.one * 0.45f;
 			UnityEngine.Object.Destroy(forceField.GetComponent<NetworkedBodyAttachment>());
 			UnityEngine.Object.Destroy(forceField.GetComponent<VFXAttributes>());

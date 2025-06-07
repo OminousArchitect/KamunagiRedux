@@ -1,6 +1,5 @@
 ﻿using EntityStates;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
-using Newtonsoft.Json.Utilities;
 using R2API;
 using RoR2;
 using RoR2.Navigation;

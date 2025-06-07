@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
-using Newtonsoft.Json.Utilities;
 using R2API;
-using Rewired.UI.ControlMapper;
 using RoR2;
 using RoR2.Navigation;
 using RoR2.Skills;

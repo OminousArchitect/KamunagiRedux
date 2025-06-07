@@ -2,7 +2,6 @@
 using HarmonyLib;
 using KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates;
 using R2API;
-using Rewired.Demos;
 using RoR2;
 using RoR2.Skills;
 using UnityEngine;

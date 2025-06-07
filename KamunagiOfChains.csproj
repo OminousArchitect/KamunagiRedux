@@ -62,6 +62,9 @@
 	<Reference Include="Unity.ResourceManager">
 		<HintPath>$(RoR2Folder)Unity.ResourceManager.dll</HintPath>
 	</Reference>
+	<Reference Include="KinematicCharacterController.dll">
+		<HintPath>$(RoR2Folder)KinematicCharacterController.dll</HintPath>
+	</Reference>
 	<Reference Include="UnityEngine.UI">
 		<HintPath>$(RoR2Folder)UnityEngine.UI.dll</HintPath>
 	</Reference>
@@ -77,19 +80,17 @@
 	<Reference Include="AK.Wwise.Unity.API.WwiseTypes.dll">
 		<HintPath>$(RoR2Folder)AK.Wwise.Unity.API.WwiseTypes.dll</HintPath>
 	</Reference>
+	<Reference Include="AK.Wwise.Unity.MonoBehaviour.dll">
+		<HintPath>$(RoR2Folder)AK.Wwise.Unity.MonoBehaviour.dll</HintPath>
+	</Reference>
 	<Reference Include="HGCSharpUtils.dll">
 		<HintPath>$(RoR2Folder)HGCSharpUtils.dll</HintPath>
 	</Reference>
 	<Reference Include="Rewired_Core.dll">
 		<HintPath>$(RoR2Folder)Rewired_Core.dll</HintPath>
 	</Reference>
-
-
-
-
-
-	<Reference Include="SimpleJSON.dll">
-		<HintPath>$(RoR2Folder)SimpleJSON.dll</HintPath>
+	<Reference Include="HGUnityUtils.dll">
+		<HintPath>$(RoR2Folder)HGUnityUtils.dll</HintPath>
 	</Reference>
 	
 	

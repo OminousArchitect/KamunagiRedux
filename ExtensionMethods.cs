@@ -155,18 +155,22 @@ namespace KamunagiOfChains
 			return result;
 		}
 
-		public static void SetChild(this ChildLocator locator, string key, Transform transform)
+		public static int IndexOf<T>(this T[] source, Func<T, bool> predicate)
 		{
 			var index = -1;
-			for (var i = 0; i < locator.transformPairs.Length; i++)
+			for (var i = 0; i < source.Length; i++)
 			{
-				if (locator.transformPairs[i].name == key)
-				{
-					index = i;
-					break;
-				}
+				if (!predicate(source[i])) continue;
+				index = i;
+				break;
 			}
-			
+
+			return index;
+		}
+		
+		public static void SetChild(this ChildLocator locator, string key, Transform transform)
+		{
+			var index = locator.transformPairs.IndexOf(x => x.name == key);
 			if (index < 0)
 			{
 				locator.transformPairs = locator.transformPairs.AddItem(new ChildLocator.NameTransformPair

@@ -141,7 +141,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				didSpawn = true;
 				var index = Mathf.RoundToInt(UnityEngine.Random.Range(0, possibleSpirits.Length));
 				log.LogInfo("Index: " + index);
-				whichSpirit = NugwisoEliteDefs.Keys.IndexOf(x => x == possibleSpirits[index]);
+				whichSpirit = NugwisoEliteDefs.Keys.ToArray().IndexOf(x => x == possibleSpirits[index]);
 
 				var equipList = NugwisoEliteDefs[possibleSpirits[index]];
 				whichEquip =

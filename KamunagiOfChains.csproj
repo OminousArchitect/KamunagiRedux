@@ -77,7 +77,7 @@
 	<Reference Include="AK.Wwise.Unity.API">
 		<HintPath>$(RoR2Folder)AK.Wwise.Unity.API.dll</HintPath>
 	</Reference>
-	<Reference Include="AK.Wwise.Unity.API.WwiseTypes.dll">
+	<Reference Include="AK.Wwise.Unity.API.WwiseTypes.dll" Publicize="true">
 		<HintPath>$(RoR2Folder)AK.Wwise.Unity.API.WwiseTypes.dll</HintPath>
 	</Reference>
 	<Reference Include="AK.Wwise.Unity.MonoBehaviour.dll">

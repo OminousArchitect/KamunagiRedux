@@ -158,7 +158,6 @@ namespace KamunagiOfChains
 		public static void SetChild(this ChildLocator locator, string key, Transform transform)
 		{
 			var index = locator.transformPairs.IndexOf(x => x.name == key);
-			var hmm = locator.transformPairs.IndexOf()
 			if (index < 0)
 			{
 				locator.transformPairs = locator.transformPairs.AddItem(new ChildLocator.NameTransformPair

@@ -76,8 +76,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			handler.footstepDustPrefab = await GetEffect<TatariStepDust>();
 
 			CharacterModel mdl = model.GetComponent<CharacterModel>();
-			mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
-			mdl.baseRendererInfos[1].renderer.enabled = false; //attempt #2
+			/*mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
+			mdl.baseRendererInfos[1].renderer.enabled = false; //attempt #2 */ //todo needs help
 			var cb = gupBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "TATARI_BODY_NAME";
 			cb.baseDamage = 14f;

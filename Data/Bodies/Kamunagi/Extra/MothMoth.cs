@@ -60,8 +60,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 
 		async Task<GameObject> INetworkedObject.BuildObject()
 		{
-			var mothMoth =
-				(await LoadAsset<GameObject>("addressable:RoR2/Base/Beetle/BeetleWard.prefab"))!.InstantiateClone("MothMoth");
+			var mothMoth = (await LoadAsset<GameObject>("addressable:RoR2/Base/BeetleGroup/BeetleWard/BeetleWard.prefab"))!.InstantiateClone("MothMoth");
 			mothMoth.GetComponent<BuffWard>().buffDef =
 				await LoadAsset<BuffDef>("RoR2/Base/LifestealOnHit/bdLifeSteal.asset");
 

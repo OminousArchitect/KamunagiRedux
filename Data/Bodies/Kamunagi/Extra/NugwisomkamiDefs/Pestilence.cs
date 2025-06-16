@@ -15,9 +15,9 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			
 			var nugwisoBody= (await LoadAsset<GameObject>("RoR2/Junk/ArchWisp/ArchWispBody.prefab"))!.InstantiateClone("Nugwiso3", true);
 			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
-			charModel.baseRendererInfos[1].ignoreOverlays = false;
+			/*charModel.baseRendererInfos[1].ignoreOverlays = false;
 			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
-			charModel.baseLightInfos[0].defaultColor = new Color(0f, 1, 0.03f);
+			charModel.baseLightInfos[0].defaultColor = new Color(0f, 1, 0.03f);*/ //todo needs help
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
 			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
 			mdl.transform.localScale = Vector3.one * 1f;

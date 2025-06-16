@@ -56,7 +56,7 @@
 	<Reference Include="com.unity.multiplayer-hlapi.Runtime" Publicize="true">
 		<HintPath>$(RoR2Folder)com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
 	</Reference>
-	<Reference Include="Unity.Addressables">
+	<Reference Include="Unity.Addressables" Publicize="true">
 		<HintPath>$(RoR2Folder)Unity.Addressables.dll</HintPath>
 	</Reference>
 	<Reference Include="Unity.ResourceManager">

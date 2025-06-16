@@ -24,7 +24,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			charModel.baseLightInfos[0].defaultColor = Colors.jachdwaltColor;
 			//charModel.baseRendererInfos[0].ignoreOverlays = true;
 			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
+			/*var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
 			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
 			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
 			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it
@@ -41,7 +41,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			charModel.baseRendererInfos[1].renderer = thePSR;
 			charModel.baseRendererInfos[1].defaultMaterial = fireMat;
 			meshObject.transform.localPosition = new Vector3(0, -2.4f, 0.4f);
-			meshObject.transform.localScale = Vector3.one * 3;
+			meshObject.transform.localScale = Vector3.one * 3;*/ //todo needs help
 			var cb = nugwisoBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI4_BODY_NAME";
 			cb.baseMaxHealth = 400;

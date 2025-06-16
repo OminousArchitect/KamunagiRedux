@@ -39,13 +39,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				skinDef.icon = icon;
 
 				skinDef.rootObject = model;
+				
 				var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
 				var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
 				modelRendererInfos.CopyTo(rendererInfos, 0);
 				skinDef.rendererInfos = rendererInfos;
 			});
 		}
-
+		
 		async Task<GameObject> IMaster.BuildObject()
 		{
 			var master = (await LoadAsset<GameObject>("RoR2/Base/Merc/MercMonsterMaster.prefab"))!.InstantiateClone(

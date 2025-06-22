@@ -30,37 +30,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 		{
 			var icon = await LoadAsset<Sprite>("kamunagiassets:TwinsSkin");
 			var model = await LoadAsset<GameObject>("kamunagiassets:mdlKamunagi")!;
-			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
-			{
-				var skinDef = (SkinDef)obj;
-				ISkin.AddDefaults(ref skinDef);
-				skinDef.name = "KamunagiDefaultSkinDef";
-				skinDef.nameToken = tokenPrefix + "DEFAULT_SKIN_NAME";
-				skinDef.icon = icon;
-
-				skinDef.rootObject = model;
-				
-				var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
-				var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
-				modelRendererInfos.CopyTo(rendererInfos, 0);
-				skinDef.rendererInfos = rendererInfos;
-			});
-		}
-		
-		async Task<GameObject> IMaster.BuildObject()
-		{
-			var master = (await LoadAsset<GameObject>("RoR2/Base/Merc/MercMonsterMaster.prefab"))!.InstantiateClone(
-				"NinesKamunagiBodyMonsterMaster", true);
-			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
-			return master;
-		}
-
-		IEnumerable<Concentric> IModel.GetSkins() => new Concentric[] { this };
-
-		async Task<GameObject> IModel.BuildObject()
-		{
-			var model = await LoadAsset<GameObject>("kamunagiassets:mdlKamunagi")!;
-			var characterModel = model.GetOrAddComponent<CharacterModel>();
+			var voidCrystalMat = await LoadAsset<Material>("addressable:RoR2/DLC1/voidstage/matVoidCrystal.mat");
 			var childLocator = model.GetComponent<ChildLocator>();
 
 			CharacterModel.RendererInfo RenderInfoFromChild(Component child, bool dontHopoo = false)
@@ -75,8 +45,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				};
 			}
 
-			var voidCrystalMat = await LoadAsset<Material>("addressable:RoR2/DLC1/voidstage/matVoidCrystal.mat");
-			characterModel.baseRendererInfos = new[]
+			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
+			sdParams.rendererInfos = new []
 			{
 				new CharacterModel.RendererInfo
 				{
@@ -105,6 +75,41 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 				RenderInfoFromChild(childLocator.FindChild("S Shoe")),
 				RenderInfoFromChild(childLocator.FindChild("U Shoe"))
 			};
+			
+			
+			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
+			{
+				var skinDef = (SkinDef)obj;
+				ISkin.AddDefaults(ref skinDef);
+				skinDef.name = "KamunagiDefaultSkinDef";
+				skinDef.nameToken = tokenPrefix + "DEFAULT_SKIN_NAME";
+				skinDef.icon = icon;
+
+				skinDef.rootObject = model;
+				skinDef.skinDefParams = sdParams;
+
+				var modelRendererInfos = sdParams.rendererInfos;
+				var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
+				modelRendererInfos.CopyTo(rendererInfos, 0);
+				skinDef.rendererInfos = modelRendererInfos;
+			});
+		}
+		
+		async Task<GameObject> IMaster.BuildObject()
+		{
+			var master = (await LoadAsset<GameObject>("RoR2/Base/Merc/MercMonsterMaster.prefab"))!.InstantiateClone(
+				"NinesKamunagiBodyMonsterMaster", true);
+			master.GetComponent<CharacterMaster>().bodyPrefab = await this.GetBody();
+			return master;
+		}
+
+		IEnumerable<Concentric> IModel.GetSkins() => new Concentric[] { this };
+
+		async Task<GameObject> IModel.BuildObject()
+		{
+			var model = await LoadAsset<GameObject>("kamunagiassets:mdlKamunagi")!;
+			var characterModel = model.GetOrAddComponent<CharacterModel>();
+			var childLocator = model.GetComponent<ChildLocator>();
 
 			var modelHurtBoxGroup = model.GetOrAddComponent<HurtBoxGroup>();
 			var mainHurtBox = childLocator.FindChild("MainHurtbox").gameObject;

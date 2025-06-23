@@ -185,12 +185,12 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				{ //War 1
 					await GetMaster<WarMachine>(),
 					new List<string>() { "EliteVoidEquipment", "EliteLunarEquipment" }
-				} 
+				},
 				
-				/*{ //Decay 2
+				{ //Decay 2
 					await GetMaster<DecaySpirit>(), 
 					new List<string>() { "ElitePoisonEquipment", "EliteHauntedEquipment" }
-				} */
+				}
 
 				/*
 				{ //Pestilence

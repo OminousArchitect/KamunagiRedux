@@ -12,7 +12,7 @@ using UnityEngine;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	[HarmonyPatch]
-	public class TatariBody : Concentric, IBody, IMaster
+	public class TatariBody : Concentric, IBody, IMaster, ISkin
 	{
 		private static ConfigEntry<string> debuffBlacklist;
 		
@@ -70,14 +70,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;
 			//var omfg = model.AddComponent<FootstepReplacer>();
 			//omfg.dust = await (GetGenericObject<TatariStepDust>());
-
 			var handler = model.GetComponent<FootstepHandler>();
 			handler.enableFootstepDust = false; // we dont actually want to use this, because we're gonna use it in the hook
 			handler.footstepDustPrefab = await GetEffect<TatariStepDust>();
 
-			CharacterModel mdl = model.GetComponent<CharacterModel>();
-			/*mdl.baseRendererInfos[0].defaultMaterial = tatariMat;
-			mdl.baseRendererInfos[1].renderer.enabled = false; //attempt #2 */ //todo needs help
 			var cb = gupBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "TATARI_BODY_NAME";
 			cb.baseDamage = 14f;
@@ -93,7 +89,31 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 						break;
 				}
 			}
+			
 			return gupBody;
+		}
+
+		async Task<SkinDef> ISkin.BuildObject()
+		{
+			var model = (await this.GetBody()).GetComponent<ModelLocator>().modelTransform.gameObject;
+
+			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
+			sdParams.rendererInfos = new CharacterModel.RendererInfo[1];
+			//sdParams.rendererInfos[0].renderer = 
+				
+			model.GetComponent<ModelSkinController>().skins[0] = await this.GetSkinDef();
+			
+			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
+			{
+				var skinDef = (SkinDef)obj;
+				ISkin.AddDefaults(ref skinDef);
+				skinDef.name = "KamunagiSpirit2DefaultSkinDef";
+				skinDef.nameToken = "AssassinSpirit2Skin";
+				skinDef.icon = null;
+
+				skinDef.rootObject = model;
+				skinDef.skinDefParams = sdParams;
+			});
 		}
 
 		async Task<GameObject> IMaster.BuildObject()

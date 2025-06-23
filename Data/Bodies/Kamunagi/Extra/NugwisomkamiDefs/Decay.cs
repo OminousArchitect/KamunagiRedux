@@ -15,22 +15,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		async Task<SkinDef> ISkin.BuildObject()
 		{
 			var icon = await LoadAsset<Sprite>("kamunagiassets:TwinsSkin");
-			//var model = (await this.GetBody()).GetComponent<ModelLocator>().modelTransform.gameObject;
-			
-			var blankObject = await LoadAsset<GameObject>("kamunagiassets2:DecaySpiritModel");
-			var meshObject = blankObject; //did this spaghetti to prevent refactoring 
-			meshObject.transform.localPosition = new Vector3(0, -2.4f, 0.4f);
-			meshObject.transform.localScale = Vector3.one * 3;
-			meshObject.AddComponent<MeshFilter>().mesh = (await LoadAsset<Mesh>("kamunagiassets2:IceMask"));
-			var theRenderer = meshObject.AddComponent<MeshRenderer>();
-			theRenderer.material = (await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat"));
+			var model = (await this.GetBody()).GetComponent<ModelLocator>().modelTransform.gameObject;
+			var mask = model.GetComponentInChildren<MeshRenderer>();
+			var theRenderer = mask;
+
+			model.GetComponent<ModelSkinController>().skins[0] = await this.GetSkinDef();
 			
 			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
 			sdParams.rendererInfos = new RoR2.CharacterModel.RendererInfo[1];
 			sdParams.rendererInfos[0].renderer = theRenderer;
 			sdParams.rendererInfos[0].defaultMaterial = (await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat"));
 			//sdParams.rendererInfos[1].renderer = thePSR 
-			//sdParams.baseRendererInfos[1].defaultMaterial = fireMat; //todo check if PSR is on model
+			//sdParams.baseRendererInfos[1].defaultMaterial = fireMat; //todo check if PSR is on model //I think it still is
 
 			sdParams.meshReplacements = new SkinDefParams.MeshReplacement[1];
 			sdParams.meshReplacements[0].renderer = theRenderer;
@@ -46,9 +42,10 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				skinDef.name = "KamunagiSpirit2DefaultSkinDef";
 				skinDef.nameToken = "AssassinSpirit2Skin";
 				skinDef.icon = icon;
-
-				//skinDef.rootObject = null;
 				skinDef.skinDefParams = sdParams;
+				skinDef.rootObject = model;
+				
+				Debug.Log("trail mix");
 			});
 		}
 		async Task<GameObject> IBody.BuildObject()
@@ -67,9 +64,18 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
 			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
 			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
-			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it
-			mdl.GetComponent<ModelSkinController>().skins[0] = await this.GetSkinDef();
+			UnityEngine.Object.Destroy(mdl.transform.Find("Sphere.000")); //todo when you destroy this you're not really destroying it, my guess is because it isn't loaded into memory yet
+			//UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it //todo you might not be allowed to do this anymore because the game seems to crash
 
+			var blankObject = await LoadAsset<GameObject>("kamunagiassets2:DecaySpiritModel");
+			var meshObject = blankObject; //did this spaghetti to prevent refactoring 
+			meshObject.transform.localPosition = new Vector3(0, -2.4f, 0.4f);
+			meshObject.transform.localScale = Vector3.one * 3;
+			meshObject.AddComponent<MeshFilter>().mesh = (await LoadAsset<Mesh>("kamunagiassets2:IceMask"));
+			var theRenderer = meshObject.AddComponent<MeshRenderer>();
+			theRenderer.material = (await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat"));
+			//meshObject.transform.SetParent(mdl.transform); //todo does the game crash because I'm setting parent here or because it can't find the renderer in ISkin? it stops crashing when I comment this out 
+			
 			//
 			nugwisoBody.GetComponent<Rigidbody>().mass = 300f;
 			var cb = nugwisoBody.GetComponent<CharacterBody>();

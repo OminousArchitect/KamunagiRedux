@@ -107,8 +107,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				var skinDef = (SkinDef)obj;
 				ISkin.AddDefaults(ref skinDef);
-				skinDef.name = "KamunagiSpirit2DefaultSkinDef";
-				skinDef.nameToken = "AssassinSpirit2Skin";
+				skinDef.name = "TatariDefaultSkinDef";
+				skinDef.nameToken = "TatariSkin";
 				skinDef.icon = null;
 
 				skinDef.rootObject = model;

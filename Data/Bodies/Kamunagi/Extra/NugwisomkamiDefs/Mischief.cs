@@ -35,19 +35,20 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			//sdParams.rendererInfos[1].renderer = thePSR 
 			//sdParams.baseRendererInfos[1].defaultMaterial = fireMat; //todo check if PSR is on model
 
-			sdParams.meshReplacements = new SkinDefParams.MeshReplacement[1];
+			/*sdParams.meshReplacements = new SkinDefParams.MeshReplacement[1];
 			sdParams.meshReplacements[0].renderer = theRenderer;
 			sdParams.meshReplacements[0].meshAddress = new AssetReferenceT<Mesh>("b8b44cceb99ce4441ad3c32705b90ec9");
 			sdParams.meshReplacements[0].meshAddress.m_AssetGUID = "b8b44cceb99ce4441ad3c32705b90ec9";
 			sdParams.meshReplacements[0].meshAddress.m_SubObjectName = "AssassinSpiritModel";
 			sdParams.meshReplacements[0].meshAddress.m_SubObjectType = "UnityEngine.Mesh, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
-
+			*/
+			
 			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
 			{
 				var skinDef = (SkinDef)obj;
 				ISkin.AddDefaults(ref skinDef);
-				skinDef.name = "KamunagiSpirit2DefaultSkinDef";
-				skinDef.nameToken = "AssassinSpirit2Skin";
+				skinDef.name = "MischiefDefaultSkinDef";
+				skinDef.nameToken = "MischiefSkin";
 				skinDef.icon = icon;
 				skinDef.skinDefParams = sdParams;
 				skinDef.rootObject = model;

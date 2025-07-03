@@ -28,6 +28,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		void SowSeeds()
 		{
 			var aimRay = GetAimRay();
+			base.characterBody.SetSpreadBloom(0.12f);
 			var testForTarget = new BulletAttack()
 			{
 				owner = gameObject,

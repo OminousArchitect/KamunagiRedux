@@ -61,7 +61,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			{
 				var currentStacks = GetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion());
 				characterBody.SetBuffCount(Concentric.GetBuffIndex<MashiroCurseDebuff>().WaitForCompletion(),
-					currentStacks + 10);
+					currentStacks + 20);
 				characterBody.AddTimedBuff(Concentric.GetBuffIndex<MashiroBlessing>().WaitForCompletion(), 15f);
 			}
 

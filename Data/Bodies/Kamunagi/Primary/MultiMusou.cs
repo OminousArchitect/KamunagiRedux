@@ -45,7 +45,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		void MissileBarrage()
 		{
 			int missiles = 4;
-
+			base.characterBody.SetSpreadBloom(0.2f);
+			
 			Vector3 vector = inputBank ? inputBank.aimDirection : transform.forward;
 			float intervalDegrees = 180f / missiles;
 			float d = twinBehaviour.radius + characterBody.radius * 1f;

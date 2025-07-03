@@ -36,6 +36,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		public override void Fire(Vector3 targetPosition)
 		{
 			base.Fire(targetPosition);
+			base.characterBody.SetSpreadBloom(0.4f);
 			var blastAttack = new BlastAttack
 			{
 				attacker = gameObject,

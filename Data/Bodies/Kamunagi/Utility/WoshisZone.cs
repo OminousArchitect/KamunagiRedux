@@ -21,6 +21,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			var ward = Object.Instantiate(Concentric.GetNetworkedObject<WoshisZone>().WaitForCompletion(), position, Quaternion.identity);
 			ward.GetComponent<TeamFilter>().teamIndex = TeamIndex.Monster;
 			NetworkServer.Spawn(ward);
+			base.characterBody.SetSpreadBloom(0.2f);
 		}
 
 		public override void OnSerialize(NetworkWriter writer)

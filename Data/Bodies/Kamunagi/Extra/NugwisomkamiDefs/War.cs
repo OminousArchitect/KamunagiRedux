@@ -10,7 +10,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
 
-	public class WarMachine : Concentric, IBody, IMaster //2
+	public class WarMachine : Concentric, IBody, IMaster //1
 	{
 		async Task<GameObject> IBody.BuildObject()
 		{

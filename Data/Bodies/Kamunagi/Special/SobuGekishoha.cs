@@ -104,6 +104,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Special
 			if (!isAuthority) return;
 			var aimRay = GetAimRay();
 			
+			base.characterBody.SetSpreadBloom(0.14f);
 			BulletAttack bullet = new BulletAttack();
 			bullet.maxDistance = 180f;
 			bullet.stopperMask = LayerIndex.noCollision.mask;

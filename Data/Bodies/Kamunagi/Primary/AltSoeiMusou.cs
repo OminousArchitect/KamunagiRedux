@@ -65,6 +65,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		public void FireBall()
 		{
 			if (!isAuthority) return;
+			base.characterBody.SetSpreadBloom(0.4f);
 			ProjectileManager.instance.FireProjectile(new FireProjectileInfo()
 			{
 				crit = RollCrit(),

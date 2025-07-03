@@ -25,6 +25,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			var prefab = Concentric.GetProjectile<DenebokshiriBrimstone>().WaitForCompletion();
 			var zapDamage = prefab.GetComponent<ProjectileProximityBeamController>();
 			zapDamage.damageCoefficient = damageCoefficient;
+			base.characterBody.SetSpreadBloom(0.25f);
 			if (!NetworkServer.active) return;
 			var fireProjectileInfo = new FireProjectileInfo
 			{

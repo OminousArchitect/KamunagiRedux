@@ -84,6 +84,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			base.OnEnter();
 			modelTransform = GetModelTransform();
 			vfxTransform = FindModelChild("MuzzleCenter");
+			base.characterBody.SetSpreadBloom(0.1f);
 			if (modelTransform)
 			{
 				charModel = modelTransform.GetComponent<CharacterModel>();

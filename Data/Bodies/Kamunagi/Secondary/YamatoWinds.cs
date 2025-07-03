@@ -59,6 +59,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 		{
 			var aimRay = GetAimRay();
 			if (!isAuthority) return;
+			base.characterBody.SetSpreadBloom(0.2f);
 			var fireProjectileInfo = new FireProjectileInfo
 			{
 				crit = RollCrit(),
@@ -234,6 +235,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				rotation = Util.QuaternionSafeLookRotation((damageInfo.force != Vector3.zero) ? damageInfo.force : UnityEngine.Random.onUnitSphere)
 			};
 			damageInfo.rejected = true;
+			__instance.body.SetSpreadBloom(0.2f);
 			EffectManager.SpawnEffect(GetEffect<WindBlockEffect>().WaitForCompletion(), effectData, transmit: true);
 		}
 	}

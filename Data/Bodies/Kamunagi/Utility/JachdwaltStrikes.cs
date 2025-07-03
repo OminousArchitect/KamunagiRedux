@@ -52,6 +52,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 				return true;
 			};
 			bullet.Fire();
+			base.characterBody.SetSpreadBloom(0.2f);
 			AkSoundEngine.PostEvent(701316761, base.gameObject);
 		}
 

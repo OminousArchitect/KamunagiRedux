@@ -18,6 +18,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 		{
 			base.OnEnter();
 			AkSoundEngine.PostEvent("Play_voidman_m2_shoot", gameObject);
+			base.characterBody.SetSpreadBloom(0.3f);
 			EffectManager.SimpleMuzzleFlash(MuzzlePrefab, gameObject, twinMuzzle, false);
 			if (isAuthority)
 			{

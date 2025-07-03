@@ -10,14 +10,14 @@ using UnityEngine.AddressableAssets;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class DecaySpirit : Concentric, IBody, IMaster, ISkin //4
+	public class DecaySpirit : Concentric, IBody, IMaster, ISkin //2
 	{
 		async Task<SkinDef> ISkin.BuildObject()
 		{
 			var icon = await LoadAsset<Sprite>("kamunagiassets:TwinsSkin");
 			var model = (await this.GetBody()).GetComponent<ModelLocator>().modelTransform.gameObject;
-			var mask = model.GetComponentInChildren<MeshRenderer>();
-			var theRenderer = mask;
+			var theRenderer = model.GetComponentInChildren<MeshRenderer>();
+			model.name = "BubbetTest";
 
 			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
 			sdParams.rendererInfos = new RoR2.CharacterModel.RendererInfo[1];

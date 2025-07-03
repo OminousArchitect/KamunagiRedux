@@ -44,6 +44,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 		private void FireTide()
 		{
 			var aimRay = GetAimRay();
+			base.characterBody.SetSpreadBloom(0.2f);
 			FireProjectileInfo unluckyInfo = new FireProjectileInfo
 			{
 				crit = false,

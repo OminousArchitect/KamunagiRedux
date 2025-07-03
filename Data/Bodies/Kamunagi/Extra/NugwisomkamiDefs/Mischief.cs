@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class AssassinSpirit : Concentric, IBody, IMaster, ISkin //1
+	public class AssassinSpirit : Concentric, IBody, IMaster, ISkin //0
 	{
 		async Task<SkinDef> ISkin.BuildObject()
 		{

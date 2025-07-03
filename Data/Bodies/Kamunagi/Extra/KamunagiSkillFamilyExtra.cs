@@ -8,7 +8,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 	{
 		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[]
 		{
-			GetAsset<MothMoth>(), GetAsset<XinZhao>(), GetAsset<SummonTatari>(), 
+			GetAsset<MothMoth>(), GetAsset<XinZhao>(), 
 			GetAsset<SummonNugwisomkami>(), GetAsset<MashiroBlessing>(), GetAsset<Overzeal>(),
 			GetAsset<KuonFlashbang>(), GetAsset<HonokasVeil>() 
 		};

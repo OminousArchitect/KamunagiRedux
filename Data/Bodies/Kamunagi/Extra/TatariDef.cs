@@ -12,7 +12,7 @@ using UnityEngine;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	[HarmonyPatch]
-	public class TatariBody : Concentric, IBody, IMaster, ISkin
+	public class TatariBody : Concentric, IBody, IMaster, ISkin, IModel
 	{
 		private static ConfigEntry<string> debuffBlacklist;
 		
@@ -60,17 +60,17 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			tatariMat.SetFloat("_SpecularStrength", 0.05f);
 			tatariMat.SetFloat("_SpecularExponent", 3.2f);
 			tatariMat.SetFloat("_FlowSpeed", 15f);
-			
-			var icon = await LoadAsset<Sprite>("kamunagiassets:TwinsSkin");
-			var model = (await this.GetBody()).GetComponent<ModelLocator>().modelTransform.gameObject;
-			var bodyMesh = model.transform.Find("mdlGup").gameObject;
-			var eyes = model.transform.Find("mdlGupEyes.001").gameObject;
+
+			var model = await this.GetModel();
+			var rends = model.GetComponentsInChildren<SkinnedMeshRenderer>(false);
+
 
 			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
-			sdParams.rendererInfos = new CharacterModel.RendererInfo[2];
-			sdParams.rendererInfos[0].renderer = bodyMesh.GetComponent<SkinnedMeshRenderer>();
+			sdParams.name = "TatariSkinDefParams";
+			sdParams.rendererInfos = new RoR2.CharacterModel.RendererInfo[2];
+			sdParams.rendererInfos[0].renderer = rends[0];
 			sdParams.rendererInfos[0].defaultMaterial = tatariMat;
-			sdParams.rendererInfos[1].renderer = eyes.GetComponent<SkinnedMeshRenderer>();
+			sdParams.rendererInfos[1].renderer = rends[2];
 			sdParams.rendererInfos[1].defaultMaterial = await LoadAsset<Material>("RoR2/DLC1/Gup/matGupEyes.mat");
 
 			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
@@ -79,33 +79,51 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				ISkin.AddDefaults(ref skinDef);
 				skinDef.name = "TatariDefaultSkinDef";
 				skinDef.nameToken = "TatariSkin";
-				skinDef.icon = icon;
-				skinDef.rootObject = model;
+				skinDef.icon = null;
 				skinDef.skinDefParams = sdParams;
-				
-				model.GetComponent<ModelSkinController>().skins[0] = skinDef;
+				skinDef.rootObject = model;
 			});
 		}
 		
+		async Task<GameObject> IModel.BuildObject()
+		{
+			var bodyPrefab = await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab");
+			var gupModelCopy = bodyPrefab.transform.Find("ModelBase/mdlGup").gameObject;
+			
+			var gupModel = gupModelCopy.InstantiateClone("mdlTatari", false);
+			return gupModel;
+		}
+		
+		IEnumerable<Concentric> IModel.GetSkins() => new Concentric[] { this };
+		
 		async Task<GameObject> IBody.BuildObject()
 		{
-			var gupBody = (await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab")).InstantiateClone("TatariBody", true);
-			gupBody.GetComponent<CharacterDeathBehavior>().deathState =
-				new SerializableEntityStateType(typeof(VoidDeathState));
-			var legs = gupBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
+			var tatariBody = (await LoadAsset<GameObject>("RoR2/DLC1/Gup/GupBody.prefab")).InstantiateClone("TatariBody", true);
+			var tatariModelObject = await this.GetModel();
+
+			var hBox = tatariModelObject.transform.Find("mdlGupArmature/ROOT/mainBody.1/Hurtbox").gameObject;
+			hBox.GetComponent<HurtBox>().healthComponent = tatariBody.GetComponent<HealthComponent>();
+			tatariBody.GetComponent<CharacterDeathBehavior>().deathState = new SerializableEntityStateType(typeof(VoidDeathState));
+			var legs = tatariBody.transform.Find("ModelBase/mdlGup/mdlGup.003").gameObject;
 			legs.GetComponent<SkinnedMeshRenderer>().enabled = false; //attempt #1
-			GameObject model = gupBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			var handler = model.GetComponent<FootstepHandler>();
+			var handler = tatariModelObject.GetComponent<FootstepHandler>();
 			handler.enableFootstepDust = false; // we dont actually want to use this, because we're gonna use it in the hook
 			handler.footstepDustPrefab = await GetEffect<TatariStepDust>();
 
-			var cb = gupBody.GetComponent<CharacterBody>();
+			var cb = tatariBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "TATARI_BODY_NAME";
 			cb.baseDamage = 14f;
 			cb.portraitIcon= (await LoadAsset<Texture>("kamunagiassets2:TatariIcon"));
+			
+			var modelLocator = tatariBody.GetComponent<ModelLocator>();
+			UnityEngine.Object.Destroy(modelLocator.modelTransform.gameObject);
+			tatariModelObject.transform.parent = modelLocator.modelBaseTransform;
+			tatariModelObject.transform.localPosition = Vector3.zero;
+			tatariModelObject.GetComponent<CharacterModel>().body = cb;
+			modelLocator.modelTransform = tatariModelObject.transform;
 
-			var lr = model.AddComponent<LegRemover>();
-			foreach (SkinnedMeshRenderer m in model.GetComponentsInChildren<SkinnedMeshRenderer>())
+			var lr = tatariModelObject.AddComponent<LegRemover>();
+			foreach (SkinnedMeshRenderer m in tatariModelObject.GetComponentsInChildren<SkinnedMeshRenderer>())
 			{
 				switch (m.name)
 				{
@@ -115,7 +133,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 				}
 			}
 			
-			return gupBody;
+			return tatariBody;
 		}
 
 		async Task<GameObject> IMaster.BuildObject()

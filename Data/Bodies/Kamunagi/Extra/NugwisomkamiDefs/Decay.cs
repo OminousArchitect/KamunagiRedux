@@ -15,13 +15,14 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 		async Task<SkinDef> ISkin.BuildObject()
 		{
 			var model = await this.GetModel();
-			var theRenderer = model.GetComponentInChildren<MeshRenderer>();
+			var theRenderer = model.transform.Find("Sphere.000").gameObject;
+			var meshRend = theRenderer.GetComponent<MeshRenderer>();
 			var particles = model.GetComponentInChildren<ParticleSystemRenderer>();
 
 			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
 			sdParams.name = "DecaySkinDefParams";
 			sdParams.rendererInfos = new RoR2.CharacterModel.RendererInfo[2];
-			sdParams.rendererInfos[0].renderer = theRenderer;
+			sdParams.rendererInfos[0].renderer = meshRend;
 			sdParams.rendererInfos[0].defaultMaterial = await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat");
 			sdParams.rendererInfos[1].renderer = particles;
 			sdParams.rendererInfos[1].defaultMaterial = await LoadAsset<Material>("RoR2/Base/GreaterWisp/matGreaterWispFire.mat");

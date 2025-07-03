@@ -97,7 +97,6 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			secondary._skillFamily = await GetSkillFamily<AssassinSpiritSecondaryFamily>();
 			secondary.baseSkill = await GetSkillDef<AssassinSpiritSecondary>();
 			nugwisoBody.GetComponent<SkillLocator>().secondary = secondary;
-
 			var skills = nugwisoBody.GetComponents<GenericSkill>();
 			skills[0]._skillFamily = await GetSkillFamily<AssassinSpiritPrimaryFamily>();
 			return nugwisoBody;

@@ -10,74 +10,64 @@ using UnityEngine.AddressableAssets;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class DecaySpirit : Concentric, IBody, IMaster, ISkin //2
+	public class DecaySpirit : Concentric, IBody, IMaster, ISkin, IModel //2
 	{
 		async Task<SkinDef> ISkin.BuildObject()
 		{
-			var icon = await LoadAsset<Sprite>("kamunagiassets:TwinsSkin");
-			var model = (await this.GetBody()).GetComponent<ModelLocator>().modelTransform.gameObject;
+			var model = await this.GetModel();
 			var theRenderer = model.GetComponentInChildren<MeshRenderer>();
-			model.name = "BubbetTest";
+			var particles = model.GetComponentInChildren<ParticleSystemRenderer>();
 
 			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
-			sdParams.rendererInfos = new RoR2.CharacterModel.RendererInfo[1];
+			sdParams.name = "DecaySkinDefParams";
+			sdParams.rendererInfos = new RoR2.CharacterModel.RendererInfo[2];
 			sdParams.rendererInfos[0].renderer = theRenderer;
 			sdParams.rendererInfos[0].defaultMaterial = await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat");
-			//sdParams.rendererInfos[1].renderer = thePSR 
-			//sdParams.baseRendererInfos[1].defaultMaterial = fireMat; //todo check if PSR is on model //I think it still is
-
-			/*sdParams.meshReplacements = new SkinDefParams.MeshReplacement[1];
-			sdParams.meshReplacements[0].renderer = theRenderer;
-			sdParams.meshReplacements[0].meshAddress = new AssetReferenceT<Mesh>("9fada769ddd7edf48b5af5380c459134");
-			sdParams.meshReplacements[0].meshAddress.m_AssetGUID = "9fada769ddd7edf48b5af5380c459134";
-			sdParams.meshReplacements[0].meshAddress.m_SubObjectName = "DecaySpiritModel";
-			sdParams.meshReplacements[0].meshAddress.m_SubObjectType = "UnityEngine.Mesh, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";*/
-
+			sdParams.rendererInfos[1].renderer = particles;
+			sdParams.rendererInfos[1].defaultMaterial = await LoadAsset<Material>("RoR2/Base/GreaterWisp/matGreaterWispFire.mat");
+			
 			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
 			{
 				var skinDef = (SkinDef)obj;
 				ISkin.AddDefaults(ref skinDef);
 				skinDef.name = "DecayDefaultSkinDef";
 				skinDef.nameToken = "DecaySkin";
-				skinDef.icon = icon;
+				skinDef.icon = null;
 				skinDef.skinDefParams = sdParams;
 				skinDef.rootObject = model;
-
-				model.GetComponent<ModelSkinController>().skins[0] = skinDef;
 			});
 		}
+
+		async Task<GameObject> IModel.BuildObject()
+		{
+			var bodyPrefab = await LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab");
+			var wispModelCopy = bodyPrefab.transform.Find("Model Base/mdlWisp1Mouth").gameObject;
+			
+			var decayModel = wispModelCopy.InstantiateClone("mdlDecay", false);
+			decayModel.GetComponent<CharacterModel>().baseLightInfos[0].defaultColor = Colors.jachdwaltColor;
+			return decayModel;
+		}
+		
+		IEnumerable<Concentric> IModel.GetSkins() => new Concentric[] { this };
+		
 		async Task<GameObject> IBody.BuildObject()
 		{
-			Material fireMat = new Material(await LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
-			fireMat.SetFloat("_BrightnessBoost", 2.63f);
-			fireMat.SetFloat("_AlphaBoost", 1.2f);
-			fireMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
-			fireMat.SetColor("_TintColor", new Color(0, 0.32f, 1f));
-			
 			var nugwisoBody= (await LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab"))!.InstantiateClone("Nugwiso4", true);
-			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
-			charModel.baseLightInfos[0].defaultColor = Colors.jachdwaltColor;
-			//charModel.baseRendererInfos[0].ignoreOverlays = true;
-			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
-			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
-			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
-			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
+			var decayModelObject = await this.GetModel();
 			
-			var sphere0 = mdl.transform.Find("Sphere.000").gameObject;
+			var thePSR = decayModelObject.GetComponentInChildren<ParticleSystemRenderer>();
+			var hBox = decayModelObject.GetComponentInChildren<HurtBox>();
+			hBox.transform.SetParent(decayModelObject.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
+			hBox.healthComponent = nugwisoBody.GetComponent<HealthComponent>();
+			thePSR.transform.SetParent(decayModelObject.transform); //do the same to the fire particles
+			var sphere0 = decayModelObject.transform.Find("Sphere.000").gameObject;
 			UnityEngine.Object.Destroy(sphere0.GetComponent<SkinnedMeshRenderer>());
-			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it 
-			
-			sphere0.AddComponent<MeshFilter>().mesh = (await LoadAsset<Mesh>("kamunagiassets2:IceMask")); //did this spaghetti to prevent refactoring 
-			sphere0.AddComponent<MeshRenderer>().material = (await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat")); 
-			// ----
-			//TODO    this still seems to work. You can still grab the meshrenderer gameobject (Sphere.000) from IBody, but the mesh isn't IceMask.
-			//TODO    It seems the mesh is just overwritten with a default, same for the material. My guess is this is because the default SkinDef
-			//TODO    is being chosen. You need to declare the SkinDef for this body, and subsequently declare the SkinDefParams for that SkinDef,
-			//TODO    ensuring that neither are default. Destroying the SkinnedMeshRenderer and destroying the armature still appears to be an
-			//TODO    acceptable workflow, as shown by the fact commenting out these lines leaves a blank Sphere.000 with no components.
+			UnityEngine.Object.Destroy(decayModelObject.transform.GetChild(1).gameObject); //destroy armature, we don't need it 
+			sphere0.AddComponent<MeshFilter>().mesh = (await LoadAsset<Mesh>("kamunagiassets2:IceMask"));
+			sphere0.AddComponent<MeshRenderer>().material = (await LoadAsset<Material>("RoR2/Junk/AncientWisp/matAncientWisp.mat"));
 			sphere0.transform.localPosition = new Vector3(0, -2.4f, 0.4f);
 			sphere0.transform.localScale = Vector3.one * 3;
-			
+
 			nugwisoBody.GetComponent<Rigidbody>().mass = 300f;
 			var cb = nugwisoBody.GetComponent<CharacterBody>();
 			cb.baseNameToken = "NUGWISOMKAMI4_BODY_NAME";
@@ -86,6 +76,13 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			cb.baseDamage = 13f;
 			cb.levelDamage = 1.5f;
 			cb.baseMoveSpeed = 4f;
+			
+			var modelLocator = nugwisoBody.GetComponent<ModelLocator>();
+			UnityEngine.Object.Destroy(modelLocator.modelTransform.gameObject);
+			decayModelObject.transform.parent = modelLocator.modelBaseTransform;
+			decayModelObject.transform.localPosition = Vector3.zero;
+			decayModelObject.GetComponent<CharacterModel>().body = cb;
+			modelLocator.modelTransform = decayModelObject.transform;
 
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";

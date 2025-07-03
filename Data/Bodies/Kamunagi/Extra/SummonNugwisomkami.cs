@@ -215,7 +215,8 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			skill.skillNameToken = KamunagiAsset.tokenPrefix + "EXTRA5_NAME";
 			skill.skillDescriptionToken = KamunagiAsset.tokenPrefix + "EXTRA5_DESCRIPTION";
 			skill.icon = (await LoadAsset<Sprite>("kamunagiassets2:Nugwisomkami"));
-			skill.baseRechargeInterval = 7f;
+			skill.baseRechargeInterval = 1f; //7f
+			skill.baseMaxStock = 10;
 			//skill.mustKeyPress = true; //this breaks things apparently
 			skill.keywordTokens = new[]
 			{

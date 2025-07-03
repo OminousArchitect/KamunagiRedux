@@ -12,78 +12,85 @@ using UnityEngine.Networking;
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
 	#region BodyAndMaster
-	public class AssassinSpirit : Concentric, IBody, IMaster, ISkin //0
+	public class AssassinSpirit : Concentric, IBody, IMaster, ISkin, IModel //0
 	{
 		async Task<SkinDef> ISkin.BuildObject()
-		{
-			var icon = await LoadAsset<Sprite>("kamunagiassets:TwinsSkin");
-			var model = (await this.GetBody()).GetComponent<ModelLocator>().modelTransform.gameObject;
-			
-			var blankObject = await LoadAsset<GameObject>("kamunagiassets2:AssassinSpiritModel");
-			var meshObject = blankObject; //did this spaghetti to prevent refactoring 
-			meshObject.transform.localPosition = new Vector3(0, -4.8f, 0);
-			
-			meshObject.AddComponent<MeshFilter>().mesh = (await LoadAsset<Mesh>("kamunagiassets2:TheMask"));
-			var theRenderer = meshObject.AddComponent<MeshRenderer>();
-			theRenderer.material = (await LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"));
-			model.GetComponent<ModelSkinController>().skins[0] = await this.GetSkinDef();
-			
-			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
-			sdParams.rendererInfos = new RoR2.CharacterModel.RendererInfo[1];
-			sdParams.rendererInfos[0].renderer = theRenderer;
-			sdParams.rendererInfos[0].defaultMaterial = (await LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"));
-			//sdParams.rendererInfos[1].renderer = thePSR 
-			//sdParams.baseRendererInfos[1].defaultMaterial = fireMat; //todo check if PSR is on model
-
-			/*sdParams.meshReplacements = new SkinDefParams.MeshReplacement[1];
-			sdParams.meshReplacements[0].renderer = theRenderer;
-			sdParams.meshReplacements[0].meshAddress = new AssetReferenceT<Mesh>("b8b44cceb99ce4441ad3c32705b90ec9");
-			sdParams.meshReplacements[0].meshAddress.m_AssetGUID = "b8b44cceb99ce4441ad3c32705b90ec9";
-			sdParams.meshReplacements[0].meshAddress.m_SubObjectName = "AssassinSpiritModel";
-			sdParams.meshReplacements[0].meshAddress.m_SubObjectType = "UnityEngine.Mesh, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
-			*/
-			
-			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
-			{
-				var skinDef = (SkinDef)obj;
-				ISkin.AddDefaults(ref skinDef);
-				skinDef.name = "MischiefDefaultSkinDef";
-				skinDef.nameToken = "MischiefSkin";
-				skinDef.icon = icon;
-				skinDef.skinDefParams = sdParams;
-				skinDef.rootObject = model;
-				
-				Debug.Log("trail mix");
-			});
-		}
-
-		async Task<GameObject> IBody.BuildObject()
 		{
 			Material fireMat = new Material(await LoadAsset<Material>("RoR2/Base/Wisp/matWispFire.mat"));
 			fireMat.SetFloat("_BrightnessBoost", 2.63f);
 			fireMat.SetFloat("_AlphaBoost", 1.2f);
 			fireMat.SetTexture("_RemapTex", await LoadAsset<Texture2D>("RoR2/Base/Common/ColorRamps/texRampWispSoul.png"));
 			fireMat.SetColor("_TintColor", Colors.zealColor);
-
-			var nugwisoBody = (await LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab"))!.InstantiateClone("Nugwiso1", true);
-			var charModel = nugwisoBody.GetComponentInChildren<CharacterModel>();
-			charModel.baseLightInfos[0].defaultColor = Colors.zealColor;
-			var mdl = nugwisoBody.GetComponent<ModelLocator>().modelTransform.gameObject;
 			
-			var thePSR = mdl.GetComponentInChildren<ParticleSystemRenderer>();
-			mdl.GetComponentInChildren<HurtBox>().transform.SetParent(mdl.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
-			thePSR.transform.SetParent(mdl.transform); //do the same to the fire particles
-			UnityEngine.Object.Destroy(mdl.transform.GetChild(1).gameObject); //destroy armature, we don't need it
+			var model = await this.GetModel();
+			var theRenderer = model.GetComponentInChildren<MeshRenderer>();
+			var particles = model.GetComponentInChildren<ParticleSystemRenderer>();
 
-			//
+			var sdParams = ScriptableObject.CreateInstance<SkinDefParams>();
+			sdParams.name = "MischiefSkinDefParams";
+			sdParams.rendererInfos = new RoR2.CharacterModel.RendererInfo[2];
+			sdParams.rendererInfos[0].renderer = theRenderer;
+			sdParams.rendererInfos[0].defaultMaterial = (await LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"));
+			sdParams.rendererInfos[1].renderer = particles;
+			sdParams.rendererInfos[1].defaultMaterial = fireMat; 
+
+			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
+			{
+				var skinDef = (SkinDef)obj;
+				ISkin.AddDefaults(ref skinDef);
+				skinDef.name = "MischiefDefaultSkinDef";
+				skinDef.nameToken = "MischiefSkin";
+				skinDef.icon = null;
+				skinDef.skinDefParams = sdParams;
+				skinDef.rootObject = model;
+			});
+		}
+		
+		async Task<GameObject> IModel.BuildObject()
+		{
+			var bodyPrefab = await LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab");
+			var wispModelCopy = bodyPrefab.transform.Find("Model Base/mdlWisp1Mouth").gameObject;
+			
+			var decayModel = wispModelCopy.InstantiateClone("mdlMischief", false);
+			decayModel.GetComponent<CharacterModel>().baseLightInfos[0].defaultColor = Colors.zealColor;
+			return decayModel;
+		}
+		
+		IEnumerable<Concentric> IModel.GetSkins() => new Concentric[] { this };
+
+		async Task<GameObject> IBody.BuildObject()
+		{
+			var nugwisoBody = (await LoadAsset<GameObject>("RoR2/Base/Wisp/WispBody.prefab"))!.InstantiateClone("Nugwiso1", true);
+			var mischiefModelObject = await this.GetModel();
+			
+			var thePSR = mischiefModelObject.GetComponentInChildren<ParticleSystemRenderer>();
+			var hBox = mischiefModelObject.GetComponentInChildren<HurtBox>();
+			hBox.transform.SetParent(mischiefModelObject.transform); //set parent of the hurtbox outside of the armature, so we don't destroy it, too
+			hBox.healthComponent = nugwisoBody.GetComponent<HealthComponent>();
+			thePSR.transform.SetParent(mischiefModelObject.transform); //do the same to the fire particles
+			var sphere0 = mischiefModelObject.transform.Find("Sphere.000").gameObject;
+			UnityEngine.Object.Destroy(sphere0.GetComponent<SkinnedMeshRenderer>());
+			UnityEngine.Object.Destroy(mischiefModelObject.transform.GetChild(1).gameObject); //destroy armature, we don't need it 
+			sphere0.AddComponent<MeshFilter>().mesh = (await LoadAsset<Mesh>("kamunagiassets2:TheMask"));
+			sphere0.AddComponent<MeshRenderer>().material = (await LoadAsset<Material>("RoR2/DLC1/Assassin2/matAssassin2.mat"));
+			sphere0.transform.localPosition = new Vector3(0, -4.8f, 0);
+			
 			nugwisoBody.GetComponent<Rigidbody>().mass = 300f;
 			var cb = nugwisoBody.GetComponent<CharacterBody>();
+			cb.portraitIcon = await LoadAsset<Texture2D>("RoR2/DLC1/Assassin2/Assassin2Body.png");
 			cb.baseNameToken = "NUGWISOMKAMI1_BODY_NAME";
 			cb.baseMaxHealth = 330f;
 			cb.levelMaxHealth = 95f;
 			cb.baseDamage = 20f;
 			cb.levelDamage = 2.3f;
 			cb.baseMoveSpeed = 13f;
+			
+			var modelLocator = nugwisoBody.GetComponent<ModelLocator>();
+			UnityEngine.Object.Destroy(modelLocator.modelTransform.gameObject);
+			mischiefModelObject.transform.parent = modelLocator.modelBaseTransform;
+			mischiefModelObject.transform.localPosition = Vector3.zero;
+			mischiefModelObject.GetComponent<CharacterModel>().body = cb;
+			modelLocator.modelTransform = mischiefModelObject.transform;
 
 			var secondary = nugwisoBody.AddComponent<GenericSkill>();
 			secondary.skillName = "NugwisoSkill2";

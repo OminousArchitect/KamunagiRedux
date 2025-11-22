@@ -1,6 +1,7 @@
 using KamunagiOfChains.Data.Bodies.Kamunagi.Primary;
 using KamunagiOfChains.Data.Bodies.Kamunagi.Utility;
 using RoR2;
+using RoR2.Skills;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 {
@@ -12,9 +13,15 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Extra
 			GetAsset<SummonNugwisomkami>(), GetAsset<MashiroBlessing>(), GetAsset<Overzeal>(),
 			GetAsset<KuonFlashbang>(), GetAsset<HonokasVeil>() 
 		};
-
-		public string GetNameToken(GenericSkill skill) => skill.skillName == "SaraanaExtra" ? "NINES_SARAANA_EXTRA" : "NINES_URURUU_EXTRA";
 	}
 
-	public class KamunagiSkillFamilyExtra2 : KamunagiSkillFamilyExtra {}
+	public class KamunagiSkillFamilyExtra2 : Concentric, ISkillFamily
+	{
+		public IEnumerable<Concentric> GetSkillAssets() => new Concentric[]
+		{
+			GetAsset<HonokasVeil>(), GetAsset<KuonFlashbang>(), 
+			GetAsset<Overzeal>(), GetAsset<MashiroBlessing>(), GetAsset<SummonNugwisomkami>(),
+			GetAsset<XinZhao>(), GetAsset<MothMoth>() 
+		};
+	}
 }

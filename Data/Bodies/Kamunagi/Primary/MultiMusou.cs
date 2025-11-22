@@ -88,6 +88,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				DotController.InflictDot(
 					__instance.gameObject,
 					damageInfo.attacker,
+					__instance.body.mainHurtBox,			
 					NaturesAxiom.CurseIndex,
 					2.4f,
 					0.5f

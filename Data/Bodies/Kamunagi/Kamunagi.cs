@@ -1190,51 +1190,62 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi
 
 			var primarySkill = bodyPrefab.AddComponent<GenericSkill>();
 			primarySkill.skillName = "SaraanaPrimary";
+			primarySkill.loadoutTitleToken = "NINES_SARAANA_PRIMARY";
 			primarySkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilyPrimary>();
 			skillLocator.primary = primarySkill;
 			var primarySkill2 = bodyPrefab.AddComponent<GenericSkill>();
 			primarySkill2.skillName = "UruruuPrimary";
+			primarySkill2.loadoutTitleToken = "NINES_URURUU_PRIMARY";
 			primarySkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilyPrimary2>();
 
 
 			var secondarySkill = bodyPrefab.AddComponent<GenericSkill>();
 			secondarySkill.skillName = "SaraanaSecondary";
+			secondarySkill.loadoutTitleToken = "NINES_SARAANA_SECONDARY";
 			secondarySkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilySecondary>();
 			skillLocator.secondary = secondarySkill;
 			var secondarySkill2 = bodyPrefab.AddComponent<GenericSkill>();
 			secondarySkill2.skillName = "UruruuSecondary";
+			secondarySkill2.loadoutTitleToken = "NINES_URURUU_SECONDARY";
 			secondarySkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilySecondary2>();
 
 
 			var utilitySkill = bodyPrefab.AddComponent<GenericSkill>();
 			utilitySkill.skillName = "SaraanaUtility";
+			utilitySkill.loadoutTitleToken = "NINES_SARAANA_UTILITY";
 			utilitySkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilyUtility>();
 			skillLocator.utility = utilitySkill;
 			var utilitySkill2 = bodyPrefab.AddComponent<GenericSkill>();
 			utilitySkill2.skillName = "UruruuUtility";
+			utilitySkill2.loadoutTitleToken = "NINES_URURUU_UTILITY";
 			utilitySkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilyUtility2>();
 
 
 			var specialSkill = bodyPrefab.AddComponent<GenericSkill>();
 			specialSkill.skillName = "SaraanaSpecial";
+			specialSkill.loadoutTitleToken = "NINES_SARAANA_SPECIAL";
 			specialSkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilySpecial>();
 			skillLocator.special = specialSkill;
 			var specialSkill2 = bodyPrefab.AddComponent<GenericSkill>();
 			specialSkill2.skillName = "UruruuSpecial";
+			specialSkill2.loadoutTitleToken = "NINES_URURUU_SPECIAL";
 			specialSkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilySpecial2>();
 
 
 			var divineSkill = bodyPrefab.AddComponent<GenericSkill>();
 			divineSkill.skillName = "SaraanaExtra";
+			divineSkill.loadoutTitleToken = "NINES_SARAANA_EXTRA";
 			divineSkill._skillFamily = await GetSkillFamily<KamunagiSkillFamilyExtra>();
 			extraSkillLocator.extraFourth = divineSkill;
 			var divineSkill2 = bodyPrefab.AddComponent<GenericSkill>();
 			divineSkill2.skillName = "UruruuExtra";
+			divineSkill2.loadoutTitleToken = "NINES_URURUU_EXTRA";
 			divineSkill2._skillFamily = await GetSkillFamily<KamunagiSkillFamilyExtra2>();
 
 			var passiveSkill = bodyPrefab.AddComponent<GenericSkill>();
 			var family = await GetSkillFamily<KamunagiSkillFamilyPassive>();
 			passiveSkill.skillName = "AscensionPassive";
+			passiveSkill.loadoutTitleToken = "NINES_KAMUNAGI_PASSIVE";
 			passiveSkill._skillFamily = family;
 			//passiveSkill.hideInCharacterSelect = family.variants.Length == 1;
 

@@ -10,6 +10,7 @@
 	  "NINES_URURUU_SPECIAL": "<color=#D0A1F8>Ururuu Final Strike</color>",
 	  "NINES_SARAANA_EXTRA": "Saraana Divine Skill",
 	  "NINES_URURUU_EXTRA": "<color=#D0A1F8>Ururuu Divine Skill</color>",
+	  "NINES_KAMUNAGI_PASSIVE": "Passive",
 
 	  "NINES_KAMUNAGI_BODY_NAME": "Kamunagi Of Chains",
 	  "NINES_KAMUNAGI_BODY_DESCRIPTION": "<color=#CCD3E0>the Kamunagi of Chains are duo spellcasters with a wide array of skills at their disposal.\n\n- Ururuu (the fair-skinned one with black clothes) and Saraana (the tan-skinned one with white clothes) each have independent loadouts and an additional resource called <color=#EDA717>Zeal</color>.\n\n - Represented below the health bar, when the <color=#EDA717>Zeal</color> bar is full, the twins will switch turns. Non-primary skills each give <style=cIsDamage>10</style> <color=#EDA717>Zeal</color>, with the exception of the wind secondary, which gives <style=cIsDamage>5</style>.",

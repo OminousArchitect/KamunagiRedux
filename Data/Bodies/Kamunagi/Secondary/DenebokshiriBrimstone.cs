@@ -219,6 +219,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 				DotController.InflictDot(
 					__instance.gameObject,
 					damageInfo.attacker,
+					__instance.body.mainHurtBox,
 					DotController.DotIndex.StrongerBurn,
 					3.5f,
 					damageInfo.damage * 0.1f

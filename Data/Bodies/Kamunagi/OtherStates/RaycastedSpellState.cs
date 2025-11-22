@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RoR2.Skills;
+using UnityEngine;
 
 namespace KamunagiOfChains.Data.Bodies.Kamunagi.OtherStates
 {

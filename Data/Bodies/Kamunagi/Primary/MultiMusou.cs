@@ -113,7 +113,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 			var controller = proj.GetComponent<ProjectileController>();
 			controller.ghostPrefab = await this.GetProjectileGhost();
 			controller.startSound = "Play_item_use_molotov_throw";
-			proj.GetComponent<ProjectileSimple>().desiredForwardSpeed = 150f;
+			proj.GetComponent<IProjectileSpeedModifierHandler>().desiredForwardSpeed = 150f;
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileSteerTowardTarget>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileDirectionalTargetFinder>());
 			UnityEngine.Object.Destroy(proj.GetComponent<ProjectileTargetComponent>());

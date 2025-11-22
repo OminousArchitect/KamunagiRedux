@@ -362,7 +362,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Primary
 				.InstantiateClone("TwinsDetonatorProjectile", true);
 			proj.GetComponent<ProjectileController>().ghostPrefab = await this.GetProjectileGhost();
 			var simple = proj.GetComponent<ProjectileSimple>();
-			simple.desiredForwardSpeed = 0f;
+			((IProjectileSpeedModifierHandler) simple).desiredForwardSpeed = 0f;
 			simple.lifetime = 10f;
 			simple.velocityOverLifetime = null;
 			ProjectileImpactExplosion impact = proj.GetComponent<ProjectileImpactExplosion>();

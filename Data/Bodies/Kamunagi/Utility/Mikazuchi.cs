@@ -231,7 +231,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			lightpact.falloffModel = BlastAttack.FalloffModel.None;
 			lightpact.blastDamageCoefficient = 1f;
 			projectile.GetComponent<ProjectileSteerTowardTarget>().rotationSpeed = 165f;
-			projectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
+			projectile.GetComponent<IProjectileSpeedModifierHandler>().desiredForwardSpeed = 80f;
 			var target = projectile.GetComponent<ProjectileDirectionalTargetFinder>();
 			target.lookRange = 45f;
 			target.lookCone = 180f;

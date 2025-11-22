@@ -115,7 +115,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Utility
 			projectileController.startSound = "Play_TidalProjectileStart";
 			projectileController.procCoefficient = 0.9f;
 			tidalProjectile.GetComponent<Rigidbody>().useGravity = false;
-			tidalProjectile.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
+			tidalProjectile.GetComponent<IProjectileSpeedModifierHandler>().desiredForwardSpeed = 80f;
 			var impact = tidalProjectile.GetComponent<ProjectileImpactExplosion>();
 			impact.impactEffect = await GetEffect<AtuysTidesImpact>();
 			impact.falloffModel = BlastAttack.FalloffModel.None;

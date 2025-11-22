@@ -215,7 +215,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Passive
 		{
 			var proj = (await LoadAsset<GameObject>("RoR2/Base/Grandparent/GrandparentGravSphere.prefab"))!.InstantiateClone("TwinsVacuumSphere", true);
 			var vacuumSimple = proj.GetComponent<ProjectileSimple>();
-			vacuumSimple.desiredForwardSpeed = 0f;
+			((IProjectileSpeedModifierHandler) vacuumSimple).desiredForwardSpeed = 0f;
 			vacuumSimple.lifetime = 1f;
 			UnityEngine.Object.Destroy(proj.GetComponent<TetherVfxOrigin>());
 			UnityEngine.Object.Destroy(proj.transform.GetChild(0).gameObject);

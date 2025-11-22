@@ -146,7 +146,7 @@ namespace KamunagiOfChains.Data.Bodies.Kamunagi.Secondary
 			proj.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSecondary
 					.AddModdedDamageTypeChainable(Denebokshiri);
 			var minisunSimple = proj.AddComponent<ProjectileSimple>();
-			minisunSimple.desiredForwardSpeed = 20f;
+			((IProjectileSpeedModifierHandler) minisunSimple).desiredForwardSpeed = 20f;
 			minisunSimple.lifetime = 5f;
 			minisunSimple.lifetimeExpiredEffect = hitEffect;
 			var singleI = proj.AddComponent<ProjectileSingleTargetImpact>();
